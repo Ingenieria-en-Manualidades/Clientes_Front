@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "Manrope-Bold";
+    src: url(/assets/fonts/Manrope/Manrope-Bold.ttf);
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Manrope-ExtraBold";
+    src: url(/assets/fonts/Manrope/Manrope-ExtraBold.ttf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Manrope-ExtraLight";
+    src: url(/assets/fonts/Manrope/Manrope-ExtraLight.ttf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Manrope-Light";
+    src: url(/assets/fonts/Manrope/Manrope-Light.ttf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Manrope-Regular";
+    src: url(/assets/fonts/Manrope/Manrope-Regular.ttf);
+    font-style: normal;
+}
+
+@layer components{
+    .pBienvenidos{
+        @apply w-full text-center font-manrope-r text-3xl mb-[7%] mt-[2%] lg:text-5xl md:text-4xl text-white;
+    }
+    .labelsLogin{
+        @apply grid gap-2 w-3/4 ml-[12%];
+    }
+    .divUser{
+        @apply p-[1%] m-[1.5%] rounded-md cursor-pointer hover:bg-gray-200;
+    }
+    .botones{
+        @apply py-1 px-4 font-manrope-b text-white rounded-lg;
+    }
+}
