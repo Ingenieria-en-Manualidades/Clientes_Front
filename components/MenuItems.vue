@@ -2,8 +2,7 @@
   <div class="divUser" @click="toggle">
     <span class="mr-5 font-manrope-b">{{ usuario }}</span>
     <i
-      class="pi pi-user text-azulIENM text-[1.5rem]"
-      style="font-size: 2rem"
+      class="pi pi-user text-azulIENM mt-[8%] text-[1.5rem] lg:text-[2rem] lg:mt-0"
     ></i>
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true">
       <template #item="{ item, props }">

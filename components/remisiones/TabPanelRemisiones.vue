@@ -1,7 +1,7 @@
 <template>
-  <div class="ml-28">
+  <div>
     <Tabs value="/remisiones">
-      <TabList class="inline-flex gap-14 mb-[2%]">
+      <TabList class="inline-flex gap-[15%] mb-[2%]">
         <Tab v-for="tab in items" :key="tab.label" :value="tab.route">
           <router-link
             v-if="tab.route"

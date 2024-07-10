@@ -98,6 +98,10 @@ const recargarTabla = () => {
   dates.value = null;
   setRemisionesFiltradas();
 };
+
+definePageMeta({
+  middleware: "login",
+});
 </script>
 
 <style>

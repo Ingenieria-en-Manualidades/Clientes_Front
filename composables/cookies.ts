@@ -9,7 +9,7 @@ export function usarCookies() {
 
   const setToken = (nuevoToken: string) => {
     token.value = nuevoToken
-    cookies.set('token', nuevoToken, { path: '/', maxAge: 60 * 60 * 24 * 7 }) // Cookie expira en una semana
+    cookies.set('token', nuevoToken, { path: '/', secure: true, maxAge: 60 * 60 * 24 * 7 }) // Cookie expira en una semana
   }
 
   const setUsuario = (nuevoUsuario: string) => {

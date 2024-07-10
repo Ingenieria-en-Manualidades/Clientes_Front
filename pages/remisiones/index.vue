@@ -1,5 +1,5 @@
 <template>
-  <div class="card w-[55%] ml-[21%]">
+  <div class="card w-[100%] md:w-[810px] lg:w-[70%]">
     <TabPanelRemisiones />
     <div class="border-[1px] p-5 rounded-t-lg border-gray-300">
       <div v-if="calendario">
