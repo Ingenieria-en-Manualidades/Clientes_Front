@@ -5,7 +5,9 @@
     @click="visible = true"
   >
     <i class="pi pi-clipboard text-black"></i>
-    <span class="text-black font-manrope-r ml-2">Gestionar remisión</span>
+    <span class="text-black font-manrope-r ml-2 hidden sm:inline-flex"
+      >Gestionar remisión</span
+    >
   </button>
   <div>
     <Dialog

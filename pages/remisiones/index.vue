@@ -1,5 +1,5 @@
 <template>
-  <div class="card w-[100%] md:w-[810px] lg:w-[70%]">
+  <div class="card w-[100%] md:w-[760px]">
     <TabPanelRemisiones />
     <div class="border-[1px] p-5 rounded-t-lg border-gray-300">
       <div v-if="calendario">
@@ -38,7 +38,6 @@
         :rowsPerPageOptions="[5, 10, 20, 50]"
         scrollable
         scrollHeight="358px"
-        tableStyle="min-width: 42rem"
         class="tabla"
       >
         <Column
@@ -46,7 +45,6 @@
           :key="col.field"
           :field="col.field"
           :header="col.header"
-          :style="col.style"
         ></Column>
         <Column header="Acción">
           <template #body="keyRem">

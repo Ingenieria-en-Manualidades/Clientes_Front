@@ -46,7 +46,6 @@
           :key="col.field"
           :field="col.field"
           :header="col.header"
-          :style="col.style"
         ></Column>
         <Column header="Acción">
           <template #body="keyRem">

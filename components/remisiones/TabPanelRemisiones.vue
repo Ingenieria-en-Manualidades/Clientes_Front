@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="w-[100%] text-center">
     <Tabs value="/remisiones">
-      <TabList class="inline-flex gap-[15%] mb-[2%]">
+      <TabList class="inline-flex mb-[2%]">
         <Tab v-for="tab in items" :key="tab.label" :value="tab.route">
           <router-link
             v-if="tab.route"
@@ -23,7 +23,7 @@
               />
               <span
                 :class="[
-                  'font-manrope-r',
+                  'font-manrope-r text-[100%]',
                   isActive(tab.route)
                     ? 'text-azulIENM font-manrope-extrab'
                     : '',
@@ -40,16 +40,20 @@
 
 <script setup lang="ts">
 const items = ref([
-  { route: "/remisiones", label: "Pendientes", icon: "pi pi-clipboard" },
+  {
+    route: "/remisiones",
+    label: "Pendientes",
+    icon: "pi pi-clipboard text-[12px] md:text-[14px]",
+  },
   {
     route: "/remisiones/Aprobadas",
     label: "Aprobadas",
-    icon: "pi pi-check",
+    icon: "pi pi-check text-[12px] md:text-[14px]",
   },
   {
     route: "/remisiones/rechazadas",
     label: "Rechazadas",
-    icon: "pi pi-times",
+    icon: "pi pi-times text-[12px] md:text-[14px]",
   },
 ]);
 

@@ -74,7 +74,7 @@ export const useDatosRemisiones = () => {
 }
 
 export const columnas = [
-  { field: "no_remision", header: "N°", style: "width: 21%" },
-  { field: "valor", header: "VALOR", style: "width: 21%" },
-  { field: "fecha", header: "FECHA", style: "width: 21%" },
+  { field: "no_remision", header: "N°" },
+  { field: "valor", header: "VALOR" },
+  { field: "fecha", header: "FECHA" },
 ];
