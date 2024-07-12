@@ -21,7 +21,7 @@
     padding-left: 8%;
   }
   .tabla tr th:last-child {
-    padding-right: 10%;
+    padding-left: 6%;
   }
   .tabla tr th:first-child {
     border-top-left-radius: 5px;
@@ -36,14 +36,17 @@
     }
     .tabla tr th {
       font-size: 15px;
+      padding-left: 9%;
     }
   }
 
-  @media (min-width: 768px) {
-    .tabla{
-      font-size: 14px;
-    }
+  @media (min-width: 640px) {
     .tabla tr th {
       font-size: medium;
+      padding-left: 6.5%;
+    }
+
+    .tabla tr th:last-child {
+      padding-left: 9%;
     }
   }

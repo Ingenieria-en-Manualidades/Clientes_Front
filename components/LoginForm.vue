@@ -29,11 +29,7 @@
         placeholder=""
       />
     </div>
-    <NuxtLink
-      to="/loquesea"
-      class="ml-[12%] text-xs md:text-sm lg:text-sm text-white font-manrope-r hover:text-amarilloIENM"
-      >¿Olvidaste tu contraseña?</NuxtLink
-    >
+    <modalRecuperarPass />
     <Button
       label="Enviar"
       class="bg-verdeIENM text-black mt-[10%] mb-[2%] w-[75%] ml-[11.5%] font-manrope-r tracking-wide hover:text-white hover:bg-verdeOscIENM"
@@ -65,9 +61,7 @@ const { setUsuario } = usarCookies();
 
 //Función que evalua el input 'usuario' cumpla las condiciones
 const validarUsuario = () => {
-  if (usuario.value.length < 3) {
-    usernameError.value = "El usuario debe tener minimo 3 caracteres.";
-  } else if (/[^a-zA-Z0-9 ]/.test(usuario.value)) {
+  if (/[^a-zA-Z0-9 ]/.test(usuario.value)) {
     usernameError.value = "El usuario no puede tener caracteres especiales.";
   } else {
     usernameError.value = null;

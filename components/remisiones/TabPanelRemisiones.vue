@@ -23,7 +23,7 @@
               />
               <span
                 :class="[
-                  'font-manrope-r text-[100%]',
+                  'font-manrope-r text-[13px] sm:text-[16px]',
                   isActive(tab.route)
                     ? 'text-azulIENM font-manrope-extrab'
                     : '',
@@ -43,17 +43,17 @@ const items = ref([
   {
     route: "/remisiones",
     label: "Pendientes",
-    icon: "pi pi-clipboard text-[12px] md:text-[14px]",
+    icon: "pi pi-clipboard text-[13px] sm:text-[16px]",
   },
   {
     route: "/remisiones/Aprobadas",
     label: "Aprobadas",
-    icon: "pi pi-check text-[12px] md:text-[14px]",
+    icon: "pi pi-check text-[13px] sm:text-[16px]",
   },
   {
     route: "/remisiones/rechazadas",
     label: "Rechazadas",
-    icon: "pi pi-times text-[12px] md:text-[14px]",
+    icon: "pi pi-times text-[13px] sm:text-[16px]",
   },
 ]);
 

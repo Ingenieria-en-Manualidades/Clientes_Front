@@ -1,5 +1,5 @@
 <template>
-  <div class="card w-[55%] ml-[21%]">
+  <div class="card w-[100%] md:w-[760px]">
     <TabPanelRemisiones />
     <div class="border-[1px] p-5 rounded-t-lg border-gray-300">
       <div v-if="calendario">
@@ -38,7 +38,6 @@
         :rowsPerPageOptions="[5, 10, 20, 50]"
         scrollable
         scrollHeight="358px"
-        tableStyle="min-width: 42rem"
         class="tabla"
       >
         <Column
@@ -49,9 +48,11 @@
         ></Column>
         <Column header="">
           <template #body>
-            <div class="bg-verdeOscIENM w-[171px] px-3 py-1 rounded">
+            <div
+              class="bg-verdeOscIENM w-[100%] sm:w-[171px] px-3 py-1 rounded"
+            >
               <i class="pi pi-check text-white"></i>
-              <span class="text-white font-manrope-r ml-2"
+              <span class="text-white font-manrope-r ml-2 hidden sm:inline-flex"
                 >Remisión aprobada</span
               >
             </div>

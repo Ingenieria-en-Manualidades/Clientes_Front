@@ -1,0 +1,15 @@
+.dialog {
+    width: 90%;
+  }
+  
+  @media (min-width: 640px) {
+    .dialog {
+      width: 70%;
+    }
+  }
+  
+  @media (min-width: 900px) {
+    .dialog {
+      width: 50%;
+    }
+  }
