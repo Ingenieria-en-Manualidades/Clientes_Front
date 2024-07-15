@@ -7,21 +7,29 @@ import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
 export const useDatosRemisiones = () => {
   const toast = useToast();
+  const isLoading = ref(false);
+  const remError = ref(false);
   const { idCliente } = usarCookies();
   const remisionesPendientes = ref<Remision[]>([]);
   const remisionesAprobadas =  ref<Remision[]>([]);
   const remisionesRechazadas =  ref<Remision[]>([]);
   
   const setRemisionesFiltradas = async () => {
+    isLoading.value = true;
     //Método del listar remisiones.
     const { listarRemisionesPorId } = useRemisionesApi();
     
     //Método que llama las remisiones por id del cliente y las guarda en el arreglo
     const res = await listarRemisionesPorId(idCliente.value);
     
-    remisionesPendientes.value = res.filter((rem) => rem.estado === null);
-    remisionesAprobadas.value = res.filter((rem) => rem.estado === "Aprobado");
-    remisionesRechazadas.value = res.filter((rem) => rem.estado === "Rechazado");
+    if (res === "error") {
+      remError.value = true;
+    }else{
+      remisionesPendientes.value = res.filter((rem) => rem.estado === null);
+      remisionesAprobadas.value = res.filter((rem) => rem.estado === "Aprobado");
+      remisionesRechazadas.value = res.filter((rem) => rem.estado === "Rechazado");
+    }
+    isLoading.value = false;
   }
 
   const setConsultar = async (tRemision: Array, dataFecha: Array<Date>) => {
@@ -69,7 +77,9 @@ export const useDatosRemisiones = () => {
     remisionesAprobadas,
     remisionesRechazadas,
     setRemisionesFiltradas,
-    setConsultar
+    setConsultar,
+    isLoading,
+    remError
   };
 }
 

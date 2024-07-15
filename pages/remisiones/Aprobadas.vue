@@ -1,7 +1,10 @@
 <template>
   <div class="card w-[100%] md:w-[760px]">
     <TabPanelRemisiones />
-    <div class="border-[1px] p-5 rounded-t-lg border-gray-300">
+    <div
+      class="border-[1px] p-5 rounded-t-lg border-gray-300"
+      v-if="remisionesAprobadas.length !== 0"
+    >
       <div v-if="calendario">
         <Calendar
           v-model="dates"
@@ -60,11 +63,33 @@
         </Column>
       </DataTable>
     </div>
+    <!-- Carga de progeso mientras terminan de llegar las remisiones -->
+    <div
+      class="border-[1px] p-5 rounded-t-lg border-gray-300 text-center"
+      v-else-if="isLoading"
+    >
+      <ProgressSpinner
+        style="width: 50px; height: 50px"
+        strokeWidth="8"
+        fill="transparent"
+        animationDuration=".5s"
+        aria-label="Custom ProgressSpinner"
+      />
+    </div>
+    <!-- Información que sale en caso de no aparecer ninguna información -->
+    <div
+      class="border-[1px] p-10 rounded-t-lg border-gray-300 text-center"
+      v-else-if="estadoRemisiones"
+    >
+      <i :class="avisoIcono"></i>
+      <p class="font-manrope-b text-xl mt-3">
+        {{ avisodetalles }}
+      </p>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
@@ -74,10 +99,18 @@ import {
 } from "~/composables/remisiones/datosRemisiones";
 
 const dates = ref();
+let avisoIcono = ref();
+let avisodetalles = ref();
 const toast = useToast();
 const calendario = ref(true);
-const { setConsultar, remisionesAprobadas, setRemisionesFiltradas } =
-  useDatosRemisiones();
+const estadoRemisiones = ref(false);
+const {
+  setConsultar,
+  remisionesAprobadas,
+  setRemisionesFiltradas,
+  isLoading,
+  remError,
+} = useDatosRemisiones();
 
 const consultarRemisiones = () => {
   if (!dates.value) {
@@ -99,9 +132,24 @@ const recargarTabla = () => {
   setRemisionesFiltradas();
 };
 
-definePageMeta({
-  middleware: "login",
-});
+const validarRemisiones = () => {
+  if (remError) {
+    estadoRemisiones.value = true;
+    avisoIcono.value = "pi pi-times-circle text-5xl items-center";
+    avisodetalles.value = "Fallo a la hora de cargar";
+  }
+
+  if (remisionesAprobadas.length === 0) {
+    estadoRemisiones.value = true;
+    avisoIcono.value = "pi pi-info-circle text-5xl items-center";
+    avisodetalles.value = "Sin remisiones rechazadas";
+  }
+};
+
+// definePageMeta({
+//   middleware: "login",
+// });
+validarRemisiones();
 </script>
 
 <style>

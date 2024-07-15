@@ -26,7 +26,7 @@ export const useRemisionesApi = () => {
       return remisiones.data;
     } catch (error) {
       console.error("Error a la hora de llamar al endpoint 'ListarRemisiones:'", error.message);
-      throw error.message;
+      return "error";
     }
   }
 

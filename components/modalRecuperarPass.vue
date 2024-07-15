@@ -37,13 +37,19 @@
 
 <script lang="ts" setup>
 import { useToast } from "primevue/usetoast";
+import { useValidarEmail } from "~/composables/login/validaciones";
 
-const correo = ref<string | null>();
-const visible = ref(false);
 const toast = useToast();
+const visible = ref(false);
+const correo = ref();
+const { validarEmail } = useValidarEmail();
 
 const enviar = () => {
   const respuesta = validarEmail(correo.value);
+
+  if (respuesta.status === "success") {
+    console.log("funcionaaaaa");
+  }
 
   toast.add({
     severity: respuesta.status,

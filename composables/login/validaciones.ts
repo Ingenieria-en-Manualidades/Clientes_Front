@@ -1,5 +1,5 @@
 export const useValidarEmail = () => {
-  const validarEmail = (email: string | undefined) => {
+  const validarEmail = (email: string) => {
     if (!email) {
       return {
         status: "error",
@@ -10,7 +10,7 @@ export const useValidarEmail = () => {
   
     if (email.indexOf("@") === -1) {
       return {
-        status: "error",
+        status: "warn",
         tittle: "Mala diligenciación.",
         detail: "El correo debe tener un '@' como minimo.",
       };
