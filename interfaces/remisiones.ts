@@ -22,3 +22,9 @@ export interface RemisionPost {
   usuario: string | null;
   remision_id: number | undefined,
 }
+
+export interface ApiPromise<T> {
+  success: boolean;
+  remisiones?: T;
+  error?: string;
+}
