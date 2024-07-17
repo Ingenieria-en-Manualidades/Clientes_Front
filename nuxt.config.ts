@@ -19,5 +19,13 @@ export default defineNuxtConfig({
       unstyled: true
     },
     importPT: { as: 'Aura', from: '~/presets/aura' }
-  }
+  },
+  runtimeConfig: {
+    public: {
+      cookieOptions: {
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+  },
 });

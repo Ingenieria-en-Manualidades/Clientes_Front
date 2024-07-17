@@ -3,7 +3,7 @@
     <TabPanelRemisiones />
     <div
       class="border-[1px] p-5 rounded-t-lg border-gray-300"
-      v-if="remisionesAprobadas.length !== 0"
+      v-if="remisionesPendientes.length !== 0"
     >
       <div v-if="calendario">
         <Calendar
@@ -40,7 +40,7 @@
         :rows="5"
         :rowsPerPageOptions="[5, 10, 20, 50]"
         scrollable
-        scrollHeight="358px"
+        scrollHeight="368px"
         class="tabla"
       >
         <Column
@@ -56,7 +56,7 @@
               <ModalRemisiones
                 :numRemision="keyRem.data.no_remision"
                 :idRemision="keyRem.data.remision_id"
-                @postGuardarRemision="setRemisionesFiltradas"
+                @postGuardarRemision="listar"
               />
             </div>
           </template>
@@ -85,6 +85,13 @@
       <p class="font-manrope-b text-xl mt-3">
         {{ avisodetalles }}
       </p>
+      <button
+        v-if="botonRecargar"
+        class="bg-azulClaroIENM px-3 py-1 rounded mt-3 font-manrope-b text-white"
+        @click="recargarTabla"
+      >
+        Recargar tabla
+      </button>
     </div>
   </div>
 </template>
@@ -92,7 +99,9 @@
 <script setup lang="ts">
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
+import { usarCookies } from "~/composables/cookies";
 import ModalRemisiones from "~/components/ModalRemisiones.vue";
+import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
 import {
   useDatosRemisiones,
@@ -101,16 +110,38 @@ import {
 
 const dates = ref();
 let avisoIcono = ref();
-let avisodetalles = ref();
 const toast = useToast();
+let avisodetalles = ref();
+const isLoading = ref(false);
 const calendario = ref(true);
-const {
-  setConsultar,
-  remisionesAprobadas,
-  setRemisionesFiltradas,
-  isLoading,
-  remError,
-} = useDatosRemisiones();
+const estadoRemisiones = ref(false);
+const botonRecargar = ref(false);
+const { idCliente } = usarCookies();
+const { listarRemisionesPorId } = useRemisionesApi();
+const { setConsultar, remisionesPendientes } = useDatosRemisiones();
+
+const listar = async () => {
+  isLoading.value = true;
+
+  const resultado = await listarRemisionesPorId(idCliente.value);
+
+  if (resultado.success) {
+    remisionesPendientes.value = resultado.remisiones.filter(
+      (rem) => rem.estado === null
+    );
+
+    if (remisionesPendientes.value.length === 0) {
+      estadoRemisiones.value = true;
+      avisoIcono.value = "pi pi-check-circle text-5xl";
+      avisodetalles.value = "Sin remisiones pendientes";
+    }
+  } else {
+    estadoRemisiones.value = true;
+    avisoIcono.value = "pi pi-times-circle text-5xl";
+    avisodetalles.value = "Fallo a la hora de cargar";
+  }
+  isLoading.value = false;
+};
 
 const consultarRemisiones = () => {
   if (!dates.value) {
@@ -122,6 +153,12 @@ const consultarRemisiones = () => {
     });
   } else {
     setConsultar(remisionesPendientes, dates.value);
+    if (remisionesPendientes.value.length === 0) {
+      estadoRemisiones.value = true;
+      avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+      avisodetalles.value = "No se encontro ninguna remisión entre esas fechas";
+      botonRecargar.value = true;
+    }
     calendario.value = false;
   }
 };
@@ -129,31 +166,10 @@ const consultarRemisiones = () => {
 const recargarTabla = () => {
   calendario.value = true;
   dates.value = null;
-  setRemisionesFiltradas();
+  listar();
 };
 
-const validarRemisiones = () => {
-  if (remError) {
-    estadoRemisiones.value = true;
-    avisoIcono.value = "pi pi-times-circle text-5xl items-center";
-    avisodetalles.value = "Fallo a la hora de cargar";
-  }
-
-  if (remisionesAprobadas.length === 0) {
-    estadoRemisiones.value = true;
-    avisoIcono.value = "pi pi-info-circle text-5xl items-center";
-    avisodetalles.value = "Sin remisiones rechazadas";
-  }
-};
-
-// definePageMeta({
-//   middleware: "login",
-// });
-validarRemisiones();
-
-definePageMeta({
-  middleware: "login",
-});
+listar();
 </script>
 
 <style>

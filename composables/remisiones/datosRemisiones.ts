@@ -1,52 +1,17 @@
-import { useToast } from "primevue/usetoast";
-import { usarCookies } from "~/composables/cookies";
 //Importe para que vue sepa los valores que devuelve la API.
 import type { Remision } from "~/interfaces/remisiones";
-//Archivo con las llamadas a la API.
-import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
 export const useDatosRemisiones = () => {
-  const toast = useToast();
-  const isLoading = ref(false);
-  const remError = ref(false);
-  const { idCliente } = usarCookies();
   const remisionesPendientes = ref<Remision[]>([]);
   const remisionesAprobadas =  ref<Remision[]>([]);
   const remisionesRechazadas =  ref<Remision[]>([]);
   
-  const setRemisionesFiltradas = async () => {
-    isLoading.value = true;
-    //Método del listar remisiones.
-    const { listarRemisionesPorId } = useRemisionesApi();
-    
-    //Método que llama las remisiones por id del cliente y las guarda en el arreglo
-    const res = await listarRemisionesPorId(idCliente.value);
-    
-    if (res === "error") {
-      remError.value = true;
-    }else{
-      remisionesPendientes.value = res.filter((rem) => rem.estado === null);
-      remisionesAprobadas.value = res.filter((rem) => rem.estado === "Aprobado");
-      remisionesRechazadas.value = res.filter((rem) => rem.estado === "Rechazado");
-    }
-    isLoading.value = false;
-  }
-
   const setConsultar = async (tRemision: Array, dataFecha: Array<Date>) => {
     const fechas = getFechas(dataFecha[0], dataFecha[1]);
     if (!fechas[1]) {
       tRemision.value = tRemision.value.filter(r => r.fecha === fechas[0]);
     }else{
       tRemision.value = tRemision.value.filter(r => r.fecha >= fechas[0] && r.fecha <= fechas[1]);
-    }
-    
-    if (tRemision.value.length === 0) {
-      toast.add({
-        severity: 'warn',
-        summary: 'Sin ocurrencias',
-        detail: 'No se encontro ninguna remisión entre esas fechas.',
-        life: 3000,
-      });
     }
   }
 
@@ -70,16 +35,11 @@ export const useDatosRemisiones = () => {
     return fechas;
   }
 
-  setRemisionesFiltradas();
-
   return {
     remisionesPendientes,
     remisionesAprobadas,
     remisionesRechazadas,
-    setRemisionesFiltradas,
     setConsultar,
-    isLoading,
-    remError
   };
 }
 

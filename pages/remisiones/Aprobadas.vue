@@ -85,6 +85,13 @@
       <p class="font-manrope-b text-xl mt-3">
         {{ avisodetalles }}
       </p>
+      <button
+        v-if="botonRecargar"
+        class="bg-azulClaroIENM px-3 py-1 rounded mt-3 font-manrope-b text-white"
+        @click="recargarTabla"
+      >
+        Recargar tabla
+      </button>
     </div>
   </div>
 </template>
@@ -93,6 +100,8 @@
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
+import { usarCookies } from "~/composables/cookies";
+import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import {
   useDatosRemisiones,
   columnas, //Declaración de las columnas de la tabla de remisiones
@@ -100,17 +109,38 @@ import {
 
 const dates = ref();
 let avisoIcono = ref();
-let avisodetalles = ref();
 const toast = useToast();
+let avisodetalles = ref();
+const isLoading = ref(false);
 const calendario = ref(true);
 const estadoRemisiones = ref(false);
-const {
-  setConsultar,
-  remisionesAprobadas,
-  setRemisionesFiltradas,
-  isLoading,
-  remError,
-} = useDatosRemisiones();
+const botonRecargar = ref(false);
+const { idCliente } = usarCookies();
+const { listarRemisionesPorId } = useRemisionesApi();
+const { setConsultar, remisionesAprobadas } = useDatosRemisiones();
+
+const listar = async () => {
+  isLoading.value = true;
+
+  const resultado = await listarRemisionesPorId(idCliente.value);
+
+  if (resultado.success) {
+    remisionesAprobadas.value = resultado.remisiones.filter(
+      (rem) => rem.estado === "Aprobado"
+    );
+
+    if (remisionesAprobadas.value.length === 0) {
+      estadoRemisiones.value = true;
+      avisoIcono.value = "pi pi-check-circle text-5xl";
+      avisodetalles.value = "Sin remisiones aprobadas";
+    }
+  } else {
+    estadoRemisiones.value = true;
+    avisoIcono.value = "pi pi-times-circle text-5xl";
+    avisodetalles.value = "Fallo a la hora de cargar";
+  }
+  isLoading.value = false;
+};
 
 const consultarRemisiones = () => {
   if (!dates.value) {
@@ -122,6 +152,12 @@ const consultarRemisiones = () => {
     });
   } else {
     setConsultar(remisionesAprobadas, dates.value);
+    if (remisionesAprobadas.value.length === 0) {
+      estadoRemisiones.value = true;
+      avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+      avisodetalles.value = "No se encontro ninguna remisión entre esas fechas";
+      botonRecargar.value = true;
+    }
     calendario.value = false;
   }
 };
@@ -129,27 +165,10 @@ const consultarRemisiones = () => {
 const recargarTabla = () => {
   calendario.value = true;
   dates.value = null;
-  setRemisionesFiltradas();
+  listar();
 };
 
-const validarRemisiones = () => {
-  if (remError) {
-    estadoRemisiones.value = true;
-    avisoIcono.value = "pi pi-times-circle text-5xl items-center";
-    avisodetalles.value = "Fallo a la hora de cargar";
-  }
-
-  if (remisionesAprobadas.length === 0) {
-    estadoRemisiones.value = true;
-    avisoIcono.value = "pi pi-info-circle text-5xl items-center";
-    avisodetalles.value = "Sin remisiones rechazadas";
-  }
-};
-
-// definePageMeta({
-//   middleware: "login",
-// });
-validarRemisiones();
+listar();
 </script>
 
 <style>
