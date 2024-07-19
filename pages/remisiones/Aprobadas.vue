@@ -115,14 +115,14 @@ const isLoading = ref(false);
 const calendario = ref(true);
 const estadoRemisiones = ref(false);
 const botonRecargar = ref(false);
-const { idCliente } = usarCookies();
+// const { idCliente } = usarCookies();
 const { listarRemisionesPorId } = useRemisionesApi();
 const { setConsultar, remisionesAprobadas } = useDatosRemisiones();
 
 const listar = async () => {
   isLoading.value = true;
 
-  const resultado = await listarRemisionesPorId(idCliente.value);
+  const resultado = await listarRemisionesPorId("220");
 
   if (resultado.success) {
     remisionesAprobadas.value = resultado.remisiones.filter(

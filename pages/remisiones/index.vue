@@ -93,6 +93,7 @@
         Recargar tabla
       </button>
     </div>
+    <p>{{ token }}</p>
   </div>
 </template>
 
@@ -116,14 +117,14 @@ const isLoading = ref(false);
 const calendario = ref(true);
 const estadoRemisiones = ref(false);
 const botonRecargar = ref(false);
-const { idCliente } = usarCookies();
+// const { idCliente } = usarCookies();
 const { listarRemisionesPorId } = useRemisionesApi();
 const { setConsultar, remisionesPendientes } = useDatosRemisiones();
 
 const listar = async () => {
   isLoading.value = true;
 
-  const resultado = await listarRemisionesPorId(idCliente.value);
+  const resultado = await listarRemisionesPorId("220");
 
   if (resultado.success) {
     remisionesPendientes.value = resultado.remisiones.filter(
@@ -169,7 +170,14 @@ const recargarTabla = () => {
   listar();
 };
 
+definePageMeta({
+  layout: "default",
+  middleware: "login",
+});
+
 listar();
+
+const token = useCookie("token");
 </script>
 
 <style>

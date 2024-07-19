@@ -26,7 +26,8 @@
 <script lang="ts" setup>
 //Método para que no tenga la plantilla HTML por defecto
 definePageMeta({
-  layout: "null",
+  layout: "login",
+  middleware: "logueado",
 });
 </script>
 

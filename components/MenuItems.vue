@@ -58,11 +58,6 @@ const menu = ref();
 //Crea un arreglo que contiene los items con su respectivo logo y nombre
 const items = ref([
   {
-    label: "Actualizar",
-    icon: "pi pi-refresh",
-    route: "/dashboard",
-  },
-  {
     label: "Salir",
     icon: "pi pi-sign-out",
     type: "salir",
@@ -88,12 +83,12 @@ const cerrarSesion = async () => {
     await router.push("/");
   }
 
-  // toast.add({
-  //   severity: response.success,
-  //   summary: response.tittle,
-  //   detail: response.mensaje,
-  //   life: 3000,
-  // });
+  toast.add({
+    severity: response.status,
+    summary: response.tittle,
+    detail: response.mensaje,
+    life: 3000,
+  });
 };
 </script>
 
