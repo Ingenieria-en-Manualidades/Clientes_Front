@@ -1,11 +1,7 @@
-import { usarCookies } from "~/composables/cookies"
-
 export default defineNuxtRouteMiddleware(async(to, from) => {
     const token = useCookie("token");
     
-    console.log("login mid", token);
-    
-    if (!token) {
+    if (token.value === undefined) {
         return navigateTo('/');
     }
 })
