@@ -79,16 +79,18 @@ const cerrarSesion = async () => {
   //llamamos al método logout que realiza el borrado del token.
   const response = await logout();
   //Envia al usuario al token
-  if (response.success) {
-    await router.push("/");
-  }
 
-  toast.add({
-    severity: response.status,
-    summary: response.tittle,
-    detail: response.mensaje,
-    life: 3000,
-  });
+  if (response.success) {
+    console.log("EXITO");
+    await router.push("/");
+  } else {
+    toast.add({
+      severity: response.status,
+      summary: response.tittle,
+      detail: response.mensaje,
+      life: 3000,
+    });
+  }
 };
 </script>
 

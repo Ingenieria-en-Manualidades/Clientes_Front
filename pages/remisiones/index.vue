@@ -93,14 +93,12 @@
         Recargar tabla
       </button>
     </div>
-    <p>{{ token }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
-import { usarCookies } from "~/composables/cookies";
 import ModalRemisiones from "~/components/ModalRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
@@ -112,19 +110,19 @@ import {
 const dates = ref();
 let avisoIcono = ref();
 const toast = useToast();
+const idCliente = useCookie("idCliente");
 let avisodetalles = ref();
 const isLoading = ref(false);
 const calendario = ref(true);
 const estadoRemisiones = ref(false);
 const botonRecargar = ref(false);
-// const { idCliente } = usarCookies();
 const { listarRemisionesPorId } = useRemisionesApi();
 const { setConsultar, remisionesPendientes } = useDatosRemisiones();
 
 const listar = async () => {
   isLoading.value = true;
 
-  const resultado = await listarRemisionesPorId("220");
+  const resultado = await listarRemisionesPorId(idCliente.value);
 
   if (resultado.success) {
     remisionesPendientes.value = resultado.remisiones.filter(
@@ -176,8 +174,6 @@ definePageMeta({
 });
 
 listar();
-
-const token = useCookie("token");
 </script>
 
 <style>

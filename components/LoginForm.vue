@@ -44,7 +44,6 @@ import { ref } from "vue";
 import { useRouter } from "#app";
 import { useToast } from "primevue/usetoast";
 import { loginApi } from "~/composables/loginApi";
-import { usarCookies } from "~/composables/cookies";
 
 //Creo variables 'ref' para recibir la información del usuario
 const usuario = ref("");
@@ -57,7 +56,6 @@ const usernameError = ref<string | null>(null);
 const { login } = loginApi();
 //Importamos variable para utilizar los mensajes 'Toast' de primevue
 const toast = useToast();
-const { setUsuario } = usarCookies();
 
 //Función que evalua el input 'usuario' cumpla las condiciones
 const validarUsuario = () => {
@@ -77,7 +75,7 @@ const handleSubmit = async () => {
   });
   //Enviando al usuario al "dashboard" o "home" y guardando el usuario de forma local.
   if (resultado.success) {
-    setUsuario(usuario.value);
+    console.log("EXITO EN EL LOGIN");
     await router.push("/remisiones");
   } else {
     //mensaje de error dependiendo el resultado

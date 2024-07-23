@@ -66,7 +66,8 @@ const opcion = ref("");
 const motivo = ref("");
 const toast = useToast();
 const visible = ref(false);
-const { idCliente, usuario } = usarCookies();
+const idCliente = useCookie("idCliente");
+const usuario = useCookie("usuario");
 let mensaje = ref<mensajeSencillo>({ status: "", tittle: "", detail: "" });
 
 const emit = defineEmits(["postGuardarRemision"]);

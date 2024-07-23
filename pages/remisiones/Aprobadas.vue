@@ -100,7 +100,6 @@
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
-import { usarCookies } from "~/composables/cookies";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import {
   useDatosRemisiones,
@@ -113,16 +112,16 @@ const toast = useToast();
 let avisodetalles = ref();
 const isLoading = ref(false);
 const calendario = ref(true);
-const estadoRemisiones = ref(false);
 const botonRecargar = ref(false);
-// const { idCliente } = usarCookies();
+const estadoRemisiones = ref(false);
+const idCliente = useCookie("idCliente");
 const { listarRemisionesPorId } = useRemisionesApi();
 const { setConsultar, remisionesAprobadas } = useDatosRemisiones();
 
 const listar = async () => {
   isLoading.value = true;
 
-  const resultado = await listarRemisionesPorId("220");
+  const resultado = await listarRemisionesPorId(idCliente.value);
 
   if (resultado.success) {
     remisionesAprobadas.value = resultado.remisiones.filter(

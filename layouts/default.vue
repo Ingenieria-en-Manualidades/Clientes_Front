@@ -1,5 +1,5 @@
 <template>
-  <NavBar :usuario="'AUXPEPE'" />
+  <NavBar :usuario="usuario" />
   <div class="inline-flex m-[1%] w-[100%]">
     <MenuLateral class="hidden" />
     <div class="w-[100%] flex justify-center pr-[1%]">
@@ -10,9 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { usarCookies } from "~/composables/cookies";
-
-const { usuario } = usarCookies();
+const usuario = useCookie("usuario");
 </script>
 
 <style></style>

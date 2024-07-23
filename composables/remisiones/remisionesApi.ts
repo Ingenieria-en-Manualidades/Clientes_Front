@@ -8,7 +8,7 @@ export const useRemisionesApi = () => {
   const token = "3nmfgfsds#22dsff343fr";
 
   //Método que declaramos va a retornar una promesa con la estructura de la interfaz de remisiones.
-  const listarRemisionesPorId = async (idCliente: string | null): Promise<ApiPromise<Remision[]>>  => {
+  const listarRemisionesPorId = async (idCliente: string | null | undefined): Promise<ApiPromise<Remision[]>>  => {
     try {
       //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.
       const response = await fetch(`${urlApi}/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
@@ -25,7 +25,7 @@ export const useRemisionesApi = () => {
       const remisiones: Remision[] = await response.json();
       return { success: true, remisiones: remisiones.data};
     } catch (error) {
-      console.error("Error a la hora de llamar al endpoint 'ListarRemisiones:'", error.message);
+      console.error("Error a la hora de llamar al endpoint 'ListarRemisiones':", error.message);
       return { success: false, error: error.message };
     }
   }

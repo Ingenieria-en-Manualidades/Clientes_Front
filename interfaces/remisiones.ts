@@ -18,8 +18,8 @@ export interface Remision {
 export interface RemisionPost {
   accion: string,
   motivo: string,
-  cliente_id: string | null;
-  usuario: string | null;
+  cliente_id: string | null | undefined;
+  usuario: string | null | undefined;
   remision_id: number | undefined,
 }
 
