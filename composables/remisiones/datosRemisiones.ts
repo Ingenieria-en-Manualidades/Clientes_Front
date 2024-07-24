@@ -18,7 +18,7 @@ export const useDatosRemisiones = () => {
   const getFechas = (fecha1: Date, fecha2: Date | null) => {
     const fechas = [];
     
-    if (fecha1.getMonth() + 1 > -1 && fecha1.getMonth() + 1 < 10) {
+    if (fecha1.getMonth() + 1 > 0 && fecha1.getMonth() + 1 < 10) {
       fechas.push(`${fecha1.getFullYear()}-0${fecha1.getMonth() + 1}-${fecha1.getDate()}`);
     }else{
       fechas.push(`${fecha1.getFullYear()}-${fecha1.getMonth() + 1}-${fecha1.getDate()}`);

@@ -75,7 +75,6 @@ const handleSubmit = async () => {
   });
   //Enviando al usuario al "dashboard" o "home" y guardando el usuario de forma local.
   if (resultado.success) {
-    console.log("EXITO EN EL LOGIN");
     await router.push("/remisiones");
   } else {
     //mensaje de error dependiendo el resultado

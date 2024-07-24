@@ -1,8 +1,6 @@
 import axios from "axios";
-import { usarCookies } from "~/composables/cookies";
 
 const url = 'http://127.0.0.1:8000/api';
-// const { token, setToken, setIDCliente, borrarDatos } = usarCookies()
 
 export const loginApi = () => {
   const login = async (userData: any) => {

@@ -44,11 +44,39 @@ const visible = ref(false);
 const correo = ref();
 const { validarEmail } = useValidarEmail();
 
-const enviar = () => {
+const enviar = async () => {
   const respuesta = validarEmail(correo.value);
 
   if (respuesta.status === "success") {
-    console.log("funcionaaaaa");
+    try {
+      const response = await fetch("/api/enviarEmailPassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          correo: correo.value,
+        }),
+      });
+      console.log("ok", response.ok);
+      console.log("correo", correo.value);
+
+      if (response.ok) {
+        respuesta.tittle = "Correo enviado";
+        respuesta.detail =
+          "Por favor revise su correo para continuar con el proceso de recuperar contraseña.";
+      } else {
+        console.error("Error con el response");
+        respuesta.status = "error";
+        respuesta.tittle = "Correo no enviado";
+        respuesta.detail = "ERROR EN EL RESPONSE";
+      }
+    } catch (error) {
+      console.error("Error en el catch", error.message);
+      respuesta.status = "error";
+      respuesta.tittle = "Correo no enviado";
+      respuesta.detail = "ERROR EN EL CATCH";
+    }
   }
 
   toast.add({

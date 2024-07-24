@@ -57,7 +57,6 @@
 <script lang="ts" setup>
 import { ref, defineEmits } from "vue";
 import { useToast } from "primevue/usetoast";
-import { usarCookies } from "~/composables/cookies";
 import type { RemisionPost } from "~/interfaces/remisiones";
 import type { mensajeSencillo } from "~/interfaces/mensajes";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
@@ -107,5 +106,3 @@ const showMensaje = (mensaje: mensajeSencillo) => {
   });
 };
 </script>
-
-<style></style>

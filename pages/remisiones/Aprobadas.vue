@@ -167,6 +167,11 @@ const recargarTabla = () => {
   listar();
 };
 
+definePageMeta({
+  layout: "default",
+  middleware: "login",
+});
+
 listar();
 </script>
 
