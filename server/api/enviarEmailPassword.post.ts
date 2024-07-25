@@ -25,9 +25,9 @@ export default defineEventHandler( async (event: H3Event) => {
     return { success: true }
   } catch (error) {
     console.error('Error al enviar el correo', error.message);
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Error al enviar el correo' + error.message
-    })
+    // throw createError({
+    //   statusCode: 500,
+    //   statusMessage: 'Error al enviar el correo' + error.message
+    // })
   }
 })

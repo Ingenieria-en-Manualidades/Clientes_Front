@@ -58,8 +58,6 @@ const enviar = async () => {
           correo: correo.value,
         }),
       });
-      console.log("ok", response.ok);
-      console.log("correo", correo.value);
 
       if (response.ok) {
         respuesta.tittle = "Correo enviado";

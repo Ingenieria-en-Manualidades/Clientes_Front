@@ -17,18 +17,34 @@ export const useDatosRemisiones = () => {
 
   const getFechas = (fecha1: Date, fecha2: Date | null) => {
     const fechas = [];
-    
+
     if (fecha1.getMonth() + 1 > 0 && fecha1.getMonth() + 1 < 10) {
-      fechas.push(`${fecha1.getFullYear()}-0${fecha1.getMonth() + 1}-${fecha1.getDate()}`);
+      if (fecha1.getDate() > 0 && fecha1.getDate() < 10) {
+        fechas.push(`${fecha1.getFullYear()}-0${fecha1.getMonth() + 1}-0${fecha1.getDate()}`);
+      }else{
+        fechas.push(`${fecha1.getFullYear()}-0${fecha1.getMonth() + 1}-${fecha1.getDate()}`);
+      }
     }else{
-      fechas.push(`${fecha1.getFullYear()}-${fecha1.getMonth() + 1}-${fecha1.getDate()}`);
+      if (fecha1.getDate() > 0 && fecha1.getDate() < 10) {
+        fechas.push(`${fecha1.getFullYear()}-${fecha1.getMonth() + 1}-0${fecha1.getDate()}`);
+      }else{
+        fechas.push(`${fecha1.getFullYear()}-${fecha1.getMonth() + 1}-${fecha1.getDate()}`);
+      }
     }
 
     if (fecha2 !== null) {
-      if (fecha2.getMonth() + 1 > -1 && fecha2.getMonth() + 1 < 10) {
-        fechas.push(`${fecha2.getFullYear()}-0${fecha2.getMonth() + 1}-${fecha2.getDate()}`);
+      if (fecha2.getMonth() + 1 > 0 && fecha2.getMonth() + 1 < 10) {
+        if (fecha2.getDate() > 0 && fecha2.getDate() < 10) {
+          fechas.push(`${fecha2.getFullYear()}-0${fecha2.getMonth() + 1}-0${fecha2.getDate()}`);
+        }else{
+          fechas.push(`${fecha2.getFullYear()}-0${fecha2.getMonth() + 1}-${fecha2.getDate()}`);
+        }
       }else{
-        fechas.push(`${fecha2.getFullYear()}-${fecha2.getMonth() + 1}-${fecha2.getDate()}`);
+        if (fecha2.getDate() > 0 && fecha2.getDate() < 10) {
+          fechas.push(`${fecha2.getFullYear()}-${fecha2.getMonth() + 1}-0${fecha2.getDate()}`);
+        }else{
+          fechas.push(`${fecha2.getFullYear()}-${fecha2.getMonth() + 1}-${fecha2.getDate()}`);
+        }
       }
     }
 

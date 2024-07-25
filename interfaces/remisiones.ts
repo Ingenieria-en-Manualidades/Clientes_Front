@@ -17,7 +17,7 @@ export interface Remision {
 
 export interface RemisionPost {
   accion: string,
-  motivo: string,
+  motivo: string | null,
   cliente_id: string | null | undefined;
   usuario: string | null | undefined;
   remision_id: number | undefined,

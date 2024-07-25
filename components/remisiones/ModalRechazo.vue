@@ -25,10 +25,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-
+// Variable que oculta el dialog
 const visible = ref(false);
-
+// Varriables 'número de remision' y el motivo de rechazo
 const props = defineProps({
   numRemision: String,
   motivo: String,

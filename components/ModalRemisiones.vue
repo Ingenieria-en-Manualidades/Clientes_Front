@@ -18,7 +18,7 @@
     >
       <p class="font-manrope-r">N° Remision: {{ props.numRemision }}.</p>
       <small class="text-red-500 font-manrope-r"
-        >Por favor llenar los dos campos.</small
+        >Por favor llenar el campo 'motivo' en caso de rechazar.</small
       >
       <div class="border-2 px-[9%] py-[3%] rounded-md">
         <p class="font-manrope-b pb-1">Acción:</p>
@@ -27,12 +27,28 @@
           required
           class="bg-white rounded border-[1px] w-[70%] p-2"
         >
-          <option value="" disabled>Selecciona una Opcion</option>
-          <option value="Aprobado">Aceptar Remision</option>
-          <option value="Rechazado">Rechazar Remision</option>
+          <option value="" disabled>Selecciona una Opción</option>
+          <option value="Aprobado" @click="estadoTextArea(true)">
+            Aceptar Remisión
+          </option>
+          <option value="Rechazado" @click="estadoTextArea(false)">
+            Rechazar Remisión
+          </option>
         </select>
-        <p class="font-manrope-b pb-1 py-2">Motivo</p>
-        <Textarea v-model="motivo" autoResize rows="5" cols="30" />
+        <p class="font-manrope-b pb-1 py-2">
+          Motivo<i
+            :class="
+              disable ? 'pi pi-lock float-right' : 'pi pi-lock-open float-right'
+            "
+          ></i>
+        </p>
+        <Textarea
+          v-model="motivo"
+          autoResize
+          rows="5"
+          cols="29"
+          :disabled="disable"
+        />
       </div>
       <div class="flex justify-end gap-2 mt-2">
         <button
@@ -61,10 +77,11 @@ import type { RemisionPost } from "~/interfaces/remisiones";
 import type { mensajeSencillo } from "~/interfaces/mensajes";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
-const opcion = ref("");
-const motivo = ref("");
+const opcion = ref();
+const motivo = ref();
 const toast = useToast();
 const visible = ref(false);
+let disable = ref(true);
 const idCliente = useCookie("idCliente");
 const usuario = useCookie("usuario");
 let mensaje = ref<mensajeSencillo>({ status: "", tittle: "", detail: "" });
@@ -77,22 +94,40 @@ const props = defineProps({
   idRemision: Number,
 });
 
+const estadoTextArea = (estado: boolean) => {
+  disable.value = estado;
+  if (disable) {
+    motivo.value = "";
+  }
+};
+
 const saveRemision = async () => {
-  if (opcion.value === "" || motivo.value === "") {
+  if (!opcion.value) {
     mensaje.value.status = "error";
-    mensaje.value.tittle = "Hacen falta campos por llenar.";
-    mensaje.value.detail = "Por favor llenar los dos campos ¡Es obligatorio!";
+    mensaje.value.tittle = "Hace falta una opción.";
+    mensaje.value.detail = "Por favor elegir una opción antes de guardar.";
   } else {
-    const remision = ref<RemisionPost>({
-      accion: opcion.value,
-      motivo: motivo.value,
-      cliente_id: idCliente.value,
-      usuario: usuario.value,
-      remision_id: props.idRemision,
-    });
-    mensaje = await agregarRemision(remision.value, props.numRemision);
-    emit("postGuardarRemision");
-    visible.value = false;
+    if (opcion.value === "Rechazado" && !motivo.value) {
+      mensaje.value.status = "error";
+      mensaje.value.tittle = "Falta del motivo.";
+      mensaje.value.detail = "Por favor escribir el motivo del rechazo.";
+    } else {
+      if (opcion.value === "Aprobado") {
+        motivo.value = "aprobado";
+      }
+
+      const remision = ref<RemisionPost>({
+        accion: opcion.value,
+        motivo: motivo.value,
+        cliente_id: idCliente.value,
+        usuario: usuario.value,
+        remision_id: props.idRemision,
+      });
+      mensaje = await agregarRemision(remision.value, props.numRemision);
+      emit("postGuardarRemision");
+      visible.value = false;
+      motivo.value = "";
+    }
   }
   showMensaje(mensaje.value);
 };
