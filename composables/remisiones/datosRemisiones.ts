@@ -64,3 +64,25 @@ export const columnas = [
   { field: "valor", header: "VALOR" },
   { field: "fecha", header: "FECHA" },
 ];
+
+/**
+ * Array de Elementos, rutas e iconos para las pestañas y la navegación entre remisiones.
+ * Importado en el componente 'TabPanelRemisiones'.
+ */
+export const items = ref([
+  {
+    route: "/remisiones",
+    label: "Pendientes",
+    icon: "pi pi-clipboard text-[13px] sm:text-[16px]",
+  },
+  {
+    route: "/remisiones/Aprobadas",
+    label: "Aprobadas",
+    icon: "pi pi-check text-[13px] sm:text-[16px]",
+  },
+  {
+    route: "/remisiones/rechazadas",
+    label: "Rechazadas",
+    icon: "pi pi-times text-[13px] sm:text-[16px]",
+  },
+]);

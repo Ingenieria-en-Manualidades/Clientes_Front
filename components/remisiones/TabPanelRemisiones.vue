@@ -9,6 +9,7 @@
             :to="tab.route"
             custom
           >
+            <!-- El estilo de la pestaña va cambiando dependiendo que presione el usuario -->
             <a
               v-ripple
               :href="href"
@@ -39,26 +40,12 @@
 </template>
 
 <script setup lang="ts">
-const items = ref([
-  {
-    route: "/remisiones",
-    label: "Pendientes",
-    icon: "pi pi-clipboard text-[13px] sm:text-[16px]",
-  },
-  {
-    route: "/remisiones/Aprobadas",
-    label: "Aprobadas",
-    icon: "pi pi-check text-[13px] sm:text-[16px]",
-  },
-  {
-    route: "/remisiones/rechazadas",
-    label: "Rechazadas",
-    icon: "pi pi-times text-[13px] sm:text-[16px]",
-  },
-]);
+import { items } from "~/composables/remisiones/datosRemisiones"; // Importamos los elementos y las rutas para cambiar entre remisiones
 
-const route = useRoute();
+const route = useRoute(); // Variable para el método para cambiar las rutas
+
+//Metodo para navegar entre las rutas de remisiones al dar click en las pestañas
 const isActive = (routePath: string) => {
-  return route.path === routePath;
+  return route.path === routePath; //Lo que haya en el parametro sirve para cambiar la ruta de la página.
 };
 </script>

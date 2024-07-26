@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineEmits } from "vue";
+import { defineEmits } from "vue";
 import { useToast } from "primevue/usetoast";
 import type { RemisionPost } from "~/interfaces/remisiones";
 import type { mensajeSencillo } from "~/interfaces/mensajes";

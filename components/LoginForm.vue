@@ -6,6 +6,7 @@
         class="text-base md:text-lg lg:text-lg text-amarilloIENM font-manrope-r"
         >Usuario</label
       >
+      <!-- Mensaje de error al momento de cometer un error al escribir -->
       <p class="text-sm text-white">
         {{ usernameError }}
       </p>
@@ -40,21 +41,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { useRouter } from "#app";
 import { useToast } from "primevue/usetoast";
 import { loginApi } from "~/composables/loginApi";
 
-//Creo variables 'ref' para recibir la información del usuario
+// Creo variables 'ref' para recibir la información del usuario
 const usuario = ref("");
 const contrasenia = ref("");
-//Variable que utilizaremos para viajar entre rutas
+// Variable que utilizaremos para viajar entre rutas
 const router = useRouter();
-//Creo variable que establece un error en los inputs
+// Variable que establece un error en los inputs
 const usernameError = ref<string | null>(null);
-//Importamos el método del login
+// Importamos el método del login
 const { login } = loginApi();
-//Importamos variable para utilizar los mensajes 'Toast' de primevue
+// Importamos variable para utilizar los mensajes 'Toast' de primevue
 const toast = useToast();
 
 //Función que evalua el input 'usuario' cumpla las condiciones
@@ -73,7 +73,7 @@ const handleSubmit = async () => {
     username: usuario.value,
     password: contrasenia.value,
   });
-  //Enviando al usuario al "dashboard" o "home" y guardando el usuario de forma local.
+  //Enviando al usuario al "dashboard" de las remisiones en caso de que el usuario este registrado.
   if (resultado.success) {
     await router.push("/remisiones");
   } else {

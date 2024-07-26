@@ -3,9 +3,11 @@ import axios from "axios";
 const url = 'http://127.0.0.1:8000/api';
 
 export const loginApi = () => {
+
+  // Metodo importado en el componente 'LoginForm'.
   const login = async (userData: any) => {
     try {
-      //llamando al endpoint y devolviendo el token.
+      //llamando al endpoint que verificara al usuario y nos devolvera el token.
       const response = await axios.post(
         `${url}/login`,
         userData,
@@ -15,7 +17,9 @@ export const loginApi = () => {
           },
         }
       );
-      //Guardamos el token en un localStorage y la id del cliente de manera local.
+      /**
+       * Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
+       */
       const resultado = await fetch('/api/cookiesRemisiones', {
         method: "POST",
         headers: {
@@ -30,7 +34,8 @@ export const loginApi = () => {
       refreshCookie('token');
       refreshCookie('idCliente');
       refreshCookie('usuario');
-
+      
+      // Verificamos si hay un error con las cookies
       if (!resultado) {
         throw "Error a la hora de crear las cookies";
       }
@@ -64,15 +69,16 @@ export const loginApi = () => {
     }
   };
 
+  // Método importado en el componente 'MenuItems'.
   const logout = async () => {
     const token = useCookie("token");
     try {
-      //Llamamos al token del usuario y verificamos su existencia.
+      // Llamamos al token del usuario y verificamos su existencia.
       if (!token.value) {
         throw new Error('No se encontró el token de autenticación');
       }
 
-      //Llamamos al endpoint "logout" dandole el token del usuario para borrar el token.
+      // Llamamos al endpoint "logout" del 'Modulo-Cliente Backend' dandole el token del usuario para borrarlo.
       const response = await axios.post(
         `${url}/logout`, 
         {},
@@ -83,11 +89,12 @@ export const loginApi = () => {
           },
         }
       );
-      //Borramos el token, el id del cliente, el nombre de usuario y retornamos mensaje exitoso del endpoint.
+      // Borramos todas las cookies(token, idCliente y usuario) y retornamos mensaje exitoso del endpoint.
       const resultado = await fetch('/api/deleteCookiesRem', {
         method: 'DELETE',
-      })  
+      });
 
+      // Verificamos que borramos bien las cookies.
       if (!resultado) {
         throw "Error a la hora de borrar las cookies";
       }
@@ -95,7 +102,7 @@ export const loginApi = () => {
       return {success: true, status: 'success', tittle: "Exito al cerrar sesión", mensaje: response.data.message};
     } catch (error) {
       console.error('Error al cerrar sesión:', error.message);
-      return {success: false, status: 'error', tittle: "Fallo al cerrar sesión", mensaje: 'Por favor reiniciar el navegador'};
+      return {success: false, status: 'error', tittle: "Fallo al cerrar sesión", mensaje: 'Por favor verificar fallo.'};
     }
   };
 

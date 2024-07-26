@@ -44,18 +44,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useToast } from "primevue/usetoast";
+import { useToast } from "primevue/usetoast"; // Importamos variable para utilizar los mensajes 'Toast' de primevue
 import { loginApi } from "~/composables/loginApi";
 
 const toast = useToast();
-const router = useRouter();
+const router = useRouter(); // Variable que utilizaremos para viajar entre rutas
 const { logout } = loginApi();
 
-//Crea la raferecia para el menu
+// Crea la raferecia para el menu
 const menu = ref();
-//Crea un arreglo que contiene los items con su respectivo logo y nombre
+// Crea un arreglo que contiene los items con su respectivo logo y nombre
 const items = ref([
   {
     label: "Salir",
@@ -64,24 +63,23 @@ const items = ref([
   },
 ]);
 
-//Función que me ayuda abrir el menu con un click
+// Función que ayuda abrir el menu con un click
 const toggle = (event) => {
   menu.value.toggle(event);
 };
 
-//Función que ayuda a conseguir el nombre de usuario pasasdo al componente.
+// Función que ayuda a conseguir el nombre de usuario entregado al componente.
 const props = defineProps({
   usuario: String,
 });
 
 //Función de cerrar sesión para borrar token del usuario y retornar al login.
 const cerrarSesion = async () => {
-  //llamamos al método logout que realiza el borrado del token.
+  // llamamos al método logout que realiza el borrado del token en la base de datos y como cookie .
   const response = await logout();
-  //Envia al usuario al token
 
+  // Revisamos si el cerrar sesión funciono.
   if (response.success) {
-    console.log("EXITO");
     await router.push("/");
   } else {
     toast.add({
@@ -93,5 +91,3 @@ const cerrarSesion = async () => {
   }
 };
 </script>
-
-<style></style>
