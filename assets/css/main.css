@@ -46,4 +46,7 @@
     .botones{
         @apply py-1 px-4 font-manrope-b text-white rounded-lg;
     }
+    .botonUpdate{
+        @apply bg-verdeIENM text-black w-full font-manrope-r hover:text-white hover:bg-verdeOscIENM rounded-md p-2 tracking-widest mb-5;
+    }
 }
