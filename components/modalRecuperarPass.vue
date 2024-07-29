@@ -38,42 +38,23 @@
 <script lang="ts" setup>
 import { useToast } from "primevue/usetoast";
 import { useValidarEmail } from "~/composables/login/validaciones";
+import { useActualizarPasswordAPI } from "~/composables/login/ActualizarPasswordAPI";
 
 const toast = useToast();
 const visible = ref(false);
 const correo = ref();
 const { validarEmail } = useValidarEmail();
+const { getTokenPassword } = useActualizarPasswordAPI();
 
 const enviar = async () => {
   const respuesta = validarEmail(correo.value);
 
   if (respuesta.status === "success") {
-    try {
-      const response = await fetch("/api/enviarEmailPassword", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          correo: correo.value,
-        }),
-      });
+    const resultado = await getTokenPassword(correo.value);
 
-      if (response.ok) {
-        respuesta.tittle = "Correo enviado";
-        respuesta.detail =
-          "Por favor revise su correo para continuar con el proceso de recuperar contraseña.";
-      } else {
-        console.error("Error con el response");
-        respuesta.status = "error";
-        respuesta.tittle = "Correo no enviado";
-        respuesta.detail = "ERROR EN EL RESPONSE";
-      }
-    } catch (error) {
-      console.error("Error en el catch", error.message);
-      respuesta.status = "error";
-      respuesta.tittle = "Correo no enviado";
-      respuesta.detail = "ERROR EN EL CATCH";
+    if (resultado?.success) {
+    } else {
+      console.error("error token: ", resultado?.motivo);
     }
   }
 

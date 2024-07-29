@@ -1,4 +1,3 @@
-import axios from "axios";
 import type { mensajeSencillo } from "~/interfaces/mensajes";
 import type { Remision, RemisionPost, ApiPromise } from "~/interfaces/remisiones";
 

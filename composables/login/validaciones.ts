@@ -8,13 +8,13 @@ export const useValidarEmail = () => {
       };
     }
   
-    if (email.indexOf("@") === -1) {
-      return {
-        status: "warn",
-        tittle: "Mala diligenciación.",
-        detail: "El correo debe tener un '@' como minimo.",
-      };
-    }
+    // if (email.indexOf("@") === -1) {
+    //   return {
+    //     status: "warn",
+    //     tittle: "Mala diligenciación.",
+    //     detail: "El correo debe tener un '@' como minimo.",
+    //   };
+    // }
   
     return {
       status: "success",
