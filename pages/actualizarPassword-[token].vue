@@ -85,5 +85,6 @@ const actualizar = () => {
 
 definePageMeta({
   layout: "login",
+  middleware: "actua-password",
 });
 </script>

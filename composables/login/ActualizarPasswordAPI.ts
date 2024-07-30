@@ -1,4 +1,4 @@
-
+import type { mensajeSencillo } from "~/interfaces/mensajes";
 const url = 'http://127.0.0.1:8000/api';
 
 export const useActualizarPasswordAPI = () => {
@@ -37,36 +37,38 @@ export const useActualizarPasswordAPI = () => {
     }
   }
 
-  const setEnviarEmail = async (valorCorreo: string, token: string) => {
-    try {
-      const response = await fetch("/api/enviarEmailPassword", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          correo: valorCorreo,
-        }),
-      });
-      if (response.ok) {
-        respuesta.tittle = "Correo enviado";
-        respuesta.detail =
-          "Por favor revise su correo para continuar con el proceso de recuperar contraseña.";
-      } else {
-        console.error("Error con el response");
-        respuesta.status = "error";
-        respuesta.tittle = "Correo no enviado";
-        respuesta.detail = "ERROR EN EL RESPONSE";
+  const setEnviarEmail = async (valorCorreo: string, valorToken: string) => {
+    const response = await fetch("/api/enviarEmailPassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        correo: valorCorreo,
+        token: valorToken
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      return {
+        status: "success",
+        tittle: "Correo enviado",
+        detail: "Por favor revise su correo para continuar con el proceso."
       }
-    } catch (error) {
-      console.error("Error en el catch", error.message);
-      respuesta.status = "error";
-      respuesta.tittle = "Correo no enviado";
-      respuesta.detail = "ERROR EN EL CATCH";
+    } else {
+      console.error("Error a la hora de enviar el correo: ", data.error);
+      return {
+        status: "error",
+        tittle: "Error "+ data.error.responseCode,
+        detail: "Error a la hora de enviar el correo."
+      }
     }
   }
 
   return {
     getTokenPassword,
+    setEnviarEmail
   };
 }

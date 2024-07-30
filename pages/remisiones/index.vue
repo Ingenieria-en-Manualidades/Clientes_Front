@@ -1,5 +1,5 @@
 <template>
-  <div class="card w-[100%] md:w-[760px]">
+  <div class="card w-[100%] md:w-[850px]">
     <TabPanelRemisiones />
     <div
       class="border-[1px] p-5 rounded-t-lg border-gray-300"

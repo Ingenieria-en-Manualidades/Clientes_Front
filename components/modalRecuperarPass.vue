@@ -39,29 +39,50 @@
 import { useToast } from "primevue/usetoast";
 import { useValidarEmail } from "~/composables/login/validaciones";
 import { useActualizarPasswordAPI } from "~/composables/login/ActualizarPasswordAPI";
+import type { mensajeSencillo } from "~/interfaces/mensajes";
 
 const toast = useToast();
 const visible = ref(false);
 const correo = ref();
 const { validarEmail } = useValidarEmail();
-const { getTokenPassword } = useActualizarPasswordAPI();
+const { getTokenPassword, setEnviarEmail } = useActualizarPasswordAPI();
 
 const enviar = async () => {
-  const respuesta = validarEmail(correo.value);
+  let mensaje = ref<mensajeSencillo>({
+    status: undefined,
+    tittle: undefined,
+    detail: undefined,
+  });
 
-  if (respuesta.status === "success") {
-    const resultado = await getTokenPassword(correo.value);
+  const validar = validarEmail(correo.value);
 
-    if (resultado?.success) {
+  if (validar.success) {
+    const resultadoToken = await getTokenPassword(correo.value);
+
+    if (resultadoToken?.success) {
+      const resultadoEmail = await setEnviarEmail(
+        correo.value,
+        resultadoToken.token
+      );
+
+      mensaje.value.status = resultadoEmail.status;
+      mensaje.value.tittle = resultadoEmail.tittle;
+      mensaje.value.detail = resultadoEmail.detail;
     } else {
-      console.error("error token: ", resultado?.motivo);
+      mensaje.value.status = "error";
+      mensaje.value.tittle = "Error " + resultadoToken.status;
+      mensaje.value.detail = resultadoToken.motivo;
     }
+  } else {
+    mensaje.value.status = validar.status;
+    mensaje.value.tittle = validar.tittle;
+    mensaje.value.detail = validar.detail;
   }
 
   toast.add({
-    severity: respuesta.status,
-    summary: respuesta.tittle,
-    detail: respuesta.detail,
+    severity: mensaje.value.status,
+    summary: mensaje.value.tittle,
+    detail: mensaje.value.detail,
     life: 3000,
   });
 };

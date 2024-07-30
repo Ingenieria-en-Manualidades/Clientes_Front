@@ -1,16 +1,29 @@
 import type { mensajeSencillo } from "~/interfaces/mensajes";
 import type { Remision, RemisionPost, ApiPromise } from "~/interfaces/remisiones";
 
-const urlApi = "https://imecplusdev.ienm.com.co:8443/api";
+const urlApi = "https://imecplusdev.ienm.com.co:8443";
 
 export const useRemisionesApi = () => {
   const token = "3nmfgfsds#22dsff343fr";
+
+  const listarPreviewRemision = async (numRemision: string) => {
+    try {
+      const response = await fetch(`${urlApi}/RemisionOnline/openPreViewRemision/${numRemision}`, {
+        method: 'GET'
+      });
+
+      return { success: true }
+    } catch (error) {
+      console.error("Error a la hora de realizar el listarPreviewRemision: ", error);
+      return { success: false};
+    }
+  }
 
   //Método que declaramos va a retornar una promesa con la estructura de la interfaz de remisiones.
   const listarRemisionesPorId = async (idCliente: string | null | undefined): Promise<ApiPromise<Remision[]>>  => {
     try {
       //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.
-      const response = await fetch(`${urlApi}/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
+      const response = await fetch(`${urlApi}/api/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
         method: 'GET',
         headers: {
           'Authorization': `${token}`,
@@ -31,7 +44,7 @@ export const useRemisionesApi = () => {
 
   const agregarRemision = async (remision: RemisionPost, numRemision: string | undefined) => {
     try{
-      const response = await fetch(`${urlApi}/RemisionOnline/saveGestionRemisionClienteAPI`, {
+      const response = await fetch(`${urlApi}/api/RemisionOnline/saveGestionRemisionClienteAPI`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(remision),

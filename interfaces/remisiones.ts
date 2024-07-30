@@ -15,6 +15,23 @@ export interface Remision {
     estado: string | null;
   }
 
+  export interface PreviewRemision {
+    programacion_id: string,
+    nombre: string,
+    codigo_cobro: number,
+    unidades: number,
+    precio: number,
+    documento_material: null,
+    documento_orden: null,
+    fecha: string,
+    orden_compra: "-",
+    numero_pedido: "-",
+    observacion: "-",
+    valor: "12490.00",
+    round: "79.00",
+    totalredondeado: "2370.00"
+  }
+
 export interface RemisionPost {
   accion: string,
   motivo: string | null,

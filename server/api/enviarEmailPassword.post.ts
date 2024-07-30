@@ -16,13 +16,13 @@ export default defineEventHandler( async (event: H3Event) => {
     from: 'doctorjst321@gmail.com',
     to: correo,
     subject: 'Recuperar contraseña',
-    text: `Por favor, haga clic en el siguiente enlace para restablecer su contraseña: http://localhost:3000/actualizarPassword?token=${token}`
+    text: `Por favor, haga clic en el siguiente enlace para restablecer su contraseña: http://localhost:3000/actualizarPassword-${token}`
   }
 
   try {
     await transporter.sendMail(mailOptions)
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error('Error al enviar el correo', error.message);
+    return { success: false, error: error};
   }
 })

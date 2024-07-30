@@ -2,8 +2,8 @@ Para hacer funcionar el proyecto ya una vez clonado en el caso de no tener la ca
 
 1. npm cache clean --force
 2. npm install
+3. npm run build
 
 Datos para iniciar sesión:
 Usuario: ADMON
 Contraseña: password
-
