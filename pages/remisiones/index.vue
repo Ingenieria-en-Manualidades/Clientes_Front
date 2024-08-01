@@ -51,7 +51,15 @@
         ></Column>
         <Column header="Acción">
           <template #body="keyRem">
-            <div class="inline-flex">
+            <div class="block sm:inline-flex sm:gap-1">
+              <ModalPreviewRemision
+                :numRemision="keyRem.data.no_remision"
+                :fecha="keyRem.data.fecha"
+                :cliente="keyRem.data.nombre_cliente"
+                :ordenCompra="keyRem.data.orden_compra"
+                :hojaEntrada="keyRem.data.numero_pedido"
+                :contacto="keyRem.data.nombre + ' ' + keyRem.data.apellido"
+              />
               <!-- LLamando a la modal la cual le asignamos un evento o "emit" para que vuelva a listar después de guardar una remisión -->
               <ModalRemisiones
                 :numRemision="keyRem.data.no_remision"
@@ -99,9 +107,9 @@
 <script setup lang="ts">
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
-import ModalRemisiones from "~/components/ModalRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
+import ModalPreviewRemision from "~/components/remisiones/ModalPreviewRemision.vue";
 import {
   useDatosRemisiones,
   columnas, //Declaración de las columnas de la tabla de remisiones

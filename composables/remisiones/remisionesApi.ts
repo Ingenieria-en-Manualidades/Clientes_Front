@@ -1,21 +1,23 @@
 import type { mensajeSencillo } from "~/interfaces/mensajes";
-import type { Remision, RemisionPost, ApiPromise } from "~/interfaces/remisiones";
+import type { Remision, RemisionPost, ApiPromise, PreviewRemision } from "~/interfaces/remisiones";
 
 const urlApi = "https://imecplusdev.ienm.com.co:8443";
 
 export const useRemisionesApi = () => {
   const token = "3nmfgfsds#22dsff343fr";
 
-  const listarPreviewRemision = async (numRemision: string) => {
+  const listarPreviewRemision = async (numRemision: string): Promise<ApiPromise<PreviewRemision[]>> => {
     try {
       const response = await fetch(`${urlApi}/RemisionOnline/openPreViewRemision/${numRemision}`, {
         method: 'GET'
       });
 
-      return { success: true }
+      const previewRemision: PreviewRemision[] = await response.json();
+
+      return { success: true, remisiones: previewRemision.data }
     } catch (error) {
       console.error("Error a la hora de realizar el listarPreviewRemision: ", error);
-      return { success: false};
+      return { success: false, error: error.message};
     }
   }
 
@@ -80,5 +82,6 @@ export const useRemisionesApi = () => {
   return {
     listarRemisionesPorId,
     agregarRemision,
+    listarPreviewRemision
   };
 }

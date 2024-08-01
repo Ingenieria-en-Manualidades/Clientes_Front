@@ -21,15 +21,15 @@ export interface Remision {
     codigo_cobro: number,
     unidades: number,
     precio: number,
-    documento_material: null,
-    documento_orden: null,
+    documento_material: string | null,
+    documento_orden: string | null,
     fecha: string,
-    orden_compra: "-",
-    numero_pedido: "-",
-    observacion: "-",
-    valor: "12490.00",
-    round: "79.00",
-    totalredondeado: "2370.00"
+    orden_compra: string,
+    numero_pedido: string,
+    observacion: string,
+    valor: number,
+    round: number,
+    totalredondeado: number
   }
 
 export interface RemisionPost {
@@ -42,6 +42,6 @@ export interface RemisionPost {
 
 export interface ApiPromise<T> {
   success: boolean;
-  remisiones?: T;
+  remisiones?: T | undefined;
   error?: string;
 }

@@ -61,8 +61,6 @@ export const useDatosRemisiones = () => {
 
 export const columnas = [
   { field: "no_remision", header: "N°" },
-  { field: "orden_compra", header: "Orden de compra" },
-  { field: "numero_pedido", header: "Número de pedido" },
   { field: "valor", header: "VALOR" },
   { field: "fecha", header: "FECHA" },
 ];

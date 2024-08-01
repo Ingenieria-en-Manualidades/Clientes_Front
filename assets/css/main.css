@@ -49,4 +49,7 @@
     .botonUpdate{
         @apply bg-verdeIENM text-black w-full font-manrope-r hover:text-white hover:bg-verdeOscIENM rounded-md p-2 tracking-widest mb-5;
     }
+    .celdasModalP{
+        @apply py-1 border-[1px] border-black px-8;
+    }
 }
