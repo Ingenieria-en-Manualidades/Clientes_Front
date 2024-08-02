@@ -59,6 +59,7 @@
                 :ordenCompra="keyRem.data.orden_compra"
                 :hojaEntrada="keyRem.data.numero_pedido"
                 :contacto="keyRem.data.nombre + ' ' + keyRem.data.apellido"
+                :botones="false"
               />
               <!-- LLamando a la modal la cual le asignamos un evento o "emit" para que vuelva a listar después de guardar una remisión -->
               <ModalRemisiones

@@ -20,48 +20,52 @@
       <div ref="contenido">
         <!-- Cabecerar con información de la empresa -->
         <div
-          class="inline-flex w-full justify-center gap-2 sm:gap-[22%] border-t-[1px] border-gray-300 pt-2"
+          class="inline-flex w-full justify-center gap-2 sm:gap-7 md:gap-[22%] border-t-[1px] border-gray-300 pt-2"
         >
           <img
             src="/assets/img/ienmLogo.jpeg"
             alt="IENM Logo"
-            class="w-[70px] sm:w-[130px]"
+            class="w-[90px] sm:w-[130px]"
           />
-          <p class="text-center font-manrope-b text-black text-xs sm:text-xs">
+          <p class="text-center font-manrope-b text-black text-xs sm:text-base">
             INGENIERÍA EN MANUALIDADES SAS <br />
             NIT 800.187.547-1 <br />
             TV 29 #16-57
           </p>
-          <p class="text-center font-manrope-b text-black text-xs sm:text-xs">
+          <p class="text-center font-manrope-b text-black text-xs sm:text-base">
             REMISIÓN N° {{ numRemision }}<br />{{ fecha }}
           </p>
         </div>
         <!-- Tabla de la información del cliente -->
         <div class="flex justify-center">
-          <table>
-            <tr
-              class="bg-azulClaroIENM border-x-[1px] border-t-[1px] border-x-azulIENM border-t-azulIENM"
-            >
+          <table class="border-[1px] border-black">
+            <tr class="">
               <th
-                class="py-[6px] font-manrope-b text-white text-sm sm:text-base"
+                class="py-[6px] font-manrope-b text-black text-sm sm:text-base bg-gray-300 border-b-[1px] border-b-black"
                 colspan="3"
               >
                 {{ cliente }}
               </th>
             </tr>
             <tr
-              class="bg-amarilloIENM font-manrope-b text-center text-black text-sm sm:text-base"
+              class="font-manrope-b text-center text-black text-sm sm:text-base"
             >
-              <th class="celdasModalP">Orden de compra</th>
-              <th class="celdasModalP">Hoja de entrada</th>
-              <th class="celdasModalP">Contacto</th>
+              <th class="bg-gray-200 celdasModalP">Orden de compra</th>
+              <th class="bg-gray-200 celdasModalP">Hoja de entrada</th>
+              <th class="bg-gray-200 celdasModalP">Contacto</th>
             </tr>
             <tr
               class="font-manrope-r text-center text-black text-sm sm:text-base"
             >
-              <td class="bg-gray-100 celdasModalP">{{ ordenCompra }}</td>
-              <td class="bg-gray-100 celdasModalP">{{ hojaEntrada }}</td>
-              <td class="bg-gray-100 celdasModalP">{{ contacto }}</td>
+              <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
+                {{ ordenCompra }}
+              </td>
+              <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
+                {{ hojaEntrada }}
+              </td>
+              <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
+                {{ contacto }}
+              </td>
             </tr>
           </table>
         </div>
@@ -70,7 +74,7 @@
           <table class="w-full">
             <thead>
               <tr
-                class="font-manrope-b border-b-2 border-b-black bg-verdeOscIENM text-black text-xs sm:text-[15px]"
+                class="font-manrope-b border-b-2 border-b-black text-black text-xs sm:text-[15px]"
               >
                 <th class="py-2">OP</th>
                 <th class="py-2">SKU</th>
@@ -100,17 +104,17 @@
             </tbody>
             <tfoot>
               <tr
-                class="bg-gray-200 border-b-[1px] border-b-black border-t-2 border-t-black font-manrope-r text-black text-xs sm:text-[14px]"
+                class="bg-gray-200 border-t-2 border-t-black font-manrope-r text-black text-xs sm:text-[14px]"
               >
-                <td class="text-right pr-5 py-1" colspan="7">
+                <td class="text-right lg:pr-5 py-1" colspan="7">
                   <span class="font-bold mr-10">TOTAL</span>
                   <span class="font-bold mr-1">$</span>{{ total }}
                 </td>
               </tr>
               <tr
-                class="bg-gray-200 border-b-[1px] border-b-black font-manrope-r text-black text-xs sm:text-[14px]"
+                class="bg-gray-200 font-manrope-r text-black text-xs sm:text-[14px]"
               >
-                <td class="text-right pr-5 py-1" colspan="7">
+                <td class="text-right lg:pr-5 py-1" colspan="7">
                   <span class="font-bold mr-10">IVA</span>
                   <span class="font-bold mr-1">$</span>{{ iva }}
                 </td>
@@ -118,7 +122,7 @@
               <tr
                 class="bg-gray-200 font-manrope-r text-black text-xs sm:text-[14px]"
               >
-                <td class="text-right pr-5 py-1" colspan="7">
+                <td class="text-right lg:pr-5 py-1" colspan="7">
                   <span class="font-bold mr-7">TOTAL GENERAL</span>
                   <span class="font-bold mr-1">$</span>{{ totalGeneral }}
                 </td>
@@ -128,7 +132,7 @@
         </div>
         <!-- Ultimos detalles como la observación y la firma -->
         <div class="mt-3">
-          <div class="font-manrope-b mb-2 text-black">
+          <div class="font-manrope-b mb-2 text-black text-xs sm:text-base">
             <label for="observacion">Observaciones:</label>
           </div>
           <Textarea
@@ -144,7 +148,13 @@
             >
               ELABORADO POR:<br />{{ usuario }}
             </p>
-            <p class="text-center w-2/4">
+            <p class="text-center w-2/4 hidden sm:block">
+              _____________________________________________<br />
+              <span class="font-manrope-b text-black text-xs sm:text-base"
+                >FIRMA</span
+              >
+            </p>
+            <p class="text-center w-2/4 block sm:hidden">
               ___________________________<br />
               <span class="font-manrope-b text-black text-xs sm:text-base"
                 >FIRMA</span
@@ -153,9 +163,12 @@
           </div>
         </div>
       </div>
-      <div class="w-full text-right mt-4 border-t-[1px] border-t-gray-300 pt-3">
+      <div
+        class="w-full text-right mt-4 border-t-[1px] border-t-gray-300 pt-3"
+        v-if="botones"
+      >
         <button class="botones bg-red-500 mr-3" @click="visible = false">
-          Cancelar
+          Cerrar
         </button>
         <button class="botones bg-verdeOscIENM" @click="generarPDF">
           <i class="pi pi-file-pdf"></i>
@@ -188,6 +201,7 @@ const props = defineProps({
   ordenCompra: String,
   hojaEntrada: String,
   contacto: String,
+  botones: Boolean,
 });
 
 const getModalPreview = async () => {
@@ -206,14 +220,27 @@ const getModalPreview = async () => {
 
 const generarPDF = () => {
   const doc = new jsPDF({
-    format: "a3",
-    orientation: "l",
+    format: [1100, 1097],
+    orientation: "p",
     unit: "pt",
   });
+
+  const numPaginas = doc.internal.pages.length - 1;
 
   if (contenido.value) {
     doc.html(contenido.value, {
       callback: function (doc: jsPDF) {
+        for (let i = 0; i <= numPaginas; i++) {
+          doc.setTextColor(150, 150, 150);
+          doc.setFontSize(140);
+          doc.setFont("helvetica", "bold");
+
+          doc.text("APROBADO", 650, 750, { angle: 45, align: "center" });
+          if (i < numPaginas - 1) {
+            doc.addPage();
+          }
+        }
+
         doc.save(`Detalles-remisión-${props.numRemision}.pdf`);
       },
       x: 10,

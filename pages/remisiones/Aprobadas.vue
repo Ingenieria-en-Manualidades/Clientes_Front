@@ -50,15 +50,16 @@
           :header="col.header"
         ></Column>
         <Column header="">
-          <template #body>
-            <div
-              class="bg-verdeOscIENM w-[100%] sm:w-[171px] px-3 py-1 rounded"
-            >
-              <i class="pi pi-check text-white"></i>
-              <span class="text-white font-manrope-r ml-2 hidden sm:inline-flex"
-                >Remisión aprobada</span
-              >
-            </div>
+          <template #body="keyRem">
+            <ModalPreviewRemision
+              :numRemision="keyRem.data.no_remision"
+              :fecha="keyRem.data.fecha"
+              :cliente="keyRem.data.nombre_cliente"
+              :ordenCompra="keyRem.data.orden_compra"
+              :hojaEntrada="keyRem.data.numero_pedido"
+              :contacto="keyRem.data.nombre + ' ' + keyRem.data.apellido"
+              :botones="true"
+            />
           </template>
         </Column>
       </DataTable>
@@ -101,6 +102,7 @@ import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
+import ModalPreviewRemision from "~/components/remisiones/ModalPreviewRemision.vue";
 import {
   useDatosRemisiones,
   columnas, //Declaración de las columnas de la tabla de remisiones
