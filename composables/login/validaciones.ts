@@ -20,7 +20,22 @@ export const useValidarEmail = () => {
     return { success: true};
   };
 
+  const verificarToken = async (tokenPassword: string | string[]) => {
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/verificarToken/${tokenPassword}`, {
+            method: 'GET'
+        });
+
+        const resultado = await response.json();
+
+        return resultado;
+    } catch (error) {
+        console.log("error en mid actuaPa: ", error);
+    }
+  }
+
   return {
-    validarEmail
+    validarEmail,
+    verificarToken
   }
 }

@@ -164,16 +164,24 @@
         </div>
       </div>
       <div
-        class="w-full text-right mt-4 border-t-[1px] border-t-gray-300 pt-3"
-        v-if="botones"
+        class="w-full mt-5 border-t-[1px] border-t-gray-300 pt-3 inline-flex"
+        v-if="estado === 'Aprobado'"
       >
-        <button class="botones bg-red-500 mr-3" @click="visible = false">
-          Cerrar
-        </button>
-        <button class="botones bg-verdeOscIENM" @click="generarPDF">
-          <i class="pi pi-file-pdf"></i>
-          Generar PDF
-        </button>
+        <div
+          class="bg-verdeOscIENM py-2 px-1 sm:px-5 rounded-lg font-manrope-b text-white mt-1 mr-[11.5%] text-center block sm:inline-flex"
+        >
+          <i class="pi pi-check text-xs sm:text-base pt-1"></i>
+          <p class="ml-0 sm:ml-3 text-xs sm:text-base">{{ estado }}</p>
+        </div>
+        <div class="w-3/4 text-right mt-2">
+          <button class="botones bg-red-500 mr-3" @click="visible = false">
+            Cerrar
+          </button>
+          <button class="botones bg-verdeOscIENM" @click="generarPDF">
+            <i class="pi pi-file-pdf"></i>
+            Generar PDF
+          </button>
+        </div>
       </div>
     </Dialog>
   </div>
@@ -201,7 +209,7 @@ const props = defineProps({
   ordenCompra: String,
   hojaEntrada: String,
   contacto: String,
-  botones: Boolean,
+  estado: String,
 });
 
 const getModalPreview = async () => {
@@ -225,26 +233,47 @@ const generarPDF = () => {
     unit: "pt",
   });
 
-  const numPaginas = doc.internal.pages.length - 1;
+  const margin = 50;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
 
   if (contenido.value) {
     doc.html(contenido.value, {
       callback: function (doc: jsPDF) {
-        for (let i = 0; i <= numPaginas; i++) {
-          doc.setTextColor(150, 150, 150);
-          doc.setFontSize(140);
-          doc.setFont("helvetica", "bold");
+        const totalPaginas = doc.internal.getNumberOfPages();
 
-          doc.text("APROBADO", 650, 750, { angle: 45, align: "center" });
-          if (i < numPaginas - 1) {
+        for (let i = 0; i < totalPaginas; i++) {
+          doc.setPage(i);
+
+          doc.setDrawColor(0);
+          doc.setLineWidth(0.5);
+          doc.rect(
+            margin,
+            margin,
+            pageWidth - 2 * margin,
+            pageHeight - 2 * margin
+          );
+
+          doc.saveGraphicsState();
+          doc.setGState(new doc.GState({ opacity: 0.2 }));
+          doc.setTextColor(160, 160, 160);
+          doc.setFontSize(150);
+          doc.setFont("helvetica", "bold");
+          doc.text("APROBADO", pageWidth / 2, pageHeight / 2, {
+            angle: 45,
+            align: "center",
+          });
+          doc.restoreGraphicsState();
+
+          if (i < totalPaginas - 2) {
             doc.addPage();
           }
         }
-
         doc.save(`Detalles-remisión-${props.numRemision}.pdf`);
       },
-      x: 10,
-      y: 10,
+      x: margin,
+      y: margin,
+      html2canvas: { scale: 0.8 },
     });
   }
 };

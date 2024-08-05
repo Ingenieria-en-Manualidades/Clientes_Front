@@ -58,7 +58,7 @@
               :ordenCompra="keyRem.data.orden_compra"
               :hojaEntrada="keyRem.data.numero_pedido"
               :contacto="keyRem.data.nombre + ' ' + keyRem.data.apellido"
-              :botones="true"
+              :estado="'Aprobado'"
             />
           </template>
         </Column>
