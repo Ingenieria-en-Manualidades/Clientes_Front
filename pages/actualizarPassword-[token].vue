@@ -6,7 +6,7 @@
       <title>Actualizar constraseña - IENM</title>
     </head>
     <body class="justify-center flex">
-      <div class="border-2 rounded-lg shadow w-80 md:w-[430px] mt-[16%]">
+      <div class="border-2 rounded-lg shadow w-80 md:w-[430px] mt-[10%]">
         <div class="p-5 justify-center flex">
           <img
             src="/assets/img/ienmLogito.png"
@@ -21,6 +21,7 @@
             Actualizar contraseña
           </p>
           <div class="mt-5">
+            <span class="text-white font-manrope-l">{{ password }}</span>
             <p
               class="font-manrope-r text-amarilloIENM mb-2 text-base md:text-lg"
             >
@@ -55,23 +56,66 @@
 </template>
 
 <script lang="ts" setup>
-import { useToast } from "primevue/usetoast";
-const toast = useToast();
+import { useValidarEmail } from "~/composables/login/validaciones";
+import { useActualizarPasswordAPI } from "~/composables/login/ActualizarPasswordAPI";
 
 const contraseña = ref();
 const confirmacion = ref();
+const password = ref<string | null>(null); // Variable que establece un error en los inputs
 
-const actualizar = () => {
+const toast = useToast();
+const { verificarToken } = useValidarEmail();
+const { setUpdatePassword } = useActualizarPasswordAPI();
+const tokenPassword = useRoute().params.token;
+
+let id_username: string;
+
+const verificacion = async () => {
+  const resultado = await verificarToken(tokenPassword);
+
+  if (!resultado.success) {
+    toast.add({
+      severity: "error",
+      summary: resultado.message,
+      detail: "El link con el cual entro es incorrecto.",
+      life: 3000,
+    });
+    return navigateTo("/");
+  } else {
+    id_username = resultado.id_username;
+  }
+};
+
+const actualizar = async () => {
   if (!contraseña.value || !confirmacion.value) {
     toast.add({
       severity: "error",
       summary: "Contraseñas vacías.",
-      detail: "Por favor escribir llenar todos los valores.",
+      detail: "Por favor llenar todos los valores.",
       life: 4000,
     });
   } else {
     if (contraseña.value === confirmacion.value) {
-      console.log("Fresh");
+      if (/.{8,}/.test(contraseña.value)) {
+        const resultado = await setUpdatePassword(
+          id_username,
+          confirmacion.value
+        );
+
+        toast.add({
+          severity: resultado.status,
+          summary: resultado.tittle,
+          detail: resultado.detail,
+          life: 4000,
+        });
+
+        if (resultado.status !== "error") {
+          return navigateTo("/");
+        }
+        password.value = null;
+      } else {
+        password.value = "El campo debe tener al menos 8 caracteres.";
+      }
     } else {
       toast.add({
         severity: "error",
@@ -83,8 +127,9 @@ const actualizar = () => {
   }
 };
 
+verificacion();
+
 definePageMeta({
   layout: "login",
-  middleware: "actua-password",
 });
 </script>

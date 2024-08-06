@@ -1,4 +1,3 @@
-import type { mensajeSencillo } from "~/interfaces/mensajes";
 const url = 'http://127.0.0.1:8000/api';
 
 export const useActualizarPasswordAPI = () => {
@@ -32,7 +31,7 @@ export const useActualizarPasswordAPI = () => {
     } catch (error) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Error al enviar al crear el token: ' + error.message
+        statusMessage: 'Error al crear el token: ' + error.message
       })
     }
   }
@@ -67,8 +66,38 @@ export const useActualizarPasswordAPI = () => {
     }
   }
 
+  const setUpdatePassword = async (id: string, password: string) => {
+    const response = await fetch(`${url}/updatePassword`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: id,
+        password: password,
+      })
+    });
+
+    const data = await response.json();
+    
+    if (data.success) {
+      return {
+        status: "success",
+        tittle: "Contraseña actualizada.",
+        detail: data.message
+      }
+    } else {
+      return {
+        status: "error",
+        tittle: "Error al actualizar",
+        detail: data.message
+      }
+    }
+  }
+
   return {
+    setUpdatePassword,
     getTokenPassword,
-    setEnviarEmail
+    setEnviarEmail,
   };
 }
