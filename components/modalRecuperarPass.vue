@@ -68,6 +68,8 @@ const enviar = async () => {
       mensaje.value.status = resultadoEmail.status;
       mensaje.value.tittle = resultadoEmail.tittle;
       mensaje.value.detail = resultadoEmail.detail;
+
+      visible.value = false;
     } else {
       mensaje.value.status = "error";
       mensaje.value.tittle = "Error " + resultadoToken.status;

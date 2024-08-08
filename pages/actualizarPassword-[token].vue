@@ -73,16 +73,16 @@ let id_username: string;
 const verificacion = async () => {
   const resultado = await verificarToken(tokenPassword);
 
-  if (!resultado.success) {
+  if (resultado?.status) {
+    id_username = resultado.id_username;
+  } else {
     toast.add({
       severity: "error",
-      summary: resultado.message,
-      detail: "El link con el cual entro es incorrecto.",
+      summary: resultado?.tittle,
+      detail: resultado?.detail,
       life: 3000,
     });
     return navigateTo("/");
-  } else {
-    id_username = resultado.id_username;
   }
 };
 
