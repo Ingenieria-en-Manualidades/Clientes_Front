@@ -259,7 +259,7 @@ const generarPDF = () => {
           doc.setTextColor(160, 160, 160);
           doc.setFontSize(150);
           doc.setFont("helvetica", "bold");
-          doc.text("APROBADO", pageWidth / 2, pageHeight / 2, {
+          doc.text("APROBADO", pageWidth / 1.5, pageHeight / 1.3, {
             angle: 45,
             align: "center",
           });
@@ -280,3 +280,8 @@ const generarPDF = () => {
 
 getModalPreview();
 </script>
+
+<style>
+.cas {
+}
+</style>

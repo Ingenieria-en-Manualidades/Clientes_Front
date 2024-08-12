@@ -9,13 +9,13 @@ export const useValidarEmail = () => {
       };
     }
   
-    // if (email.indexOf("@") === -1) {
-    //   return {
-    //     status: "warn",
-    //     tittle: "Mala diligenciación.",
-    //     detail: "El correo debe tener un '@' como minimo.",
-    //   };
-    // }
+    if (!email.includes("@")) {
+      return {
+        status: "warn",
+        tittle: "Mala diligenciación.",
+        detail: "El correo debe tener un '@' como minimo.",
+      };
+    }
   
     return { success: true};
   };
@@ -38,15 +38,9 @@ export const useValidarEmail = () => {
       }
 
       if (resultado.codigo === 403) {
-        // const aviso = await fetch(`http://127.0.0.1:8000/api/borrarToken/${tokenPassword}`, {
-        //   method: 'GET'
-        // });
-
-        // const data = await aviso.json();
-
         return {
           status: false,
-          tittle: "expitado",
+          tittle: resultado.message,
           detail: "Por favor repita el proceso de recuperar contraseña."
         };
       }

@@ -80,7 +80,7 @@ const verificacion = async () => {
       severity: "error",
       summary: resultado?.tittle,
       detail: resultado?.detail,
-      life: 3000,
+      life: 4000,
     });
     return navigateTo("/");
   }

@@ -44,6 +44,7 @@ import type { mensajeSencillo } from "~/interfaces/mensajes";
 const toast = useToast();
 const visible = ref(false);
 const correo = ref();
+
 const { validarEmail } = useValidarEmail();
 const { getTokenPassword, setEnviarEmail } = useActualizarPasswordAPI();
 
@@ -89,3 +90,8 @@ const enviar = async () => {
   });
 };
 </script>
+
+<style>
+.cas {
+}
+</style>

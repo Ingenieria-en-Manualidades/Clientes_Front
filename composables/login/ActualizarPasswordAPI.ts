@@ -44,7 +44,7 @@ export const useActualizarPasswordAPI = () => {
       },
       body: JSON.stringify({
         correo: valorCorreo,
-        token: valorToken
+        token: valorToken,
       }),
     });
 
