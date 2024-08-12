@@ -163,6 +163,7 @@
           </div>
         </div>
       </div>
+      <!-- IF que ayuda a mostrar el boton para generar PDF en caso de ser remisiones aprobadas  -->
       <div
         class="w-full mt-5 border-t-[1px] border-t-gray-300 pt-3 inline-flex"
         v-if="estado === 'Aprobado'"
@@ -188,8 +189,9 @@
 </template>
 
 <script lang="ts" setup>
-import { jsPDF } from "jspdf";
-import type { PreviewRemision } from "~/interfaces/remisiones";
+import { useToast } from "primevue/usetoast";
+import { jsPDF } from "jspdf"; //nos ayuda generar el PDF
+import type { PreviewRemision } from "~/interfaces/remisiones"; //Modelo del objeto que llegue de la API
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
 const iva = ref();
@@ -198,10 +200,11 @@ const visible = ref(false);
 const totalGeneral = ref();
 const observaciones = ref();
 const usuario = useCookie("usuario");
-const datos = ref<PreviewRemision[]>([]);
-const contenido = ref<HTMLElement | null>(null);
-const { listarPreviewRemision } = useRemisionesApi();
+const datos = ref<PreviewRemision[]>([]); //Arreglo con la información de las actividades.
+const contenido = ref<HTMLElement | null>(null); //Variable con la información de la modal a PDF
+const { listarPreviewRemision } = useRemisionesApi(); //Método que trae la información de la remisión oprimida.
 
+//Variables importantes a especificar en el componente
 const props = defineProps({
   numRemision: String,
   fecha: String,
@@ -212,6 +215,7 @@ const props = defineProps({
   estado: String,
 });
 
+//Método que llena la modal con la información de la remisión
 const getModalPreview = async () => {
   const resultado = await listarPreviewRemision(props.numRemision);
 
@@ -222,29 +226,44 @@ const getModalPreview = async () => {
     iva.value = (total.value * 19) / 100;
     totalGeneral.value = total.value + iva.value;
   } else {
-    console.log("Fallo!!");
+    useToast().add({
+      severity: "error",
+      summary: "Error en la carga",
+      detail: "Por favor vuelve a recargar la página.",
+      life: 4000,
+    });
   }
 };
 
+//Método que genera el PDF de la modal seleccionada.
 const generarPDF = () => {
+  /**
+   * Creamos el objeto jsPDF con sus propiedades.
+   * - format: Es el tamaño del formato: [1100, 1097] [ancho, altura].
+   * - orientation: Es la orientación y la 'p' quiere decir que es vertical.
+   * - unit: Es el tamaño del contenido que tendra y la 'pt' es la más pequeña.
+   */
   const doc = new jsPDF({
-    format: [1100, 1097],
+    format: [959, 1097],
     orientation: "p",
     unit: "pt",
   });
 
+  //Definimos el tamaño del margin y conseguimos el alto y el ancho del formato
   const margin = 50;
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
 
+  //Si existe el contenido realizara esto.
   if (contenido.value) {
     doc.html(contenido.value, {
       callback: function (doc: jsPDF) {
-        const totalPaginas = doc.internal.getNumberOfPages();
+        const totalPaginas = doc.internal.getNumberOfPages(); //Conseguimos a cantidad de páginas que tendra el pdf por su tamaño.
 
+        //Este 'for' ayudara aplicar la margen y la marca de agua en cada página.
         for (let i = 0; i < totalPaginas; i++) {
           doc.setPage(i);
-
+          //Definimos y agregamos la margen en cada página, tomando en cuenta el tamaño y ancho del PDF.
           doc.setDrawColor(0);
           doc.setLineWidth(0.5);
           doc.rect(
@@ -253,22 +272,19 @@ const generarPDF = () => {
             pageWidth - 2 * margin,
             pageHeight - 2 * margin
           );
-
+          //Definimos y agregamos la marca de agua en cada página.
           doc.saveGraphicsState();
-          doc.setGState(new doc.GState({ opacity: 0.2 }));
-          doc.setTextColor(160, 160, 160);
-          doc.setFontSize(150);
+          doc.setGState(new doc.GState({ opacity: 0.2 })); //Definimos la opacidad.
+          doc.setTextColor(160, 160, 160); //Definimos el color del texto.
+          doc.setFontSize(150); //Definimos la opacidad.
           doc.setFont("helvetica", "bold");
           doc.text("APROBADO", pageWidth / 1.5, pageHeight / 1.3, {
             angle: 45,
             align: "center",
           });
           doc.restoreGraphicsState();
-
-          if (i < totalPaginas - 2) {
-            doc.addPage();
-          }
         }
+        //Guardamos el pdf con su propio nombre
         doc.save(`Detalles-remisión-${props.numRemision}.pdf`);
       },
       x: margin,
@@ -280,8 +296,3 @@ const generarPDF = () => {
 
 getModalPreview();
 </script>
-
-<style>
-.cas {
-}
-</style>

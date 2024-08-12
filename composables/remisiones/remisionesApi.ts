@@ -6,6 +6,11 @@ const urlApi = "https://imecplusdev.ienm.com.co:8443";
 export const useRemisionesApi = () => {
   const token = "3nmfgfsds#22dsff343fr";
 
+  /**
+   * Trae la información de la remisión presionada por el usuario desde la API de 'Groot' y la retorna a la modal.
+   * @param numRemision: Número de la remisión que presiono el usuario, que se utiliza para buscar en BD. 
+   * @returns una promesa que contiene un objeto con estos atributos { success: booleano, resimion: Array (información de la remisión), error: string}. 
+   */
   const listarPreviewRemision = async (numRemision: string): Promise<ApiPromise<PreviewRemision[]>> => {
     try {
       const response = await fetch(`${urlApi}/RemisionOnline/openPreViewRemision/${numRemision}`, {
@@ -21,7 +26,11 @@ export const useRemisionesApi = () => {
     }
   }
 
-  //Método que declaramos va a retornar una promesa con la estructura de la interfaz de remisiones.
+  /**
+   * Trae todas las remisiones de un mismo cliente basandose en su id desde la API de 'Groot' y la retorna a la página.
+   * @param idCliente: referencia y dato unico para identificar un cliente.
+   * @returns una promesa que contiene un objeto con estos atributos { success: booleano, resimion: Array de remisiones del cliente, error: string}. 
+   */
   const listarRemisionesPorId = async (idCliente: string | null | undefined): Promise<ApiPromise<Remision[]>>  => {
     try {
       //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.
@@ -32,10 +41,8 @@ export const useRemisionesApi = () => {
         },
       });
 
-      /**
-       * Guardamos los resultados de la API en una variable con la interfaz de las remisiones 'Remision[]'.
-       * La intefaz es necesaria ya que Vue es incapaz de identifcar los valores traidos de la API.
-       */
+      //Guardamos los resultados de la API en una variable con la interfaz de las remisiones 'Remision[]'.
+      // La intefaz es necesaria ya que Vue es incapaz de identifcar los valores traidos de la API.
       const remisiones: Remision[] = await response.json();
       return { success: true, remisiones: remisiones.data};
     } catch (error) {
@@ -44,6 +51,12 @@ export const useRemisionesApi = () => {
     }
   }
 
+  /**
+   * Realiza un 'POST' que realiza el método de 'Groot' para hacer una inserción en la tabla 'remision_conciliacionxcliente' con la remisión presionada por el usuario.
+   * @param remision :Objeto que contiene toda la información para registrar una remisión.
+   * @param numRemision :Número de la remisión para usarlo en el mensaje a la hora de guardar.
+   * @returns retorna un objeto tipo 'mensaje sencillo' con la información necesaria para enviar un aviso.
+   */
   const agregarRemision = async (remision: RemisionPost, numRemision: string | undefined) => {
     try{
       const response = await fetch(`${urlApi}/api/RemisionOnline/saveGestionRemisionClienteAPI`, {

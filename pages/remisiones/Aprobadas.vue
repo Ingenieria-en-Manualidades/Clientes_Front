@@ -41,13 +41,14 @@
         :rowsPerPageOptions="[5, 10, 20, 50]"
         scrollable
         scrollHeight="358px"
-        class="tabla"
+        class="tabla bg-white"
       >
         <Column
           v-for="col of columnas"
           :key="col.field"
           :field="col.field"
           :header="col.header"
+          class=""
         ></Column>
         <Column header="">
           <template #body="keyRem">
@@ -178,5 +179,5 @@ listar();
 </script>
 
 <style>
-@import url("/assets/css/estilosTablaRemisiones.css");
+@import url("/assets/css/estilosTablaAprobadas.css");
 </style>
