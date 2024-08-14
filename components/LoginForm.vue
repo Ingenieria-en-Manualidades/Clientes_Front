@@ -6,7 +6,6 @@
         class="text-base md:text-lg lg:text-lg text-amarilloIENM font-manrope-r"
         >Usuario</label
       >
-      <!-- Mensaje de error al momento de cometer un error al escribir -->
       <p class="text-sm text-white">
         {{ usernameError }}
       </p>
@@ -45,17 +44,13 @@ import { useRouter } from "#app";
 import { useToast } from "primevue/usetoast";
 import { loginApi } from "~/composables/loginApi";
 
-// Creo variables 'ref' para recibir la información del usuario
+//Variables 'ref' para recibir la información del usuario
 const usuario = ref("");
 const contrasenia = ref("");
-// Variable que utilizaremos para viajar entre rutas
-const router = useRouter();
-// Variable que establece un error en los inputs
-const usernameError = ref<string | null>(null);
-// Importamos el método del login
-const { login } = loginApi();
-// Importamos variable para utilizar los mensajes 'Toast' de primevue
-const toast = useToast();
+const router = useRouter(); //Variable que utilizaremos para viajar entre rutas
+const usernameError = ref<string | null>(null); //Variable que establece un error en los inputs
+const { login } = loginApi(); //Importamos el método del login
+const toast = useToast(); //Importamos variable para utilizar los mensajes 'Toast' de primevue
 
 //Función que evalua el input 'usuario' cumpla las condiciones
 const validarUsuario = () => {
@@ -68,7 +63,7 @@ const validarUsuario = () => {
 
 //Método que llama al endpoint que permite la verficación de usuarios y retorna el token.
 const handleSubmit = async () => {
-  //llamando al endpoint y guardando el token y el id del cliente de manera local dentro del método 'login'.
+  //llamando al endpoint y guardando el token y la id del cliente como una cookie dentro del método 'login'.
   const resultado = await login({
     username: usuario.value,
     password: contrasenia.value,
@@ -77,7 +72,7 @@ const handleSubmit = async () => {
   if (resultado.success) {
     await router.push("/remisiones");
   } else {
-    //mensaje de error dependiendo el resultado
+    //mensaje de error dependiendo del resultado
     toast.add({
       severity: resultado.status,
       summary: resultado.tittle,

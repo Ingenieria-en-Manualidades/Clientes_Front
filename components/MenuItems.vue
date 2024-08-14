@@ -45,15 +45,14 @@
 
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
-import { useToast } from "primevue/usetoast"; // Importamos variable para utilizar los mensajes 'Toast' de primevue
+import { useToast } from "primevue/usetoast"; //Importamos variable para utilizar los mensajes 'Toast' de primevue
 import { loginApi } from "~/composables/loginApi";
 
 const toast = useToast();
-const router = useRouter(); // Variable que utilizaremos para viajar entre rutas
+const router = useRouter(); //Variable que utilizaremos para viajar entre rutas
 const { logout } = loginApi();
 
-// Crea la raferecia para el menu
-const menu = ref();
+const menu = ref(); //Crea la variable ref para el menu
 // Crea un arreglo que contiene los items con su respectivo logo y nombre
 const items = ref([
   {
@@ -73,7 +72,7 @@ const props = defineProps({
   usuario: String,
 });
 
-//Función de cerrar sesión para borrar token del usuario y retornar al login.
+//Función de cerrar sesión para borrar token del usuario y las cookies para retornar al login.
 const cerrarSesion = async () => {
   // llamamos al método logout que realiza el borrado del token en la base de datos y como cookie .
   const response = await logout();

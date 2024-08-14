@@ -36,18 +36,19 @@
 </template>
 
 <script lang="ts" setup>
-import { useToast } from "primevue/usetoast";
+import { useToast } from "primevue/usetoast"; //Importamos variable para utilizar los mensajes 'Toast' de primevue
+import type { mensajeSencillo } from "~/interfaces/mensajes";
 import { useValidarEmail } from "~/composables/login/validaciones";
 import { useActualizarPasswordAPI } from "~/composables/login/ActualizarPasswordAPI";
-import type { mensajeSencillo } from "~/interfaces/mensajes";
 
-const toast = useToast();
-const visible = ref(false);
-const correo = ref();
+const correo = ref(); //Variable que contiene el valor del input correo.
+const toast = useToast(); //Variable para los mensajes
+const visible = ref(false); //Variable para aparecer y desaparecer la modal.
 
 const { validarEmail } = useValidarEmail();
 const { getTokenPassword, setEnviarEmail } = useActualizarPasswordAPI();
 
+// Método que realiza todo el proceso de envío y toma las precauciones antes de hacerlo
 const enviar = async () => {
   let mensaje = ref<mensajeSencillo>({
     status: undefined,
@@ -90,8 +91,3 @@ const enviar = async () => {
   });
 };
 </script>
-
-<style>
-.cas {
-}
-</style>

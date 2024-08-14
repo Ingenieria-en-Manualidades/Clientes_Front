@@ -4,7 +4,12 @@ const url = 'http://127.0.0.1:8000/api';
 
 export const loginApi = () => {
 
-  // Metodo importado en el componente 'LoginForm'.
+  /**
+   * Verifica dentro de la BD si el usuario existe y si es el caso crea tres cookies (idCliente, token y nombredDeUsuario) para que la página funcione y duran lo que dure la sesión.
+   * Metodo importado en el componente 'LoginForm'.
+   * @param userData: Objeto con los atributos para verficar a un usuario {nombreDeUsuario: string, password: string}.
+   * @returns En caso de todo ir bien retorna un 'true' y en caso contrario un objeto para mostrar un mensaje de fallo y que tipo de fallo.
+   */
   const login = async (userData: any) => {
     try {
       //llamando al endpoint que verificara al usuario y nos devolvera el token.
@@ -17,9 +22,7 @@ export const loginApi = () => {
           },
         }
       );
-      /**
-       * Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
-       */
+    //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
       const resultado = await fetch('/api/cookiesRemisiones', {
         method: "POST",
         headers: {
@@ -69,7 +72,11 @@ export const loginApi = () => {
     }
   };
 
-  // Método importado en el componente 'MenuItems'.
+  /**
+   * Verifica aun la existencia del token como cookie y si es el caso lo borra en la BD y borra las tres cookies para luego retornar el resultado del procedimiento.
+   * Método importado en el componente 'MenuItems'.
+   * @returns Objeto con los siguientes atributos {success: boolean (comprobar el resultado), tittle y mensaje: string (mensaje que da el contexto de la situación)}
+   */
   const logout = async () => {
     const token = useCookie("token");
     try {
@@ -78,7 +85,7 @@ export const loginApi = () => {
         throw new Error('No se encontró el token de autenticación');
       }
 
-      // Llamamos al endpoint "logout" del 'Modulo-Cliente Backend' dandole el token del usuario para borrarlo.
+      // Llamamos al endpoint "logout" del 'Modulo-Cliente Backend' dandole el token del usuario para borrarlo en la BD.
       const response = await axios.post(
         `${url}/logout`, 
         {},

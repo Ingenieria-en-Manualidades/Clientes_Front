@@ -59,12 +59,6 @@ export const useDatosRemisiones = () => {
   };
 }
 
-export const columnas = [
-  { field: "no_remision", header: "N°" },
-  { field: "valor", header: "VALOR" },
-  { field: "fecha", header: "FECHA" },
-];
-
 /**
  * Array de Elementos, rutas e iconos para las pestañas y la navegación entre remisiones.
  * Importado en el componente 'TabPanelRemisiones'.

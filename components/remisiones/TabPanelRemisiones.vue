@@ -9,7 +9,6 @@
             :to="tab.route"
             custom
           >
-            <!-- El estilo de la pestaña va cambiando dependiendo que presione el usuario -->
             <a
               v-ripple
               :href="href"

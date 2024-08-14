@@ -43,13 +43,13 @@
         scrollHeight="358px"
         class="tabla bg-white"
       >
-        <Column
-          v-for="col of columnas"
-          :key="col.field"
-          :field="col.field"
-          :header="col.header"
-          class=""
-        ></Column>
+        <Column field="no_remision" header="N°" header-class=""></Column>
+        <Column header="VALOR">
+          <template #body="slotProps">
+            <span><b>$</b> {{ slotProps.data.valor }}</span>
+          </template>
+        </Column>
+        <Column field="fecha" header="FECHA"></Column>
         <Column header="">
           <template #body="keyRem">
             <ModalPreviewRemision
@@ -104,10 +104,7 @@ import { useToast } from "primevue/usetoast";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import ModalPreviewRemision from "~/components/remisiones/ModalPreviewRemision.vue";
-import {
-  useDatosRemisiones,
-  columnas, //Declaración de las columnas de la tabla de remisiones
-} from "~/composables/remisiones/datosRemisiones";
+import { useDatosRemisiones } from "~/composables/remisiones/datosRemisiones";
 
 const dates = ref();
 let avisoIcono = ref();

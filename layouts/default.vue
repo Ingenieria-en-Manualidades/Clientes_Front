@@ -1,7 +1,7 @@
 <template>
   <NavBar :usuario="usuario" />
   <div class="inline-flex m-[1%] w-[100%]">
-    <MenuLateral class="hidden" />
+    <MenuLateral />
     <div class="w-[100%] flex justify-center pr-[1%]">
       <slot></slot>
     </div>

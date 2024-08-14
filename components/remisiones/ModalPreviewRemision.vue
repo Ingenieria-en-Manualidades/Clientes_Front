@@ -289,7 +289,11 @@ const generarPDF = () => {
       },
       x: margin,
       y: margin,
-      html2canvas: { scale: 0.8 },
+      html2canvas: {
+        scale: 0.8,
+        width: pageWidth - 2 * margin,
+        height: pageHeight - 2 * margin,
+      },
     });
   }
 };
