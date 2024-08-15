@@ -7,9 +7,7 @@
         width="160px"
         class="min-w-[120px]"
       />
-      <button class="ml-14 mt-3" id="botonjaja">
-        <i class="pi pi-bars text-2xl"></i>
-      </button>
+      <MenuLateral />
     </div>
     <div class="w-[75%] inline-flex justify-end">
       <MenuItems :usuario="props.usuario" />
@@ -19,6 +17,6 @@
 
 <script lang="ts" setup>
 const props = defineProps({
-  usuario: String,
+  usuario: String || null,
 });
 </script>

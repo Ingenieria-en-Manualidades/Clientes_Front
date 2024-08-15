@@ -1,10 +1,7 @@
 <template>
-  <div class="card w-[100%] md:w-[760px]">
+  <div class="card w-[100%] md:w-[760px] float-right">
     <TabPanelRemisiones />
-    <div
-      class="border-[1px] p-5 rounded-t-lg border-gray-300"
-      v-if="remisionesAprobadas.length !== 0"
-    >
+    <div class="mt-3" v-if="remisionesAprobadas.length !== 0">
       <div v-if="calendario">
         <Calendar
           v-model="dates"

@@ -1,6 +1,11 @@
 <template>
-  <div class="slideBar">
-    <Tabs>
+  <button class="ml-16 mt-3" @click="visible = true">
+    <i class="pi pi-bars text-2xl"></i>
+  </button>
+  <div
+    class="absolute h-[83%] w-[20%] top-[102px] left-3 bg-amarilloIENM rounded-lg px-4 pt-10"
+  >
+    <Tabs v-model:visible="visible">
       <TabList>
         <Tab v-for="modulo in modulos" :key="modulo.nombre">
           <router-link v-slot="{ href, navigate }" :to="modulo.ruta" custom>
@@ -31,6 +36,7 @@
 </template>
 
 <script lang="ts" setup>
+const visible = ref(false);
 const modulos = ref([
   {
     icono: "pi pi-home",
@@ -48,27 +54,4 @@ const modulos = ref([
     nombre: "Modulo 3",
   },
 ]);
-
-const botonjaja = document.getElementById("botonjaja");
-
-botonjaja?.addEventListener("click", (event) => {
-  alert("hola");
-});
 </script>
-
-<style>
-.slideBar {
-  width: 23%;
-  height: 440px;
-  background-color: #fbdc00;
-  border-radius: 8px;
-  margin-right: 1%;
-  padding: 40px 12px 0px 12px;
-  transform: translate(-100%);
-  transition: 0.5s;
-}
-
-.slideBar:hover {
-  transform: translate(0);
-}
-</style>
