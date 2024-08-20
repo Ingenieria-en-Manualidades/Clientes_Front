@@ -43,7 +43,7 @@
         <Column field="no_remision" header="N°" header-class=""></Column>
         <Column header="VALOR">
           <template #body="slotProps">
-            <span><b>$</b> {{ slotProps.data.valor }}</span>
+            <span><b>$</b> {{ formatoNumero(slotProps.data.valor) }}</span>
           </template>
         </Column>
         <Column field="fecha" header="FECHA"></Column>
@@ -168,6 +168,10 @@ definePageMeta({
   layout: "default",
   middleware: "login",
 });
+
+const formatoNumero = (numero: number): string => {
+  return new Intl.NumberFormat("es-ES").format(numero);
+};
 
 listar();
 </script>

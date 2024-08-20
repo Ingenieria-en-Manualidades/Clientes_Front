@@ -5,9 +5,6 @@
     @click="visible = true"
   >
     <i class="pi pi-eye text-white"></i>
-    <span class="text-white font-manrope-r ml-2 hidden sm:inline-flex"
-      >Ver</span
-    >
   </button>
   <div>
     <Dialog
@@ -93,12 +90,14 @@
                 <td class="py-2">{{ dato.programacion_id }}</td>
                 <td class="py-2">{{ dato.codigo_cobro }}</td>
                 <td class="py-2">{{ dato.nombre }}</td>
-                <td class="py-2">{{ dato.unidades }}</td>
+                <td class="py-2">{{ formatoNumero(dato.unidades) }}</td>
                 <td class="py-2">
-                  <span class="font-bold">$</span> {{ dato.precio }}
+                  <span class="font-bold">$</span>
+                  {{ formatoNumero(dato.precio) }}
                 </td>
                 <td class="py-2">
-                  <span class="font-bold">$</span> {{ dato.totalredondeado }}
+                  <span class="font-bold">$</span>
+                  {{ formatoNumero(dato.totalredondeado) }}
                 </td>
               </tr>
             </tbody>
@@ -108,7 +107,8 @@
               >
                 <td class="text-right lg:pr-5 py-1" colspan="7">
                   <span class="font-bold mr-10">TOTAL</span>
-                  <span class="font-bold mr-1">$</span>{{ total }}
+                  <span class="font-bold mr-1">$</span
+                  >{{ formatoNumero(total) }}
                 </td>
               </tr>
               <tr
@@ -116,7 +116,7 @@
               >
                 <td class="text-right lg:pr-5 py-1" colspan="7">
                   <span class="font-bold mr-10">IVA</span>
-                  <span class="font-bold mr-1">$</span>{{ iva }}
+                  <span class="font-bold mr-1">$</span>{{ formatoNumero(iva) }}
                 </td>
               </tr>
               <tr
@@ -124,7 +124,8 @@
               >
                 <td class="text-right lg:pr-5 py-1" colspan="7">
                   <span class="font-bold mr-7">TOTAL GENERAL</span>
-                  <span class="font-bold mr-1">$</span>{{ totalGeneral }}
+                  <span class="font-bold mr-1">$</span
+                  >{{ formatoNumero(totalGeneral) }}
                 </td>
               </tr>
             </tfoot>
@@ -189,8 +190,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useToast } from "primevue/usetoast";
 import { jsPDF } from "jspdf"; //nos ayuda generar el PDF
+import { useToast } from "primevue/usetoast";
 import type { PreviewRemision } from "~/interfaces/remisiones"; //Modelo del objeto que llegue de la API
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
@@ -200,7 +201,7 @@ const visible = ref(false);
 const totalGeneral = ref();
 const observaciones = ref();
 const usuario = useCookie("usuario");
-const datos = ref<PreviewRemision[]>([]); //Arreglo con la información de las actividades.
+const datos = ref<PreviewRemision[] | undefined>([]); //Arreglo con la información de las actividades.
 const contenido = ref<HTMLElement | null>(null); //Variable con la información de la modal a PDF
 const { listarPreviewRemision } = useRemisionesApi(); //Método que trae la información de la remisión oprimida.
 
@@ -296,6 +297,10 @@ const generarPDF = () => {
       },
     });
   }
+};
+
+const formatoNumero = (numero: number): string => {
+  return new Intl.NumberFormat("es-ES").format(numero);
 };
 
 getModalPreview();

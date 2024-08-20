@@ -34,7 +34,7 @@
       label="Enviar"
       class="bg-verdeIENM text-black mt-[10%] mb-[2%] w-[75%] ml-[11.5%] font-manrope-r tracking-wide hover:text-white hover:bg-verdeOscIENM"
       type="submit"
-      :disabled="usernameError"
+      :disabled="boolError"
     />
   </form>
 </template>
@@ -46,18 +46,21 @@ import { loginApi } from "~/composables/loginApi";
 
 //Variables 'ref' para recibir la información del usuario
 const usuario = ref("");
-const contrasenia = ref("");
-const router = useRouter(); //Variable que utilizaremos para viajar entre rutas
-const usernameError = ref<string | null>(null); //Variable que establece un error en los inputs
-const { login } = loginApi(); //Importamos el método del login
 const toast = useToast(); //Importamos variable para utilizar los mensajes 'Toast' de primevue
+const router = useRouter(); //Variable que utilizaremos para viajar entre rutas
+const contrasenia = ref("");
+const boolError = ref(true);
+const { login } = loginApi(); //Importamos el método del login
+const usernameError = ref<string | null>(null); //Variable que establece un error en los inputs
 
 //Función que evalua el input 'usuario' cumpla las condiciones
 const validarUsuario = () => {
   if (/[^a-zA-Z0-9 ]/.test(usuario.value)) {
     usernameError.value = "El usuario no puede tener caracteres especiales.";
+    boolError.value = false;
   } else {
     usernameError.value = null;
+    boolError.value = true;
   }
 };
 

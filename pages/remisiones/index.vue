@@ -8,7 +8,7 @@
           selectionMode="range"
           :manualInput="false"
           dateFormat="yy/mm/dd"
-          class="mb-3"
+          class="mb-3 absolute"
           placeholder="Escoge una o dos fechas"
           showIcon
           fluid
@@ -43,7 +43,7 @@
         <Column field="no_remision" header="N°" header-class=""></Column>
         <Column header="VALOR">
           <template #body="slotProps">
-            <span><b>$</b> {{ slotProps.data.valor }}</span>
+            <span><b>$</b> {{ formatoNumero(slotProps.data.valor) }}</span>
           </template>
         </Column>
         <Column field="fecha" header="FECHA"></Column>
@@ -170,6 +170,10 @@ const recargarTabla = () => {
   calendario.value = true;
   dates.value = null;
   listar();
+};
+
+const formatoNumero = (numero: number): string => {
+  return new Intl.NumberFormat("es-ES").format(numero);
 };
 
 definePageMeta({
