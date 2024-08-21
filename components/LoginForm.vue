@@ -49,7 +49,7 @@ const usuario = ref("");
 const toast = useToast(); //Importamos variable para utilizar los mensajes 'Toast' de primevue
 const router = useRouter(); //Variable que utilizaremos para viajar entre rutas
 const contrasenia = ref("");
-const boolError = ref(true);
+const boolError = ref(false);
 const { login } = loginApi(); //Importamos el método del login
 const usernameError = ref<string | null>(null); //Variable que establece un error en los inputs
 
@@ -57,10 +57,10 @@ const usernameError = ref<string | null>(null); //Variable que establece un erro
 const validarUsuario = () => {
   if (/[^a-zA-Z0-9 ]/.test(usuario.value)) {
     usernameError.value = "El usuario no puede tener caracteres especiales.";
-    boolError.value = false;
+    boolError.value = true;
   } else {
     usernameError.value = null;
-    boolError.value = true;
+    boolError.value = false;
   }
 };
 

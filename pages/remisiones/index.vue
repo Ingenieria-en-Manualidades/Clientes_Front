@@ -31,6 +31,39 @@
           ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
         >
       </button>
+      <table class="text-xs sm:text-base w-full font-manrope-r">
+        <thead>
+          <tr>
+            <th class="bg-azulIENM text-white p-4 rounded-tl-md">N°</th>
+            <th class="bg-azulIENM text-white p-4">VALOR</th>
+            <th class="bg-azulIENM text-white p-4">FECHA</th>
+            <th class="bg-azulIENM text-white p-4 rounded-tr-md">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="remision in remisionesPendientes"
+            v-bind:key="remision.no_remision"
+          >
+            <td class="border-b-[1px] border-gray-400 text-center">
+              {{ remision.no_remision }}
+            </td>
+            <td class="border-b-[1px] border-gray-400 text-center">
+              {{ remision.valor }}
+            </td>
+            <td class="border-b-[1px] border-gray-400 text-center">
+              {{ remision.fecha }}
+            </td>
+            <td class="border-b-[1px] border-gray-400 text-center">
+              <ModalRemisiones
+                :numRemision="remision.no_remision"
+                :idRemision="remision.remision_id"
+                @postGuardarRemision="listar"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <DataTable
         :value="remisionesPendientes"
         paginator

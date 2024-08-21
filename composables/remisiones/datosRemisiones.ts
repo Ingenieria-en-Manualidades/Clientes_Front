@@ -1,5 +1,6 @@
 //Importe para que vue sepa los valores que devuelve la API.
 import type { Remision } from "~/interfaces/remisiones";
+import type { tablaDinamica } from "~/interfaces/componentesDinamicos";
 
 export const useDatosRemisiones = () => {
   const remisionesPendientes = ref<Remision[]>([]);
