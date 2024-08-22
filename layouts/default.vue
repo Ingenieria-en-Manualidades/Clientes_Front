@@ -3,7 +3,9 @@
   <div
     :class="[
       'my-[1%] h-[519px] overflow-y-scroll duration-200',
-      isOpen ? 'ml-[22%] w-[77%]' : 'ml-[1%] w-[98%]',
+      isOpen
+        ? 'ml-[1%] w-[98%] min-[1300px]:ml-[22%] min-[1300px]:w-[77%]'
+        : 'ml-[1%] w-[98%]',
     ]"
   >
     <!-- <MenuLateral /> -->

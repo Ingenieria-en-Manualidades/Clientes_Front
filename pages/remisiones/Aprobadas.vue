@@ -1,14 +1,14 @@
 <template>
   <div class="card w-[100%] md:w-[760px] float-right">
     <TabPanelRemisiones />
-    <div class="mt-3" v-if="remisionesAprobadas.length !== 0">
+    <div v-if="remisionesAprobadas.length !== 0">
       <div v-if="calendario">
         <Calendar
           v-model="dates"
           selectionMode="range"
           :manualInput="false"
           dateFormat="yy/mm/dd"
-          class="mb-3"
+          class="mb-3 z-0"
           placeholder="Escoge una o dos fechas"
           showIcon
           fluid
@@ -31,36 +31,11 @@
           ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
         >
       </button>
-      <DataTable
-        :value="remisionesAprobadas"
-        paginator
-        :rows="5"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        scrollable
-        scrollHeight="358px"
-        class="tabla bg-white"
-      >
-        <Column field="no_remision" header="N°" header-class=""></Column>
-        <Column header="VALOR">
-          <template #body="slotProps">
-            <span><b>$</b> {{ formatoNumero(slotProps.data.valor) }}</span>
-          </template>
-        </Column>
-        <Column field="fecha" header="FECHA"></Column>
-        <Column header="">
-          <template #body="keyRem">
-            <ModalPreviewRemision
-              :numRemision="keyRem.data.no_remision"
-              :fecha="keyRem.data.fecha"
-              :cliente="keyRem.data.nombre_cliente"
-              :ordenCompra="keyRem.data.orden_compra"
-              :hojaEntrada="keyRem.data.numero_pedido"
-              :contacto="keyRem.data.nombre + ' ' + keyRem.data.apellido"
-              :estado="'Aprobado'"
-            />
-          </template>
-        </Column>
-      </DataTable>
+      <TablaRemisiones
+        :remisiones="remisionesAprobadas"
+        :modales="'Aprobados'"
+        @listar="listar"
+      />
     </div>
     <!-- Carga de progeso mientras terminan de llegar las remisiones -->
     <div
@@ -98,9 +73,9 @@
 <script setup lang="ts">
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
+import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
-import ModalPreviewRemision from "~/components/remisiones/ModalPreviewRemision.vue";
 import { useDatosRemisiones } from "~/composables/remisiones/datosRemisiones";
 
 const dates = ref();
@@ -168,10 +143,6 @@ definePageMeta({
   layout: "default",
   middleware: "login",
 });
-
-const formatoNumero = (numero: number): string => {
-  return new Intl.NumberFormat("es-ES").format(numero);
-};
 
 listar();
 </script>

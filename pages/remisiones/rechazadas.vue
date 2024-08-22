@@ -31,31 +31,11 @@
           ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
         >
       </button>
-      <DataTable
-        :value="remisionesRechazadas"
-        paginator
-        :rows="5"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        scrollable
-        scrollHeight="358px"
-        class="tabla"
-      >
-        <Column field="no_remision" header="N°" header-class=""></Column>
-        <Column header="VALOR">
-          <template #body="slotProps">
-            <span><b>$</b> {{ formatoNumero(slotProps.data.valor) }}</span>
-          </template>
-        </Column>
-        <Column field="fecha" header="FECHA"></Column>
-        <Column header="Acción">
-          <template #body="keyRem">
-            <ModalRechazo
-              :numRemision="keyRem.data.no_remision"
-              :motivo="keyRem.data.motivo"
-            />
-          </template>
-        </Column>
-      </DataTable>
+      <TablaRemisiones
+        :remisiones="remisionesRechazadas"
+        :modales="'Rechazados'"
+        @listar="listar"
+      />
     </div>
     <!-- Carga de progeso mientras terminan de llegar las remisiones -->
     <div
@@ -93,7 +73,7 @@
 <script setup lang="ts">
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
-import ModalRechazo from "~/components/remisiones/ModalRechazo.vue";
+import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import { useDatosRemisiones } from "~/composables/remisiones/datosRemisiones";
@@ -163,10 +143,6 @@ definePageMeta({
   layout: "default",
   middleware: "login",
 });
-
-const formatoNumero = (numero: number): string => {
-  return new Intl.NumberFormat("es-ES").format(numero);
-};
 
 listar();
 </script>

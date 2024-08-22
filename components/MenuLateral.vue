@@ -1,13 +1,21 @@
 <template>
-  <button class="mt-3 mr-5" @click="toggleNavbar">
-    <i class="pi pi-bars text-2xl"></i>
+  <button
+    class="rounded-[50%] mr-6 mt-3 px-3 pt-1 hover:bg-gray-200"
+    @click="toggleNavbar"
+  >
+    <i :class="['text-2xl', isOpen ? 'pi pi-times' : 'pi pi-bars']"></i>
   </button>
   <div
     :class="[
-      'fixed h-[81.7%] w-[270px] top-[102px] left-3 bg-amarilloIENM rounded-lg px-4 pt-10 overflow-y-scroll duration-200',
+      'fixed h-full min-[1300px]:h-[81.7%] w-[270px] top-0 left-0 min-[1300px]:top-[102px] min-[1300px]:left-3 bg-amarilloIENM rounded-lg px-3 overflow-y-scroll duration-200 z-10',
       isOpen ? 'translate-x-0' : '-translate-x-[105%]',
     ]"
   >
+    <div class="flex justify-end pt-1 min-[1300px]:hidden">
+      <button class="py-2 px-3 hover:bg-gray-200 rounded-[50%]">
+        <i class="pi pi-times mt-1 text-base"></i>
+      </button>
+    </div>
     <Tabs>
       <TabList>
         <Tab v-for="modulo in modulos" :key="modulo.nombre">
@@ -16,7 +24,7 @@
               v-ripple
               :href="href"
               @click="navigate"
-              class="flex justify-start py-2 pl-4 hover:bg-verdeIENM rounded-lg"
+              class="flex justify-start py-2 pl-4 hover:bg-verdeIENM rounded-lg w-[98%]"
             >
               <i v-if="modulo.icono" :class="modulo.icono"
                 ><span class="ml-2 font-manrope-r text-base">{{

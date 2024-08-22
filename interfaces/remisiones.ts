@@ -11,7 +11,7 @@ export interface Remision {
     nombre: string;
     apellido: string;
     nombre_cliente: string;
-    motivo: string | null;
+    motivo: string | undefined;
     estado: string | null;
   }
 
