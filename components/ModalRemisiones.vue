@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="bg-amarilloIENM px-3 py-1 rounded hover:bg-[#e1c600]"
+    class="bg-amarilloIENM px-3 py-[6px] rounded hover:bg-[#e1c600]"
     @click="visible = true"
   >
     <i class="pi pi-clipboard text-black"></i>

@@ -44,6 +44,7 @@
 </template>
 
 <script lang="ts" setup>
+import { defineProps } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast"; //Importamos variable para utilizar los mensajes 'Toast' de primevue
 import { loginApi } from "~/composables/loginApi";
@@ -63,7 +64,7 @@ const items = ref([
 ]);
 
 // Función que ayuda abrir el menu con un click
-const toggle = (event) => {
+const toggle = (event: any) => {
   menu.value.toggle(event);
 };
 

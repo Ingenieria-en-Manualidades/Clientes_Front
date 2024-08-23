@@ -92,9 +92,31 @@ export const useRemisionesApi = () => {
     }
   }
 
+  const getNumRemisionesPen = async (idCliente: string | null | undefined) => {
+    try {
+      //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.
+      const response = await fetch(`${urlApi}/api/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `${token}`,
+        },
+      });
+
+      const remisiones: Remision[] = await response.json();
+      const remisionesPendientes: Remision[] = remisiones.data.filter(
+        (rem) => rem.estado === null
+      );
+      return remisionesPendientes.length;
+    } catch (error) {
+      console.error("Error a la hora de llamar al endpoint 'ListarRemisiones':", error.message);
+      return "error getNumRemisionesPen";
+    }
+  }
+
   return {
     listarRemisionesPorId,
     agregarRemision,
-    listarPreviewRemision
+    listarPreviewRemision,
+    getNumRemisionesPen
   };
 }

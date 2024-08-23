@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="bg-verdeOscIENM px-3 py-1 rounded hover:bg-verdeIENM mb-1 sm:mb-0"
+    class="bg-verdeOscIENM px-3 py-[6px] rounded hover:bg-verdeIENM mb-1 sm:mb-0"
     @click="visible = true"
   >
     <i class="pi pi-eye text-white"></i>

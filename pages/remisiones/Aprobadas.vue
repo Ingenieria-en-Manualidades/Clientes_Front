@@ -2,7 +2,7 @@
   <div class="card w-[100%] md:w-[760px] float-right">
     <TabPanelRemisiones />
     <div v-if="remisionesAprobadas.length !== 0">
-      <div v-if="calendario">
+      <div v-if="calendario" class="ml-[2.5%]">
         <Calendar
           v-model="dates"
           selectionMode="range"
@@ -23,7 +23,7 @@
       </div>
       <button
         type="button"
-        class="bg-azulClaroIENM px-3 py-1 rounded mb-2"
+        class="bg-azulClaroIENM px-3 py-1 rounded mb-2 ml-[2.5%]"
         @click="recargarTabla"
         v-else
       >
@@ -38,10 +38,7 @@
       />
     </div>
     <!-- Carga de progeso mientras terminan de llegar las remisiones -->
-    <div
-      class="border-[1px] p-5 rounded-t-lg border-gray-300 text-center"
-      v-else-if="isLoading"
-    >
+    <div class="p-5 rounded-t-lg text-center" v-else-if="isLoading">
       <ProgressSpinner
         style="width: 50px; height: 50px"
         strokeWidth="8"
@@ -51,10 +48,7 @@
       />
     </div>
     <!-- Información que sale en caso de no aparecer ninguna información -->
-    <div
-      class="border-[1px] p-10 rounded-t-lg border-gray-300 text-center"
-      v-else-if="estadoRemisiones"
-    >
+    <div class="p-10 rounded-t-lg text-center" v-else-if="estadoRemisiones">
       <i :class="avisoIcono"></i>
       <p class="font-manrope-b text-xl mt-3">
         {{ avisodetalles }}

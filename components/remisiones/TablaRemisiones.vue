@@ -1,6 +1,6 @@
 <template>
   <table
-    class="text-xs sm:text-sm w-[95%] mx-[2.5%] md:mx-0 md:w-full font-manrope-r mb-3"
+    class="text-xs sm:text-sm w-[95%] mx-[2.5%] lg:w-full font-manrope-r mb-3"
   >
     <thead>
       <tr class="sm:text-base">
@@ -25,7 +25,7 @@
         <td class="text-center">
           {{ remision.fecha }}
         </td>
-        <td class="text-center sm:flex justify-center gap-1 pt-3">
+        <td class="text-center sm:flex justify-center gap-1 py-2">
           <ModalPreviewRemision
             v-if="modales === 'Aprobados' || modales === 'Pendientes'"
             :numRemision="remision.no_remision"

@@ -2,7 +2,7 @@
   <div class="w-[100%] md:w-[850px]">
     <TabPanelRemisiones />
     <div class="mt-3" v-if="remisionesPendientes.length !== 0">
-      <div v-if="calendario">
+      <div v-if="calendario" class="ml-[2.5%]">
         <Calendar
           v-model="dates"
           selectionMode="range"
@@ -23,7 +23,7 @@
       </div>
       <button
         type="button"
-        class="bg-azulClaroIENM px-3 py-1 rounded mb-2"
+        class="bg-azulClaroIENM px-3 py-1 rounded mb-2 ml-[2.5%]"
         @click="recargarTabla"
         v-else
       >
