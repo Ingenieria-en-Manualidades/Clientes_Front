@@ -41,7 +41,7 @@
         @apply grid gap-2 w-3/4 ml-[12%];
     }
     .divUser{
-        @apply p-[1%] m-[1.5%] rounded-md cursor-pointer hover:bg-gray-200;
+        @apply p-[1%] m-[0.5%] rounded-md cursor-pointer hover:bg-gray-200;
     }
     .botones{
         @apply py-1 px-4 font-manrope-b text-white rounded-lg;
@@ -51,5 +51,8 @@
     }
     .celdasModalP{
         @apply py-1 px-8 text-xs sm:text-base;
+    }
+    .sideBar{
+        @apply fixed h-full min-[1300px]:h-[81.7%] w-[270px] max-[760px]:w-full top-0 left-0 min-[1300px]:top-[102px] min-[1300px]:left-3 bg-[#4789c8] rounded-r-lg max-[760px]:rounded-none min-[1300px]:rounded-lg px-3 duration-200 z-10;
     }
 }

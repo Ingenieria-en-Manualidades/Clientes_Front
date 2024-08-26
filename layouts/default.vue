@@ -20,5 +20,5 @@
 
 <script lang="ts" setup>
 const usuario = useCookie("usuario");
-const isOpen = ref(false);
+const isOpen = ref(true);
 </script>

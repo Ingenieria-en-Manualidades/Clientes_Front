@@ -16,6 +16,7 @@ export default {
         'amarilloIENM': '#fbdc00',
         'verdeIENM': '#f4b233',
         'verdeOscIENM': '#c38e28',
+        'rojoIENM': '#c86a2b',
         'azulClaroIENM': '#007cbb',
         'azulIENM': '#0063a6',
         primary: 'rgb(var(--primary))',

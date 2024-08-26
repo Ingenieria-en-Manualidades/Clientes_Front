@@ -1,9 +1,9 @@
 <template>
-  <div class="divUser" @click="toggle">
-    <span class="mr-5 font-manrope-b">{{ usuario }}</span>
+  <div class="divUser text-center" @click="toggle">
     <i
-      class="pi pi-user text-azulIENM mt-[8%] text-[1.5rem] lg:text-[2rem] lg:mt-0"
+      class="pi pi-user text-azulIENM mt-[8%] text-[1.5rem] lg:text-[1.5rem] lg:mt-0"
     ></i>
+    <p class="font-manrope-b">{{ usuario }}</p>
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true">
       <template #item="{ item, props }">
         <router-link

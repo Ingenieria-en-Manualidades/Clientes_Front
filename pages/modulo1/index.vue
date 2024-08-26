@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <p>MODULO 1 BROOOOOOOO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
+    <p>MODULO 1</p>
     <Tabla :tableInterface="interfaceTable" :data="arrayUser" />
   </div>
 </template>
