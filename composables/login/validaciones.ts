@@ -1,4 +1,9 @@
 export const useValidarEmail = () => {
+  /**
+   * Método que funciona para verificar si el input fue llenado o si el correo esta bien diligenciado.
+   * @param email : Correo del usuario al cual se va a verificar su diligenciamento.
+   * @returns En caso de que el correo este bien diligenciado retorna un 'true' y en caso contrario retorna 'false' y el motivo del false en formato del mensaje.
+   */
   const validarEmail = (email: string) => {
     if (!email) {
       return {
@@ -20,13 +25,18 @@ export const useValidarEmail = () => {
     return { success: true};
   };
 
+  /**
+   * Recibe el token de la URL para verificar si existe dentro de la BD y permitirle actualizar contraseña y en caso de no retornar al usuario al login.
+   * @param tokenPassword :Token que recibe desde la URL a la hora de entrar.
+   * @returns En caso de existir el token retorna un 'true' y la id del usuario para identificar al usuario a modificar y en caso contrario un 'false' y los motivos del porque.
+   */
   const verificarToken = async (tokenPassword: string | string[]) => {
     const response = await fetch(`http://127.0.0.1:8000/api/verificarToken/${tokenPassword}`, {
       method: 'GET'
     });
 
     const resultado = await response.json();
-    console.log("resultado verficar", resultado);
+
     if (!resultado.success) {
 
       if (resultado.codigo === 404) {

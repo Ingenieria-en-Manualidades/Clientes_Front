@@ -71,29 +71,32 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits } from "vue";
+//Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";
+//Importamos métodos para crear props y emits.
+import { defineProps, defineEmits } from "vue";
+//Importamos modelos para los Toast y guardar remisiones.
 import type { RemisionPost } from "~/interfaces/remisiones";
 import type { mensajeSencillo } from "~/interfaces/mensajes";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
-const opcion = ref();
-const motivo = ref();
+const opcion = ref(); //Variable que guarda la opción de como guardar la remisión.
+const motivo = ref(); //Varable para guardar el motivo del rechazo.
 const toast = useToast();
-const visible = ref(false);
-let disable = ref(true);
+const visible = ref(false); //Variable que define la aparición de la modal.
+let disable = ref(true); //Variable que define es estado del textArea.
 const idCliente = useCookie("idCliente");
 const usuario = useCookie("usuario");
 let mensaje = ref<mensajeSencillo>({ status: "", tittle: "", detail: "" });
 
-const emit = defineEmits(["postGuardarRemision"]);
 const { agregarRemision } = useRemisionesApi();
-
 const props = defineProps({
   numRemision: String,
   idRemision: Number,
 });
+const emit = defineEmits(["postGuardarRemision"]); //Método importado desde el componente.
 
+//Método que bloquea el TextArea del motivo si la opción escogida es "Rechazar".
 const estadoTextArea = (estado: boolean) => {
   disable.value = estado;
   if (disable) {
@@ -101,6 +104,7 @@ const estadoTextArea = (estado: boolean) => {
   }
 };
 
+//Método para hacer una inserción en la tabla 'remision_conciliacionxcliente' con la remisión , el estado y el posible motivo de rechazo escogida por el usuario.
 const saveRemision = async () => {
   if (!opcion.value) {
     mensaje.value.status = "error";
@@ -112,10 +116,12 @@ const saveRemision = async () => {
       mensaje.value.tittle = "Falta del motivo.";
       mensaje.value.detail = "Por favor escribir el motivo del rechazo.";
     } else {
+      //Si la opción es 'Aprobado' el motivo sera 'aprobado' por defecto.
       if (opcion.value === "Aprobado") {
         motivo.value = "aprobado";
       }
 
+      //Se crea el objeto 'RemisionPost' el cual se usara para hacer la inserción con todos los datos necesarios.
       const remision = ref<RemisionPost>({
         accion: opcion.value,
         motivo: motivo.value,
@@ -123,6 +129,8 @@ const saveRemision = async () => {
         usuario: usuario.value,
         remision_id: props.idRemision,
       });
+
+      //Se realiza la inserción llamando a este método
       mensaje = await agregarRemision(remision.value, props.numRemision);
       emit("postGuardarRemision");
       visible.value = false;

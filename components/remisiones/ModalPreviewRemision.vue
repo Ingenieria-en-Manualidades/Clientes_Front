@@ -1,10 +1,11 @@
 <template>
   <button
     type="button"
-    class="bg-rojoIENM px-3 py-[6px] rounded hover:bg-verdeIENM mb-1 sm:mb-0"
+    class="relative bg-rojoIENM px-3 py-[6px] rounded hover:bg-verdeIENM mb-1 sm:mb-0 group"
     @click="visible = true"
   >
     <i class="pi pi-eye text-white"></i>
+    <p class="tooltipModalPreview">ver remisión</p>
   </button>
   <div>
     <Dialog
@@ -190,6 +191,7 @@
 </template>
 
 <script lang="ts" setup>
+import { defineProps } from "vue";
 import { jsPDF } from "jspdf"; //nos ayuda generar el PDF
 import { useToast } from "primevue/usetoast";
 import type { PreviewRemision } from "~/interfaces/remisiones"; //Modelo del objeto que llegue de la API

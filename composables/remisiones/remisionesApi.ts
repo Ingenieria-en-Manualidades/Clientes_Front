@@ -92,6 +92,11 @@ export const useRemisionesApi = () => {
     }
   }
 
+  /**
+   * Método que trae todas las remisiones relacionadas con el cliente, separa las remisiones tipo 'Pendiente' para retornar la cantidad de remisiones existentes en la BD.
+   * @param idCliente :Numero que ayuda a identificar al cliente.
+   * @returns retorna la cantidad de remisiones tipo 'Pendiente' del cliente especificado.
+   */
   const getNumRemisionesPen = async (idCliente: string | null | undefined) => {
     try {
       //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.

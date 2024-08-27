@@ -5,35 +5,24 @@
       <img
         src="/assets/img/ienmLogito.png"
         alt="Logo IENM"
-        width="160px"
-        class="min-w-[120px]"
+        class="min-w-[115px] w-[160px]"
       />
     </div>
     <div class="w-[75%] inline-flex justify-end">
       <button
         type="button"
-        class="relative h-11 mt-[16px] pr-[6px] cursor-pointer group"
+        class="relative h-11 mt-[13px] md:mt-[16px] pr-[6px] cursor-pointer group"
         @click="viajarRemisiones"
       >
-        <!-- <img
-          src="/assets/img/remision.png"
-          alt="Icono remisión"
-          class="h-11 hover:bg-gray-200 rounded p-1"
-        /> -->
         <i
-          class="pi pi-bell hover:bg-gray-200 rounded-lg mt-2 p-2"
-          style="font-size: 1.5rem"
+          class="pi pi-bell hover:bg-gray-200 rounded-lg mt-1 md:mt-2 p-2 text-lg md:text-2xl"
         ></i>
         <span
           v-if="nRemisiones !== 0"
-          class="absolute bg-green-600 font-manrope-r px-[17%] py-[10%] rounded-[50%] border-2 border-white text-xs right-0 top-0 text-white"
+          class="absolute bg-green-600 font-manrope-r px-[14%] py-[8%] md:px-[17%] md:py-[10%] rounded-[50%] border-2 border-white text-[10px] md:text-xs right-1 md:right-0 top-0 text-white"
           >{{ nRemisiones }}</span
         >
-        <p
-          class="fixed font-manrope-r text-sm px-3 pb-1 rounded-lg top-7 right-[70px] bg-[#28b67a] transform translate-y-0 hidden duration-300 group-hover:translate-y-10 group-hover:block"
-        >
-          remisiones pendientes
-        </p>
+        <p class="tooltipBell">remisiones pendientes</p>
       </button>
       <MenuItems :usuario="props.usuario" />
     </div>

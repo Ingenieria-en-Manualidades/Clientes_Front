@@ -3,7 +3,7 @@
     <i
       class="pi pi-user text-azulIENM mt-[8%] text-[1.5rem] lg:text-[1.5rem] lg:mt-0"
     ></i>
-    <p class="font-manrope-b">{{ usuario }}</p>
+    <p class="font-manrope-b text-xs md:text-base">{{ usuario }}</p>
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true">
       <template #item="{ item, props }">
         <router-link
@@ -46,7 +46,8 @@
 <script lang="ts" setup>
 import { defineProps } from "vue";
 import { useRouter } from "vue-router";
-import { useToast } from "primevue/usetoast"; //Importamos variable para utilizar los mensajes 'Toast' de primevue
+//Importamos variable para utilizar los mensajes 'Toast' de primevue.
+import { useToast } from "primevue/usetoast";
 import { loginApi } from "~/composables/loginApi";
 
 const toast = useToast();

@@ -36,19 +36,21 @@
 </template>
 
 <script lang="ts" setup>
-import { useToast } from "primevue/usetoast"; //Importamos variable para utilizar los mensajes 'Toast' de primevue
+//Importamos variable para utilizar los mensajes 'Toast' de primevue.
+import { useToast } from "primevue/usetoast";
+//Importamos modelo de un mensaje Toast.
 import type { mensajeSencillo } from "~/interfaces/mensajes";
 import { useValidarEmail } from "~/composables/login/validaciones";
 import { useActualizarPasswordAPI } from "~/composables/login/ActualizarPasswordAPI";
 
 const correo = ref(); //Variable que contiene el valor del input correo.
-const toast = useToast(); //Variable para los mensajes
+const toast = useToast(); //Variable para los mensajes.
 const visible = ref(false); //Variable para aparecer y desaparecer la modal.
 
 const { validarEmail } = useValidarEmail();
 const { getTokenPassword, setEnviarEmail } = useActualizarPasswordAPI();
 
-// Método que realiza todo el proceso de envío y toma las precauciones antes de hacerlo
+// Método que realiza todo el proceso de envío y toma las precauciones antes de hacerlo.
 const enviar = async () => {
   let mensaje = ref<mensajeSencillo>({
     status: undefined,
@@ -56,6 +58,7 @@ const enviar = async () => {
     detail: undefined,
   });
 
+  //Método que verifica si el correo esta bien diligenciado.
   const validar = validarEmail(correo.value);
 
   if (validar.success) {
@@ -71,7 +74,7 @@ const enviar = async () => {
       mensaje.value.tittle = resultadoEmail.tittle;
       mensaje.value.detail = resultadoEmail.detail;
 
-      visible.value = false;
+      visible.value = false; //Cierra la modal automaticamente.
     } else {
       mensaje.value.status = "error";
       mensaje.value.tittle = "Error " + resultadoToken.status;
