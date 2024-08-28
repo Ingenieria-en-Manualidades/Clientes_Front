@@ -1,36 +1,15 @@
 <template>
-  <div class="">
-    <p>MODULO 1</p>
-    <Tabla :tableInterface="interfaceTable" :data="arrayUser" />
+  <div class="flex gap-3 w-full p-1">
+    <div class="w-1/3 bg-blue-400 text-center rounded-lg">
+      <p>1</p>
+    </div>
+    <div class="w-1/3 bg-blue-400 text-center rounded-lg">
+      <p>2</p>
+    </div>
+    <div class="w-1/3 bg-blue-400 text-center rounded-lg">
+      <p>3</p>
+    </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import Tabla from "~/components/dinamicos/Tabla.vue";
-import type { tablaDinamica, User } from "~/interfaces/componentesDinamicos";
-
-const interfaceTable = ref<tablaDinamica>({
-  styleTable: "border-[1px] border-black font-manrope-r",
-  caption: {
-    label: "Tabla normal",
-    style: "bg-blue-400 text-xl border-[1px] border-black",
-  },
-  headers: {
-    labels: ["header1", "header2", "header3"],
-    style:
-      "text-white px-5 py-2 border-[1px] bg-red-400 border-black font-manrope-r",
-  },
-  tbodyStyle: null,
-  rowStyle: "border-[1px] border-black text-center bg-green-400",
-  tfootStyle: null,
-});
-
-const arrayUser = ref<User[]>([
-  { id: "1", name: "jos", apellido: "velasco" },
-  { id: "2", name: "Karol", apellido: "Villaquiran" },
-  { id: "3", name: "jos", apellido: "velasco" },
-  { id: "4", name: "Kevin", apellido: "Cadena" },
-]);
-</script>
-
-<style></style>
+<script lang="ts" setup></script>

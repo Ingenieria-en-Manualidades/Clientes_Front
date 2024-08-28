@@ -62,9 +62,11 @@ const enviar = async () => {
   const validar = validarEmail(correo.value);
 
   if (validar.success) {
+    //Se verifica el correo y crea el token para la URL.
     const resultadoToken = await getTokenPassword(correo.value);
 
     if (resultadoToken?.success) {
+      //Se envia el correo con el link donde estara escrito el token.
       const resultadoEmail = await setEnviarEmail(
         correo.value,
         resultadoToken.token

@@ -77,7 +77,7 @@ export const useActualizarPasswordAPI = () => {
   }
 
   /**
-   * Método encargado de actualizar la contraseña utilizando una API.
+   * Método encargado de actualizar la contraseña utilizando una API del Groot.
    * @param id :Variable para identificar a que usuario actualizar contraseña.
    * @param password :Nueva contraseña ingresada por el usuario.
    * @returns retorna un mensaje de exito o fracaso dependiendo de la situación.

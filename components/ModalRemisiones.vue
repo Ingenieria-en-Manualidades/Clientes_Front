@@ -130,7 +130,7 @@ const saveRemision = async () => {
         remision_id: props.idRemision,
       });
 
-      //Se realiza la inserción llamando a este método
+      //Se realiza la inserción llamando a este método.
       mensaje = await agregarRemision(remision.value, props.numRemision);
       emit("postGuardarRemision");
       visible.value = false;
@@ -140,6 +140,7 @@ const saveRemision = async () => {
   showMensaje(mensaje.value);
 };
 
+//Método que realiza el mensaje.
 const showMensaje = (mensaje: mensajeSencillo) => {
   toast.add({
     severity: mensaje.status,

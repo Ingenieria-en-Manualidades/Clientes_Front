@@ -30,13 +30,16 @@
 </template>
 
 <script lang="ts" setup>
+//Importamos el método para utilizar la ruta.
 import { useRouter } from "#app";
+//Importamos métodos para crear props y emits.
 import { defineProps, defineEmits } from "vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
-const route = useRouter();
+const route = useRouter(); //Variable que se utiliza para cambiar la ruta.
 const nRemisiones = ref();
 const idCliente = useCookie("idCliente");
+//Metodo emit importado desde el componente
 const emit = defineEmits(["extenderMain"]);
 const { getNumRemisionesPen } = useRemisionesApi();
 
@@ -44,14 +47,17 @@ const props = defineProps({
   usuario: String || null,
 });
 
+//Método importado para cambiar el tamaño del main al mismo tiempo que el menú desplegable
 const extenderMain = () => {
   emit("extenderMain");
 };
 
+//Método que se ejecuta al presionar la campana.
 const viajarRemisiones = async () => {
   await route.push("/remisiones");
 };
 
+//Método que realiza una consulta por la API y llena la variable con la cantidad de remisiones pendientes.
 const valueRemisiones = async () => {
   nRemisiones.value = await getNumRemisionesPen(idCliente.value);
 };
