@@ -1,3 +1,4 @@
+//Modelo para recibir remisiones y crear arrays del mismo.
 export interface Remision {
     remision_id: number;
     no_remision: string;
@@ -15,6 +16,7 @@ export interface Remision {
     estado: string | null;
   }
 
+  //Modelo para recibir todos los detalles de una remisión y crear arrays del mismo.
   export interface PreviewRemision {
     programacion_id: string,
     nombre: string,
@@ -32,6 +34,7 @@ export interface Remision {
     totalredondeado: number
   }
 
+//Modelo para hacer una inserción en la tabla 'remisiones_conciliacionxcliente'.
 export interface RemisionPost {
   accion: string,
   motivo: string | null,
@@ -40,6 +43,7 @@ export interface RemisionPost {
   remision_id: number | undefined,
 }
 
+//Modelo hecha para retornar una data, el estado del proceso y el error de una función.
 export interface ApiPromise<T> {
   success: boolean;
   remisiones?: T | undefined;
