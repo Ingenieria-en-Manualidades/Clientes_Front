@@ -1,4 +1,5 @@
 <template>
+  <!-- Agregamos el método para cambiar la variable 'isOpen' para así afectar  -->
   <NavBar :usuario="usuario ?? undefined" @extenderMain="isOpen = !isOpen" />
   <div
     :class="[

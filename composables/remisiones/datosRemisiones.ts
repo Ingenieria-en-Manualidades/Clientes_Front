@@ -1,12 +1,13 @@
 //Importe para que vue sepa los valores que devuelve la API.
 import type { Remision } from "~/interfaces/remisiones";
-import type { tablaDinamica } from "~/interfaces/componentesDinamicos";
 
 export const useDatosRemisiones = () => {
+  //Arrays tipo ref para separar los diferentes tipos de remisiones.
   const remisionesPendientes = ref<Remision[]>([]);
   const remisionesAprobadas =  ref<Remision[]>([]);
   const remisionesRechazadas =  ref<Remision[]>([]);
   
+  //Se encarga de filtrar las remisiones que se encuentren entre dos fechas o una.
   const setConsultar = async (tRemision: Array, dataFecha: Array<Date>) => {
     const fechas = getFechas(dataFecha[0], dataFecha[1]);
     if (!fechas[1]) {
@@ -16,6 +17,7 @@ export const useDatosRemisiones = () => {
     }
   }
 
+  //El método hace que las fechas dadas por el usuario esten con el formato correcto para filtrar.
   const getFechas = (fecha1: Date, fecha2: Date | null) => {
     const fechas = [];
 
