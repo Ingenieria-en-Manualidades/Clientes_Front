@@ -30,10 +30,11 @@
 </template>
 
 <script lang="ts" setup>
+import { useCookie } from "nuxt/app";
 //Importamos el método para utilizar la ruta.
-import { useRouter } from "#app";
+import { useRouter } from "vue-router";
 //Importamos métodos para crear props y emits.
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref } from "vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
 const route = useRouter(); //Variable que se utiliza para cambiar la ruta.

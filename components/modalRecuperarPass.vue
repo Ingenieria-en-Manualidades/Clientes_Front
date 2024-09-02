@@ -36,6 +36,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 //Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";
 //Importamos modelo de un mensaje Toast.

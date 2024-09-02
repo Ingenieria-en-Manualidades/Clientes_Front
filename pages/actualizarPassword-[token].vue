@@ -47,10 +47,10 @@
   </div>
 </template>
 
-
 <script lang="ts" setup>
 import { useValidarEmail } from "~/composables/login/validaciones";
 import { useActualizarPasswordAPI } from "~/composables/login/ActualizarPasswordAPI";
+import { definePageMeta } from "nuxt/dist/pages/runtime";
 
 const contraseña = ref();
 const confirmacion = ref();

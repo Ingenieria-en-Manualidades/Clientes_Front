@@ -20,6 +20,9 @@
 </template>
 
 <script lang="ts" setup>
-const usuario = useCookie("usuario");
+import { ref } from "vue";
+import { useCookie } from "nuxt/app";
+
 const isOpen = ref(true);
+const usuario = useCookie("usuario");
 </script>

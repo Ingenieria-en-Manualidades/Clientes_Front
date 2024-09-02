@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref, computed } from "vue";
 import type { Remision } from "~/interfaces/remisiones";
 import ModalRechazo from "~/components/remisiones/ModalRechazo.vue";
 import ModalPreviewRemision from "~/components/remisiones/ModalPreviewRemision.vue";

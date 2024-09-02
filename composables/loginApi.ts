@@ -1,4 +1,4 @@
- import axios from "axios";
+import { refreshCookie, useCookie } from "nuxt/app";
 
 const url = 'http://127.0.0.1:8000/api';
 
@@ -23,8 +23,7 @@ export const loginApi = () => {
         body: JSON.stringify( userData )
       });
       const response = await resultado.json();
-      
-    //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
+      //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
       const restCookies = await fetch('/api/cookiesRemisiones', {
         method: "POST",
         headers: {

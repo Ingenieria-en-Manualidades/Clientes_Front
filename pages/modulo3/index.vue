@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import TablaPaginacion from "~/components/dinamicos/TablaPaginacion.vue";
 
 const headers = ref(["name", "age", "dni"]);

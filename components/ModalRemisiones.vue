@@ -71,10 +71,11 @@
 </template>
 
 <script lang="ts" setup>
+import { useCookie } from "nuxt/app";
 //Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";
 //Importamos métodos para crear props y emits.
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref } from "vue";
 //Importamos modelos para los Toast y guardar remisiones.
 import type { RemisionPost } from "~/interfaces/remisiones";
 import type { mensajeSencillo } from "~/interfaces/mensajes";

@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineEmits } from "vue";
+import { defineEmits, ref } from "vue";
 
 const isOpen = ref(true); //Variable que define el estado del menú desplegable.
 const emit = defineEmits(["extenderMain"]); //Importa el método que recibe desde su componente.
