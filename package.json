@@ -30,6 +30,7 @@
     "xmldom": "^0.6.0"
   },
   "devDependencies": {
+    "@nuxt/types": "^2.18.1",
     "@types/nodemailer": "^6.4.15",
     "autoprefixer": "^10.4.19",
     "nuxt-primevue": "^3.0.0",

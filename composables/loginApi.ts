@@ -1,4 +1,5 @@
  import axios from "axios";
+ import {useCokie, useCookie} from 'nuxt/app'
 
 const url = 'http://127.0.0.1:8000/api';
 
