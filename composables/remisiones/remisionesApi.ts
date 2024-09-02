@@ -11,7 +11,7 @@ export const useRemisionesApi = () => {
    * @param numRemision: Número de la remisión que presiono el usuario, que se utiliza para buscar en BD. 
    * @returns una promesa que contiene un objeto con estos atributos { success: booleano, resimion: Array (información de la remisión), error: string}. 
    */
-  const listarPreviewRemision = async (numRemision: string): Promise<ApiPromise<PreviewRemision[]>> => {
+  const listarPreviewRemision = async (numRemision: string | undefined): Promise<ApiPromise<PreviewRemision[]>> => {
     try {
       const response = await fetch(`${urlApi}/RemisionOnline/openPreViewRemision/${numRemision}`, {
         method: 'GET'

@@ -42,6 +42,7 @@
 <script lang="ts" setup>
 import { useRouter } from "#app";
 import { useToast } from "primevue/usetoast";
+import { ref } from "vue";
 import { loginApi } from "~/composables/loginApi";
 
 //Variables 'ref' para recibir la información del usuario

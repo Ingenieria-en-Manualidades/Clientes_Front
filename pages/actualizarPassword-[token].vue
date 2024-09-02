@@ -1,59 +1,52 @@
 <template>
-  <html lang="es">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Actualizar constraseña - IENM</title>
-    </head>
-    <body class="justify-center flex">
-      <div class="border-2 rounded-lg shadow w-80 md:w-[430px] mt-[10%]">
-        <div class="p-5 justify-center flex">
-          <img
-            src="/assets/img/ienmLogito.png"
-            alt="Logo IENM"
-            class="min-w-[100px] w-[175px] md:w-[210px]"
+  <div class="flex justify-center items-center min-h-screen bg-gray-100">
+    <title>Actualizar constraseña</title>
+    <div class="border-2 rounded-lg shadow w-80 md:w-[430px] bg-white">
+      <div class="p-5 flex justify-center">
+        <img
+          src="/assets/img/ienmLogito.png"
+          alt="Logo IENM"
+          class="min-w-[100px] w-[175px] md:w-[210px]"
+        />
+      </div>
+      <div
+        class="bg-gradient-to-r from-azulIENM to-azulClaroIENM px-[15%] py-[5%] place-items-center rounded-b-lg"
+      >
+        <p class="font-manrope-extrab text-white text-[20px] md:text-[26px]">
+          Actualizar contraseña
+        </p>
+        <div class="mt-5">
+          <span class="text-white font-manrope-l">{{ password }}</span>
+          <p class="font-manrope-r text-amarilloIENM mb-2 text-base md:text-lg">
+            Contraseña nueva
+          </p>
+          <Password
+            v-model="contraseña"
+            toggleMask
+            :feedback="false"
+            class="w-full text-sm md:text-base"
           />
         </div>
-        <div
-          class="bg-gradient-to-r from-azulIENM to-azulClaroIENM px-[15%] py-[5%] place-items-center rounded-b-lg"
-        >
-          <p class="font-manrope-extrab text-white text-[20px] md:text-[26px]">
-            Actualizar contraseña
+        <div class="mt-5 mb-7">
+          <p class="font-manrope-r text-amarilloIENM mb-2 text-base md:text-lg">
+            Vuelve a escribir la contraseña
           </p>
-          <div class="mt-5">
-            <span class="text-white font-manrope-l">{{ password }}</span>
-            <p
-              class="font-manrope-r text-amarilloIENM mb-2 text-base md:text-lg"
-            >
-              Contraseña nueva
-            </p>
-            <Password
-              v-model="contraseña"
-              toggleMask
-              :feedback="false"
-              class="w-full text-sm md:text-base"
-            />
-          </div>
-          <div class="mt-5 mb-7">
-            <p
-              class="font-manrope-r text-amarilloIENM mb-2 text-base md:text-lg"
-            >
-              Vuelve a escribir la contraseña
-            </p>
-            <Password
-              v-model="confirmacion"
-              toggleMask
-              :feedback="false"
-              class="w-full text-sm md:text-base"
-            />
-          </div>
-          <!-- Componente 'botonUpdate' de tailwind ubicada en 'assets/css' -->
-          <button class="botonUpdate" @click="actualizar">Actualizar</button>
+          <Password
+            v-model="confirmacion"
+            toggleMask
+            :feedback="false"
+            class="w-full text-sm md:text-base"
+          />
         </div>
+        <!-- Componente 'botonUpdate' de tailwind ubicada en 'assets/css' -->
+        <button class="botonUpdate w-full py-2 mt-4" @click="actualizar">
+          Actualizar
+        </button>
       </div>
-    </body>
-  </html>
+    </div>
+  </div>
 </template>
+
 
 <script lang="ts" setup>
 import { useValidarEmail } from "~/composables/login/validaciones";
@@ -71,7 +64,7 @@ const tokenPassword = useRoute().params.token;
 let id_username: string;
 
 const verificacion = async () => {
-  const resultado = await verificarToken(tokenPassword);
+  /*const resultado = await verificarToken(tokenPassword);
 
   if (resultado?.status) {
     id_username = resultado.id_username;
@@ -83,7 +76,7 @@ const verificacion = async () => {
       life: 4000,
     });
     return navigateTo("/");
-  }
+  }*/
 };
 
 const actualizar = async () => {

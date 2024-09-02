@@ -12,17 +12,22 @@
   },
   "dependencies": {
     "@nuxt/http": "^0.6.4",
-    "@vueuse/core": "^10.11.0",
-    "axios": "^1.7.2",
-    "html2pdf.js": "^0.9.0",
+    "@vueuse/core": "^11.0.3",
+    "@vueuse/integrations": "^11.0.3",
+    "axios": "^1.7.5",
+    "consola": "^3.2.3",
+    "defu": "^6.1.4",
+    "html2pdf.js": "^0.10.2",
     "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "nodemailer": "^6.9.14",
     "nuxt": "^3.11.2",
     "primeicons": "^7.0.0",
     "primevue": "^3.52.0",
-    "universal-cookie": "^7.1.4",
+    "universal-cookie": "^7.2.0",
     "vue": "^3.4.27",
-    "vue-router": "^4.3.2"
+    "vue-router": "^4.3.2",
+    "xmldom": "^0.6.0"
   },
   "devDependencies": {
     "@types/nodemailer": "^6.4.15",

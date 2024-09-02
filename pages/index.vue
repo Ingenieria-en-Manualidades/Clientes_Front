@@ -1,13 +1,6 @@
 <template>
   <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Bienvenido a IENM</title>
-    </head>
-    <body class="flex justify-center">
-      <div class="border-2 rounded-lg shadow w-full mt-[10%] lg:inline-flex">
+      <div class="border-2 justify-center rounded-lg shadow w-full mt-[10%] lg:inline-flex">
         <div class="w-1/2 bg-cover pt-4 pb-4">
           <img
             src="/assets/img/ienmLogo600.jpg"
@@ -27,8 +20,7 @@
           <LoginForm />
         </div>
       </div>
-    </body>
-  </html>
+
 </template>
 
 <script lang="ts" setup>

@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 import { useRouter } from "vue-router";
 //Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";

@@ -191,119 +191,277 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from "vue";
-import { jsPDF } from "jspdf"; //nos ayuda generar el PDF
-import { useToast } from "primevue/usetoast";
-import type { PreviewRemision } from "~/interfaces/remisiones"; //Modelo del objeto que llegue de la API
-import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
+import { defineProps, ref } from 'vue';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { useToast } from 'primevue/usetoast';
+import type { PreviewRemision } from '~/interfaces/remisiones'; 
+import { useRemisionesApi } from '~/composables/remisiones/remisionesApi';
+import { useCookie } from 'nuxt/app';
+import Aprobado from '~/assets/img/Aprobado.png';
+import imgHeader from '~/assets/img/header.png';
 
-const iva = ref();
-const total = ref();
-const visible = ref(false);
-const totalGeneral = ref();
-const observaciones = ref();
-const usuario = useCookie("usuario");
-const datos = ref<PreviewRemision[] | undefined>([]); //Arreglo con la información de las actividades.
-const contenido = ref<HTMLElement | null>(null); //Variable con la información de la modal a PDF
-const { listarPreviewRemision } = useRemisionesApi(); //Método que trae la información de la remisión oprimida.
+const iva = ref<number>(0);
+const total = ref<number>(0);
+const totalGeneral = ref<number>(0);
+const observaciones = ref<string>('');
+const usuario = useCookie('usuario');
+const datos = ref<PreviewRemision[]>([]);
+const visible = ref<boolean>(false);
+const contenido = ref<HTMLElement | null>(null);
+const { listarPreviewRemision } = useRemisionesApi();
 
-//Variables importantes a especificar en el componente
-const props = defineProps({
-  numRemision: String,
-  fecha: String,
-  cliente: String,
-  ordenCompra: String,
-  hojaEntrada: String,
-  contacto: String,
-  estado: String,
-});
+const props = defineProps<{
+  numRemision: string;
+  fecha: string;
+  cliente: string;
+  ordenCompra: string;
+  hojaEntrada: string;
+  contacto: string;
+  estado: string;
+}>();
 
-//Método que llena la modal con la información de la remisión
+const formatoNumero = (numero: number): string => {
+  return new Intl.NumberFormat('es-ES').format(numero);
+};
+
 const getModalPreview = async () => {
-  const resultado = await listarPreviewRemision(props.numRemision);
-
-  if (resultado.success) {
-    datos.value = resultado.remisiones;
-    total.value = Number(resultado.remisiones[0].valor);
-    observaciones.value = resultado.remisiones[0].observacion;
-    iva.value = (total.value * 19) / 100;
-    totalGeneral.value = total.value + iva.value;
-  } else {
+  try {
+    const resultado = await listarPreviewRemision(props.numRemision);
+    if (resultado.success) {
+      datos.value = resultado.remisiones;
+      total.value = Number(resultado.remisiones[0].valor);
+      observaciones.value = resultado.remisiones[0].observacion;
+      iva.value = (total.value * 19) / 100;
+      totalGeneral.value = total.value + iva.value;
+    } else {
+      useToast().add({
+        severity: 'error',
+        summary: 'Error en la carga',
+        detail: 'Por favor vuelve a recargar la página.',
+        life: 4000,
+      });
+    }
+  } catch (error) {
     useToast().add({
-      severity: "error",
-      summary: "Error en la carga",
-      detail: "Por favor vuelve a recargar la página.",
+      severity: 'error',
+      summary: 'Error en la carga',
+      detail: 'Por favor vuelve a recargar la página.',
       life: 4000,
     });
   }
 };
 
-//Método que genera el PDF de la modal seleccionada.
-const generarPDF = () => {
-  /**
-   * Creamos el objeto jsPDF con sus propiedades.
-   * - format: Es el tamaño del formato: [1100, 1097] [ancho, altura].
-   * - orientation: Es la orientación y la 'p' quiere decir que es vertical.
-   * - unit: Es el tamaño del contenido que tendra y la 'pt' es la más pequeña.
-   */
-  const doc = new jsPDF({
-    format: [959, 1097],
-    orientation: "p",
-    unit: "pt",
-  });
-
-  //Definimos el tamaño del margin y conseguimos el alto y el ancho del formato
-  const margin = 50;
+const generarPDF = async () => {
+  let finalY = 0;
+  const doc = new jsPDF('p', 'pt', 'letter');
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 50;
+  let currentY = 20;
 
-  //Si existe el contenido realizara esto.
-  if (contenido.value) {
-    doc.html(contenido.value, {
-      callback: function (doc: jsPDF) {
-        const totalPaginas = doc.internal.getNumberOfPages(); //Conseguimos a cantidad de páginas que tendra el pdf por su tamaño.
+  
+  doc.addImage(imgHeader, 'PNG', 10, currentY, 130, 90); 
+  currentY += 50;
 
-        //Este 'for' ayudara aplicar la margen y la marca de agua en cada página.
-        for (let i = 0; i < totalPaginas; i++) {
-          doc.setPage(i);
-          //Definimos y agregamos la margen en cada página, tomando en cuenta el tamaño y ancho del PDF.
-          doc.setDrawColor(0);
-          doc.setLineWidth(0.5);
-          doc.rect(
-            margin,
-            margin,
-            pageWidth - 2 * margin,
-            pageHeight - 2 * margin
-          );
-          //Definimos y agregamos la marca de agua en cada página.
-          doc.saveGraphicsState();
-          doc.setGState(new doc.GState({ opacity: 0.2 })); //Definimos la opacidad.
-          doc.setTextColor(160, 160, 160); //Definimos el color del texto.
-          doc.setFontSize(150); //Definimos la opacidad.
-          doc.setFont("helvetica", "bold");
-          doc.text("APROBADO", pageWidth / 1.5, pageHeight / 1.3, {
-            angle: 45,
-            align: "center",
-          });
-          doc.restoreGraphicsState();
-        }
-        //Guardamos el pdf con su propio nombre
-        doc.save(`Detalles-remisión-${props.numRemision}.pdf`);
-      },
-      x: margin,
-      y: margin,
-      html2canvas: {
-        scale: 0.8,
-        width: pageWidth - 2 * margin,
-        height: pageHeight - 2 * margin,
-      },
-    });
+  // Información de la empresa
+  doc.setFontSize(12);
+  doc.text('INGENIERÍA EN MANUALIDADES SAS', pageWidth / 2, currentY, { align: 'center' });
+  doc.text('NIT 800.187.547-1', pageWidth / 2, currentY + 15, { align: 'center' });
+  doc.text('TV 29 #16-57', pageWidth / 2, currentY + 30, { align: 'center' });
+
+  doc.text(`REMISIÓN N° ${props.numRemision}`, pageWidth - margin, currentY, { align: 'right' });
+  doc.text(props.fecha, pageWidth - margin, currentY + 15, { align: 'right' });
+  currentY += 60;
+
+  // Información del cliente
+autoTable(doc, {
+  startY: currentY,
+  head: [
+    [{ content: props.cliente, colSpan: 3, styles: { halign: 'center', fontSize: 14, fillColor: [169, 169, 169] } }],
+    ['Orden de compra', 'Hoja de entrada', 'Contacto']
+  ],
+  body: [[props.ordenCompra, props.hojaEntrada, props.contacto]],
+  headStyles: {
+    fillColor: [140, 140, 140], 
+    textColor: [0, 0, 0], 
+    fontSize: 12,
+    halign: 'center' 
+  },
+  styles: { 
+    fontSize: 10,
+    halign: 'center'  // Centra el texto en las celdas de la tabla
+  },
+  columnStyles: {
+    0: { halign: 'center' },
+    1: { halign: 'center' },
+    2: { halign: 'center' }
+  },
+  margin: { left: margin, right: margin },
+  theme: 'striped',
+  didDrawPage: (data) => {
+    if (data.cursor) {
+      finalY = data.cursor.y;
+    } else {
+      console.warn('data.cursor is undefined');
+    }
   }
-};
+});
 
-const formatoNumero = (numero: number): string => {
-  return new Intl.NumberFormat("es-ES").format(numero);
+currentY = finalY + 20;
+
+// Tabla de actividades
+autoTable(doc, {
+  startY: currentY,
+  head: [['OP', 'SKU', 'ACTIVIDAD', 'UNIDADES', 'PRECIO UNITARIO', 'TOTAL']],
+  body: datos.value.map(dato => [
+    dato.programacion_id,
+    dato.codigo_cobro,
+    dato.nombre,
+    formatoNumero(dato.unidades),
+    `$${formatoNumero(dato.precio)}`,
+    `$${formatoNumero(dato.totalredondeado)}`
+  ]),
+  styles: { 
+    fontSize: 10,
+    halign: 'center'  // Centra el texto en las celdas de la tabla
+  },
+  columnStyles: {
+    0: { halign: 'center' },
+    1: { halign: 'center' },
+    2: { halign: 'center' },
+    3: { halign: 'center' },
+    4: { halign: 'center' },
+    5: { halign: 'center' }
+  },
+  margin: { left: margin, right: margin },
+  theme: 'striped',
+  didDrawPage: (data) => {
+    if (data.cursor) {
+      finalY = data.cursor.y;
+    } else {
+      console.warn('data.cursor is undefined');
+    }
+  }
+});
+
+
+  currentY = finalY + 20;
+
+  // Totales
+  autoTable(doc, {
+    startY: currentY,
+    body: [
+      [`TOTAL: $${formatoNumero(total.value)}`], 
+      [`IVA: $${formatoNumero(iva.value)}`], 
+      [`TOTAL GENERAL: $${formatoNumero(totalGeneral.value)}`]
+    ],
+    styles: {
+      fontSize: 10,
+      halign: 'right'  
+    },
+    margin: { right: margin },
+    theme: 'plain',
+    didDrawPage: (data) => {
+      if (data.cursor) {
+        finalY = data.cursor.y;
+      } else {
+        console.warn('data.cursor is undefined');
+      }
+    }
+  });
+
+  currentY = finalY + 30;
+
+  // Observaciones
+  autoTable(doc, {
+    startY: currentY,
+    head: [['OBERVACIONES:']],
+    body: [
+      [observaciones.value || 'N/A']
+    ],
+    styles: {
+      fontSize: 10,
+      halign: 'left'  
+    },
+    margin: { left: margin },
+    theme: 'plain',
+    didDrawPage: (data) => {
+      if (data.cursor) {
+        finalY = data.cursor.y;
+      } else {
+        console.warn('data.cursor is undefined');
+      }
+    }
+  });
+  
+  currentY = finalY + 20;
+
+  const table1Width = (pageWidth - margin * 2) / 2;
+  const table2Width = table1Width;
+
+  // Información Elaborado por
+  autoTable(doc, {
+    startY: currentY,
+    head: [['ELABORADO POR:']],
+    body: [[`${usuario.value}`]],
+    styles: {
+      fontSize: 10,
+      halign: 'left'  
+    },
+    margin: { left: margin },
+    theme: 'plain',
+    didDrawPage: (data) => {
+      if (data.cursor) {
+        finalY = data.cursor.y;
+      } else {
+        console.warn('data.cursor is undefined');
+      }
+    }
+  });
+
+  // Información Firma
+  autoTable(doc, {
+    startY: currentY,
+    head: [['______________________________']],
+    body: [['FIRMA']],
+    styles: {
+      fontSize: 10,
+      halign: 'right'
+    },
+    margin: { right: margin },
+    theme: 'plain',
+    didDrawPage: (data) => {
+      if (data.cursor) {
+        finalY = data.cursor.y;
+      } else {
+        console.warn('data.cursor is undefined');
+      }
+    }
+  });
+   // Agregar marca de agua
+   const roatatioAngle = 45;
+
+const fontSizeW = 80;
+const rotationAngle = 45; // Grados para rotar la imagen
+const transparency = 0.1;
+const totalPages = doc.internal.pages.length;
+for (let i = 0; i < totalPages; i++) {
+  doc.setPage(i + 1);
+
+  // Establecer el estado de gráficos para aplicar transparencia
+  doc.setGState(new doc.GState({ opacity: transparency }));
+    doc.setTextColor(220, 220, 220);
+    doc.setFontSize(fontSizeW);
+    doc.setFont('helvetica', 'bold');
+    doc.addImage(Aprobado,'JPEG',200,300, 400, 200, undefined, 'NONE', roatatioAngle);
+    doc.setGState(new doc.GState({ opacity: 1 }));
+  }
+  
+  // Guardar PDF
+  doc.save(`Detalles-remision-${props.numRemision}.pdf`);
 };
 
 getModalPreview();
 </script>
+

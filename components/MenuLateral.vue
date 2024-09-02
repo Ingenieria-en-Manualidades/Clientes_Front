@@ -22,7 +22,7 @@
       </button>
     </div>
     <div
-      class="flex justify-start max-[760px]:justify-center overflow-y-scroll h-full min-[1300px]:h-[90%] min-[1300px]:mt-10"
+      class="flex justify-start max-[760px]:justify-center overflow-hidden overflow-y-scroll h-full min-[1300px]:h-[90%] min-[1300px]:mt-10"
     >
       <Tabs>
         <TabList>
