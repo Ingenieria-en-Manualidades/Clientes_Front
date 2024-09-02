@@ -13,7 +13,7 @@
     <div class="flex justify-center rounded-lg border-[1px] border-gray-300">
       <slot />
     </div>
-    <footer class="border-y-[1px] mt-3 p-3 flex justify-center">
+    <footer class="border-y-[1px] mt-3 p-3 hidden">
       <p>@Copyrigth (footer)</p>
     </footer>
   </div>

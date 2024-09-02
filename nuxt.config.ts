@@ -21,6 +21,8 @@ export default defineNuxtConfig({
     importPT: { as: 'Aura', from: '~/presets/aura' }
   },
   runtimeConfig: {
+    //URL del backend del modulo clientes
+    apiBackendCliente: process.env.NUXT_API_BACKEND_CLIENTE,
     public: {
       cookieOptions: {
         sameSite: 'lax',

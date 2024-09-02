@@ -4,7 +4,7 @@ const url = 'http://127.0.0.1:8000/api';
 
 export const loginApi = () => {
 
-  /**
+    /**
    * Verifica dentro de la BD si el usuario existe y si es el caso crea tres cookies (idCliente, token y nombredDeUsuario) para que la página funcione y duran lo que dure la sesión.
    * Metodo importado en el componente 'LoginForm'.
    * @param userData: Objeto con los atributos para verficar a un usuario {nombreDeUsuario: string, password: string}.
@@ -13,24 +13,26 @@ export const loginApi = () => {
   const login = async (userData: any) => {
     try {
       //llamando al endpoint que verificara al usuario y nos devolvera el token.
-      const response = await axios.post(
-        `${url}/login`,
-        userData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      console.log('urlAPI: ', url);
+      
+      const resultado = await fetch(`${url}/login`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify( userData )
+      });
+      const response = await resultado.json();
+      
     //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
-      const resultado = await fetch('/api/cookiesRemisiones', {
+      const restCookies = await fetch('/api/cookiesRemisiones', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          token: response.data.access_token,
-          idCliente: response.data.clientes_endpoint_ids[0],
+          token: response.access_token,
+          idCliente: response.clientes_endpoint_ids[0],
           usuario: userData.username
         })
       });
@@ -39,10 +41,10 @@ export const loginApi = () => {
       refreshCookie('usuario');
       
       // Verificamos si hay un error con las cookies
-      if (!resultado) {
+      if (!restCookies) {
         throw "Error a la hora de crear las cookies";
       }
-
+      
       return {success: true};
     } catch (error) {
       console.error(error.message);
@@ -78,6 +80,7 @@ export const loginApi = () => {
    * @returns Objeto con los siguientes atributos {success: boolean (comprobar el resultado), tittle y mensaje: string (mensaje que da el contexto de la situación)}
    */
   const logout = async () => {
+    console.log("URL logout: ", url);
     const token = useCookie("token");
     try {
       // Llamamos al token del usuario y verificamos su existencia.
@@ -86,27 +89,27 @@ export const loginApi = () => {
       }
 
       // Llamamos al endpoint "logout" del 'Modulo-Cliente Backend' dandole el token del usuario para borrarlo en la BD.
-      const response = await axios.post(
-        `${url}/logout`, 
-        {},
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token.value}`,
+      const resultado = await fetch(`${url}/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token.value}`,
           },
-        }
-      );
+      });
+
+      const response = await resultado.json();
+      
       // Borramos todas las cookies(token, idCliente y usuario) y retornamos mensaje exitoso del endpoint.
-      const resultado = await fetch('/api/deleteCookiesRem', {
+      const resultCookie = await fetch('/api/deleteCookiesRem', {
         method: 'DELETE',
       });
 
       // Verificamos que borramos bien las cookies.
-      if (!resultado) {
+      if (!resultCookie) {
         throw "Error a la hora de borrar las cookies";
       }
 
-      return {success: true, status: 'success', tittle: "Exito al cerrar sesión", mensaje: response.data.message};
+      return {success: true, status: 'success', tittle: "Exito al cerrar sesión", mensaje: response.message};
     } catch (error) {
       console.error('Error al cerrar sesión:', error.message);
       return {success: false, status: 'error', tittle: "Fallo al cerrar sesión", mensaje: 'Por favor verificar fallo.'};
