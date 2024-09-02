@@ -1,7 +1,5 @@
 <template>
-  <table
-    class="text-xs sm:text-sm w-[95%] mx-[2.5%] lg:w-full font-manrope-r mb-3"
-  >
+  <table class="text-xs sm:text-sm w-[95%] mx-[2.5%] lg:w-full font-manrope-r">
     <thead>
       <tr class="sm:text-base">
         <th class="bg-azulIENM text-white py-4 rounded-tl-md">N°</th>
@@ -12,7 +10,7 @@
     </thead>
     <tbody>
       <tr
-        v-for="remision in remisiones"
+        v-for="remision in remisionesData"
         v-bind:key="remision.no_remision"
         class="border-x-[1px] border-b-[1px] border-gray-400"
       >
@@ -51,10 +49,59 @@
       </tr>
     </tbody>
   </table>
+  <div class="w-full mx-[2.5%] py-4 flex justify-center my-[7px]">
+    <button
+      type="button"
+      :disabled="paginaActual === 1"
+      @click="paginaActual = 1"
+      :class="[
+        'py-2 px-3 rounded-[50%]',
+        paginaActual === 1 ? 'text-gray-400' : 'hover:bg-gray-200',
+      ]"
+    >
+      <i class="pi pi-angle-double-left"></i>
+    </button>
+    <button
+      type="button"
+      :disabled="paginaActual === 1"
+      @click="paginaActual -= 1"
+      :class="[
+        'py-2 px-3 rounded-[50%]',
+        paginaActual === 1 ? 'text-gray-400' : 'hover:bg-gray-200',
+      ]"
+    >
+      <i class="pi pi-angle-left"></i>
+    </button>
+    <span class="font-manrope-b mt-[6px]"
+      >Página {{ paginaActual }} de {{ totalPaginas }}</span
+    >
+    <button
+      type="button"
+      :disabled="paginaActual === totalPaginas"
+      @click="paginaActual += 1"
+      :class="[
+        'py-2 px-3 rounded-[50%]',
+        paginaActual === totalPaginas ? 'text-gray-400' : 'hover:bg-gray-200',
+      ]"
+    >
+      <i class="pi pi-angle-right"></i>
+    </button>
+    <button
+      type="button"
+      :disabled="paginaActual === totalPaginas"
+      @click="paginaActual = totalPaginas"
+      :class="[
+        'py-2 px-3 rounded-[50%]',
+        paginaActual === totalPaginas ? 'text-gray-400' : 'hover:bg-gray-200',
+      ]"
+    >
+      <i class="pi pi-angle-double-right"></i>
+    </button>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, ref, computed } from "vue";
 import type { Remision } from "~/interfaces/remisiones";
 import ModalRechazo from "~/components/remisiones/ModalRechazo.vue";
 import ModalPreviewRemision from "~/components/remisiones/ModalPreviewRemision.vue";
@@ -67,6 +114,19 @@ const props = defineProps({
   modales: String,
 });
 
+const itemsPorPagina = ref(5);
+const paginaActual = ref(1);
+const totalItems = computed(() => props.remisiones.length);
+const totalPaginas = computed(() =>
+  Math.ceil(totalItems.value / itemsPorPagina.value)
+);
+
+const remisionesData = computed(() => {
+  const start = (paginaActual.value - 1) * itemsPorPagina.value;
+  const end = start + itemsPorPagina.value;
+  return props.remisiones.slice(start, end);
+});
+
 const emit = defineEmits(["listar"]);
 
 const listar = () => {
@@ -77,5 +137,3 @@ const formatoNumero = (numero: number): string => {
   return new Intl.NumberFormat("es-ES").format(numero);
 };
 </script>
-
-<style></style>

@@ -66,8 +66,11 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
+import { useCookie } from "nuxt/app";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
+import { definePageMeta } from "nuxt/dist/pages/runtime";
 import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";

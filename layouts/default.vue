@@ -13,13 +13,16 @@
     <div class="flex justify-center rounded-lg border-[1px] border-gray-300">
       <slot />
     </div>
-    <footer class="border-y-[1px] mt-3 p-3 flex justify-center">
+    <footer class="border-y-[1px] mt-3 p-3 hidden">
       <p>@Copyrigth (footer)</p>
     </footer>
   </div>
 </template>
 
 <script lang="ts" setup>
-const usuario = useCookie("usuario");
+import { ref } from "vue";
+import { useCookie } from "nuxt/app";
+
 const isOpen = ref(true);
+const usuario = useCookie("usuario");
 </script>

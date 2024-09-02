@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from "nuxt/config";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import {defineNuxtConfig} from 'nuxt/config';
 
@@ -29,6 +31,8 @@ export default defineNuxtConfig({
 
 
   runtimeConfig: {
+    //URL del backend del modulo clientes
+    apiBackendCliente: process.env.NUXT_API_BACKEND_CLIENTE,
     public: {
       cookieOptions: {
         sameSite: 'lax',
@@ -37,5 +41,5 @@ export default defineNuxtConfig({
     },
   },
 
-  compatibilityDate: '2024-08-28',
+  compatibilityDate: '2024-09-28',
 });

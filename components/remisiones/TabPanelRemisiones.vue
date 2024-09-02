@@ -39,6 +39,7 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from "nuxt/app";
 import { items } from "~/composables/remisiones/datosRemisiones"; // Importamos los elementos y las rutas para cambiar entre remisiones
 
 const route = useRoute(); // Variable para el método para cambiar las rutas
