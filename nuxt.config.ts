@@ -1,6 +1,5 @@
-import { defineNuxtConfig } from "nuxt/config";
+import {defineNuxtConfig} from 'nuxt/config';
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
@@ -27,10 +26,11 @@ export default defineNuxtConfig({
     importPT: { as: 'Aura', from: '~/presets/aura' }
   },
 
+
   runtimeConfig: {
     //URL del backend del modulo clientes
-    apiBackendCliente: process.env.NUXT_API_BACKEND_CLIENTE,
     public: {
+      apiBackendCliente: process.env.GLOBAL_URL_SERVER,
       cookieOptions: {
         sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production',

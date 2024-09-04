@@ -1,9 +1,14 @@
+import { useRuntimeConfig } from "nuxt/app";
+
 export const useValidarEmail = () => {
   /**
    * Método que funciona para verificar si el input fue llenado o si el correo esta bien diligenciado.
    * @param email : Correo del usuario al cual se va a verificar su diligenciamento.
    * @returns En caso de que el correo este bien diligenciado retorna un 'true' y en caso contrario retorna 'false' y el motivo del false en formato del mensaje.
    */
+  const config = useRuntimeConfig();
+
+  const url = config.public.apiBackendCliente;
   const validarEmail = (email: string) => {
     if (!email) {
       return {
@@ -31,7 +36,7 @@ export const useValidarEmail = () => {
    * @returns En caso de existir el token retorna un 'true' y la id del usuario para identificar al usuario a modificar y en caso contrario un 'false' y los motivos del porque.
    */
   const verificarToken = async (tokenPassword: string | string[]) => {
-    const response = await fetch(`http://127.0.0.1:8000/api/verificarToken/${tokenPassword}`, {
+    const response = await fetch(`${url}/verificarToken/${tokenPassword}`, {
       method: 'GET'
     });
 

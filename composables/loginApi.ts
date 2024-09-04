@@ -1,8 +1,11 @@
 import { refreshCookie } from "nuxt/app";
 
-const url = 'http://127.0.0.1:8000/api';
 
 export const loginApi = () => {
+
+  const config = useRuntimeConfig();
+
+  const url = config.public.apiBackendCliente;
 
     /**
    * Verifica dentro de la BD si el usuario existe y si es el caso crea tres cookies (idCliente, token y nombredDeUsuario) para que la página funcione y duran lo que dure la sesión.
