@@ -1,4 +1,5 @@
 //Importe para que vue sepa los valores que devuelve la API.
+import { ref } from "vue";
 import type { Remision } from "~/interfaces/remisiones";
 
 export const useDatosRemisiones = () => {

@@ -1,12 +1,10 @@
-import { refreshCookie } from "nuxt/app";
-
+import { useRuntimeConfig } from "nuxt/app";
 
 export const loginApi = () => {
 
   const config = useRuntimeConfig();
 
   const url = config.public.apiBackendCliente;
-
     /**
    * Verifica dentro de la BD si el usuario existe y si es el caso crea tres cookies (idCliente, token y nombredDeUsuario) para que la página funcione y duran lo que dure la sesión.
    * Metodo importado en el componente 'LoginForm'.
@@ -18,7 +16,7 @@ export const loginApi = () => {
       //llamando al endpoint que verificara al usuario y nos devolvera el token.
       console.log('urlAPI: ', url);
       
-      const resultado = await fetch(`${url}/login`, {
+      const resultado = await fetch(`${url}api/login`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -40,9 +38,6 @@ export const loginApi = () => {
           usuario: userData.username
         })
       });
-      refreshCookie('token');
-      refreshCookie('idCliente');
-      refreshCookie('usuario');
       
       // Verificamos si hay un error con las cookies
       if (!restCookies) {
@@ -96,7 +91,7 @@ export const loginApi = () => {
       }
 
       // Llamamos al endpoint "logout" del 'Modulo-Cliente Backend' dandole el token del usuario para borrarlo en la BD.
-      const resultado = await fetch(`${url}/logout`, {
+      const resultado = await fetch(`${url}api/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

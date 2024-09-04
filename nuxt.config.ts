@@ -31,6 +31,8 @@ export default defineNuxtConfig({
     //URL del backend del modulo clientes
     public: {
       apiBackendCliente: process.env.GLOBAL_URL_SERVER,
+      apiGroot: process.env.GLOBAL_URL_SERVER_GROOT,
+      tokenRemisiones: process.env.KEY_REFERRALS_URL_SERVER,
       cookieOptions: {
         sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production',

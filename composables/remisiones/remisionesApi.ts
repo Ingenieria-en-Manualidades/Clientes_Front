@@ -1,12 +1,14 @@
 import { ref } from "vue";
+import { useRuntimeConfig } from "nuxt/app";
 import type { mensajeSencillo } from "~/interfaces/mensajes";
 import type { Remision, RemisionPost, ApiPromise, PreviewRemision } from "~/interfaces/remisiones";
 
-const urlApi = "https://imecplusdev.ienm.com.co:8443";
-
 export const useRemisionesApi = () => {
-  const token = "3nmfgfsds#22dsff343fr";
-
+  
+  const config = useRuntimeConfig();
+  const url = config.public.apiGroot;
+  const token = config.public.tokenRemisiones;
+  
   /**
    * Trae la información de la remisión presionada por el usuario desde la API de 'Groot' y la retorna a la modal.
    * @param numRemision: Número de la remisión que presiono el usuario, que se utiliza para buscar en BD. 
@@ -14,7 +16,7 @@ export const useRemisionesApi = () => {
    */
   const listarPreviewRemision = async (numRemision: string | undefined): Promise<ApiPromise<PreviewRemision[]>> => {
     try {
-      const response = await fetch(`${urlApi}/RemisionOnline/openPreViewRemision/${numRemision}`, {
+      const response = await fetch(`${url}/RemisionOnline/openPreViewRemision/${numRemision}`, {
         method: 'GET'
       });
 
@@ -37,7 +39,7 @@ export const useRemisionesApi = () => {
     
     try {
       //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.
-      const response = await fetch(`${urlApi}/api/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
+      const response = await fetch(`${url}/api/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
         method: 'GET',
         headers: {
           'Authorization': `${token}`,
@@ -64,7 +66,7 @@ export const useRemisionesApi = () => {
    */
   const agregarRemision = async (remision: RemisionPost, numRemision: string | undefined) => {
     try{
-      const response = await fetch(`${urlApi}/api/RemisionOnline/saveGestionRemisionClienteAPI`, {
+      const response = await fetch(`${url}/api/RemisionOnline/saveGestionRemisionClienteAPI`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(remision),
@@ -102,10 +104,10 @@ export const useRemisionesApi = () => {
    * @param idCliente :Numero que ayuda a identificar al cliente.
    * @returns retorna la cantidad de remisiones tipo 'Pendiente' del cliente especificado.
    */
-  const getNumRemisionesPen = async (idCliente: string | null | undefined) => {
+  const getNumRemisionesPen = async (cliente: number | null ) => {
     try {
       //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.
-      const response = await fetch(`${urlApi}/api/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
+      const response = await fetch(`${url}/api/RemisionOnline/ListarRemisionesAPI/${cliente}`, {
         method: 'GET',
         headers: {
           'Authorization': `${token}`,
@@ -118,6 +120,8 @@ export const useRemisionesApi = () => {
       const remisionesPendientes: Remision[] = remisiones.data.filter(
         (rem) => rem.estado === null
       );
+      console.log("Remisiones length:", remisionesPendientes[0]);
+      
       return remisionesPendientes.length;
     } catch (error) {
       console.error("Error a la hora de llamar al endpoint 'númeroRemisiones':", error.message);
