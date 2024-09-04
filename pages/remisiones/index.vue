@@ -75,9 +75,7 @@ import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
 import { useDatosRemisiones } from "~/composables/remisiones/datosRemisiones";
-import { ref } from "vue";
-import { useCookie } from "nuxt/app";
-import { definePageMeta } from "nuxt/dist/pages/runtime";
+
 
 const dates = ref();
 let avisoIcono = ref();

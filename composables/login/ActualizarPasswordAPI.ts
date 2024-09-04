@@ -1,8 +1,10 @@
-import { createError } from "nuxt/app";
-
-const url = 'http://127.0.0.1:8000/api';
+import { createError, useRuntimeConfig } from "nuxt/app";
 
 export const useActualizarPasswordAPI = () => {
+
+  const config = useRuntimeConfig();
+
+  const url = config.public.apiBackendCliente;
   /**
    * Método que se dedica a crear el token a un usuario para que pueda actualizar su contraseña, primero verificando si el correo existe y luego crearlo.
    * @param correo :Correo ingresado por el usuario.
