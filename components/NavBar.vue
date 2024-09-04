@@ -39,7 +39,7 @@ import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
 const route = useRouter(); //Variable que se utiliza para cambiar la ruta.
 const nRemisiones = ref();
-const idCliente = useCookie("idCliente");
+const idCliente = ref<string | undefined>();
 //Metodo emit importado desde el componente
 const emit = defineEmits(["extenderMain"]);
 const { getNumRemisionesPen } = useRemisionesApi();
@@ -48,6 +48,15 @@ const props = defineProps({
   usuario: String || null,
 });
 
+const setUsuario = async () => {
+  const response = await fetch("/api/getCookies", {
+    method: "GET",
+  });
+
+  const json = await response.json();
+
+  idCliente.value = json.cookieCliente;
+};
 //Método importado para cambiar el tamaño del main al mismo tiempo que el menú desplegable
 const extenderMain = () => {
   emit("extenderMain");

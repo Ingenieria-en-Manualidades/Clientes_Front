@@ -1,4 +1,4 @@
-import { refreshCookie, useCookie } from "nuxt/app";
+import { refreshCookie } from "nuxt/app";
 
 const url = 'http://127.0.0.1:8000/api';
 
@@ -23,6 +23,8 @@ export const loginApi = () => {
         body: JSON.stringify( userData )
       });
       const response = await resultado.json();
+      console.log("response json: ", response);
+      
       //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
       const restCookies = await fetch('/api/cookiesRemisiones', {
         method: "POST",
@@ -79,11 +81,14 @@ export const loginApi = () => {
    * @returns Objeto con los siguientes atributos {success: boolean (comprobar el resultado), tittle y mensaje: string (mensaje que da el contexto de la situación)}
    */
   const logout = async () => {
-    console.log("URL logout: ", url);
-    const token = useCookie("token");
     try {
+      const responseCookies = await fetch("/api/getCookies", {
+        method: "GET",
+      });
+    
+      const json = await responseCookies.json();
       // Llamamos al token del usuario y verificamos su existencia.
-      if (!token.value) {
+      if (!json.cookieToken) {
         throw new Error('No se encontró el token de autenticación');
       }
 
@@ -92,7 +97,7 @@ export const loginApi = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token.value}`,
+          Authorization: `Bearer ${json.cookieToken}`,
           },
       });
 

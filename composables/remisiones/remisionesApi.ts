@@ -1,3 +1,4 @@
+import { ref } from "vue";
 import type { mensajeSencillo } from "~/interfaces/mensajes";
 import type { Remision, RemisionPost, ApiPromise, PreviewRemision } from "~/interfaces/remisiones";
 
@@ -31,7 +32,9 @@ export const useRemisionesApi = () => {
    * @param idCliente: referencia y dato unico para identificar un cliente.
    * @returns una promesa que contiene un objeto con estos atributos { success: booleano, resimion: Array de remisiones del cliente, error: string}. 
    */
-  const listarRemisionesPorId = async (idCliente: string | null | undefined): Promise<ApiPromise<Remision[]>>  => {
+  const listarRemisionesPorId = async (idCliente: string | null): Promise<ApiPromise<Remision[]>>  => {
+    console.log("idCliente listar: ", idCliente);
+    
     try {
       //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.
       const response = await fetch(`${urlApi}/api/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
@@ -40,10 +43,12 @@ export const useRemisionesApi = () => {
           'Authorization': `${token}`,
         },
       });
-
+      
       //Guardamos los resultados de la API en una variable con la interfaz de las remisiones 'Remision[]'.
       // La intefaz es necesaria ya que Vue es incapaz de identifcar los valores traidos de la API.
       const remisiones: Remision[] = await response.json();
+      console.log("remisiones arreglo: ", remisiones.data);
+      
       return { success: true, remisiones: remisiones.data};
     } catch (error) {
       console.error("Error a la hora de llamar al endpoint 'ListarRemisiones':", error.message);
@@ -108,12 +113,14 @@ export const useRemisionesApi = () => {
       });
 
       const remisiones: Remision[] = await response.json();
+      console.log("remisiones json:", remisiones);
+      
       const remisionesPendientes: Remision[] = remisiones.data.filter(
         (rem) => rem.estado === null
       );
       return remisionesPendientes.length;
     } catch (error) {
-      console.error("Error a la hora de llamar al endpoint 'ListarRemisiones':", error.message);
+      console.error("Error a la hora de llamar al endpoint 'númeroRemisiones':", error.message);
       return "error getNumRemisionesPen";
     }
   }

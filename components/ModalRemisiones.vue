@@ -71,7 +71,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useCookie } from "nuxt/app";
 //Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";
 //Importamos métodos para crear props y emits.
@@ -86,8 +85,8 @@ const motivo = ref(); //Varable para guardar el motivo del rechazo.
 const toast = useToast();
 const visible = ref(false); //Variable que define la aparición de la modal.
 let disable = ref(true); //Variable que define es estado del textArea.
-const idCliente = useCookie("idCliente");
-const usuario = useCookie("usuario");
+const idCliente = ref<string | undefined>();
+const usuario = ref<string | undefined>();
 let mensaje = ref<mensajeSencillo>({ status: "", tittle: "", detail: "" });
 
 const { agregarRemision } = useRemisionesApi();
@@ -104,6 +103,18 @@ const estadoTextArea = (estado: boolean) => {
     motivo.value = "";
   }
 };
+
+const setUsuarioYcliente = async () => {
+  const response = await fetch("/api/getCookies", {
+    method: "GET",
+  });
+
+  const json = await response.json();
+
+  usuario.value = json.cookieUsuario;
+  idCliente.value = json.cookieCliente;
+};
+setUsuarioYcliente();
 
 //Método para hacer una inserción en la tabla 'remision_conciliacionxcliente' con la remisión , el estado y el posible motivo de rechazo escogida por el usuario.
 const saveRemision = async () => {

@@ -67,10 +67,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useCookie } from "nuxt/app";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
-import { definePageMeta } from "nuxt/dist/pages/runtime";
 import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
@@ -79,7 +77,6 @@ import { useDatosRemisiones } from "~/composables/remisiones/datosRemisiones";
 const dates = ref();
 let avisoIcono = ref();
 const toast = useToast();
-const idCliente = useCookie("idCliente");
 let avisodetalles = ref();
 const isLoading = ref(false);
 const calendario = ref(true);
@@ -90,8 +87,13 @@ const { setConsultar, remisionesPendientes } = useDatosRemisiones();
 
 const listar = async () => {
   isLoading.value = true;
+  const response = await fetch("/api/getCookies", {
+    method: "GET",
+  });
 
-  const resultado = await listarRemisionesPorId(idCliente.value);
+  const json = await response.json();
+
+  const resultado = await listarRemisionesPorId(json.cookieCliente);
 
   if (resultado.success) {
     remisionesPendientes.value = resultado.remisiones.filter(
@@ -137,10 +139,10 @@ const recargarTabla = () => {
   listar();
 };
 
-definePageMeta({
-  layout: "default",
-  middleware: "login",
-});
+// definePageMeta({
+//   layout: "default",
+//   middleware: "login",
+// });
 
 listar();
 </script>

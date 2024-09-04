@@ -1,9 +1,13 @@
-import { defineNuxtRouteMiddleware, navigateTo, useCookie } from "nuxt/app";
+import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 
 export default defineNuxtRouteMiddleware(async(to, from) => {
-    const token = useCookie("token");
+    const response = await fetch("/api/getCookies", {
+        method: "GET",
+      });
     
-    if (!token.value) {
+    const json = await response.json();
+    
+    if (!json.cookieToken) {
         return navigateTo('/');
     }
 })

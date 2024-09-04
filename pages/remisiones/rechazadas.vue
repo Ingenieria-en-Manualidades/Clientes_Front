@@ -66,7 +66,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useCookie } from "nuxt/app";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
 import { definePageMeta } from "nuxt/dist/pages/runtime";
@@ -83,14 +82,17 @@ const isLoading = ref(false);
 const calendario = ref(true);
 const botonRecargar = ref(false);
 const estadoRemisiones = ref(false);
-const idCliente = useCookie("idCliente");
 const { listarRemisionesPorId } = useRemisionesApi();
 const { setConsultar, remisionesRechazadas } = useDatosRemisiones();
 
 const listar = async () => {
   isLoading.value = true;
+  const response = await fetch("/api/getCookies", {
+    method: "GET",
+  });
 
-  const resultado = await listarRemisionesPorId(idCliente.value);
+  const json = await response.json();
+  const resultado = await listarRemisionesPorId(json.cookieCliente);
 
   if (resultado.success) {
     remisionesRechazadas.value = resultado.remisiones.filter(
