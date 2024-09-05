@@ -14,8 +14,6 @@ export const loginApi = () => {
   const login = async (userData: any) => {
     try {
       //llamando al endpoint que verificara al usuario y nos devolvera el token.
-      console.log('urlAPI: ', url);
-      
       const resultado = await fetch(`${url}api/login`, {
         method: "POST",
         headers: {
@@ -23,8 +21,19 @@ export const loginApi = () => {
         },
         body: JSON.stringify( userData )
       });
+      
+      if (!resultado.ok) {
+        const response = await resultado.json();
+        
+        return {
+          success: false,
+          status: 'error',
+          tittle: response.tittle,
+          detail: response.message
+        };
+      }
+
       const response = await resultado.json();
-      console.log("response json: ", response);
       
       //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
       const restCookies = await fetch('/api/cookiesRemisiones', {
@@ -46,30 +55,8 @@ export const loginApi = () => {
       
       return {success: true};
     } catch (error) {
-      console.error(error.message);
-      //Creación un objeto mensaje de error desconocido.
-      let mensaje = {
-        success: false,
-        status: 'error',
-        tittle: 'Error desconocido',
-        detail: 'Error desconocido, por favor intenta de nuevo más tarde'
-      };
-      //Verifica si el error se debe a una mal ingreso de los valores.
-      if (error.response && error.response.status === 422) {
-        //Cambia el titulo y el detalle del error.
-        mensaje.tittle = 'Error de verificación';
-        mensaje.detail = 'Usuario o contraseña mal ingresados';
-        return mensaje;
-      }
-      //Verifica si el error se debe a que el usuario esta inactivo.
-      if (error.response && error.response.status === 403) {
-        mensaje.status = 'warn'
-        mensaje.tittle = 'Usuario inactivo';
-        mensaje.detail = `${error.response.data.message}.`;
-        return mensaje;
-      }
-      //Si el error no se debe a ninguno de ellos se enviara el de tipo desconocido
-      return mensaje;
+      console.error(error);
+      throw "Error desconocido a la hora de iniciar";
     }
   };
 

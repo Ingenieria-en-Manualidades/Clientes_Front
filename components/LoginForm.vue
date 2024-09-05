@@ -46,7 +46,7 @@ import { ref } from "vue";
 import { loginApi } from "~/composables/loginApi";
 
 //Variables 'ref' para recibir la información del usuario
-const usuario = ref("");
+const usuario = ref();
 const toast = useToast(); //Importamos variable para utilizar los mensajes 'Toast' de primevue
 const router = useRouter(); //Variable que utilizaremos para viajar entre rutas
 const contrasenia = ref("");
@@ -67,22 +67,32 @@ const validarUsuario = () => {
 
 //Método que llama al endpoint que permite la verficación de usuarios y retorna el token.
 const handleSubmit = async () => {
-  //llamando al endpoint y guardando el token y la id del cliente como una cookie dentro del método 'login'.
-  const resultado = await login({
-    username: usuario.value,
-    password: contrasenia.value,
-  });
-  //Enviando al usuario al "dashboard" de las remisiones en caso de que el usuario este registrado.
-  if (resultado.success) {
-    await router.push("/remisiones");
-  } else {
-    //mensaje de error dependiendo del resultado
+  if (!usuario.value || !contrasenia.value) {
     toast.add({
-      severity: resultado.status,
-      summary: resultado.tittle,
-      detail: resultado.detail,
+      severity: "error",
+      summary: "Campos vacíos",
+      detail: "Por favor llene el formulario.",
       life: 4000,
     });
+  } else {
+    //llamando al endpoint y guardando el token y la id del cliente como una cookie dentro del método 'login'.
+    const resultado = await login({
+      username: usuario.value,
+      password: contrasenia.value,
+    });
+
+    //Enviando al usuario al "dashboard" de las remisiones en caso de que el usuario este registrado.
+    if (resultado.success) {
+      await router.push("/remisiones");
+    } else {
+      //mensaje de error dependiendo del resultado
+      toast.add({
+        severity: resultado.status,
+        summary: resultado.tittle,
+        detail: resultado.detail,
+        life: 4000,
+      });
+    }
   }
 };
 </script>
