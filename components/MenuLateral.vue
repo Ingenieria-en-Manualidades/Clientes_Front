@@ -36,7 +36,7 @@
                 v-ripple
                 :href="href"
                 @click="navigate"
-                class="flex py-3 pl-6 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-[165%]"
+                class="flex py-3 pl-6 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-[124%]"
               >
                 <i v-if="modulo.icono" :class="modulo.icono"
                   ><span class="ml-6 font-manrope-l text-base">{{
@@ -54,6 +54,7 @@
 
 <script lang="ts" setup>
 import { defineEmits, ref } from "vue";
+import { modulos } from "~/composables/remisiones/datosRemisiones"; //Importamos los modulos para el menú
 
 const isOpen = ref(true); //Variable que define el estado del menú desplegable.
 const emit = defineEmits(["extenderMain"]); //Importa el método que recibe desde su componente.
@@ -75,26 +76,4 @@ const toggleNavBarMovil = () => {
     emit("extenderMain");
   }
 };
-
-const modulos = ref([
-  {
-    icono: "pi pi-home",
-    nombre: "Inicio",
-  },
-  {
-    icono: "pi pi-bell",
-    nombre: "Remisiones",
-    ruta: "/remisiones",
-  },
-  {
-    icono: "pi pi-user",
-    nombre: "Programación",
-    ruta: "/modulo1",
-  },
-  {
-    icono: "pi pi-ban",
-    nombre: "Improductividades",
-    ruta: "/modulo3",
-  },
-]);
 </script>

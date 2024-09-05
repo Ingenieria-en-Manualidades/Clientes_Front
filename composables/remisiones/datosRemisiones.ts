@@ -84,3 +84,29 @@ export const items = ref([
     icon: "pi pi-times text-[13px] sm:text-[16px]",
   },
 ]);
+
+/**
+ * Array de Elementos, rutas e iconos para las modulos y la navegación general de la página.
+ * Importado en el componente 'MenuLateral'.
+ */
+export const modulos = ref([
+  {
+    icono: "pi pi-home",
+    nombre: "Inicio",
+  },
+  {
+    icono: "pi pi-bell",
+    nombre: "Remisiones",
+    ruta: "/remisiones",
+  },
+  {
+    icono: "pi pi-user",
+    nombre: "Programación",
+    ruta: "/modulo1",
+  },
+  {
+    icono: "pi pi-sliders-h",
+    nombre: "Improductividades",
+    ruta: "/modulo3",
+  },
+]);
