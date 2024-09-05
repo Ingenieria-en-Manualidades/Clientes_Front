@@ -1,3 +1,5 @@
+import { defineEventHandler } from 'h3';
+
 export default defineEventHandler(async (event) => {
   let idCliente = getCookie(event, 'idCliente');
   let token = getCookie(event, 'token');

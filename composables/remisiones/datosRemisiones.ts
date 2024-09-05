@@ -20,7 +20,7 @@ export const useDatosRemisiones = () => {
 
   //El método hace que las fechas dadas por el usuario esten con el formato correcto para filtrar.
   const getFechas = (fecha1: Date, fecha2: Date | null) => {
-    const fechas = [];
+    const fechas: String[] = [];
 
     if (fecha1.getMonth() + 1 > 0 && fecha1.getMonth() + 1 < 10) {
       if (fecha1.getDate() > 0 && fecha1.getDate() < 10) {

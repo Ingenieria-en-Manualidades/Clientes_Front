@@ -26,8 +26,7 @@
     "primevue": "^3.52.0",
     "universal-cookie": "^7.2.0",
     "vue": "^3.4.27",
-    "vue-router": "^4.3.2",
-    "xmldom": "^0.6.0"
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
     "@nuxt/types": "^2.18.1",
