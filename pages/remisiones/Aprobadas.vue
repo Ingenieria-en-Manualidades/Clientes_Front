@@ -1,4 +1,5 @@
 <template>
+  <title>Remisiones aprobadas</title>
   <div class="card w-[100%] md:w-[760px] float-right">
     <TabPanelRemisiones />
     <div v-if="remisionesAprobadas.length !== 0">

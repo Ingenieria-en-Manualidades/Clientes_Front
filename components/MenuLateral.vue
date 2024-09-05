@@ -79,38 +79,22 @@ const toggleNavBarMovil = () => {
 const modulos = ref([
   {
     icono: "pi pi-home",
-    nombre: "Modulo 1",
-    ruta: "/modulo1",
+    nombre: "Inicio",
   },
   {
-    // img: "remision.png",
     icono: "pi pi-bell",
     nombre: "Remisiones",
     ruta: "/remisiones",
   },
   {
     icono: "pi pi-user",
-    nombre: "Modulo 3",
-  },
-  {
-    icono: "pi pi-home",
-    nombre: "Modulo 1",
+    nombre: "Programación",
     ruta: "/modulo1",
   },
   {
-    // img: "remision.png",
-    icono: "pi pi-home",
-    nombre: "Remisiones",
-    ruta: "/remisiones",
-  },
-  {
-    icono: "pi pi-home",
-    nombre: "Modulo 3",
-  },
-  {
-    icono: "pi pi-home",
-    nombre: "Modulo 1",
-    ruta: "/modulo1",
+    icono: "pi pi-ban",
+    nombre: "Improductividades",
+    ruta: "/modulo3",
   },
 ]);
 </script>

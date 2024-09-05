@@ -1,4 +1,5 @@
 <template>
+  <title>Remisiones rechazadas</title>
   <div class="card w-[100%] md:w-[760px]">
     <TabPanelRemisiones />
     <div class="mt-3" v-if="remisionesRechazadas.length !== 0">

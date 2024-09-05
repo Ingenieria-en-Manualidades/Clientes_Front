@@ -1,6 +1,6 @@
 <template>
   <div class="w-[100%] md:w-[850px]">
-    <title></title>
+    <title>Remisiones pendientes</title>
     <TabPanelRemisiones />
     <div class="mt-3" v-if="remisionesPendientes.length !== 0">
       <div v-if="calendario" class="ml-[2.5%]">

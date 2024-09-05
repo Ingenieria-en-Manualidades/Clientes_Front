@@ -9,12 +9,12 @@ export const useDatosRemisiones = () => {
   const remisionesRechazadas =  ref<Remision[]>([]);
   
   //Se encarga de filtrar las remisiones que se encuentren entre dos fechas o una.
-  const setConsultar = async (tRemision: Array, dataFecha: Array<Date>) => {
+  const setConsultar = async (tRemision: Remision[], dataFecha: Array<Date>) => {
     const fechas = getFechas(dataFecha[0], dataFecha[1]);
     if (!fechas[1]) {
-      tRemision.value = tRemision.value.filter(r => r.fecha === fechas[0]);
+      tRemision = tRemision.filter(r => r.fecha === fechas[0]);
     }else{
-      tRemision.value = tRemision.value.filter(r => r.fecha >= fechas[0] && r.fecha <= fechas[1]);
+      tRemision = tRemision.filter(r => r.fecha >= fechas[0] && r.fecha <= fechas[1]);
     }
   }
 

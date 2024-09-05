@@ -1,4 +1,5 @@
 <template>
+  <title>Modulo 3</title>
   <div>
     <p>Modulo 3</p>
   </div>
