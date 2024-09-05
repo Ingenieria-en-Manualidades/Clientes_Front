@@ -68,7 +68,7 @@
 import { ref } from "vue";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
-import { definePageMeta } from "nuxt/dist/pages/runtime";
+import { useCookie, navigateTo } from "nuxt/app";
 import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
@@ -138,10 +138,11 @@ const recargarTabla = () => {
   listar();
 };
 
-definePageMeta({
-  layout: "default",
-  middleware: "login",
-});
+const token = useCookie("token");
+
+if (!token.value) {
+  navigateTo("/");
+}
 
 listar();
 </script>

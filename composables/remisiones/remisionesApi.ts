@@ -20,9 +20,10 @@ export const useRemisionesApi = () => {
         method: 'GET'
       });
 
-      const previewRemision: PreviewRemision[] = await response.json();
+      const previewRemision = await response.json();
+      const data: Remision[] = previewRemision.data;
 
-      return { success: true, remisiones: previewRemision.data }
+      return { success: true, remisiones: data }
     } catch (error) {
       console.error("Error a la hora de realizar el listarPreviewRemision: ", error);
       return { success: false, error: error.message};
@@ -48,10 +49,10 @@ export const useRemisionesApi = () => {
       
       //Guardamos los resultados de la API en una variable con la interfaz de las remisiones 'Remision[]'.
       // La intefaz es necesaria ya que Vue es incapaz de identifcar los valores traidos de la API.
-      const remisiones: Remision[] = await response.json();
-      console.log("remisiones arreglo: ", remisiones.data);
+      const remisiones = await response.json();
+      const data: Remision[] = remisiones.data;
       
-      return { success: true, remisiones: remisiones.data};
+      return { success: true, remisiones: data};
     } catch (error) {
       console.error("Error a la hora de llamar al endpoint 'ListarRemisiones':", error.message);
       return { success: false, error: error.message };
@@ -114,13 +115,13 @@ export const useRemisionesApi = () => {
         },
       });
 
-      const remisiones: Remision[] = await response.json();
-      console.log("remisiones json:", remisiones);
+      const remisiones = await response.json();
+      const data: Remision[] = remisiones.data;
+      console.log("remisiones data:", data);
       
-      const remisionesPendientes: Remision[] = remisiones.data.filter(
+      const remisionesPendientes: Remision[] = data.filter(
         (rem) => rem.estado === null
       );
-      console.log("Remisiones length:", remisionesPendientes[0]);
       
       return remisionesPendientes.length;
     } catch (error) {

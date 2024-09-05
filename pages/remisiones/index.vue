@@ -69,6 +69,7 @@
 import { ref } from "vue";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
+import { navigateTo, useCookie } from "nuxt/app";
 import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
@@ -139,10 +140,11 @@ const recargarTabla = () => {
   listar();
 };
 
-// definePageMeta({
-//   layout: "default",
-//   middleware: "login",
-// });
+const token = useCookie("token");
+
+if (!token.value) {
+  navigateTo("/");
+}
 
 listar();
 </script>
