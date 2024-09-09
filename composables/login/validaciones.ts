@@ -36,7 +36,9 @@ export const useValidarEmail = () => {
    * @returns En caso de existir el token retorna un 'true' y la id del usuario para identificar al usuario a modificar y en caso contrario un 'false' y los motivos del porque.
    */
   const verificarToken = async (tokenPassword: string | string[]) => {
-    const response = await fetch(`${url}/verificarToken/${tokenPassword}`, {
+    console.log("url: ", url);
+    
+    const response = await fetch(`${url}api/verificarToken/${tokenPassword}`, {
       method: 'GET'
     });
 

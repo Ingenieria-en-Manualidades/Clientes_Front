@@ -49,6 +49,7 @@ export const useRemisionesApi = () => {
       // La intefaz es necesaria ya que Vue es incapaz de identifcar los valores traidos de la API.
       const remisiones = await response.json();
       const data: Remision[] = remisiones.data;
+      console.log("data remisiones: ", data);
       
       return { success: true, remisiones: data};
     } catch (error) {
@@ -67,7 +68,7 @@ export const useRemisionesApi = () => {
     try{
       const response = await fetch(`${url}/api/RemisionOnline/saveGestionRemisionClienteAPI`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `${token}` },
         body: JSON.stringify(remision),
       });
       const data = await response.json();
