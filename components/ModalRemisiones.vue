@@ -131,8 +131,9 @@ const saveRemision = async () => {
         accion: opcion.value,
         motivo: motivo.value,
         cliente_id: idCliente.value,
-        usuario: usuario.value,
+        usuario: "systemCLIENT",
         remision_id: props.idRemision,
+        usuario_gestiona: usuario.value,
       });
 
       //Se realiza la inserción llamando a este método.

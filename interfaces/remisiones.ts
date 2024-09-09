@@ -41,6 +41,7 @@ export interface RemisionPost {
   cliente_id: string | null | undefined;
   usuario: string | null | undefined;
   remision_id: number | undefined,
+  usuario_gestiona: string | null | undefined;
 }
 
 //Modelo hecha para retornar una data, el estado del proceso y el error de una función.
