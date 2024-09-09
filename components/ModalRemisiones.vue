@@ -71,6 +71,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useCookie } from "nuxt/app";
 //Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";
 //Importamos métodos para crear props y emits.
@@ -82,19 +83,23 @@ import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
 const opcion = ref(); //Variable que guarda la opción de como guardar la remisión.
 const motivo = ref(); //Varable para guardar el motivo del rechazo.
+let disable = ref(true); //Variable que define es estado del textArea.
 const toast = useToast();
 const visible = ref(false); //Variable que define la aparición de la modal.
-let disable = ref(true); //Variable que define es estado del textArea.
-const idCliente = ref<string | undefined>();
-const usuario = ref<string | undefined>();
-let mensaje = ref<mensajeSencillo>({ status: "", tittle: "", detail: "" });
+const usuario = useCookie("usuario");
+const idCliente = useCookie("idCliente");
+let mensaje: mensajeSencillo = {
+  status: undefined,
+  tittle: "",
+  detail: "",
+};
 
 const { agregarRemision } = useRemisionesApi();
 const props = defineProps({
   numRemision: String,
   idRemision: Number,
 });
-const emit = defineEmits(["postGuardarRemision"]); //Método importado desde el componente.
+const emit = defineEmits(["postGuardarRemision", "actualizarCampana"]); //Método importado desde el componente.
 
 //Método que bloquea el TextArea del motivo si la opción escogida es "Rechazar".
 const estadoTextArea = (estado: boolean) => {
@@ -104,29 +109,17 @@ const estadoTextArea = (estado: boolean) => {
   }
 };
 
-const setUsuarioYcliente = async () => {
-  const response = await fetch("/api/getCookies", {
-    method: "GET",
-  });
-
-  const json = await response.json();
-
-  usuario.value = json.cookieUsuario;
-  idCliente.value = json.cookieCliente;
-};
-setUsuarioYcliente();
-
 //Método para hacer una inserción en la tabla 'remision_conciliacionxcliente' con la remisión , el estado y el posible motivo de rechazo escogida por el usuario.
 const saveRemision = async () => {
   if (!opcion.value) {
-    mensaje.value.status = "error";
-    mensaje.value.tittle = "Hace falta una opción.";
-    mensaje.value.detail = "Por favor elegir una opción antes de guardar.";
+    mensaje.status = "error";
+    mensaje.tittle = "Hace falta una opción.";
+    mensaje.detail = "Por favor elegir una opción antes de guardar.";
   } else {
     if (opcion.value === "Rechazado" && !motivo.value) {
-      mensaje.value.status = "error";
-      mensaje.value.tittle = "Falta del motivo.";
-      mensaje.value.detail = "Por favor escribir el motivo del rechazo.";
+      mensaje.status = "error";
+      mensaje.tittle = "Falta del motivo.";
+      mensaje.detail = "Por favor escribir el motivo del rechazo.";
     } else {
       //Si la opción es 'Aprobado' el motivo sera 'aprobado' por defecto.
       if (opcion.value === "Aprobado") {
@@ -145,11 +138,12 @@ const saveRemision = async () => {
       //Se realiza la inserción llamando a este método.
       mensaje = await agregarRemision(remision.value, props.numRemision);
       emit("postGuardarRemision");
+      emit("actualizarCampana");
       visible.value = false;
       motivo.value = "";
     }
   }
-  showMensaje(mensaje.value);
+  showMensaje(mensaje);
 };
 
 //Método que realiza el mensaje.

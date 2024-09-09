@@ -68,7 +68,10 @@ const tokenPassword = useRoute().params.token;
 let id_username: string;
 
 const verificacion = async () => {
-  /*const resultado = await verificarToken(tokenPassword);
+  console.log("tokenPassword: ", tokenPassword);
+
+  const resultado = await verificarToken(tokenPassword);
+  console.log("resultado actualizarPassword: ", resultado);
 
   if (resultado?.status) {
     id_username = resultado.id_username;
@@ -80,7 +83,7 @@ const verificacion = async () => {
       life: 4000,
     });
     return navigateTo("/");
-  }*/
+  }
 };
 
 const actualizar = async () => {

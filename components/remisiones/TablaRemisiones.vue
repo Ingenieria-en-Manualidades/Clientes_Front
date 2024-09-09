@@ -39,6 +39,7 @@
             :numRemision="remision.no_remision"
             :idRemision="remision.remision_id"
             @postGuardarRemision="listar"
+            @actualizarCampana="actuCampana"
           />
           <ModalRechazo
             v-if="modales === 'Rechazados'"
@@ -101,11 +102,14 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineEmits, ref, computed } from "vue";
+import { useCookie } from "nuxt/app";
 import type { Remision } from "~/interfaces/remisiones";
+import { defineProps, defineEmits, ref, computed } from "vue";
 import ModalRechazo from "~/components/remisiones/ModalRechazo.vue";
+import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import ModalPreviewRemision from "~/components/remisiones/ModalPreviewRemision.vue";
 
+const { getNumRemisionesPen } = useRemisionesApi();
 const props = defineProps({
   remisiones: {
     type: Array as () => Remision[],
@@ -114,8 +118,10 @@ const props = defineProps({
   modales: String,
 });
 
-const itemsPorPagina = ref(5);
 const paginaActual = ref(1);
+const itemsPorPagina = ref(5);
+const numRem = useCookie("numRem");
+const idCliente = useCookie("idCliente");
 const totalItems = computed(() => props.remisiones.length);
 const totalPaginas = computed(() =>
   Math.ceil(totalItems.value / itemsPorPagina.value)
@@ -131,6 +137,10 @@ const emit = defineEmits(["listar"]);
 
 const listar = () => {
   emit("listar");
+};
+
+const actuCampana = async () => {
+  numRem.value = await getNumRemisionesPen(idCliente.value);
 };
 
 const formatoNumero = (numero: number): string => {

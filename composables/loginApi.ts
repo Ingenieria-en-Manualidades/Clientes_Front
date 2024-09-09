@@ -1,4 +1,4 @@
-import { useRuntimeConfig } from "nuxt/app";
+import { useCookie, useRuntimeConfig } from "nuxt/app";
 
 export const loginApi = () => {
 
@@ -67,13 +67,10 @@ export const loginApi = () => {
    */
   const logout = async () => {
     try {
-      const responseCookies = await fetch("/api/getCookies", {
-        method: "GET",
-      });
-    
-      const json = await responseCookies.json();
+      const token = useCookie("token");
+      
       // Llamamos al token del usuario y verificamos su existencia.
-      if (!json.cookieToken) {
+      if (!token.value) {
         throw new Error('No se encontró el token de autenticación');
       }
 
@@ -82,7 +79,7 @@ export const loginApi = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${json.cookieToken}`,
+          Authorization: `Bearer ${token.value}`,
           },
       });
 

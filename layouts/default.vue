@@ -21,20 +21,8 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-
-const usuario = ref<string | undefined>();
-
-const getUsuario = async () => {
-  const response = await fetch("/api/getCookies", {
-    method: "GET",
-  });
-
-  const json = await response.json();
-  console.log("json default: ", json.cookieUsuario);
-
-  usuario.value = json.cookieUsuario;
-};
+import { useCookie } from "nuxt/app";
 
 const isOpen = ref(true);
-getUsuario();
+const usuario = useCookie("usuario");
 </script>

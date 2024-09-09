@@ -12,7 +12,7 @@ export const useActualizarPasswordAPI = () => {
    */
   const getTokenPassword = async (correo: string) => {
     try {
-      const resultado = await fetch(`${url}/generartoken`, {
+      const resultado = await fetch(`${url}api/generartoken`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export const useActualizarPasswordAPI = () => {
    * @returns retorna un mensaje de exito o fracaso dependiendo de la situación.
    */
   const setUpdatePassword = async (id: string, password: string) => {
-    const response = await fetch(`${url}/updatePassword`, {
+    const response = await fetch(`${url}api/updatePassword`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

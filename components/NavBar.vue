@@ -18,7 +18,7 @@
           class="pi pi-bell hover:bg-gray-200 rounded-lg mt-1 md:mt-2 p-2 text-lg md:text-2xl"
         ></i>
         <span
-          v-if="nRemisiones !== 0"
+          v-if="nRemisiones"
           class="absolute bg-green-600 font-manrope-r px-[14%] py-[8%] md:px-[17%] md:py-[10%] rounded-[50%] border-2 border-white text-[10px] md:text-xs right-1 md:right-0 top-0 text-white"
           >{{ nRemisiones }}</span
         >
@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useCookie } from "nuxt/app";
 //Importamos el método para utilizar la ruta.
 import { useRouter } from "vue-router";
 //Importamos métodos para crear props y emits.
@@ -37,8 +38,8 @@ import { defineProps, defineEmits, ref } from "vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 
 const route = useRouter(); //Variable que se utiliza para cambiar la ruta.
-const nRemisiones = ref();
-const idCliente = ref<string | null>();
+const nRemisiones = useCookie("numRem");
+const idCliente = useCookie("idCliente");
 //Metodo emit importado desde el componente
 const emit = defineEmits(["extenderMain"]);
 const { getNumRemisionesPen } = useRemisionesApi();
@@ -46,7 +47,6 @@ const { getNumRemisionesPen } = useRemisionesApi();
 const props = defineProps({
   usuario: String || null,
 });
-
 //Método importado para cambiar el tamaño del main al mismo tiempo que el menú desplegable
 const extenderMain = () => {
   emit("extenderMain");
@@ -59,15 +59,6 @@ const viajarRemisiones = async () => {
 
 //Método que realiza una consulta por la API y llena la variable con la cantidad de remisiones pendientes.
 const valueRemisiones = async () => {
-  const response = await fetch("/api/getCookies", {
-    method: "GET",
-  });
-
-  const json = await response.json();
-  console.log("json NavBar: ", json.cookieCliente);
-
-  idCliente.value = json.cookieCliente;
-
   nRemisiones.value = await getNumRemisionesPen(idCliente.value);
 };
 valueRemisiones();

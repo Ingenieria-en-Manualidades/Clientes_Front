@@ -3,18 +3,15 @@ import { ref } from "vue";
 import type { Remision } from "~/interfaces/remisiones";
 
 export const useDatosRemisiones = () => {
-  //Arrays tipo ref para separar los diferentes tipos de remisiones.
-  const remisionesPendientes = ref<Remision[]>([]);
-  const remisionesAprobadas =  ref<Remision[]>([]);
-  const remisionesRechazadas =  ref<Remision[]>([]);
   
   //Se encarga de filtrar las remisiones que se encuentren entre dos fechas o una.
   const setConsultar = async (tRemision: Remision[], dataFecha: Array<Date>) => {
     const fechas = getFechas(dataFecha[0], dataFecha[1]);
     if (!fechas[1]) {
-      tRemision = tRemision.filter(r => r.fecha === fechas[0]);
+      return tRemision.filter(r => r.fecha === fechas[0]);
+      
     }else{
-      tRemision = tRemision.filter(r => r.fecha >= fechas[0] && r.fecha <= fechas[1]);
+      return tRemision.filter(r => r.fecha >= fechas[0] && r.fecha <= fechas[1]);
     }
   }
 
@@ -56,9 +53,6 @@ export const useDatosRemisiones = () => {
   }
 
   return {
-    remisionesPendientes,
-    remisionesAprobadas,
-    remisionesRechazadas,
     setConsultar,
   };
 }

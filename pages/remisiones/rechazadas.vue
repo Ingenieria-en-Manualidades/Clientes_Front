@@ -2,7 +2,7 @@
   <title>Remisiones rechazadas</title>
   <div class="card w-[100%] md:w-[760px]">
     <TabPanelRemisiones />
-    <div class="mt-3" v-if="remisionesRechazadas.length !== 0">
+    <div class="mt-3" v-if="remisiones.length !== 0">
       <div v-if="calendario" class="ml-[2.5%]">
         <Calendar
           v-model="dates"
@@ -33,7 +33,7 @@
         >
       </button>
       <TablaRemisiones
-        :remisiones="remisionesRechazadas"
+        :remisiones="remisiones"
         :modales="'Rechazados'"
         @listar="listar"
       />
@@ -70,9 +70,10 @@ import { ref } from "vue";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
 import { useCookie, navigateTo } from "nuxt/app";
+import type { Remision } from "~/interfaces/remisiones";
 import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
-import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
+import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
 import { useDatosRemisiones } from "~/composables/remisiones/datosRemisiones";
 
 const dates = ref();
@@ -83,24 +84,22 @@ const isLoading = ref(false);
 const calendario = ref(true);
 const botonRecargar = ref(false);
 const estadoRemisiones = ref(false);
+let remisiones = ref<Remision[]>([]);
+const { setConsultar } = useDatosRemisiones();
 const { listarRemisionesPorId } = useRemisionesApi();
-const { setConsultar, remisionesRechazadas } = useDatosRemisiones();
 
 const listar = async () => {
   isLoading.value = true;
-  const response = await fetch("/api/getCookies", {
-    method: "GET",
-  });
+  const idCliente = useCookie("idCliente");
 
-  const json = await response.json();
-  const resultado = await listarRemisionesPorId(json.cookieCliente);
+  const resultado = await listarRemisionesPorId(idCliente.value);
 
   if (resultado.success) {
-    remisionesRechazadas.value = resultado.remisiones.filter(
+    remisiones.value = resultado.remisiones.filter(
       (rem) => rem.estado === "Rechazado"
     );
 
-    if (remisionesRechazadas.value.length === 0) {
+    if (remisiones.value.length === 0) {
       estadoRemisiones.value = true;
       avisoIcono.value = "pi pi-check-circle text-5xl";
       avisodetalles.value = "Sin remisiones rechazadas";
@@ -113,7 +112,7 @@ const listar = async () => {
   isLoading.value = false;
 };
 
-const consultarRemisiones = () => {
+const consultarRemisiones = async () => {
   if (!dates.value) {
     toast.add({
       severity: "error",
@@ -122,8 +121,8 @@ const consultarRemisiones = () => {
       life: 3000,
     });
   } else {
-    setConsultar(remisionesRechazadas, dates.value);
-    if (remisionesRechazadas.value.length === 0) {
+    remisiones.value = await setConsultar(remisiones.value, dates.value);
+    if (remisiones.value.length === 0) {
       estadoRemisiones.value = true;
       avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
       avisodetalles.value = "No se encontro ninguna remisión entre esas fechas";
@@ -134,9 +133,9 @@ const consultarRemisiones = () => {
 };
 
 const recargarTabla = () => {
+  listar();
   calendario.value = true;
   dates.value = null;
-  listar();
 };
 
 const token = useCookie("token");
