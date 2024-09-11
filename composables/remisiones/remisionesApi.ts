@@ -1,6 +1,6 @@
 import { useRuntimeConfig } from "nuxt/app";
-import type { mensajeSencillo } from "~/interfaces/mensajes";
-import type { Remision, RemisionPost, ApiPromise, PreviewRemision } from "~/interfaces/remisiones";
+import type { mensajeSencillo } from "../../interfaces/mensajes";
+import type { Remision, RemisionPost, ApiPromise, PreviewRemision } from "../../interfaces/remisiones";
 
 export const useRemisionesApi = () => {
   
@@ -34,7 +34,7 @@ export const useRemisionesApi = () => {
    * @param idCliente: referencia y dato unico para identificar un cliente.
    * @returns una promesa que contiene un objeto con estos atributos { success: booleano, resimion: Array de remisiones del cliente, error: string}. 
    */
-  const listarRemisionesPorId = async (idCliente: string | null): Promise<ApiPromise<Remision[]>>  => {
+  const listarRemisionesPorId = async (idCliente: string | null | undefined): Promise<ApiPromise<Remision[]>>  => {
     
     try {
       //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.
@@ -49,7 +49,6 @@ export const useRemisionesApi = () => {
       // La intefaz es necesaria ya que Vue es incapaz de identifcar los valores traidos de la API.
       const remisiones = await response.json();
       const data: Remision[] = remisiones.data;
-      console.log("data remisiones: ", data);
       
       return { success: true, remisiones: data};
     } catch (error) {
@@ -72,7 +71,6 @@ export const useRemisionesApi = () => {
         body: JSON.stringify(remision),
       });
       const data = await response.json();
-      console.log("data agregarRem: ", data);
       
       let mensaje: mensajeSencillo = {
         status: 'success',
@@ -124,7 +122,6 @@ export const useRemisionesApi = () => {
       return remisionesPendientes.length.toString();
     } catch (error) {
       console.error("Error a la hora de llamar al endpoint 'númeroRemisiones':", error.message);
-      return "error getNumRemisionesPen";
     }
   }
 

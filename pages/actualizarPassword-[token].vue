@@ -52,16 +52,16 @@ import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { navigateTo } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
-// import { definePageMeta } from "nuxt/dist/pages/runtime";
-import { useValidarEmail } from "~/composables/login/validaciones";
-import { useActualizarPasswordAPI } from "~/composables/login/ActualizarPasswordAPI";
+import { useValidaciones } from "../composables/login/validaciones";
+import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
+import { useActualizarPasswordAPI } from "../composables/login/ActualizarPasswordAPI";
 
 const contraseña = ref();
 const confirmacion = ref();
 const password = ref<string | null>(null); // Variable que establece un error en los inputs
 
 const toast = useToast();
-const { verificarToken } = useValidarEmail();
+const { verificarToken } = useValidaciones();
 const { setUpdatePassword } = useActualizarPasswordAPI();
 const tokenPassword = useRoute().params.token;
 
@@ -131,5 +131,6 @@ verificacion();
 
 definePageMeta({
   layout: "login",
+  skipGlobalMiddleware: true,
 });
 </script>

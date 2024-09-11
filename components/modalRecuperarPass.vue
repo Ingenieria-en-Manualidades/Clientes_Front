@@ -41,14 +41,14 @@ import { ref } from "vue";
 import { useToast } from "primevue/usetoast";
 //Importamos modelo de un mensaje Toast.
 import type { mensajeSencillo } from "~/interfaces/mensajes";
-import { useValidarEmail } from "~/composables/login/validaciones";
+import { useValidaciones } from "~/composables/login/validaciones";
 import { useActualizarPasswordAPI } from "~/composables/login/ActualizarPasswordAPI";
 
 const correo = ref(); //Variable que contiene el valor del input correo.
 const toast = useToast(); //Variable para los mensajes.
 const visible = ref(false); //Variable para aparecer y desaparecer la modal.
 
-const { validarEmail } = useValidarEmail();
+const { validarEmail } = useValidaciones();
 const { getTokenPassword, setEnviarEmail } = useActualizarPasswordAPI();
 
 // Método que realiza todo el proceso de envío y toma las precauciones antes de hacerlo.

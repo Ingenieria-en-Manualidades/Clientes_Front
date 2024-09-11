@@ -48,7 +48,7 @@ import { defineProps, ref } from "vue";
 import { useRouter } from "vue-router";
 //Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";
-import { loginApi } from "~/composables/loginApi";
+import { loginApi } from "../composables/loginApi";
 
 const toast = useToast();
 const router = useRouter(); //Variable que utilizaremos para viajar entre rutas

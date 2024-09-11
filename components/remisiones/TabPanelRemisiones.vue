@@ -1,6 +1,6 @@
 <template>
   <div class="w-[100%] text-center">
-    <Tabs value="/remisiones">
+    <Tabs>
       <TabList class="inline-flex mb-[2%]">
         <Tab v-for="tab in items" :key="tab.label" :value="tab.route">
           <router-link
@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { useRoute } from "nuxt/app";
-import { items } from "~/composables/remisiones/datosRemisiones"; // Importamos los elementos y las rutas para cambiar entre remisiones
+import { items } from "../../composables/remisiones/datosRemisiones"; // Importamos los elementos y las rutas para cambiar entre remisiones
 
 const route = useRoute(); // Variable para el método para cambiar las rutas
 
