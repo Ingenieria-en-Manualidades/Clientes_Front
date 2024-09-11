@@ -1,4 +1,5 @@
 import { useCookie, useRuntimeConfig } from "nuxt/app";
+import { encryptData } from "./login/EncryptedData";
 
 export const loginApi = () => {
 
@@ -12,6 +13,8 @@ export const loginApi = () => {
    * @returns En caso de todo ir bien retorna un 'true' y en caso contrario un objeto para mostrar un mensaje de fallo y que tipo de fallo.
    */
   const login = async (userData: any) => {
+    const encryptedData = encryptData([userData['username'], userData['password']]);
+    console.log('hola:',encryptedData)
     try {
       //llamando al endpoint que verificara al usuario y nos devolvera el token.
       const resultado = await fetch(`${url}api/login`, {
@@ -19,7 +22,7 @@ export const loginApi = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify( userData )
+        body: JSON.stringify( {encrypted_data:encryptedData} )
       });
       
       if (!resultado.ok) {
