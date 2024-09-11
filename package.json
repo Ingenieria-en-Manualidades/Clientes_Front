@@ -16,6 +16,8 @@
     "@vueuse/integrations": "^11.0.3",
     "axios": "^1.7.5",
     "consola": "^3.2.3",
+    "crypto-js": "^4.2.0",
+    "crypto.js": "^3.2.2",
     "defu": "^6.1.4",
     "html2pdf.js": "^0.10.2",
     "jspdf": "^2.5.1",
