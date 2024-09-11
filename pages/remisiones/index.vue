@@ -69,12 +69,12 @@
 import { ref } from "vue";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
-import { navigateTo, useCookie } from "nuxt/app";
-import type { Remision } from "~/interfaces/remisiones";
-import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
-import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
-import { useDatosRemisiones } from "~/composables/remisiones/datosRemisiones";
-import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
+import { useCookie } from "nuxt/app";
+import type { Remision } from "../../interfaces/remisiones";
+import TablaRemisiones from "../../components/remisiones/TablaRemisiones.vue";
+import { useRemisionesApi } from "../../composables/remisiones/remisionesApi";
+import { useDatosRemisiones } from "../../composables/remisiones/datosRemisiones";
+import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
 
 const dates = ref();
 let avisoIcono = ref();
@@ -138,12 +138,6 @@ const recargarTabla = () => {
   calendario.value = true;
   dates.value = null;
 };
-
-const token = useCookie("token");
-
-if (!token.value) {
-  navigateTo("/");
-}
 
 listar();
 </script>

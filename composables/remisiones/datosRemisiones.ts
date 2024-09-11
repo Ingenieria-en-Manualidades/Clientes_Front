@@ -1,6 +1,6 @@
 //Importe para que vue sepa los valores que devuelve la API.
 import { ref } from "vue";
-import type { Remision } from "~/interfaces/remisiones";
+import type { Remision } from "../../interfaces/remisiones";
 
 export const useDatosRemisiones = () => {
   
@@ -87,6 +87,7 @@ export const modulos = ref([
   {
     icono: "pi pi-home",
     nombre: "Inicio",
+    ruta: "",
   },
   {
     icono: "pi pi-bell",

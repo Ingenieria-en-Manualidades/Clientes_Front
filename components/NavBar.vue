@@ -35,10 +35,13 @@ import { useCookie } from "nuxt/app";
 import { useRouter } from "vue-router";
 //Importamos métodos para crear props y emits.
 import { defineProps, defineEmits, ref } from "vue";
-import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
+import { useRemisionesApi } from "../composables/remisiones/remisionesApi";
 
 const route = useRouter(); //Variable que se utiliza para cambiar la ruta.
-const nRemisiones = useCookie("numRem");
+const nRemisiones = useCookie("numRem", {
+  sameSite: "none",
+  secure: true,
+});
 const idCliente = useCookie("idCliente");
 //Metodo emit importado desde el componente
 const emit = defineEmits(["extenderMain"]);

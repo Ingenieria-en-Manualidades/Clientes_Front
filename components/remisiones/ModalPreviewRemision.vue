@@ -37,34 +37,38 @@
         <!-- Tabla de la información del cliente -->
         <div class="flex justify-center">
           <table class="border-[1px] border-black">
-            <tr class="">
-              <th
-                class="py-[6px] font-manrope-b text-black text-sm sm:text-base bg-gray-300 border-b-[1px] border-b-black"
-                colspan="3"
+            <thead>
+              <tr>
+                <th
+                  class="py-[6px] font-manrope-b text-black text-sm sm:text-base bg-gray-300 border-b-[1px] border-b-black"
+                  colspan="3"
+                >
+                  {{ cliente }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="font-manrope-b text-center text-black text-sm sm:text-base"
               >
-                {{ cliente }}
-              </th>
-            </tr>
-            <tr
-              class="font-manrope-b text-center text-black text-sm sm:text-base"
-            >
-              <th class="bg-gray-200 celdasModalP">Orden de compra</th>
-              <th class="bg-gray-200 celdasModalP">Hoja de entrada</th>
-              <th class="bg-gray-200 celdasModalP">Contacto</th>
-            </tr>
-            <tr
-              class="font-manrope-r text-center text-black text-sm sm:text-base"
-            >
-              <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
-                {{ ordenCompra }}
-              </td>
-              <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
-                {{ hojaEntrada }}
-              </td>
-              <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
-                {{ contacto }}
-              </td>
-            </tr>
+                <th class="bg-gray-200 celdasModalP">Orden de compra</th>
+                <th class="bg-gray-200 celdasModalP">Hoja de entrada</th>
+                <th class="bg-gray-200 celdasModalP">Contacto</th>
+              </tr>
+              <tr
+                class="font-manrope-r text-center text-black text-sm sm:text-base"
+              >
+                <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
+                  {{ ordenCompra }}
+                </td>
+                <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
+                  {{ hojaEntrada }}
+                </td>
+                <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
+                  {{ contacto }}
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
         <!-- Tabla de las actividades -->
@@ -191,21 +195,21 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref } from 'vue';
-import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import { useToast } from 'primevue/usetoast';
-import type { PreviewRemision } from '~/interfaces/remisiones'; 
-import { useRemisionesApi } from '~/composables/remisiones/remisionesApi';
-import { useCookie } from 'nuxt/app';
-import Aprobado from '~/assets/img/Aprobado.png';
-import imgHeader from '~/assets/img/header.png';
+import { defineProps, ref } from "vue";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import { useToast } from "primevue/usetoast";
+import type { PreviewRemision } from "~/interfaces/remisiones";
+import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
+import { useCookie } from "nuxt/app";
+import Aprobado from "~/assets/img/Aprobado.png";
+import imgHeader from "~/assets/img/header.png";
 
 const iva = ref<number>(0);
 const total = ref<number>(0);
 const totalGeneral = ref<number>(0);
-const observaciones = ref<string>('');
-const usuario = useCookie('usuario');
+const observaciones = ref<string>("");
+const usuario = useCookie("usuario");
 const datos = ref<PreviewRemision[]>([]);
 const visible = ref<boolean>(false);
 const contenido = ref<HTMLElement | null>(null);
@@ -222,7 +226,7 @@ const props = defineProps<{
 }>();
 
 const formatoNumero = (numero: number): string => {
-  return new Intl.NumberFormat('es-ES').format(numero);
+  return new Intl.NumberFormat("es-ES").format(numero);
 };
 
 const getModalPreview = async () => {
@@ -236,17 +240,17 @@ const getModalPreview = async () => {
       totalGeneral.value = total.value + iva.value;
     } else {
       useToast().add({
-        severity: 'error',
-        summary: 'Error en la carga',
-        detail: 'Por favor vuelve a recargar la página.',
+        severity: "error",
+        summary: "Error en la carga",
+        detail: "Por favor vuelve a recargar la página.",
         life: 4000,
       });
     }
   } catch (error) {
     useToast().add({
-      severity: 'error',
-      summary: 'Error en la carga',
-      detail: 'Por favor vuelve a recargar la página.',
+      severity: "error",
+      summary: "Error en la carga",
+      detail: "Por favor vuelve a recargar la página.",
       life: 4000,
     });
   }
@@ -254,97 +258,111 @@ const getModalPreview = async () => {
 
 const generarPDF = async () => {
   let finalY = 0;
-  const doc = new jsPDF('p', 'pt', 'letter');
+  const doc = new jsPDF("p", "pt", "letter");
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 50;
   let currentY = 20;
 
-  
-  doc.addImage(imgHeader, 'PNG', 10, currentY, 130, 90); 
+  doc.addImage(imgHeader, "PNG", 10, currentY, 130, 90);
   currentY += 50;
 
   // Información de la empresa
   doc.setFontSize(12);
-  doc.text('INGENIERÍA EN MANUALIDADES SAS', pageWidth / 2, currentY, { align: 'center' });
-  doc.text('NIT 800.187.547-1', pageWidth / 2, currentY + 15, { align: 'center' });
-  doc.text('TV 29 #16-57', pageWidth / 2, currentY + 30, { align: 'center' });
+  doc.text("INGENIERÍA EN MANUALIDADES SAS", pageWidth / 2, currentY, {
+    align: "center",
+  });
+  doc.text("NIT 800.187.547-1", pageWidth / 2, currentY + 15, {
+    align: "center",
+  });
+  doc.text("TV 29 #16-57", pageWidth / 2, currentY + 30, { align: "center" });
 
-  doc.text(`REMISIÓN N° ${props.numRemision}`, pageWidth - margin, currentY, { align: 'right' });
-  doc.text(props.fecha, pageWidth - margin, currentY + 15, { align: 'right' });
+  doc.text(`REMISIÓN N° ${props.numRemision}`, pageWidth - margin, currentY, {
+    align: "right",
+  });
+  doc.text(props.fecha, pageWidth - margin, currentY + 15, { align: "right" });
   currentY += 60;
 
   // Información del cliente
-autoTable(doc, {
-  startY: currentY,
-  head: [
-    [{ content: props.cliente, colSpan: 3, styles: { halign: 'center', fontSize: 14, fillColor: [169, 169, 169] } }],
-    ['Orden de compra', 'Hoja de entrada', 'Contacto']
-  ],
-  body: [[props.ordenCompra, props.hojaEntrada, props.contacto]],
-  headStyles: {
-    fillColor: [140, 140, 140], 
-    textColor: [0, 0, 0], 
-    fontSize: 12,
-    halign: 'center' 
-  },
-  styles: { 
-    fontSize: 10,
-    halign: 'center'  // Centra el texto en las celdas de la tabla
-  },
-  columnStyles: {
-    0: { halign: 'center' },
-    1: { halign: 'center' },
-    2: { halign: 'center' }
-  },
-  margin: { left: margin, right: margin },
-  theme: 'striped',
-  didDrawPage: (data) => {
-    if (data.cursor) {
-      finalY = data.cursor.y;
-    } else {
-      console.warn('data.cursor is undefined');
-    }
-  }
-});
+  autoTable(doc, {
+    startY: currentY,
+    head: [
+      [
+        {
+          content: props.cliente,
+          colSpan: 3,
+          styles: {
+            halign: "center",
+            fontSize: 14,
+            fillColor: [169, 169, 169],
+          },
+        },
+      ],
+      ["Orden de compra", "Hoja de entrada", "Contacto"],
+    ],
+    body: [[props.ordenCompra, props.hojaEntrada, props.contacto]],
+    headStyles: {
+      fillColor: [140, 140, 140],
+      textColor: [0, 0, 0],
+      fontSize: 12,
+      halign: "center",
+    },
+    styles: {
+      fontSize: 10,
+      halign: "center", // Centra el texto en las celdas de la tabla
+    },
+    columnStyles: {
+      0: { halign: "center" },
+      1: { halign: "center" },
+      2: { halign: "center" },
+    },
+    margin: { left: margin, right: margin },
+    theme: "striped",
+    didDrawPage: (data) => {
+      if (data.cursor) {
+        finalY = data.cursor.y;
+      } else {
+        console.warn("data.cursor is undefined");
+      }
+    },
+  });
 
-currentY = finalY + 20;
+  currentY = finalY + 20;
 
-// Tabla de actividades
-autoTable(doc, {
-  startY: currentY,
-  head: [['OP', 'SKU', 'ACTIVIDAD', 'UNIDADES', 'PRECIO UNITARIO', 'TOTAL']],
-  body: datos.value.map(dato => [
-    dato.programacion_id,
-    dato.codigo_cobro,
-    dato.nombre,
-    formatoNumero(dato.unidades),
-    `$${formatoNumero(dato.precio)}`,
-    `$${formatoNumero(dato.totalredondeado)}`
-  ]),
-  styles: { 
-    fontSize: 10,
-    halign: 'center'  // Centra el texto en las celdas de la tabla
-  },
-  columnStyles: {
-    0: { halign: 'center' },
-    1: { halign: 'center' },
-    2: { halign: 'center' },
-    3: { halign: 'center' },
-    4: { halign: 'center' },
-    5: { halign: 'center' }
-  },
-  margin: { left: margin, right: margin },
-  theme: 'striped',
-  didDrawPage: (data) => {
-    if (data.cursor) {
-      finalY = data.cursor.y;
-    } else {
-      console.warn('data.cursor is undefined');
-    }
-  }
-});
-
+  // Tabla de actividades
+  autoTable(doc, {
+    startY: currentY,
+    head: [["OP", "SKU", "ACTIVIDAD", "UNIDADES", "PRECIO UNITARIO", "TOTAL"]],
+    body: datos.value.map((dato) => [
+      dato.programacion_id,
+      dato.codigo_cobro,
+      dato.nombre,
+      formatoNumero(dato.unidades),
+      `$${formatoNumero(dato.precio)}`,
+      `$${formatoNumero(dato.totalredondeado)}`,
+    ]),
+    styles: {
+      fontSize: 10,
+      halign: "center", // Centra el texto en las celdas de la tabla
+    },
+    columnStyles: {
+      0: { halign: "center" },
+      1: { halign: "center" },
+      2: { halign: "center" },
+      3: { halign: "center" },
+      4: { halign: "center" },
+      5: { halign: "center" },
+    },
+    margin: { left: margin, right: margin },
+    theme: "striped",
+    didDrawPage: (data) => {
+      if (data.cursor) {
+        finalY = data.cursor.y;
+      } else {
+        console.warn("data.cursor is undefined");
+      }
+    },
+  });
 
   currentY = finalY + 20;
 
@@ -352,23 +370,23 @@ autoTable(doc, {
   autoTable(doc, {
     startY: currentY,
     body: [
-      [`TOTAL: $${formatoNumero(total.value)}`], 
-      [`IVA: $${formatoNumero(iva.value)}`], 
-      [`TOTAL GENERAL: $${formatoNumero(totalGeneral.value)}`]
+      [`TOTAL: $${formatoNumero(total.value)}`],
+      [`IVA: $${formatoNumero(iva.value)}`],
+      [`TOTAL GENERAL: $${formatoNumero(totalGeneral.value)}`],
     ],
     styles: {
       fontSize: 10,
-      halign: 'right'  
+      halign: "right",
     },
     margin: { right: margin },
-    theme: 'plain',
+    theme: "plain",
     didDrawPage: (data) => {
       if (data.cursor) {
         finalY = data.cursor.y;
       } else {
-        console.warn('data.cursor is undefined');
+        console.warn("data.cursor is undefined");
       }
-    }
+    },
   });
 
   currentY = finalY + 30;
@@ -376,25 +394,23 @@ autoTable(doc, {
   // Observaciones
   autoTable(doc, {
     startY: currentY,
-    head: [['OBERVACIONES:']],
-    body: [
-      [observaciones.value || 'N/A']
-    ],
+    head: [["OBERVACIONES:"]],
+    body: [[observaciones.value || "N/A"]],
     styles: {
       fontSize: 10,
-      halign: 'left'  
+      halign: "left",
     },
     margin: { left: margin },
-    theme: 'plain',
+    theme: "plain",
     didDrawPage: (data) => {
       if (data.cursor) {
         finalY = data.cursor.y;
       } else {
-        console.warn('data.cursor is undefined');
+        console.warn("data.cursor is undefined");
       }
-    }
+    },
   });
-  
+
   currentY = finalY + 20;
 
   const table1Width = (pageWidth - margin * 2) / 2;
@@ -403,65 +419,74 @@ autoTable(doc, {
   // Información Elaborado por
   autoTable(doc, {
     startY: currentY,
-    head: [['ELABORADO POR:']],
+    head: [["ELABORADO POR:"]],
     body: [[`${usuario.value}`]],
     styles: {
       fontSize: 10,
-      halign: 'left'  
+      halign: "left",
     },
     margin: { left: margin },
-    theme: 'plain',
+    theme: "plain",
     didDrawPage: (data) => {
       if (data.cursor) {
         finalY = data.cursor.y;
       } else {
-        console.warn('data.cursor is undefined');
+        console.warn("data.cursor is undefined");
       }
-    }
+    },
   });
 
   // Información Firma
   autoTable(doc, {
     startY: currentY,
-    head: [['______________________________']],
-    body: [['FIRMA']],
+    head: [["______________________________"]],
+    body: [["FIRMA"]],
     styles: {
       fontSize: 10,
-      halign: 'right'
+      halign: "right",
     },
     margin: { right: margin },
-    theme: 'plain',
+    theme: "plain",
     didDrawPage: (data) => {
       if (data.cursor) {
         finalY = data.cursor.y;
       } else {
-        console.warn('data.cursor is undefined');
+        console.warn("data.cursor is undefined");
       }
-    }
+    },
   });
-   // Agregar marca de agua
-   const roatatioAngle = 45;
+  // Agregar marca de agua
+  const roatatioAngle = 45;
 
-const fontSizeW = 80;
-const rotationAngle = 45; // Grados para rotar la imagen
-const transparency = 0.1;
-const totalPages = doc.internal.pages.length;
-for (let i = 0; i < totalPages; i++) {
-  doc.setPage(i + 1);
+  const fontSizeW = 80;
+  const rotationAngle = 45; // Grados para rotar la imagen
+  const transparency = 0.1;
+  const totalPages = doc.internal.pages.length;
+  for (let i = 0; i < totalPages; i++) {
+    doc.setPage(i + 1);
 
-  // Establecer el estado de gráficos para aplicar transparencia
-  doc.setGState(new doc.GState({ opacity: transparency }));
+    // Establecer el estado de gráficos para aplicar transparencia
+    doc.setGState(new doc.GState({ opacity: transparency }));
     doc.setTextColor(220, 220, 220);
     doc.setFontSize(fontSizeW);
-    doc.setFont('helvetica', 'bold');
-    doc.addImage(Aprobado,'JPEG',200,300, 400, 200, undefined, 'NONE', roatatioAngle);
+    doc.setFont("helvetica", "bold");
+    doc.addImage(
+      Aprobado,
+      "JPEG",
+      200,
+      300,
+      400,
+      200,
+      undefined,
+      "NONE",
+      roatatioAngle
+    );
     doc.setGState(new doc.GState({ opacity: 1 }));
   }
-  
+
   // Guardar PDF
   doc.save(`Detalles-remision-${props.numRemision}.pdf`);
 };
 
 getModalPreview();
 </script>
-
