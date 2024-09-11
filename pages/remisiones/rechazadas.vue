@@ -70,7 +70,7 @@ import { ref } from "vue";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
 import { useCookie, navigateTo } from "nuxt/app";
-import type { Remision } from "~/interfaces/remisiones";
+import type { Remision } from "../../interfaces/remisiones";
 import TablaRemisiones from "~/components/remisiones/TablaRemisiones.vue";
 import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
 import TabPanelRemisiones from "~/components/remisiones/TabPanelRemisiones.vue";
