@@ -40,10 +40,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from "#app";
+import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
-import { loginApi } from "~/composables/loginApi";
+import { loginApi } from "../composables/loginApi";
 
 //Variables 'ref' para recibir la información del usuario
 const usuario = ref();

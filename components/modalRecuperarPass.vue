@@ -40,9 +40,9 @@ import { ref } from "vue";
 //Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";
 //Importamos modelo de un mensaje Toast.
-import type { mensajeSencillo } from "~/interfaces/mensajes";
-import { useValidaciones } from "~/composables/login/validaciones";
-import { useActualizarPasswordAPI } from "~/composables/login/ActualizarPasswordAPI";
+import type { mensajeSencillo } from "../interfaces/mensajes";
+import { useValidaciones } from "../composables/login/validaciones";
+import { useActualizarPasswordAPI } from "../composables/login/ActualizarPasswordAPI";
 
 const correo = ref(); //Variable que contiene el valor del input correo.
 const toast = useToast(); //Variable para los mensajes.

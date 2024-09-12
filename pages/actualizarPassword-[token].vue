@@ -49,42 +49,29 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useRoute } from "vue-router";
-import { navigateTo } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
+import { navigateTo } from "nuxt/app";
+import { useRoute } from "vue-router";
 import { useValidaciones } from "../composables/login/validaciones";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { useActualizarPasswordAPI } from "../composables/login/ActualizarPasswordAPI";
 
 const contraseña = ref();
 const confirmacion = ref();
+const { verificarToken } = useValidaciones();
+const tokenPassword = useRoute().params.token;
 const password = ref<string | null>(null); // Variable que establece un error en los inputs
 
 const toast = useToast();
-const { verificarToken } = useValidaciones();
 const { setUpdatePassword } = useActualizarPasswordAPI();
-const tokenPassword = useRoute().params.token;
 
 let id_username: string;
-
-const verificacion = async () => {
-  console.log("tokenPassword: ", tokenPassword);
-
+const getIDUsername = async () => {
   const resultado = await verificarToken(tokenPassword);
-  console.log("resultado actualizarPassword: ", resultado);
-
-  if (resultado?.status) {
-    id_username = resultado.id_username;
-  } else {
-    toast.add({
-      severity: "error",
-      summary: resultado?.tittle,
-      detail: resultado?.detail,
-      life: 4000,
-    });
-    return navigateTo("/");
-  }
+  id_username = resultado?.id_username;
+  console.log("idUsername: ", id_username);
 };
+getIDUsername();
 
 const actualizar = async () => {
   if (!contraseña.value || !confirmacion.value) {
@@ -127,10 +114,9 @@ const actualizar = async () => {
   }
 };
 
-verificacion();
-
 definePageMeta({
   layout: "login",
+  middleware: "mid-actualizar-pass",
   skipGlobalMiddleware: true,
 });
 </script>

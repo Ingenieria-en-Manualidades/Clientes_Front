@@ -14,7 +14,6 @@ export const loginApi = () => {
    */
   const login = async (userData: any) => {
     const encryptedData = encryptData([userData['username'], userData['password']]);
-    console.log('hola:',encryptedData)
     try {
       //llamando al endpoint que verificara al usuario y nos devolvera el token.
       const resultado = await fetch(`${url}api/login`, {

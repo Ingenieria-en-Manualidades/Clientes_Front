@@ -103,11 +103,11 @@
 
 <script lang="ts" setup>
 import { useCookie } from "nuxt/app";
-import type { Remision } from "~/interfaces/remisiones";
+import type { Remision } from "../../interfaces/remisiones";
 import { defineProps, defineEmits, ref, computed } from "vue";
-import ModalRechazo from "~/components/remisiones/ModalRechazo.vue";
-import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
-import ModalPreviewRemision from "~/components/remisiones/ModalPreviewRemision.vue";
+import ModalRechazo from "../../components/remisiones/ModalRechazo.vue";
+import { useRemisionesApi } from "../../composables/remisiones/remisionesApi";
+import ModalPreviewRemision from "../../components/remisiones/ModalPreviewRemision.vue";
 
 const { getNumRemisionesPen } = useRemisionesApi();
 const props = defineProps({

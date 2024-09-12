@@ -77,9 +77,9 @@ import { useToast } from "primevue/usetoast";
 //Importamos métodos para crear props y emits.
 import { defineProps, defineEmits, ref } from "vue";
 //Importamos modelos para los Toast y guardar remisiones.
-import type { RemisionPost } from "~/interfaces/remisiones";
-import type { mensajeSencillo } from "~/interfaces/mensajes";
-import { useRemisionesApi } from "~/composables/remisiones/remisionesApi";
+import type { RemisionPost } from "../interfaces/remisiones";
+import type { mensajeSencillo } from "../interfaces/mensajes";
+import { useRemisionesApi } from "../composables/remisiones/remisionesApi";
 
 const opcion = ref(); //Variable que guarda la opción de como guardar la remisión.
 const motivo = ref(); //Varable para guardar el motivo del rechazo.

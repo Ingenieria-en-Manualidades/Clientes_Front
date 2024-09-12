@@ -41,8 +41,8 @@ export const useValidaciones = () => {
       method: 'GET'
     });
 
-    console.log("resultado verificar token: ", response);
     const resultado = await response.json();
+    
     if (!resultado.success) {
 
       if (resultado.codigo === 404) {
