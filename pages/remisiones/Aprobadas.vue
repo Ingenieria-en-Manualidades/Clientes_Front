@@ -95,7 +95,7 @@ const listar = async () => {
   const resultado = await listarRemisionesPorId(idCliente.value);
 
   if (resultado.success) {
-    remisiones.value = resultado.remisiones.filter(
+    remisiones.value = resultado.data.filter(
       (rem) => rem.estado === "Aprobado"
     );
 
