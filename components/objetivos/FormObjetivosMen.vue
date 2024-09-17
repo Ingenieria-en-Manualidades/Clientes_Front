@@ -1,5 +1,6 @@
 <template>
-  <div class="my-5">
+  <form action="">
+    <div class="my-5">
     <div class="flex justify-center mb-12 gap-5">
       <div>
         <p class="font-manrope-b text-lg mb-1">Cumplimiento</p>
@@ -40,6 +41,9 @@
       </div>
     </div>
   </div>
+  </form>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+
+</script>
