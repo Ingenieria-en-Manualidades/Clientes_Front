@@ -7,8 +7,7 @@
     >
       <template #default="{ pasoActual }">
         <div v-if="pasoActual === 0">
-          <h2>Contenido del Paso 1</h2>
-          <!-- Aquí podrías agregar el contenido específico de este paso -->
+          <FormObjetivosMen />
         </div>
         <div v-else-if="pasoActual === 1">
           <h2>Contenido del Paso 2</h2>
@@ -24,6 +23,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import PanelPaso from "../../components/dinamicos/PanelPaso.vue";
+import FormObjetivosMen from "../../components/objetivos/formObjetivosMen.vue";
 
 const visible = ref(true);
 </script>
