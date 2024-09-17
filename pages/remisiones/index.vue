@@ -95,9 +95,7 @@ const listar = async () => {
   const resultado = await listarRemisionesPorId(idCliente.value);
 
   if (resultado.success) {
-    remisiones.value = resultado.remisiones.filter(
-      (rem) => rem.estado === null
-    );
+    remisiones.value = resultado.data.filter((rem) => rem.estado === null);
 
     if (remisiones.value.length === 0) {
       estadoRemisiones.value = true;
