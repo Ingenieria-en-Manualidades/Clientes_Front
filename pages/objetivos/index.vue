@@ -1,16 +1,16 @@
 <template>
   <div class="w-full py-3 px-5">
     <PanelPaso
-      :icono="'pi pi-bell'"
-      :titulo="'Cabeza 1'"
-      :visibilidad="visible"
+      :pasos="['pi pi-user', 'pi pi-star', 'pi pi-id-card']"
+      @paso-siguiente="handleSiguiente"
+      @paso-anterior="handleAnterior"
     >
       <template #default="{ pasoActual }">
         <div v-if="pasoActual === 0">
-          <FormObjetivosMen />
+          <FormObjetivosMen ref="formObjetivos" />
         </div>
         <div v-else-if="pasoActual === 1">
-          <FormCalidad />
+          <FormCalidad ref="formCalidad" />
         </div>
         <div v-else-if="pasoActual === 2">
           <h2>Contenido del Paso 3</h2>
@@ -20,11 +20,28 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import PanelPaso from "../../components/dinamicos/PanelPaso.vue";
 import FormObjetivosMen from "../../components/objetivos/formObjetivosMen.vue";
 import FormCalidad from "../../components/objetivos/FormCalidad.vue";
 
-const visible = ref(true);
+const pasoActual = ref(0);
+
+// Función para manejar el evento al presionar "Siguiente"
+const handleSiguiente = async (paso: number) => {
+  if (paso === 0) {
+    const isFormValid = await (refs.formObjetivos as any)?.submitForm();
+    if (!isFormValid) return; // No avanzar si no es válido
+  } else if (paso === 1) {
+    const isFormValid = await (refs.formCalidad as any)?.submitForm();
+    if (!isFormValid) return;
+  }
+
+  pasoActual.value = paso + 1;
+};
+
+const handleAnterior = (paso: number) => {
+  pasoActual.value = paso;
+};
 </script>
