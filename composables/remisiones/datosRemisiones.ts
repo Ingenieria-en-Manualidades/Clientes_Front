@@ -102,6 +102,11 @@ export const modulos = ref([
   {
     icono: "pi pi-sliders-h",
     nombre: "Improductividades",
-    ruta: "/modulo3",
+    ruta: "/improductividades",
   },
+  {
+    icono: "pi pi-bullseye",
+    nombre: "Objetivos",
+    ruta: "/objetivos"
+  }
 ]);

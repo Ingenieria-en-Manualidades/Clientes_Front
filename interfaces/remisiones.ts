@@ -47,6 +47,6 @@ export interface RemisionPost {
 //Modelo hecha para retornar una data, el estado del proceso y el error de una función.
 export interface ApiPromise<T> {
   success: boolean;
-  remisiones?: T | undefined;
+  data?: T | undefined;
   error?: string;
 }

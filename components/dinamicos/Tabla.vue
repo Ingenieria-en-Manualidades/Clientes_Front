@@ -1,60 +1,49 @@
 <template>
-  <table :class="tableInterface.styleTable">
-    <caption :class="tableInterface.caption?.style">
+  <table class="text-xs sm:text-sm w-[95%] mx-[2.5%] lg:w-full font-manrope-r">
+    <caption v-if="titulo">
       {{
-        tableInterface.caption?.label
+        titulo
       }}
     </caption>
     <thead>
-      <tr>
+      <tr class="sm:text-base">
         <th
-          v-for="header in headers"
-          v-bind:key="header.length"
-          :class="tableInterface.headers.style"
+          class="bg-azulIENM text-white py-4 px-5"
+          v-for="(cabeza, index) in cabezas"
+          v-bind:key="index"
         >
-          {{ header }}
+          {{ cabeza.toUpperCase() }}
         </th>
+        <slot name="nuevaColumna"></slot>
       </tr>
     </thead>
-    <tbody :class="tableInterface.tbodyStyle">
-      <tr v-for="data in arrayData" v-bind:key="data">
-        <td
-          v-for="element in data"
-          v-bind:key="element"
-          :class="tableInterface.rowStyle"
-        >
-          {{ element }}
+    <tbody>
+      <tr
+        class="border-x-[1px] border-b-[1px] border-gray-400 text-center"
+        v-for="(data, index) in arrayData"
+        v-bind:key="index"
+      >
+        <td class="p-3" v-for="(cabeza, index) in cabezas" v-bind:key="index">
+          {{ data[cabeza] }}
         </td>
+        <slot name="botones"></slot>
       </tr>
     </tbody>
-    <tfoot :class="tableInterface.tfootStyle" v-if="tableInterface.tfootStyle">
-      <tr>
-        <td></td>
-      </tr>
+    <tfoot>
+      <slot name="tfoot"></slot>
     </tfoot>
   </table>
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from "vue";
-import type { tablaDinamica } from "~/interfaces/componentesDinamicos";
+import { defineProps, ref } from "vue";
 
 const props = defineProps({
-  tableInterface: {
-    type: Object as () => tablaDinamica,
+  titulo: String,
+  cabezas: {
+    type: Object as () => String[],
     required: true,
   },
-  data: Array,
+  arrayData: Array,
 });
-
-const headers = ref(props.tableInterface.headers.labels);
-const arrayData = ref([]);
-
-for (const e of props.data) {
-  let arrayElement = [];
-  for (const i in e) {
-    arrayElement.push(e[i]);
-  }
-  arrayData.value.push(arrayElement);
-}
 </script>

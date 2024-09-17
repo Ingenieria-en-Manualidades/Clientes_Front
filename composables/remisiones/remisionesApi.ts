@@ -22,7 +22,7 @@ export const useRemisionesApi = () => {
       const previewRemision = await response.json();
       const data: PreviewRemision[] = previewRemision.data;
 
-      return { success: true, remisiones: data }
+      return { success: true, data: data }
     } catch (error) {
       console.error("Error a la hora de realizar el listarPreviewRemision: ", error);
       return { success: false, error: error};
@@ -50,7 +50,7 @@ export const useRemisionesApi = () => {
       const remisiones = await response.json();
       const data: Remision[] = remisiones.data;
       
-      return { success: true, remisiones: data};
+      return { success: true, data: data};
     } catch (error) {
       console.error("Error a la hora de llamar al endpoint 'ListarRemisiones':", error.message);
       return { success: false, error: error.message };
