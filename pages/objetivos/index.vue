@@ -13,7 +13,7 @@
           <FormCalidad />
         </div>
         <div v-else-if="pasoActual === 2">
-          <h2>Contenido del Paso 3</h2>
+          <FormAccidentes />
         </div>
       </template>
     </PanelPaso>
@@ -25,6 +25,7 @@ import { ref } from "vue";
 import PanelPaso from "../../components/dinamicos/PanelPaso.vue";
 import FormObjetivosMen from "../../components/objetivos/formObjetivosMen.vue";
 import FormCalidad from "../../components/objetivos/FormCalidad.vue";
+import FormAccidentes from "../../components/objetivos/FormAccidentes.vue";
 
 const visible = ref(true);
 </script>

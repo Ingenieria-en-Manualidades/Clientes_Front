@@ -6,11 +6,15 @@ export const useImproductividadesAPI = () => {
 
   const config = useRuntimeConfig();
   const url = config.public.apiGroot;
+  const token = config.public.tokenRemisiones;
 
   const listarImproductividades = async (idCliente: string | null | undefined): Promise<ApiPromise<Improductividad[]>> => {
     try {
       const response = await fetch(`${url}/api/MaquilaOnline/getListImprodAPI/${idCliente}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+          'Authorization': `${token}`,
+        }
       });
 
       const valueJSON = await response.json();

@@ -1,7 +1,7 @@
 <template>
   <title>Remisiones aprobadas</title>
   <div class="card w-[100%] md:w-[760px] float-right">
-    <TabPanelRemisiones />
+    <TabPanelRemisiones :items="items" />
     <div v-if="remisiones.length !== 0">
       <div v-if="calendario" class="ml-[2.5%]">
         <Calendar
@@ -71,6 +71,7 @@ import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
 import { useCookie, navigateTo } from "nuxt/app";
 import type { Remision } from "../../interfaces/remisiones";
+import { items } from "../../composables/remisiones/datosRemisiones";
 import { useRemisionesApi } from "../../composables/remisiones/remisionesApi";
 import TablaRemisiones from "../../components/remisiones/TablaRemisiones.vue";
 import { useDatosRemisiones } from "../../composables/remisiones/datosRemisiones";

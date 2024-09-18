@@ -40,9 +40,16 @@
 
 <script setup lang="ts">
 import { useRoute } from "nuxt/app";
-import { items } from "../../composables/remisiones/datosRemisiones"; // Importamos los elementos y las rutas para cambiar entre remisiones
+import type { ItemTabPanel } from "../../interfaces/componentesDinamicos";
 
 const route = useRoute(); // Variable para el método para cambiar las rutas
+
+const props = defineProps({
+  items: {
+    type: Array as () => ItemTabPanel[],
+    required: true,
+  },
+});
 
 //Metodo para navegar entre las rutas de remisiones al dar click en las pestañas
 const isActive = (routePath: string) => {
