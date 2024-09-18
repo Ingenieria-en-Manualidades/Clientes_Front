@@ -1,22 +1,25 @@
-import { useRuntimeConfig } from 'nuxt/app';
+import { useCookie, useRuntimeConfig } from 'nuxt/app';
 import { Objetives } from '../../interfaces/objetives';
 import { ApiPromise } from '../../interfaces/objetives';
 
 export const useObjetivosApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
-  const token = config.public.tokenRemisiones;
+  //const token = config.public.tokenRemisiones;
 
   const createObjetives = async (objetivosData: Objetives): Promise<ApiPromise<any>> => {
     try {
-      const response = await fetch(`${url}/createObjetives`, {
+      const token = useCookie("token");
+      const response = await fetch(`http://localhost:8000/api/guardarObjetivos`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(objetivosData)
+        body: JSON.stringify(objetivosData)        
       });
+
+  
 
       const data = await response.json();
 

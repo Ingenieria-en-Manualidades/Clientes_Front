@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Barra de progreso de pasos -->
     <div class="flex items-center mb-8 w-[95%] ml-4">
       <div v-for="(paso, index) in pasos" :key="index" class="flex w-full">
         <Divider v-if="index !== 0" />
@@ -16,9 +17,14 @@
       </div>
     </div>
 
-    <div class="flex justify-center">
-      <!-- Incluyendo el componente hijo y pasando la referencia -->
+    <!-- Render del formulario de objetivos (primer paso) -->
+    <div class="flex justify-center" v-if="pasoActual === 0">
       <FormObjetivosMen ref="formObjetivos" />
+    </div>
+
+    <!-- Render del contenido de otros pasos (ejemplo del segundo paso) -->
+    <div class="flex justify-center" v-else-if="pasoActual === 1">
+      <p>Contenido del segundo paso</p>
     </div>
 
     <div class="flex justify-between w-[95%] ml-5 mt-6">
@@ -48,9 +54,6 @@ import FormObjetivosMen from '../objetivos/FormObjetivosMen.vue';
 const pasos = ref(["pi pi-user", "pi pi-star", "pi pi-id-card"]);
 const pasoActual = ref(0);
 
-// Referencia al formulario hijo
-const formObjetivos = ref(null);  // Aquí asignamos la referencia al componente hijo
-
 // Función para avanzar de paso
 const pasoSig = () => {
   if (pasoActual.value < pasos.value.length - 1) {
@@ -65,20 +68,29 @@ const pasoAnt = () => {
   }
 };
 
+// Definir el tipo para la referencia del formulario
+type FormObjetivosMenInstance = {
+  submitForm: () => Promise<boolean>;
+};
+
+// Crear la referencia con el tipo del componente hijo
+const formObjetivos = ref<FormObjetivosMenInstance | null>(null);
+
 // Función para validar el formulario y avanzar
 const submitAndProceed = async () => {
-  // Verificamos si la referencia existe y tiene el método submitForm
-  if (formObjetivos.value && typeof formObjetivos.value.submitForm === 'function') {
+  if (pasoActual.value === 0 && formObjetivos.value) {
+    // Validar el formulario del paso 1
     const isFormValid = await formObjetivos.value.submitForm();
 
     if (isFormValid) {
-      console.log("Formulario válido, procede al siguiente paso");
-      pasoSig();  // Si es válido, procede al siguiente paso
+      console.log('Formulario válido, procede al siguiente paso');
+      pasoSig(); // Avanzar al siguiente paso si es válido
     } else {
-      console.log("Errores en el formulario, no puedes avanzar");
+      console.log('Errores en el formulario, no puedes avanzar');
     }
   } else {
-    console.error("No se pudo acceder al método submitForm");
+    // Lógica para avanzar en otros pasos sin validación (ejemplo para el segundo paso)
+    pasoSig();
   }
 };
 </script>
