@@ -1,6 +1,8 @@
 import { useRuntimeConfig } from "nuxt/app";
 import type { ApiPromise } from "../../interfaces/remisiones";
 import type { Improductividad } from "../../interfaces/improductividades";
+import type { postImproductividad } from "../../interfaces/improductividades";
+import type { mensajeSencillo } from "../../interfaces/mensajes";
 
 export const useImproductividadesAPI = () => {
 
@@ -27,7 +29,29 @@ export const useImproductividadesAPI = () => {
     }
   }
   
+  const agregarImproductividad = async (improductividad: postImproductividad): Promise<mensajeSencillo> => {
+    try {
+      const response = await fetch(`${url}/api/RemisionOnline/saveGestionImprodAPI`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`
+        },
+        body: JSON.stringify(improductividad),
+      });
+
+      const resultado = await response.json();
+      console.log("resultado agregarImpr: ", resultado);
+      
+      return { status: 'success', tittle: 'Guardado', detail: 'Exito a la hora de aprobar la improductividad.' };
+    } catch (error) {
+      console.error("Error a la hora de agregar improductividad: ", error);
+      return { status: 'error', tittle: 'Error al gestionar', detail: 'Por favor revisar el error.' };
+    }
+  }
+
   return {
-    listarImproductividades
+    listarImproductividades,
+    agregarImproductividad
   }
 }

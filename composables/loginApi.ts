@@ -26,12 +26,11 @@ export const loginApi = () => {
       
       if (!resultado.ok) {
         const response = await resultado.json();
-        console.error("response tittle: ", response);
         return {
           success: false,
           status: 'error',
           tittle: `Error ${resultado.status}`,
-          detail: 'Por favor revisar el error desconocido.'
+          detail: response.message
         };
       }
 

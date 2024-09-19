@@ -26,7 +26,7 @@
         <td class="p-3" v-for="(cabeza, index) in cabezas" v-bind:key="index">
           {{ data[cabeza] }}
         </td>
-        <slot name="botones"></slot>
+        <slot name="botones" :data="data"></slot>
       </tr>
     </tbody>
     <tfoot>

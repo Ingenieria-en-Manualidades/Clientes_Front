@@ -18,3 +18,11 @@ export interface Improductividad {
     usuario_gestiona: string;
     usuario_reporta: string;
 }
+
+export interface postImproductividad {
+    improductividad_id: number | undefined;
+    estado: string | null | undefined;
+    motivo: string | null | undefined;
+    usuario_gestiona: string;
+    cliente_id: string;
+};

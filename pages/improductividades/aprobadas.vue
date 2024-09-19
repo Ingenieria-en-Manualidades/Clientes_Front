@@ -36,13 +36,14 @@
         <template #nuevaColumna>
           <th class="bg-azulIENM text-white py-4 px-5">ACCIONES</th>
         </template>
-        <template #botones="{ data }">
+        <template #botones>
           <td>
-            <ModalGestionar
-              :idImproductividad="data.improductividad_id"
-              :actividad="data.actividad"
-              :descripcion="data.descripcion"
-            />
+            <button
+              type="button"
+              class="border-[1px] border-green-400 py-1 px-4 rounded-lg bg-green-400"
+            >
+              Gestionar
+            </button>
           </td>
         </template>
       </Tabla>
@@ -77,7 +78,6 @@ import { ref } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import Tabla from "../../components/dinamicos/Tabla.vue";
-import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
 import ProgressSpinner from "primevue/progressspinner";
 import type { Improductividad } from "../../interfaces/improductividades";
 import {
@@ -107,15 +107,18 @@ const listar = async () => {
   const response = await listarImproductividades(idCliente.value);
 
   if (response.success) {
-    data.value = response.data?.filter((rem) => rem.estado === null);
+    data.value = response.data?.filter((rem) => rem.estado === "Aprobado");
     console.log("data filter: ", data.value);
+
+    if (data.value.length === 0) {
+      estadoRemisiones.value = true;
+      avisoIcono.value = "pi pi-check-circle text-5xl";
+      avisodetalles.value = "Sin remisiones pendientes";
+    }
   } else {
-    toast.add({
-      severity: "error",
-      summary: "Error al listar improductividades.",
-      detail: response.error,
-      life: 3000,
-    });
+    estadoRemisiones.value = true;
+    avisoIcono.value = "pi pi-times-circle text-5xl";
+    avisodetalles.value = "Fallo a la hora de cargar";
   }
   isLoading.value = false;
 };
