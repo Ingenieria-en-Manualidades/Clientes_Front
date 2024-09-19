@@ -24,7 +24,11 @@
 
     <!-- Render del contenido de otros pasos (ejemplo del segundo paso) -->
     <div class="flex justify-center" v-else-if="pasoActual === 1">
-      <p>Contenido del segundo paso</p>
+      <FormCalidad  />
+    </div>
+
+    <div class="flex justify-center" v-else-if="pasoActual === 2">
+      <FormAccidentes />
     </div>
 
     <div class="flex justify-between w-[95%] ml-5 mt-6">
@@ -49,9 +53,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import FormObjetivosMen from '../objetivos/FormObjetivosMen.vue';
+import FormCalidad from '../objetivos/FormCalidad.vue';
 
 // Definir los pasos del proceso y el paso actual
-const pasos = ref(["pi pi-user", "pi pi-star", "pi pi-id-card"]);
+const pasos = ref(["pi pi-user", "pi pi-star"]);
 const pasoActual = ref(0);
 
 // Función para avanzar de paso

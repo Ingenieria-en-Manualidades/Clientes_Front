@@ -12,9 +12,6 @@
         <div v-else-if="pasoActual === 1">
           <FormCalidad ref="formCalidad" />
         </div>
-        <div v-else-if="pasoActual === 2">
-          <FormAccidentes />
-        </div>
       </template>
     </PanelPaso>
   </div>
@@ -25,7 +22,6 @@ import { ref } from "vue";
 import PanelPaso from "../../components/dinamicos/PanelPaso.vue";
 import FormObjetivosMen from "../../components/objetivos/formObjetivosMen.vue";
 import FormCalidad from "../../components/objetivos/FormCalidad.vue";
-import FormAccidentes from "../../components/objetivos/FormAccidentes.vue";
 
 const pasoActual = ref(0);
 
