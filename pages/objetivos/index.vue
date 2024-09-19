@@ -12,9 +12,6 @@
         <div v-else-if="pasoActual === 1">
           <FormCalidad ref="formCalidad" />
         </div>
-        <div v-else-if="pasoActual === 2">
-          <FormAccidentes />
-        </div>
       </template>
     </PanelPaso>
   </div>
@@ -25,7 +22,6 @@ import { ref } from "vue";
 import PanelPaso from "../../components/dinamicos/PanelPaso.vue";
 import FormObjetivosMen from "../../components/objetivos/formObjetivosMen.vue";
 import FormCalidad from "../../components/objetivos/FormCalidad.vue";
-import FormAccidentes from "../../components/objetivos/FormAccidentes.vue";
 
 const pasoActual = ref(0);
 
@@ -45,4 +41,12 @@ const handleSiguiente = async (paso: number) => {
 const handleAnterior = (paso: number) => {
   pasoActual.value = paso;
 };
+
+// import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime";
+// //Método para que no tenga la plantilla HTML por defecto
+// definePageMeta({
+//   layout: "login",
+//   middleware: "logueado",
+//   skipGlobalMiddleware: true,
+// });
 </script>

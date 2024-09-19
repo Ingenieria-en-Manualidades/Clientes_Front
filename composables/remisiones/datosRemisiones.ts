@@ -108,5 +108,10 @@ export const modulos = ref([
     icono: "pi pi-bullseye",
     nombre: "Objetivos",
     ruta: "/objetivos"
+  },
+  {
+    icono: "pi pi-exclamation-triangle",
+    nombre: "Accidentes",
+    ruta: "/accidentes"
   }
 ]);

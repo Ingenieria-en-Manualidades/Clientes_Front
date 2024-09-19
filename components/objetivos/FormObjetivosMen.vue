@@ -76,7 +76,7 @@ const errors = ref({
 
 // Método para validar y enviar el formulario
 const submitForm = async () => {
-  // Reiniciar los errores
+  //Reiniciar los errores
   errors.value = {
     cumplimiento: false,
     eficienciaProductiva: false,
@@ -92,10 +92,10 @@ const submitForm = async () => {
   if (!desperdicioME.value) errors.value.desperdicioME = true;
   if (!desperdicioPP.value) errors.value.desperdicioPP = true;
 
-  // Comprobar si hay errores
+  //Comprobar si hay errores
   const noErrors = !Object.values(errors.value).includes(true);
 
-  if (noErrors) {
+  //if (noErrors) {
     // Llamar a la API para crear los objetivos
     const { createObjetives } = useObjetivosApi();
     const objetivosData = {
@@ -115,7 +115,7 @@ const submitForm = async () => {
       console.error('Error al crear objetivos:', response.error);
       return false;  // Hubo un error en la creación
     }
-  }
+  //}
 
   return false;  // Hay errores en el formulario
 };
