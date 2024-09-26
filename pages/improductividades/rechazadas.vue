@@ -33,7 +33,16 @@
         >
       </button>
       <div class="w-[100%] overflow-x-auto">
-        <Tabla :cabezas="cols" :arrayData="data" :atributosDatos="atributos" />
+        <Tabla :cabezas="cols" :arrayData="data" :atributosDatos="atributos">
+          <template #nuevaColumna>
+            <th class="bg-azulIENM text-white py-3 px-2">ACCIONES</th>
+          </template>
+          <template #botones="{ data }">
+            <td>
+              <ModalRechazo :motivo="data.motivo" />
+            </td>
+          </template>
+        </Tabla>
       </div>
     </div>
     <div class="p-5 rounded-t-lg text-center" v-else-if="isLoading">
@@ -65,17 +74,18 @@
 import { ref } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
-import Tabla from "../../components/dinamicos/Tabla.vue";
 import ProgressSpinner from "primevue/progressspinner";
+import Tabla from "../../components/dinamicos/Tabla.vue";
 import type { Improductividad } from "../../interfaces/improductividades";
+import ModalRechazo from "../../components/improductividades/ModalRechazo.vue";
+import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
+import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 import {
   items,
   cols,
-  useDatosImproductividades,
   atributos,
+  useDatosImproductividades,
 } from "../../composables/improductividades/datosImproductividades";
-import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
-import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 
 const dates = ref();
 let avisoIcono = ref();
@@ -86,8 +96,8 @@ const calendario = ref(true);
 const botonRecargar = ref(false);
 const estadoRemisiones = ref(false);
 const data = ref<Improductividad[]>([]);
-const { listarImproductividades } = useImproductividadesAPI();
 const { setConsultar } = useDatosImproductividades();
+const { listarImproductividades } = useImproductividadesAPI();
 
 const listar = async () => {
   isLoading.value = true;
@@ -96,7 +106,7 @@ const listar = async () => {
   const response = await listarImproductividades(idCliente.value);
 
   if (response.success) {
-    data.value = response.data?.filter((rem) => rem.estado === "Aprobado");
+    data.value = response.data?.filter((rem) => rem.estado === "Rechazado");
 
     if (data.value.length === 0) {
       estadoRemisiones.value = true;

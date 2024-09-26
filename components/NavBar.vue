@@ -19,7 +19,7 @@
         ></i>
         <span
           v-if="nRemisiones"
-          class="absolute bg-green-600 font-manrope-r px-[14%] py-[8%] md:px-[17%] md:py-[10%] rounded-[50%] border-2 border-white text-[10px] md:text-xs right-1 md:right-0 top-0 text-white"
+          class="absolute bg-red-500 font-manrope-r px-[14%] py-[8%] md:px-[17%] md:py-[10%] rounded-[50%] border-2 border-white text-[10px] md:text-xs right-1 md:right-0 top-0 text-white"
           >{{ nRemisiones }}</span
         >
         <p class="tooltipBell">remisiones pendientes</p>
@@ -62,7 +62,7 @@ const viajarRemisiones = async () => {
 
 //Método que realiza una consulta por la API y llena la variable con la cantidad de remisiones pendientes.
 const valueRemisiones = async () => {
-  nRemisiones.value = await getNumRemisionesPen(idCliente.value);
+  nRemisiones.value = await getNumRemisionesPen(Number(idCliente.value));
 };
 valueRemisiones();
 </script>

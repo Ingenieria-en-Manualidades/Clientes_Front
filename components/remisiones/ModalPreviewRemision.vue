@@ -233,9 +233,10 @@ const getModalPreview = async () => {
   try {
     const resultado = await listarPreviewRemision(props.numRemision);
     if (resultado.success) {
-      datos.value = resultado.remisiones;
-      total.value = Number(resultado.remisiones[0].valor);
-      observaciones.value = resultado.remisiones[0].observacion;
+      datos.value = resultado.data;
+
+      total.value = Number(resultado.data[0].valor);
+      observaciones.value = resultado.data[0].observacion;
       iva.value = (total.value * 19) / 100;
       totalGeneral.value = total.value + iva.value;
     } else {

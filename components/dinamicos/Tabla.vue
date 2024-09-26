@@ -1,18 +1,18 @@
 <template>
-  <table class="text-xs sm:text-sm w-[95%] mx-[2.5%] lg:w-full font-manrope-r">
+  <table class="text-xs sm:text-sm w-[95%] lg:w-full font-manrope-r">
     <caption v-if="titulo">
       {{
         titulo
       }}
     </caption>
     <thead>
-      <tr class="sm:text-base">
+      <tr class="sm:text-sm">
         <th
           class="bg-azulIENM text-white py-2 px-3"
           v-for="(cabeza, index) in cabezas"
           v-bind:key="index"
         >
-          {{ cabeza === "dispositivo" ? "LINEA" : cabeza.toUpperCase() }}
+          {{ cabeza.toUpperCase() }}
         </th>
         <slot name="nuevaColumna"></slot>
       </tr>
@@ -23,8 +23,12 @@
         v-for="(data, index) in remisionesData"
         v-bind:key="index"
       >
-        <td class="p-3" v-for="(cabeza, index) in cabezas" v-bind:key="index">
-          {{ data[cabeza] }}
+        <td
+          class="p-[5px]"
+          v-for="(atributo, index) in atributosDatos"
+          v-bind:key="index"
+        >
+          {{ data[atributo] }}
         </td>
         <slot name="botones" :data="data"></slot>
       </tr>
@@ -33,7 +37,7 @@
       <slot name="tfoot"></slot>
     </tfoot>
   </table>
-  <div class="w-full mx-[2.5%] py-4 flex justify-center my-[7px]">
+  <div class="w-full mx-[2.5%] py-4 flex justify-center">
     <button
       type="button"
       :disabled="paginaActual === 1"
@@ -92,6 +96,10 @@ const props = defineProps({
   cabezas: {
     type: Object as () => String[],
     required: true,
+  },
+  atributosDatos: {
+    type: Object as () => String[],
+    required: false,
   },
   arrayData: Array,
 });

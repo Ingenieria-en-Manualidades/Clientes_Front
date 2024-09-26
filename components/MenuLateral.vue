@@ -31,7 +31,52 @@
             :key="modulo.nombre"
             @click="toggleNavBarMovil"
           >
-            <router-link v-slot="{ href, navigate }" :to="modulo.ruta" custom>
+            <li v-if="modulo.submodulos && modulo.visible">
+              <div
+                class="py-3 pl-6 hover:bg-white rounded-lg text-white hover:text-black w-[120%] cursor-pointer"
+                @click="visible = !visible"
+              >
+                <i :class="modulo.icono"></i>
+                <span class="ml-6">{{ modulo.nombre }}</span>
+                <i
+                  :class="[
+                    'pi pi-angle-right pl-2 transition origin-center duration-300 float-right pt-1 mr-2',
+                    visible ? 'rotate-90' : 'rotate-0',
+                  ]"
+                ></i>
+              </div>
+              <ul
+                :class="['ml-6 pl-5 text-white', visible ? 'block' : 'hidden']"
+              >
+                <router-link
+                  v-for="(submodulo, index) in modulo.submodulos"
+                  v-bind:key="index"
+                  :to="submodulo.ruta"
+                  v-slot="{ href, navigate }"
+                  custom
+                >
+                  <a
+                    v-ripple
+                    v-if="submodulo.visible"
+                    :href="href"
+                    @click="navigate"
+                    class="flex py-3 pl-6 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-[124%]"
+                  >
+                    <i :class="submodulo.icono"
+                      ><span class="ml-6 font-manrope-l text-base">{{
+                        submodulo.nombre
+                      }}</span></i
+                    >
+                  </a>
+                </router-link>
+              </ul>
+            </li>
+            <router-link
+              v-else-if="modulo.visible"
+              v-slot="{ href, navigate }"
+              :to="modulo.ruta"
+              custom
+            >
               <a
                 v-ripple
                 :href="href"
@@ -58,6 +103,7 @@ import { modulos } from "../composables/remisiones/datosRemisiones"; //Importamo
 
 const isOpen = ref(true); //Variable que define el estado del menú desplegable.
 const emit = defineEmits(["extenderMain"]); //Importa el método que recibe desde su componente.
+const visible = ref(false);
 
 //Método que cambia estado del menú desplegable, ayudando a cuando ocultar y no al menú
 const toggleNavbar = () => {

@@ -5,14 +5,14 @@ export const useDatosImproductividades = () => {
 
   const setConsultar = async (improductividades: Improductividad[], dataFecha: Array<Date>) => {
     const fechas = formatoFechas(dataFecha[0], dataFecha[1]);
+    
     if (!fechas[1]) {
-      return improductividades.filter(r => r.fecha_ingreso === fechas[0]);
+      return improductividades.filter(r => r.fecha_ingreso >= `${fechas[0]} 00:00:00` && r.fecha_ingreso <= `${fechas[0]} 23:59:59`);
     }else{
-      return improductividades.filter(r => r.fecha_ingreso >= fechas[0] && r.fecha_ingreso <= fechas[1]);
+      return improductividades.filter(r => r.fecha_ingreso >= `${fechas[0]} 00:00:00` && r.fecha_ingreso <= `${fechas[1]} 23:59:59`);
     }
   }
 
-  // const formatoFechas
   const formatoFechas = (fecha1: Date, fecha2: Date | null) => {
     const fechas: String[] = [];
 
@@ -74,9 +74,22 @@ export const items = ref([
 
 export const cols = ref([
   "actividad",
+  "linea",
+  "descripcion",
+  "turno",
+  "fecha de ingreso",
+  "horas",
+  "minutos",
+  "estandar por persona"
+]);
+
+export const atributos = ref([
+  "actividad",
   "dispositivo",
   "descripcion",
+  "turno",
   "fecha_ingreso",
   "horas",
   "minutos",
+  "horasxpersonas"
 ]);

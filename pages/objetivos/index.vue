@@ -41,12 +41,4 @@ const handleSiguiente = async (paso: number) => {
 const handleAnterior = (paso: number) => {
   pasoActual.value = paso;
 };
-
-// import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime";
-// //Método para que no tenga la plantilla HTML por defecto
-// definePageMeta({
-//   layout: "login",
-//   middleware: "logueado",
-//   skipGlobalMiddleware: true,
-// });
 </script>

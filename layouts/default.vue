@@ -10,7 +10,9 @@
     ]"
   >
     <!-- <MenuLateral /> -->
-    <div class="flex justify-center rounded-lg border-[1px] border-gray-300">
+    <div
+      class="w-full flex justify-center rounded-lg border-[1px] border-gray-300"
+    >
       <slot />
     </div>
     <footer class="border-y-[1px] mt-3 p-3 hidden">

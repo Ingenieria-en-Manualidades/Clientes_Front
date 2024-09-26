@@ -1,10 +1,10 @@
 <template>
-  <title>Improductividades</title>
-  <div class="w-[100%] md:w-[850px]">
+  <div class="w-full md:w-[90%]">
+    <title>Improductividades</title>
     <TabPanelRemisiones :items="items" />
-    <div v-if="data?.length !== 0">
-      <div v-if="calendario" class="ml-[2.5%]">
-        <!-- <Calendar
+    <div v-if="data?.length !== 0" class="px-3">
+      <div v-if="calendario" class="">
+        <Calendar
           v-model="dates"
           selectionMode="range"
           :manualInput="false"
@@ -20,7 +20,7 @@
           class="bg-azulClaroIENM ml-2 p-[11px] rounded"
         >
           <i class="pi pi-search text-white"></i>
-        </button> -->
+        </button>
       </div>
       <button
         type="button"
@@ -32,20 +32,23 @@
           ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
         >
       </button>
-      <Tabla :cabezas="cols" :arrayData="data">
-        <template #nuevaColumna>
-          <th class="bg-azulIENM text-white py-4 px-5">ACCIONES</th>
-        </template>
-        <template #botones="{ data }">
-          <td>
-            <ModalGestionar
-              :idImproductividad="data.improductividad_id"
-              :actividad="data.actividad"
-              :descripcion="data.descripcion"
-            />
-          </td>
-        </template>
-      </Tabla>
+      <div class="w-[100%] overflow-x-auto">
+        <Tabla :cabezas="cols" :arrayData="data" :atributosDatos="atributos">
+          <template #nuevaColumna>
+            <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
+          </template>
+          <template #botones="{ data }">
+            <td>
+              <ModalGestionar
+                :idImproductividad="data.improductividad_id"
+                :actividad="data.actividad"
+                :descripcion="data.descripcion"
+                @postGuardar="listar"
+              />
+            </td>
+          </template>
+        </Tabla>
+      </div>
     </div>
     <div class="p-5 rounded-t-lg text-center" v-else-if="isLoading">
       <ProgressSpinner
@@ -76,17 +79,18 @@
 import { ref } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
-import Tabla from "../../components/dinamicos/Tabla.vue";
-import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
 import ProgressSpinner from "primevue/progressspinner";
+import Tabla from "../../components/dinamicos/Tabla.vue";
 import type { Improductividad } from "../../interfaces/improductividades";
+import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
+import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
+import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 import {
   items,
   cols,
   useDatosImproductividades,
+  atributos,
 } from "../../composables/improductividades/datosImproductividades";
-import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
-import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 
 const dates = ref();
 let avisoIcono = ref();
@@ -97,8 +101,8 @@ const calendario = ref(true);
 const botonRecargar = ref(false);
 const estadoRemisiones = ref(false);
 const data = ref<Improductividad[]>([]);
-const { listarImproductividades } = useImproductividadesAPI();
 const { setConsultar } = useDatosImproductividades();
+const { listarImproductividades } = useImproductividadesAPI();
 
 const listar = async () => {
   isLoading.value = true;
@@ -108,14 +112,16 @@ const listar = async () => {
 
   if (response.success) {
     data.value = response.data?.filter((rem) => rem.estado === null);
-    console.log("data filter: ", data.value);
+
+    if (data.value.length === 0) {
+      estadoRemisiones.value = true;
+      avisoIcono.value = "pi pi-check-circle text-5xl";
+      avisodetalles.value = "Sin remisiones pendientes";
+    }
   } else {
-    toast.add({
-      severity: "error",
-      summary: "Error al listar improductividades.",
-      detail: response.error,
-      life: 3000,
-    });
+    estadoRemisiones.value = true;
+    avisoIcono.value = "pi pi-times-circle text-5xl";
+    avisodetalles.value = "Fallo a la hora de cargar";
   }
   isLoading.value = false;
 };

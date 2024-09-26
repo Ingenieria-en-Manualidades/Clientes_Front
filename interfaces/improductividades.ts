@@ -8,6 +8,7 @@ export interface Improductividad {
     fecha_gestion: string;
     fecha_ingreso: string;
     horas: number;
+    horasxpersonas: number;
     improductividad_id: number;
     linea_id: number;
     minutos: number;
@@ -15,6 +16,7 @@ export interface Improductividad {
     nombre_area: string;
     observacion: string;
     programacion_id: string;
+    turno: string;
     usuario_gestiona: string;
     usuario_reporta: string;
 }
@@ -24,5 +26,6 @@ export interface postImproductividad {
     estado: string | null | undefined;
     motivo: string | null | undefined;
     usuario_gestiona: string;
+    usuario: string;
     cliente_id: string;
 };

@@ -16,10 +16,8 @@ export const useObjetivosApi = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(objetivosData)        
+        body: JSON.stringify(objetivosData)
       });
-
-  
 
       const data = await response.json();
 

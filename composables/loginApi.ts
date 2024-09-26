@@ -26,6 +26,7 @@ export const loginApi = () => {
       
       if (!resultado.ok) {
         const response = await resultado.json();
+        console.log("RESPONSE: ", response);
         return {
           success: false,
           status: 'error',

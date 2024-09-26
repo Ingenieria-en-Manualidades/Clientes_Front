@@ -101,7 +101,7 @@ export const useRemisionesApi = () => {
    * @param idCliente :Numero que ayuda a identificar al cliente.
    * @returns retorna la cantidad de remisiones tipo 'Pendiente' del cliente especificado.
    */
-  const getNumRemisionesPen = async (cliente: string | null | undefined ) => {
+  const getNumRemisionesPen = async (cliente: number | null | undefined ) => {
     try {
       //Llamamos al endpoint "ListarRemisionesAPI" devolviendonos la lista de remisiones en base a una ID.
       const response = await fetch(`${url}/api/RemisionOnline/ListarRemisionesAPI/${cliente}`, {
@@ -113,7 +113,6 @@ export const useRemisionesApi = () => {
 
       const remisiones = await response.json();
       const data: Remision[] = remisiones.data;
-      console.log("remisiones data:", data);
       
       const remisionesPendientes: Remision[] = data.filter(
         (rem) => rem.estado === null

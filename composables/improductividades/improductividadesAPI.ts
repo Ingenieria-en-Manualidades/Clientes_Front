@@ -31,7 +31,7 @@ export const useImproductividadesAPI = () => {
   
   const agregarImproductividad = async (improductividad: postImproductividad): Promise<mensajeSencillo> => {
     try {
-      const response = await fetch(`${url}/api/RemisionOnline/saveGestionImprodAPI`, {
+      const response = await fetch(`${url}/api/MaquilaOnlineController/saveGestionImprodAPI`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,9 +41,13 @@ export const useImproductividadesAPI = () => {
       });
 
       const resultado = await response.json();
-      console.log("resultado agregarImpr: ", resultado);
       
-      return { status: 'success', tittle: 'Guardado', detail: 'Exito a la hora de aprobar la improductividad.' };
+      if (resultado.status === 'error') {
+        console.error("resultado improductividades: ", resultado);
+        return { status: resultado.status, tittle: 'Fallo en el gestionar', detail: resultado.msg };
+      }
+      
+      return { status: resultado.status, tittle: 'Guardado', detail: resultado.msg };
     } catch (error) {
       console.error("Error a la hora de agregar improductividad: ", error);
       return { status: 'error', tittle: 'Error al gestionar', detail: 'Por favor revisar el error.' };
