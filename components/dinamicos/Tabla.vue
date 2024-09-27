@@ -1,6 +1,6 @@
 <template>
   <table class="text-xs sm:text-sm w-[95%] lg:w-full font-manrope-r">
-    <caption v-if="titulo">
+    <caption class="text-base" v-if="titulo">
       {{
         titulo
       }}
@@ -37,7 +37,7 @@
       <slot name="tfoot"></slot>
     </tfoot>
   </table>
-  <div class="w-full mx-[2.5%] py-4 flex justify-center">
+  <div v-if="pag" class="w-full mx-[2.5%] py-4 flex justify-center">
     <button
       type="button"
       :disabled="paginaActual === 1"
@@ -102,6 +102,7 @@ const props = defineProps({
     required: false,
   },
   arrayData: Array,
+  pag: Boolean,
 });
 
 const paginaActual = ref(1);

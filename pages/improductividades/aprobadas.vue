@@ -33,7 +33,12 @@
         >
       </button>
       <div class="w-[100%] overflow-x-auto">
-        <Tabla :cabezas="cols" :arrayData="data" :atributosDatos="atributos" />
+        <Tabla
+          :cabezas="cols"
+          :arrayData="data"
+          :atributosDatos="atributos"
+          :pag="true"
+        />
       </div>
     </div>
     <div class="p-5 rounded-t-lg text-center" v-else-if="isLoading">

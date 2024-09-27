@@ -25,7 +25,7 @@ import FormCalidad from "../../components/objetivos/FormCalidad.vue";
 
 const pasoActual = ref(0);
 
-// Función para manejar el evento al presionar "Siguiente"
+// Función para manejar el evento al presionar "Siguiente",y
 const handleSiguiente = async (paso: number) => {
   if (paso === 0) {
     const isFormValid = await (refs.formObjetivos as any)?.submitForm();

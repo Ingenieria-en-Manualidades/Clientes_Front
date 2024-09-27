@@ -33,7 +33,12 @@
         >
       </button>
       <div class="w-[100%] overflow-x-auto">
-        <Tabla :cabezas="cols" :arrayData="data" :atributosDatos="atributos">
+        <Tabla
+          :cabezas="cols"
+          :arrayData="data"
+          :atributosDatos="atributos"
+          :pag="true"
+        >
           <template #nuevaColumna>
             <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
           </template>
