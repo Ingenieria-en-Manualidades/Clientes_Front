@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import PanelPaso from "../../components/dinamicos/PanelPaso.vue";
-import FormObjetivosMen from "../../components/objetivos/formObjetivosMen.vue";
+import FormObjetivosMen from "../../components/objetivos/FormObjetivosMen.vue";
 import FormCalidad from "../../components/objetivos/FormCalidad.vue";
 
 const pasoActual = ref(0);

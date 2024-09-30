@@ -1,5 +1,4 @@
 <template>
-<div>
   <form @submit.prevent="handleSubmit">
     <div class="labelsLogin mt-[7%]">
       <label
@@ -38,7 +37,6 @@
       :disabled="boolError"
     />
   </form>
-</div>
   <div v-if="isLoading" class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20" >
       <ProgressSpinner
         style="width: 200px; height: 200px"
