@@ -1,6 +1,11 @@
 import { ref } from 'vue';
+import { useCookie, useRuntimeConfig } from "nuxt/app";
+
 
 export const useModulos = () => {
+
+  const userPermissions = useCookie("permissions");
+
   const modulos = ref([
   // {
   //   icono: "pi pi-home",
@@ -12,36 +17,42 @@ export const useModulos = () => {
     icono: "pi pi-bell",
     nombre: "Remisiones",
     ruta: "/remisiones",
-    visible: true,
+    visible: false,
+    permission: 'view_remisiones'
   },
   // {
   //   icono: "pi pi-user",
   //   nombre: "Programación",
   //   ruta: "/modulo1",
   //   visible: true,
+  // permission: 'view_programacion'
   // },
   {
     icono: "pi pi-sliders-h",
     nombre: "Improductividades",
     ruta: "/improductividades",
-    visible: true,
+    visible: false,
+    permission: 'view_improductividades'
   },
   {
     icono: "pi pi-bullseye",
     nombre: "Objetivos",
-    visible: true,
+    visible: false,
+    permission: 'view_objetivos',
     submodulos: [
       {
         icono: "pi pi-user",
         nombre: "Diarios",
         ruta: "/objetivos/diarios",
-        visible: true,
+        visible: false,
+        permission: 'view_objetivos_diarios'
       },
       {
         icono: "pi pi-user",
         nombre: "Mensuales",
         ruta: "/objetivos",
-        visible: true
+        visible: false,
+        permission: 'view_objetivos_mensuales'
       }
     ]
   },
@@ -49,8 +60,33 @@ export const useModulos = () => {
     icono: "pi pi-exclamation-triangle",
     nombre: "Accidentes",
     ruta: "/accidentes",
-    visible: true,
+    visible: false,
+    permission: 'view_accidentes'
   }
 ]);
-return { modulos };
+  const verificarPermisos = () => {
+    modulos.value.forEach(modulo => {
+
+      if(userPermissions.value?.includes(modulo.permission)){
+        modulo.visible = true;
+      }else{
+        modulo.visible = false;
+      }
+
+      if(modulo.submodulos){
+        modulo.submodulos.forEach(submodulo => {
+          if(userPermissions.value?.includes(submodulo.permission)){
+            submodulo.visible = true;
+          }else{
+            submodulo.visible = false;
+          }
+        })
+      }
+    });
+  }
+
+verificarPermisos();
+
+return { modulos,
+  verificarPermisos };
 };

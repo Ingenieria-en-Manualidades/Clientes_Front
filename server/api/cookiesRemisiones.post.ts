@@ -17,6 +17,10 @@ export default defineEventHandler(async (event) => {
         sameSite: 'none',
         secure: true
     });
+    setCookie(event, 'permissions', 'view_improductividades', {
+        sameSite: 'none',
+        secure: true
+    });
 
     return true;
 })
