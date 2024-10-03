@@ -99,8 +99,8 @@
 
 <script lang="ts" setup>
 import { defineEmits, ref } from "vue";
-import { modulos } from "../composables/remisiones/datosRemisiones"; //Importamos los modulos para el menú
-
+import { useModulos } from "../composables/menuItems";
+const { modulos } = useModulos();
 const isOpen = ref(true); //Variable que define el estado del menú desplegable.
 const emit = defineEmits(["extenderMain"]); //Importa el método que recibe desde su componente.
 const visible = ref(false);

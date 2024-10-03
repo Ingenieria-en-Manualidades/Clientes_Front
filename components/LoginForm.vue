@@ -37,6 +37,15 @@
       :disabled="boolError"
     />
   </form>
+  <div v-if="isLoading" class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20" >
+      <ProgressSpinner
+        style="width: 200px; height: 200px"
+        strokeWidth="8"
+        fill="transparent"
+        animationDuration=".5s"
+        aria-label="Custom ProgressSpinner"
+      />
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -44,6 +53,7 @@ import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
 import { loginApi } from "../composables/loginApi";
+import ProgressSpinner from "primevue/progressspinner";
 
 //Variables 'ref' para recibir la información del usuario
 const usuario = ref();
@@ -53,6 +63,7 @@ const contrasenia = ref("");
 const boolError = ref(false);
 const { login } = loginApi(); //Importamos el método del login
 const usernameError = ref<string | null>(null); //Variable que establece un error en los inputs
+const isLoading = ref(false);
 
 //Función que evalua el input 'usuario' cumpla las condiciones
 const validarUsuario = () => {
@@ -67,7 +78,10 @@ const validarUsuario = () => {
 
 //Método que llama al endpoint que permite la verficación de usuarios y retorna el token.
 const handleSubmit = async () => {
+  isLoading.value = true;
   if (!usuario.value || !contrasenia.value) {
+    isLoading.value = false;
+
     toast.add({
       severity: "error",
       summary: "Campos vacíos",
@@ -84,7 +98,11 @@ const handleSubmit = async () => {
     //Enviando al usuario al "dashboard" de las remisiones en caso de que el usuario este registrado.
     if (resultado.success) {
       await router.push("/remisiones");
+      isLoading.value = false;
+
     } else {
+      isLoading.value = false;
+
       //mensaje de error dependiendo del resultado
       toast.add({
         severity: resultado.status,

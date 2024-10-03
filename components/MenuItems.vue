@@ -41,6 +41,15 @@
       </template>
     </Menu>
   </div>
+  <div v-if="isLoading" class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20" >
+      <ProgressSpinner
+        style="width: 200px; height: 200px"
+        strokeWidth="8"
+        fill="transparent"
+        animationDuration=".10s"
+        aria-label="Custom ProgressSpinner"
+      />
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -49,6 +58,7 @@ import { useRouter } from "vue-router";
 //Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";
 import { loginApi } from "../composables/loginApi";
+const isLoading = ref(false);
 
 const toast = useToast();
 const router = useRouter(); //Variable que utilizaremos para viajar entre rutas
@@ -76,13 +86,16 @@ const props = defineProps({
 
 //Función de cerrar sesión para borrar token del usuario y las cookies para retornar al login.
 const cerrarSesion = async () => {
+  isLoading.value = true;
   // llamamos al método logout que realiza el borrado del token en la base de datos y como cookie .
   const response = await logout();
 
   // Revisamos si el cerrar sesión funciono.
   if (response.success) {
     await router.push("/");
+    isLoading.value = false;
   } else {
+    isLoading.value = false;
     toast.add({
       severity: response.status,
       summary: response.tittle,
