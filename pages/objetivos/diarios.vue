@@ -8,7 +8,7 @@
     </div> -->
     <div class="w-full flex">
       <div class="w-[23%] px-3">
-        <form class="mb-10 mx-5">
+        <form class="mb-10 mx-5" @submit.prevent="handleSubmit">
           <p class="mb-1 font-manrope-r">Producción Planificada:</p>
           <input
             type="text"
@@ -22,11 +22,11 @@
             INGRESAR
           </button>
         </form>
-        <form class="mb-10 mx-5">
-          <p class="mb-1 font-manrope-r">Producción Planificada:</p>
+        <form v-if="visible" class="mb-10 mx-5">
+          <p class="mb-1 font-manrope-r">Producción Modificada:</p>
           <input
             type="text"
-            v-model="prodPlan"
+            v-model="prodMod"
             class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2 mb-3"
           />
           <button
@@ -51,7 +51,7 @@
           </button>
         </form>
       </div>
-      <div class="w-[74%] ml-2">
+      <!-- <div class="w-[74%] ml-2">
         <div class="w-full flex justify-center gap-10">
           <div>
             <Tabla
@@ -70,15 +70,15 @@
             />
           </div>
         </div>
-        <div class="bg-yellow-300 mt-1">
+        <div class="mt-1">
           <Tabla
-            :cabezas="cabezasProd"
-            :arrayData="dataProd"
-            :atributosDatos="atribProd"
+            :cabezas="cabezasArm"
+            :arrayData="dataArm"
+            :atributosDatos="atribArm"
             :pag="false"
           />
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -90,21 +90,21 @@ import Tabla from "../../components/dinamicos/Tabla.vue";
 import {
   datosTablaIndicadores,
   datosTablaProd,
+  datosTablaArmado,
 } from "../../composables/objetivos/datosObjetivos";
 
+const prodMod = ref();
 const prodPlan = ref();
 const planArmado = ref();
 const toast = useToast();
-const formVisible = ref(true);
+const visible = ref(false);
+const { cabezasArm, atribArm, dataArm } = datosTablaArmado();
 const { cabezasProd, atribProd, dataProd } = datosTablaProd();
 const { cabezasInd, atribInd, dataInd } = datosTablaIndicadores();
 
-let date: Date = new Date();
-console.log("Date: ", date);
-
 const handleSubmit = () => {
-  if (prodPlan.value && planArmado.value) {
-    formVisible.value = false;
+  if (prodPlan.value) {
+    visible.value = !visible.value;
   } else {
     toast.add({
       severity: "error",

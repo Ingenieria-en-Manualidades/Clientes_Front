@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-    import FormAccidentes from "../../components/objetivos/FormAccidentes.vue";
+import FormAccidentes from "../../components/objetivos/FormAccidentes.vue";
 </script>

@@ -9,7 +9,9 @@
             type="text"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
-          <p v-if="errors.cumplimiento" class="text-red-500 text-sm">Este campo es obligatorio</p>
+          <p v-if="errors.cumplimiento" class="text-red-500 text-sm">
+            Este campo es obligatorio
+          </p>
         </div>
         <div>
           <p class="font-manrope-b text-lg mb-1">Eficiencia Productiva</p>
@@ -18,7 +20,9 @@
             type="text"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
-          <p v-if="errors.eficienciaProductiva" class="text-red-500 text-sm">Este campo es obligatorio</p>
+          <p v-if="errors.eficienciaProductiva" class="text-red-500 text-sm">
+            Este campo es obligatorio
+          </p>
         </div>
         <div>
           <p class="font-manrope-b text-lg mb-1">Inspección de Calidad</p>
@@ -27,7 +31,9 @@
             type="text"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
-          <p v-if="errors.calidad" class="text-red-500 text-sm">Este campo es obligatorio</p>
+          <p v-if="errors.calidad" class="text-red-500 text-sm">
+            Este campo es obligatorio
+          </p>
         </div>
       </div>
       <div class="flex justify-center gap-6">
@@ -38,7 +44,9 @@
             type="text"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
-          <p v-if="errors.desperdicioME" class="text-red-500 text-sm">Este campo es obligatorio</p>
+          <p v-if="errors.desperdicioME" class="text-red-500 text-sm">
+            Este campo es obligatorio
+          </p>
         </div>
         <div>
           <p class="font-manrope-b text-lg mb-1">Desperdicios de P.P</p>
@@ -47,7 +55,9 @@
             type="text"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
-          <p v-if="errors.desperdicioPP" class="text-red-500 text-sm">Este campo es obligatorio</p>
+          <p v-if="errors.desperdicioPP" class="text-red-500 text-sm">
+            Este campo es obligatorio
+          </p>
         </div>
       </div>
     </form>
@@ -55,15 +65,15 @@
 </template>
 
 <script setup lang="ts">
-import { defineExpose, ref } from 'vue';
-import { useObjetivosApi } from '../../composables/objetivos/useObjetivosApi';  // Asegúrate de que esta ruta sea correcta
+import { defineExpose, ref } from "vue";
+import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi"; // Asegúrate de que esta ruta sea correcta
 
 // Variables reactivas de los campos del formulario
-const cumplimiento = ref('');
-const eficienciaProductiva = ref('');
-const calidad = ref('');
-const desperdicioME = ref('');
-const desperdicioPP = ref('');
+const cumplimiento = ref("");
+const eficienciaProductiva = ref("");
+const calidad = ref("");
+const desperdicioME = ref("");
+const desperdicioPP = ref("");
 
 // Variables de errores para la validación
 const errors = ref({
@@ -71,7 +81,7 @@ const errors = ref({
   eficienciaProductiva: false,
   calidad: false,
   desperdicioME: false,
-  desperdicioPP: false
+  desperdicioPP: false,
 });
 
 // Método para validar y enviar el formulario
@@ -82,7 +92,7 @@ const submitForm = async () => {
     eficienciaProductiva: false,
     calidad: false,
     desperdicioME: false,
-    desperdicioPP: false
+    desperdicioPP: false,
   };
 
   // Validar los campos
@@ -96,32 +106,33 @@ const submitForm = async () => {
   const noErrors = !Object.values(errors.value).includes(true);
 
   //if (noErrors) {
-    // Llamar a la API para crear los objetivos
-    const { createObjetives } = useObjetivosApi();
-    const objetivosData = {
-      cumplimiento: cumplimiento.value,
-      eficienciaProductiva: eficienciaProductiva.value,
-      calidad: calidad.value,
-      desperdicioME: desperdicioME.value,
-      desperdicioPP: desperdicioPP.value
-    };
+  // Llamar a la API para crear los objetivos
+  const { createObjetives } = useObjetivosApi();
+  const objetivosData = {
+    cumplimiento: cumplimiento.value,
+    eficienciaProductiva: eficienciaProductiva.value,
+    calidad: calidad.value,
+    desperdicioME: desperdicioME.value,
+    desperdicioPP: desperdicioPP.value,
+    tablero_id: 1,
+  };
+  // return true;
+  const response = await createObjetives(objetivosData);
 
-    const response = await createObjetives(objetivosData);
-
-    if (response.success) {
-      console.log('Objetivos creados correctamente:', response.data);
-      return true;  // Formulario válido, seguir adelante
-    } else {
-      console.error('Error al crear objetivos:', response.error);
-      return false;  // Hubo un error en la creación
-    }
+  if (response.success) {
+    console.log("Objetivos creados correctamente:", response.data);
+    return true; // Formulario válido, seguir adelante
+  } else {
+    console.error("Error al crear objetivos:", response.error);
+    return false; // Hubo un error en la creación
+  }
   //}
 
-  return false;  // Hay errores en el formulario
+  return false; // Hay errores en el formulario
 };
 
 // Exponer el método `submitForm` para que el componente padre pueda acceder a él
 defineExpose({
-  submitForm
+  submitForm,
 });
 </script>
