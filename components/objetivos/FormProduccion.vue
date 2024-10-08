@@ -7,6 +7,7 @@
       <p>Producción Planificada:</p>
       <input
         type="date"
+        readonly
         class="w-full border-[1px] border-black outline-none mb-1 rounded"
         :value="getFecha()"
       />
@@ -46,11 +47,8 @@ import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
 const prodMod = ref();
 const prodPlan = ref();
-const errorProdPlan = ref<null | string>();
 const date = new Date();
-const fecha = ref(
-  `${date.getFullYear()}-${date.getMonth() + 1}-0${date.getDate()}`
-);
+const errorProdPlan = ref<null | string>();
 
 const toast = useToast();
 const { createProduccion } = useObjetivosApi();

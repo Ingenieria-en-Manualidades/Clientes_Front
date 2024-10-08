@@ -36,6 +36,11 @@ export const loginApi = () => {
       }
 
       const response = await resultado.json();
+      let permisos = [];
+
+      for (const p of response.permissions) {
+        permisos.push(p.name);
+      }
       
       //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
       const restCookies = await fetch('/api/cookiesRemisiones', {
@@ -46,7 +51,8 @@ export const loginApi = () => {
         body: JSON.stringify({
           token: response.access_token,
           idCliente: response.clientes_endpoint_ids[0],
-          usuario: userData.username
+          usuario: userData.username,
+          permissions: permisos
         })
       });
       
