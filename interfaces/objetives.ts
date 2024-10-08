@@ -22,6 +22,17 @@ export interface Objetives {
     tablero_id: number,
   }
 
+  export interface Produccion {
+    fecha_produccion: Date,
+    planificada: number,
+    modificada: number | null,
+    plan_armado: number | null,
+    calidad: number | null,
+    desperfecto_me: number | null,
+    desperfecto_pp: number | null,
+    tablero_id: number,
+  }
+
   export interface ApiPromise<T> {
     success: boolean;
     data?: T | undefined;

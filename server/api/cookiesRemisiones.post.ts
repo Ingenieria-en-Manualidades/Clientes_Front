@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
         secure: true
     });
     const permissions = ['view_objetivos_diarios','view_objetivos_mensuales','view_objetivos','view_accidentes', 'view_remisiones', 'view_improductividades']
+    
     setCookie(event, 'permissions', JSON.stringify(permissions), {
         sameSite: 'none',
         secure: true

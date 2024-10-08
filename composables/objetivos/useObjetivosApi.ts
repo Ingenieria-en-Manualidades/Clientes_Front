@@ -1,5 +1,6 @@
 import { useCookie, useRuntimeConfig } from 'nuxt/app';
-import { Objetives, Calidad, Accidente, ApiPromise } from '../../interfaces/objetives';
+import { Objetives, Calidad, Accidente, ApiPromise, Produccion } from '../../interfaces/objetives';
+import { data } from 'autoprefixer';
 
 export const useObjetivosApi = () => {
   const config = useRuntimeConfig();
@@ -77,9 +78,34 @@ export const useObjetivosApi = () => {
     }
   }
 
+  const createProduccion = async (objProduccion: Produccion): Promise<ApiPromise<any>> => {
+    try {
+      const response = await fetch(`${url}api/guardarProduccion`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(objProduccion),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {success: data.success, data: data.message};
+      } else {
+        console.error("Error a la hora de ingresar la producción: ", data.message);
+        return { success: false, error: data.message || 'Error a la hora de insertar en "Producción"' }
+      }
+    } catch (error) {
+      console.error("Error de catch en la inserción 'Producción': ", error);
+      return { success: false, error: data.messagge }
+    }
+  }
+
   return {
     createObjetives,
     createCalidad,
-    createAccidente
+    createAccidente,
+    createProduccion
   };
 };

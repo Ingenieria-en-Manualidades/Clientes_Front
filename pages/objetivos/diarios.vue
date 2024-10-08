@@ -1,56 +1,14 @@
 <template>
   <div class="w-full">
-    <p class="font-manrope-b text-center text-2xl my-3">PRODUCCIÓN</p>
+    <p class="font-manrope-b text-center text-2xl my-1">PRODUCCIÓN</p>
     <!-- <div class="text-center">
       <p v-if="formVisible" class="font-manrope-r mb-3">
         Ingresar producción del día
       </p>
     </div> -->
-    <div class="w-full flex">
-      <div class="w-[23%] px-3">
-        <form class="mb-10 mx-5" @submit.prevent="handleSubmit">
-          <p class="mb-1 font-manrope-r">Producción Planificada:</p>
-          <input
-            type="text"
-            v-model="prodPlan"
-            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2 mb-3"
-          />
-          <button
-            class="w-full bg-azulClaroIENM py-1 rounded-md border-[1px] border-azulClaroIENM text-white font-manrope-b"
-            type="submit"
-          >
-            INGRESAR
-          </button>
-        </form>
-        <form v-if="visible" class="mb-10 mx-5">
-          <p class="mb-1 font-manrope-r">Producción Modificada:</p>
-          <input
-            type="text"
-            v-model="prodMod"
-            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2 mb-3"
-          />
-          <button
-            class="w-full bg-azulClaroIENM py-1 rounded-md border-[1px] border-azulClaroIENM text-white font-manrope-b"
-            type="submit"
-          >
-            INGRESAR
-          </button>
-        </form>
-        <form class="mb-3 mx-5">
-          <p class="mb-1 font-manrope-r">Plan armado:</p>
-          <input
-            type="text"
-            v-model="planArmado"
-            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2 mb-3"
-          />
-          <button
-            class="w-full bg-azulClaroIENM py-1 rounded-md border-[1px] border-azulClaroIENM text-white font-manrope-b"
-            type="submit"
-          >
-            INGRESAR
-          </button>
-        </form>
-      </div>
+    <div class="w-full flex justify-center p-1 gap-2">
+      <FormProduccion />
+      <FormIndicadores />
       <!-- <div class="w-[74%] ml-2">
         <div class="w-full flex justify-center gap-10">
           <div>
@@ -87,31 +45,15 @@
 import { ref } from "vue";
 import { useToast } from "primevue/usetoast";
 import Tabla from "../../components/dinamicos/Tabla.vue";
+import FormProduccion from "../../components/objetivos/FormProduccion.vue";
+import FormIndicadores from "../../components/objetivos/FormIndicadores.vue";
 import {
   datosTablaIndicadores,
   datosTablaProd,
   datosTablaArmado,
 } from "../../composables/objetivos/datosObjetivos";
 
-const prodMod = ref();
-const prodPlan = ref();
-const planArmado = ref();
-const toast = useToast();
-const visible = ref(false);
 const { cabezasArm, atribArm, dataArm } = datosTablaArmado();
 const { cabezasProd, atribProd, dataProd } = datosTablaProd();
 const { cabezasInd, atribInd, dataInd } = datosTablaIndicadores();
-
-const handleSubmit = () => {
-  if (prodPlan.value) {
-    visible.value = !visible.value;
-  } else {
-    toast.add({
-      severity: "error",
-      summary: "",
-      detail: "",
-      life: 3000,
-    });
-  }
-};
 </script>
