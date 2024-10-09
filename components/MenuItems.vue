@@ -1,5 +1,8 @@
 <template>
-  <div class="divUser text-center" @click="toggle">
+  <div
+    class="p-[1%] m-[0.5%] rounded-md cursor-pointer hover:bg-gray-200 text-center"
+    @click="toggle"
+  >
     <i
       class="pi pi-user text-azulIENM mt-[8%] text-[1.5rem] lg:text-[1.5rem] lg:mt-0"
     ></i>
@@ -41,15 +44,18 @@
       </template>
     </Menu>
   </div>
-  <div v-if="isLoading" class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20" >
-      <ProgressSpinner
-        style="width: 200px; height: 200px"
-        strokeWidth="8"
-        fill="transparent"
-        animationDuration=".10s"
-        aria-label="Custom ProgressSpinner"
-      />
-    </div>
+  <div
+    v-if="isLoading"
+    class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20"
+  >
+    <ProgressSpinner
+      style="width: 200px; height: 200px"
+      strokeWidth="8"
+      fill="transparent"
+      animationDuration=".10s"
+      aria-label="Custom ProgressSpinner"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>

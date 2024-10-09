@@ -1,6 +1,6 @@
 import { H3Event } from "h3";
 import { createTransport } from "nodemailer";
-import { useStylesEmail } from "~/assets/css/stylesEmail";
+import { useStylesEmail } from "~/composables/stylesEmail";
 
 export default defineEventHandler( async (event: H3Event) => {
 

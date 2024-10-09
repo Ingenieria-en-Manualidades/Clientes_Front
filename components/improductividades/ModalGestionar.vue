@@ -50,14 +50,14 @@
       <div class="flex justify-end gap-2 mt-2">
         <button
           type="button"
-          class="botones bg-red-500 hover:bg-red-600"
+          class="py-1 px-4 font-manrope-b text-white rounded-lg bg-red-500 hover:bg-red-600"
           @click="visible = false"
         >
           Cancelar
         </button>
         <button
           type="button"
-          class="botones bg-verdeOscIENM hover:bg-[#c37428]"
+          class="py-1 px-4 font-manrope-b text-white rounded-lg bg-verdeOscIENM hover:bg-[#c37428]"
           @click="agregar()"
         >
           Guardar

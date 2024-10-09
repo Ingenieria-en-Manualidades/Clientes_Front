@@ -1,36 +1,39 @@
-import { ref } from "vue";
 
 export const datosObjetivos = () => {
 
-  
-  return {
-
-  };
-}
-
-export const datosTablaIndicadores = () => {
-
-  const cabezasInd = ["Indicador", "Abril", "Junio"];
-  
-  const atribInd = ["indicador","mesUno","mesDos"];
-  
-  const dataInd = [
-    {
-      indicador: "Cumplimiento Productivo",
-      mesUno: "90%",
-      mesDos: "90%",
-    },
-    {
-      indicador: "Cumplimiento Plan Armado",
-      mesUno: "90%",
-      mesDos: "90%",
-    },
+  const meses = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
   ];
-
+  
+  const getFecha = (date: Date) => {
+    if (date.getMonth() + 1 > 0 && date.getMonth() + 1 < 10) {
+      if (date.getDate() > 0 && date.getDate() < 10) {
+        return `${date.getFullYear()}-0${date.getMonth() + 1}-0${date.getDate()}`;
+      } else {
+        return `${date.getFullYear()}-0${date.getMonth() + 1}-${date.getDate()}`;
+      }
+    } else {
+      if (date.getDate() > 0 && date.getDate() < 10) {
+        return `${date.getFullYear()}-${date.getMonth() + 1}-0${date.getDate()}`;
+      } else {
+        return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      }
+    }
+  };
+  
   return {
-    cabezasInd,
-    atribInd,
-    dataInd
+    getFecha
   };
 }
 

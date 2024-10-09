@@ -5,7 +5,11 @@
     @click="visible = true"
   >
     <i class="pi pi-eye text-white"></i>
-    <p class="tooltipModalPreview">ver remisión</p>
+    <p
+      class="absolute w-[110px] bg-[#28b67a] px-3 font-manrope-r rounded-lg left-[-35px] top-2 hidden transform group-hover:-translate-y-8 group-hover:block duration-200 after:block after:border-t-[5px] after:border-t-[#28b67a] after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent after:absolute after:left-12"
+    >
+      ver remisión
+    </p>
   </button>
   <div>
     <Dialog
@@ -51,20 +55,32 @@
               <tr
                 class="font-manrope-b text-center text-black text-sm sm:text-base"
               >
-                <th class="bg-gray-200 celdasModalP">Orden de compra</th>
-                <th class="bg-gray-200 celdasModalP">Hoja de entrada</th>
-                <th class="bg-gray-200 celdasModalP">Contacto</th>
+                <th class="bg-gray-200 py-1 px-8 text-xs sm:text-base">
+                  Orden de compra
+                </th>
+                <th class="bg-gray-200 py-1 px-8 text-xs sm:text-base">
+                  Hoja de entrada
+                </th>
+                <th class="bg-gray-200 py-1 px-8 text-xs sm:text-base">
+                  Contacto
+                </th>
               </tr>
               <tr
                 class="font-manrope-r text-center text-black text-sm sm:text-base"
               >
-                <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
+                <td
+                  class="py-1 px-8 text-xs sm:text-base hover:bg-gray-100 cursor-pointer"
+                >
                   {{ ordenCompra }}
                 </td>
-                <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
+                <td
+                  class="py-1 px-8 text-xs sm:text-base hover:bg-gray-100 cursor-pointer"
+                >
                   {{ hojaEntrada }}
                 </td>
-                <td class="celdasModalP hover:bg-gray-100 cursor-pointer">
+                <td
+                  class="py-1 px-8 text-xs sm:text-base hover:bg-gray-100 cursor-pointer"
+                >
                   {{ contacto }}
                 </td>
               </tr>
@@ -181,10 +197,16 @@
           <p class="ml-0 sm:ml-3 text-xs sm:text-base">{{ estado }}</p>
         </div>
         <div class="w-3/4 text-right mt-2">
-          <button class="botones bg-red-500 mr-3" @click="visible = false">
+          <button
+            class="py-1 px-4 font-manrope-b text-white rounded-lg bg-red-500 mr-3"
+            @click="visible = false"
+          >
             Cerrar
           </button>
-          <button class="botones bg-verdeOscIENM" @click="generarPDF">
+          <button
+            class="py-1 px-4 font-manrope-b text-white rounded-lg bg-verdeOscIENM"
+            @click="generarPDF"
+          >
             <i class="pi pi-file-pdf"></i>
             Generar PDF
           </button>

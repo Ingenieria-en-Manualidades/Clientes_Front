@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit">
-    <div class="labelsLogin mt-[7%]">
+    <div class="grid gap-2 w-3/4 ml-[12%] mt-[7%]">
       <label
         for="username"
         class="text-base md:text-lg lg:text-lg text-amarilloIENM font-manrope-r"
@@ -17,7 +17,7 @@
         @input="validarUsuario"
       />
     </div>
-    <div class="labelsLogin mt-[7%]">
+    <div class="grid gap-2 w-3/4 ml-[12%] mt-[7%]">
       <label
         class="text-base md:text-lg lg:text-lg text-amarilloIENM font-manrope-r"
         >Contraseña</label
@@ -37,15 +37,18 @@
       :disabled="boolError"
     />
   </form>
-  <div v-if="isLoading" class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20" >
-      <ProgressSpinner
-        style="width: 200px; height: 200px"
-        strokeWidth="8"
-        fill="transparent"
-        animationDuration=".5s"
-        aria-label="Custom ProgressSpinner"
-      />
-    </div>
+  <div
+    v-if="isLoading"
+    class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20"
+  >
+    <ProgressSpinner
+      style="width: 200px; height: 200px"
+      strokeWidth="8"
+      fill="transparent"
+      animationDuration=".5s"
+      aria-label="Custom ProgressSpinner"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -99,7 +102,6 @@ const handleSubmit = async () => {
     if (resultado.success) {
       await router.push("/remisiones");
       isLoading.value = false;
-
     } else {
       isLoading.value = false;
 

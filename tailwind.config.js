@@ -13,12 +13,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        'amarilloIENM': '#fbdc00',
-        'verdeIENM': '#f4b233',
-        'verdeOscIENM': '#c38e28',
-        'rojoIENM': '#c86a2b',
-        'azulClaroIENM': '#007cbb',
-        'azulIENM': '#0063a6',
+        amarilloIENM: '#fbdc00',
+        verdeIENM: '#f4b233',
+        verdeOscIENM: '#c38e28',
+        rojoIENM: '#c86a2b',
+        azulClaroIENM: '#007cbb',
+        azulIENM: '#0063a6',
         primary: 'rgb(var(--primary))',
         'primary-inverse': 'rgb(var(--primary-inverse))',
         'primary-hover': 'rgb(var(--primary-hover))',

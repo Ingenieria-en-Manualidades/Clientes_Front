@@ -4,61 +4,37 @@
 
 @font-face {
     font-family: "Manrope-Bold";
-    src: url(/assets/fonts/Manrope/Manrope-Bold.ttf);
+    src: url(../fonts/Manrope/Manrope-Bold.ttf);
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Manrope-ExtraBold";
-    src: url(/assets/fonts/Manrope/Manrope-ExtraBold.ttf);
+    src: url(../fonts/Manrope/Manrope-ExtraBold.ttf);
     font-style: normal;
 }
 
 @font-face {
     font-family: "Manrope-ExtraLight";
-    src: url(/assets/fonts/Manrope/Manrope-ExtraLight.ttf);
+    src: url(../fonts/Manrope/Manrope-ExtraLight.ttf);
     font-style: normal;
 }
 
 @font-face {
     font-family: "Manrope-Light";
-    src: url(/assets/fonts/Manrope/Manrope-Light.ttf);
+    src: url(../fonts/Manrope/Manrope-Light.ttf);
     font-style: normal;
 }
 
 @font-face {
     font-family: "Manrope-Regular";
-    src: url(/assets/fonts/Manrope/Manrope-Regular.ttf);
+    src: url(../fonts/Manrope/Manrope-Regular.ttf);
     font-style: normal;
 }
 
 @layer components{
-    .pBienvenidos{
-        @apply w-full text-center font-manrope-r text-3xl mb-[7%] mt-[2%] lg:text-5xl md:text-4xl text-white;
-    }
-    .labelsLogin{
-        @apply grid gap-2 w-3/4 ml-[12%];
-    }
-    .divUser{
-        @apply p-[1%] m-[0.5%] rounded-md cursor-pointer hover:bg-gray-200;
-    }
-    .botones{
-        @apply py-1 px-4 font-manrope-b text-white rounded-lg;
-    }
-    .botonUpdate{
-        @apply bg-verdeIENM text-black w-full font-manrope-r hover:text-white hover:bg-verdeOscIENM rounded-md p-2 tracking-widest mb-5;
-    }
-    .celdasModalP{
-        @apply py-1 px-8 text-xs sm:text-base;
-    }
     .sideBar{
-        @apply fixed h-full min-[1300px]:h-[81.7%] w-[270px] max-[760px]:w-full top-0 left-0 min-[1300px]:top-[102px] min-[1300px]:left-3 bg-[#4789c8] rounded-r-lg max-[760px]:rounded-none min-[1300px]:rounded-lg px-3 duration-200 z-10;
-    }
-    .tooltipBell{
-        @apply fixed font-manrope-r text-sm px-3 pb-1 rounded-lg top-7 right-[70px] bg-[#28b67a] transform translate-y-0 hidden duration-300 group-hover:translate-y-9 group-hover:block after:block after:border-b-[7px] after:border-b-[#28b67a] after:border-l-[7px] after:border-l-transparent after:border-r-[7px] after:border-r-transparent after:absolute after:top-[-7px] after:left-[77px];
-    }
-    .tooltipModalPreview{
-        @apply absolute w-[110px] bg-[#28b67a] px-3 font-manrope-r rounded-lg left-[-35px] top-2 hidden transform group-hover:-translate-y-8 group-hover:block duration-200 after:block after:border-t-[5px] after:border-t-[#28b67a] after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent after:absolute after:left-12;
+        @apply fixed h-full w-[270px] max-[760px]:w-full top-0 left-0 min-[1300px]:top-[102px] min-[1300px]:left-3 bg-[#4789c8] rounded-r-lg max-[760px]:rounded-none min-[1300px]:rounded-lg px-3 duration-200 z-10;
     }
 }

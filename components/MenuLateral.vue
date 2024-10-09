@@ -11,7 +11,12 @@
     ></i>
   </button>
   <!-- La clase "sideBar" se encuentra en el archivo "/assets/css/main.css" -->
-  <div :class="['sideBar', isOpen ? 'translate-x-0' : '-translate-x-[105%]']">
+  <div
+    :class="[
+      'sideBar min-[1300px]:h-[81.7%]',
+      isOpen ? 'translate-x-0' : '-translate-x-[105%]',
+    ]"
+  >
     <div class="flex justify-end pt-1 min-[1300px]:hidden">
       <button
         type="button"
