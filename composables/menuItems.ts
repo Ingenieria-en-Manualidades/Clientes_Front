@@ -34,6 +34,7 @@ export const useModulos = () => {
     visible: false,
     permission: 'view_improductividades'
   },
+  
   {
     icono: "pi pi-bullseye",
     nombre: "Objetivos",

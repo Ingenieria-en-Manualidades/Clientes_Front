@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Para navegadores basados en WebKit (como Chrome, Safari) */
+::-webkit-scrollbar {
+    display: none; /* Oculta la barra de desplazamiento */
+  }
+  
+  /* Para Firefox */
+  * {
+    scrollbar-width: none; /* Oculta la barra de desplazamiento */
+  }
+  
+  /* Mantener el desplazamiento funcional */
+  .scroll-container {
+    -ms-overflow-style: none; /* Para Internet Explorer y Edge */
+    overflow: auto; /* Mantener funcionalidad de scroll */
+  }
+
+
 @font-face {
     font-family: "Manrope-Bold";
     src: url(/assets/fonts/Manrope/Manrope-Bold.ttf);
