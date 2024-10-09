@@ -28,7 +28,7 @@
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime";
 //Método para que no tenga la plantilla HTML por defecto
 definePageMeta({
-  layout: "login",
+  layout: false,
   middleware: "logueado",
   skipGlobalMiddleware: true,
 });
