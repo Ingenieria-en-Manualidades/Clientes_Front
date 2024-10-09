@@ -115,7 +115,7 @@ const actualizar = async () => {
 };
 
 definePageMeta({
-  layout: "login",
+  layout: false,
   middleware: "mid-actualizar-pass",
   skipGlobalMiddleware: true,
 });

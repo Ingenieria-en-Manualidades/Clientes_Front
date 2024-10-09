@@ -27,9 +27,9 @@
       </button>
     </div>
     <div
-      class="flex justify-start max-[760px]:justify-center overflow-hidden overflow-y-scroll h-full min-[1300px]:h-[90%] min-[1300px]:mt-10"
-    >
-      <Tabs>
+  class="flex justify-start max-[760px]:justify-center overflow-hidden overflow-y-scroll h-full min-[1300px]:h-[90%] min-[1300px]:mt-10 scroll-container"
+>
+  <Tabs>
         <TabList>
           <Tab
             v-for="modulo in modulos"

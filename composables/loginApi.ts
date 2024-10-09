@@ -39,7 +39,7 @@ export const loginApi = () => {
       let permisos = [];
 
       for (const p of response.permissions) {
-        permisos.push(p.name);
+          permisos.push(p.name);
       }
       
       //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
