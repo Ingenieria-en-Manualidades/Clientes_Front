@@ -18,11 +18,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     console.log('Resultado de verificación:', resultado);
     
     // Redirect logic based on authentication status
-    if (!resultado && to.path !== "/") {
-        return navigateTo("/"); // Redirect to login if not authenticated
-    }
-
-    if (resultado && to.path === "/") {
-        return navigateTo("/remisiones"); // Redirect to authorized page if authenticated
+    if (!resultado && to.path !== "/login") {
+        return navigateTo("/login"); // Redirect to login if not authenticated
     }
 });
