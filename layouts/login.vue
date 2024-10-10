@@ -1,6 +1,6 @@
 <template>
   <div>
-    <formLogin />
+    <slot />
   </div>
 </template>
 
