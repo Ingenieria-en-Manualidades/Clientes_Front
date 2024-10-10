@@ -1,19 +1,12 @@
-import { useValidaciones } from "../composables/login/validaciones";
+import { useValidaciones } from "~/composables/login/validaciones";
 import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-
-    if (to.meta.skipGlobalMiddleware) {
-        return;
-    }
-
     const { verificarLogin } = useValidaciones();
 
     const resultado = await verificarLogin();
-    
+
     if (!resultado) {
-        if (to.path !== "/login") {
-            return navigateTo("/login");
-        }
+        return navigateTo("/login");
     }
 })
