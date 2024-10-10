@@ -98,7 +98,7 @@ const cerrarSesion = async () => {
 
   // Revisamos si el cerrar sesión funciono.
   if (response.success) {
-    await router.push("/login");
+    await router.push("/");
     isLoading.value = false;
   } else {
     isLoading.value = false;

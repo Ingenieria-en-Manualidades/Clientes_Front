@@ -9,6 +9,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const resultado = await verificarToken(tokenPassword);
 
     if (!resultado?.status) {
-        return navigateTo("/login");
+        return navigateTo("/");
     }
 })

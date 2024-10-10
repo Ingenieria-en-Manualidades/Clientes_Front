@@ -97,7 +97,7 @@ const actualizar = async () => {
         });
 
         if (resultado.status !== "error") {
-          return navigateTo("/login");
+          return navigateTo("/");
         }
         password.value = null;
       } else {
