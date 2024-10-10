@@ -12,8 +12,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const resultado = await verificarLogin();
     
     if (!resultado) {
-        if (to.path !== "/login") {
-            return navigateTo("/login");
-        }
+            return navigateTo("/");
     }
 })

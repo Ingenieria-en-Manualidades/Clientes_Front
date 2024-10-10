@@ -24,13 +24,9 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useCookie } from "nuxt/app";
-import logueado from "../middleware/logueado";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime";
 
 const isOpen = ref(true);
 const usuario = useCookie("usuario");
 
-definePageMeta({
-  middleware: "logueado"
-});
 </script>

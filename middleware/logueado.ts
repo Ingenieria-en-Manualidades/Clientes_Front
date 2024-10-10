@@ -11,6 +11,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const resultado = await verificarLogin();
 
     if (resultado) {
-        return navigateTo("/");
+        return navigateTo("/remisiones");
     }
 })
