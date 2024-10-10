@@ -4,8 +4,8 @@
 
 /* Para navegadores basados en WebKit (como Chrome, Safari) */
 ::-webkit-scrollbar {
-=======
 ::-webkit-scrollbar {
+=======
 >>>>>>> 9a5c549... fix-scroll-hidden
     display: none; /* Oculta la barra de desplazamiento */
   }
