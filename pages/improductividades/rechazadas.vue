@@ -59,7 +59,10 @@
         aria-label="Custom ProgressSpinner"
       />
     </div>
-    <div class="p-10 rounded-t-lg text-center" v-else-if="estadoRemisiones">
+    <div
+      class="p-10 rounded-t-lg text-center"
+      v-else-if="estadoImproductividades"
+    >
       <i :class="avisoIcono"></i>
       <p class="font-manrope-b text-xl mt-3">
         {{ avisodetalles }}
@@ -99,7 +102,7 @@ let avisodetalles = ref();
 const isLoading = ref(false);
 const calendario = ref(true);
 const botonRecargar = ref(false);
-const estadoRemisiones = ref(false);
+const estadoImproductividades = ref(false);
 const data = ref<Improductividad[]>([]);
 const { setConsultar } = useDatosImproductividades();
 const { listarImproductividades } = useImproductividadesAPI();
@@ -114,12 +117,12 @@ const listar = async () => {
     data.value = response.data?.filter((rem) => rem.estado === "Rechazado");
 
     if (data.value.length === 0) {
-      estadoRemisiones.value = true;
+      estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-check-circle text-5xl";
-      avisodetalles.value = "Sin remisiones pendientes";
+      avisodetalles.value = "Sin improductividades pendientes";
     }
   } else {
-    estadoRemisiones.value = true;
+    estadoImproductividades.value = true;
     avisoIcono.value = "pi pi-times-circle text-5xl";
     avisodetalles.value = "Fallo a la hora de cargar";
   }
@@ -137,9 +140,10 @@ const consultarRemisiones = async () => {
   } else {
     data.value = await setConsultar(data.value, dates.value);
     if (data.value.length === 0) {
-      estadoRemisiones.value = true;
+      estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
-      avisodetalles.value = "No se encontro ninguna remisión entre esas fechas";
+      avisodetalles.value =
+        "No se encontro ninguna improductividad entre esas fechas";
       botonRecargar.value = true;
     }
     calendario.value = false;

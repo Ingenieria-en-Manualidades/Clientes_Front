@@ -16,7 +16,7 @@
           iconDisplay="input"
         />
         <button
-          @click="consultarRemisiones"
+          @click="consultarImproductividades"
           class="bg-azulClaroIENM ml-2 p-[11px] rounded"
         >
           <i class="pi pi-search text-white"></i>
@@ -64,7 +64,10 @@
         aria-label="Custom ProgressSpinner"
       />
     </div>
-    <div class="p-10 rounded-t-lg text-center" v-else-if="estadoRemisiones">
+    <div
+      class="p-10 rounded-t-lg text-center"
+      v-else-if="estadoImproductividades"
+    >
       <i :class="avisoIcono"></i>
       <p class="font-manrope-b text-xl mt-3">
         {{ avisodetalles }}
@@ -104,8 +107,8 @@ let avisodetalles = ref();
 const isLoading = ref(false);
 const calendario = ref(true);
 const botonRecargar = ref(false);
-const estadoRemisiones = ref(false);
-const data = ref<Improductividad[]>([]);
+const estadoImproductividades = ref(false);
+const data = ref<Improductividad[] | undefined>([]);
 const { setConsultar } = useDatosImproductividades();
 const { listarImproductividades } = useImproductividadesAPI();
 
@@ -119,19 +122,19 @@ const listar = async () => {
     data.value = response.data?.filter((rem) => rem.estado === null);
 
     if (data.value.length === 0) {
-      estadoRemisiones.value = true;
+      estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-check-circle text-5xl";
-      avisodetalles.value = "Sin remisiones pendientes";
+      avisodetalles.value = "Sin improductividades pendientes";
     }
   } else {
-    estadoRemisiones.value = true;
+    estadoImproductividades.value = true;
     avisoIcono.value = "pi pi-times-circle text-5xl";
     avisodetalles.value = "Fallo a la hora de cargar";
   }
   isLoading.value = false;
 };
 
-const consultarRemisiones = async () => {
+const consultarImproductividades = async () => {
   if (!dates.value) {
     toast.add({
       severity: "error",
@@ -142,9 +145,10 @@ const consultarRemisiones = async () => {
   } else {
     data.value = await setConsultar(data.value, dates.value);
     if (data.value.length === 0) {
-      estadoRemisiones.value = true;
+      estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
-      avisodetalles.value = "No se encontro ninguna remisión entre esas fechas";
+      avisodetalles.value =
+        "No se encontro ninguna improductividad entre esas fechas";
       botonRecargar.value = true;
     }
     calendario.value = false;

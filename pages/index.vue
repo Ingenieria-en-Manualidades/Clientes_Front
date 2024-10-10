@@ -17,7 +17,11 @@
       <div
         class="bg-gradient-to-r from-azulIENM to-azulClaroIENM lg:w-1/2 p-[3%] rounded lg:rounded-r-lg"
       >
-        <p class="pBienvenidos">Bienvenido</p>
+        <p
+          class="w-full text-center font-manrope-r text-3xl mb-[7%] mt-[2%] lg:text-5xl md:text-4xl text-white"
+        >
+          Bienvenido
+        </p>
         <LoginForm />
       </div>
     </div>
