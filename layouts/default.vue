@@ -31,6 +31,6 @@ const isOpen = ref(true);
 const usuario = useCookie("usuario");
 
 definePageMeta({
-  middleware: 'logueado',
+  middleware: "logueado"
 });
 </script>
