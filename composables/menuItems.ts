@@ -7,12 +7,12 @@ export const useModulos = () => {
   const userPermissions = useCookie("permissions");
 
   const modulos = ref([
-  // {
-  //   icono: "pi pi-home",
-  //   nombre: "Inicio",
-  //   ruta: "",
-  //   visible: true,
-  // },
+  {
+    icono: "pi pi-home",
+    nombre: "Inicio",
+    ruta: "/",
+    visible: true,
+  },
   {
     icono: "pi pi-bell",
     nombre: "Remisiones",

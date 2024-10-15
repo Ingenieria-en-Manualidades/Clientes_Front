@@ -89,7 +89,8 @@ export const useValidaciones = () => {
             Authorization: `Bearer ${token.value}`,
             },
         });
-
+        
+        
         if (!response.ok) {
           console.error(`Error en la respuesta del servidor: ${response.status}`);
           return false;
@@ -98,6 +99,7 @@ export const useValidaciones = () => {
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
           const resultado = await response.json();
+          console.log(resultado);
           return resultado.success;
         } else {
           return false;
