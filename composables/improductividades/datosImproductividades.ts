@@ -80,7 +80,8 @@ export const cols = ref([
   "fecha de ingreso",
   "horas",
   "minutos",
-  "estandar por persona"
+  "cantidad de personas",
+  "improductividades hora hombre"
 ]);
 
 export const atributos = ref([
@@ -91,5 +92,6 @@ export const atributos = ref([
   "fecha_ingreso",
   "horas",
   "minutos",
+  "cant_personas",
   "horasxpersonas"
 ]);

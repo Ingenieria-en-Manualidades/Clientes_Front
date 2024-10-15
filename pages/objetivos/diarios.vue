@@ -9,8 +9,8 @@
     <div class="w-full flex justify-center p-1 gap-2">
       <FormProduccion :visible="visible" @setVisible="visible = !visible" />
       <FormIndicadores :visible="visible" @setVisible="visible = !visible" />
-      <fieldset class="border-[1px] border-black rounded p-2">
-        <legend>Meses Anteriores</legend>
+      <fieldset class="border-[1px] border-black rounded p-2 font-manrope-r">
+        <legend class="font-manrope-b">Meses Anteriores</legend>
         <Calendar
           v-model="dates"
           selectionMode="range"
@@ -68,10 +68,12 @@ import FormIndicadores from "../../components/objetivos/FormIndicadores.vue";
 import {
   datosTablaProd,
   datosTablaArmado,
+  datosObjetivos,
 } from "../../composables/objetivos/datosObjetivos";
 
 const dates = ref();
 const toast = useToast();
+const { meses } = datosObjetivos();
 const { cabezasArm, atribArm, dataArm } = datosTablaArmado();
 const { cabezasProd, atribProd, dataProd } = datosTablaProd();
 

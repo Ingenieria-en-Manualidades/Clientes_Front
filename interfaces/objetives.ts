@@ -23,14 +23,14 @@ export interface Objetives {
   }
 
   export interface Produccion {
-    fecha_produccion: Date,
-    planificada: number,
+    fecha_produccion: Date | null | undefined,
+    planificada: number | null,
     modificada: number | null,
     plan_armado: number | null,
     calidad: number | null,
     desperfecto_me: number | null,
     desperfecto_pp: number | null,
-    tablero_id: number,
+    tablero_id: number | null,
   }
 
   export interface ApiPromise<T> {

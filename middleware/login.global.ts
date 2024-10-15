@@ -10,10 +10,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const { verificarLogin } = useValidaciones();
 
     const resultado = await verificarLogin();
+    console.log("resultado mid: ", resultado);
     
     if (!resultado) {
-        if (to.path !== "/login") {
-            return navigateTo("/login");
+        if (to.path !== "/") {
+            return navigateTo("/");
         }
+        // return navigateTo("/");
     }
 })

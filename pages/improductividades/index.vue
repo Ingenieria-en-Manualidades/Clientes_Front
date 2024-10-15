@@ -1,9 +1,9 @@
 <template>
-  <div class="w-full md:w-[90%]">
+  <div class="w-full md:w-[95%]">
     <title>Improductividades</title>
     <TabPanelRemisiones :items="items" />
-    <div v-if="data?.length !== 0" class="px-3">
-      <div v-if="calendario" class="">
+    <div v-if="data?.length !== 0">
+      <div v-if="calendario">
         <Calendar
           v-model="dates"
           selectionMode="range"
@@ -121,6 +121,7 @@ const listar = async () => {
   if (response.success) {
     data.value = response.data?.filter((rem) => rem.estado === null);
 
+    console.log("data improductividad: ", data.value);
     if (data.value.length === 0) {
       estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-check-circle text-5xl";

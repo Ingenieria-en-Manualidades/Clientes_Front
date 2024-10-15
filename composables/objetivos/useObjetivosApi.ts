@@ -102,10 +102,36 @@ export const useObjetivosApi = () => {
     }
   }
 
+  const updateProduccion = async (objProduccion: Produccion): Promise<ApiPromise<any>> => {
+    try {
+      const response = await fetch(`${url}api/actualizarProduccion`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(objProduccion),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {success: data.success, data: data.message};
+      } else {
+        console.log("response: ", response);        
+        console.error("Error a la hora de actualizar la producción: ", data.message);
+        return { success: false, error: data.message || 'Error a la hora de actualizar la "Producción"' }
+      }
+    } catch (error) {
+      console.error("Error de catch en la inserción 'Producción': ", error);
+      return { success: false, error: data.messagge }
+    }
+  }
+
   return {
     createObjetives,
     createCalidad,
     createAccidente,
-    createProduccion
+    createProduccion,
+    updateProduccion
   };
 };

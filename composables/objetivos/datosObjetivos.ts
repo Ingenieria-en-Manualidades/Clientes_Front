@@ -1,5 +1,17 @@
+import { Produccion } from "../../interfaces/objetives";
 
 export const datosObjetivos = () => {
+
+  const objProduccion: Produccion = {
+    fecha_produccion: null,
+    planificada: null,
+    modificada: null,
+    plan_armado: null,
+    calidad: null,
+    desperfecto_me: null,
+    desperfecto_pp: null,
+    tablero_id: null,
+  };
 
   const meses = [
     "Enero",
@@ -33,7 +45,9 @@ export const datosObjetivos = () => {
   };
   
   return {
-    getFecha
+    getFecha,
+    meses,
+    objProduccion
   };
 }
 

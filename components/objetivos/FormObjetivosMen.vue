@@ -114,7 +114,7 @@ const submitForm = async () => {
     calidad: calidad.value,
     desperdicioME: desperdicioME.value,
     desperdicioPP: desperdicioPP.value,
-    tablero_id: 1,
+    tablero_id: 2,
   };
   // return true;
   const response = await createObjetives(objetivosData);

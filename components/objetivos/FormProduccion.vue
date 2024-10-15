@@ -13,41 +13,55 @@
       />
       <input
         type="text"
+        :disabled="!visible"
         v-model="prodPlan"
-        class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+        :class="[
+          'w-full border-[1px] rounded-md outline-none py-1 pl-2 mb-1',
+          visible ? 'border-black' : 'bg-gray-300 border-gray-500',
+        ]"
       />
       <p class="text-red-500 text-xs my-1">{{ errorProd }}</p>
       <button
-        @click="handleSubmit"
-        class="w-full bg-azulClaroIENM py-1 rounded-md border-[1px] border-azulClaroIENM text-white font-manrope-b mb-5"
         type="button"
+        :disabled="!visible"
+        @click="submitPlanificada"
+        :class="[
+          'w-full py-1 rounded-md border-[1px] text-white font-manrope-b mb-5',
+          visible
+            ? 'bg-azulClaroIENM border-azulClaroIENM'
+            : 'bg-blue-400 border-blue-400',
+        ]"
       >
         INGRESAR
       </button>
-      <p class="mb-1">Producción Modificada:</p>
+      <p>Producción Modificada:</p>
+      <p class="mb-1 text-xs">* Elegir una fecha anterior</p>
       <input
         type="date"
-        :readonly="visible"
+        :disabled="visibleMod"
+        v-model="fechaMod"
         class="w-full border-[1px] border-black outline-none rounded mb-1"
       />
       <input
         type="text"
-        :readonly="visible"
+        :disabled="visibleMod"
         v-model="prodMod"
         :class="[
           'w-full border-[1px] rounded-md outline-none py-1 pl-2 mb-1',
-          visible ? 'bg-gray-300 border-gray-500' : 'border-black',
+          visibleMod ? 'bg-gray-300 border-gray-500' : 'border-black',
         ]"
       />
+      <p class="text-red-500 text-xs my-1">{{ errorMod }}</p>
       <button
-        :disabled="visible"
+        type="button"
+        :disabled="visibleMod"
+        @click="submitModificada()"
         :class="[
           'w-full py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base',
-          visible
+          visibleMod
             ? 'bg-blue-400 border-blue-400'
             : 'bg-azulClaroIENM border-azulClaroIENM',
         ]"
-        type="button"
       >
         INGRESAR
       </button>
@@ -65,35 +79,32 @@ import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 const prodMod = ref();
 const prodPlan = ref();
 const date = new Date();
+const visibleMod = ref(true);
+const fechaMod = ref<Date | null>();
+const errorMod = ref<null | string>();
 const errorProd = ref<null | string>();
 
 const toast = useToast();
-const { getFecha } = datosObjetivos();
-const { createProduccion } = useObjetivosApi();
+const { objProduccion, getFecha } = datosObjetivos();
+const { createProduccion, updateProduccion } = useObjetivosApi();
 
 const props = defineProps({
   visible: Boolean,
 });
 const emit = defineEmits(["setVisible"]);
 
-const handleSubmit = async () => {
-  const objProduccion: Produccion = {
-    fecha_produccion: date,
-    planificada: Number(prodPlan.value),
-    modificada: null,
-    plan_armado: null,
-    calidad: null,
-    desperfecto_me: null,
-    desperfecto_pp: null,
-    tablero_id: 2,
-  };
-
+const submitPlanificada = async () => {
   if (prodPlan.value) {
+    limpiarObjeto();
+    objProduccion.tablero_id = 2;
+    objProduccion.fecha_produccion = date;
+    objProduccion.planificada = Number(prodPlan.value);
+
     const resultado = await createProduccion(objProduccion);
 
     if (resultado.success) {
-      prodPlan.value = "";
       emit("setVisible");
+      visibleMod.value = false;
       showMessage("success", "Guardado correctamente.", resultado.data);
       errorProd.value = null;
     } else {
@@ -101,6 +112,32 @@ const handleSubmit = async () => {
     }
   } else {
     errorProd.value = "Este campo es obligatorio.";
+    showMessage("error", "Campos vacíos.", "Por favor llenar los campos.");
+  }
+};
+
+const submitModificada = async () => {
+  if (prodMod.value && fechaMod.value) {
+    limpiarObjeto();
+    objProduccion.tablero_id = 2;
+    objProduccion.modificada = prodMod.value;
+    objProduccion.fecha_produccion = fechaMod.value;
+
+    const resultado = await updateProduccion(objProduccion);
+
+    if (resultado.success) {
+      errorMod.value = null;
+      visibleMod.value = true;
+      showMessage("success", "Guardado correctamente.", resultado.data);
+    } else {
+      showMessage("error", "Error al guardar.", resultado.error);
+    }
+  } else {
+    if (prodMod.value) {
+      errorMod.value = "El campo de fecha es obligatorio.";
+    } else {
+      errorMod.value = "Este campo de es obligatorio.";
+    }
     showMessage("error", "Campos vacíos.", "Por favor llenar los campos.");
   }
 };
@@ -116,5 +153,16 @@ const showMessage = (
     detail: detalles,
     life: 3000,
   });
+};
+
+const limpiarObjeto = () => {
+  objProduccion.fecha_produccion = null;
+  objProduccion.planificada = null;
+  objProduccion.modificada = null;
+  objProduccion.plan_armado = null;
+  objProduccion.calidad = null;
+  objProduccion.desperfecto_me = null;
+  objProduccion.desperfecto_pp = null;
+  objProduccion.tablero_id = null;
 };
 </script>
