@@ -1,8 +1,6 @@
 <template>
-<<<<<<< HEAD
    <div class="w-[100%] md:w-[850px]">
     <title>Inicio</title>
-=======
   <title>Bienvenido a IENM</title>
   <div class="flex justify-center items-center mt-20">
     <div class="border-2 rounded-lg shadow w-[70%] md:w-[65%] lg:inline-flex">
@@ -28,15 +26,11 @@
         </p>
         <LoginForm />
       </div>
->>>>>>> dd381bc... pequeñas mejoras de estilos.
     </div>
 </template>
 
 <script lang="ts" setup>
-<<<<<<< HEAD
-=======
 import logueado from "../middleware/logueado";
->>>>>>> parent of 0d8c28f... buf-fix
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime";
 //Método para que no tenga la plantilla HTML por defecto
 definePageMeta({
