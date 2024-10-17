@@ -1,6 +1,6 @@
 import { Produccion } from "../../interfaces/objetives";
 
-export const datosObjetivos = () => {
+export const datosObjetivos = () => { 
 
   const objProduccion: Produccion = {
     fecha_produccion: null,

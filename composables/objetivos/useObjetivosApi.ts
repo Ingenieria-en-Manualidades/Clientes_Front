@@ -1,10 +1,11 @@
 import { useCookie, useRuntimeConfig } from 'nuxt/app';
 import { Objetives, Calidad, Accidente, ApiPromise, Produccion } from '../../interfaces/objetives';
-import { data } from 'autoprefixer';
+import autoprefixer from 'autoprefixer'; 
 
 export const useObjetivosApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
+  const { data } = autoprefixer;
 
   const createObjetives = async (objetivosData: Objetives): Promise<ApiPromise<any>> => {
     try {
