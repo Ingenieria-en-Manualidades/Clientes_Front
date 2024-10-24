@@ -40,6 +40,8 @@
         type="date"
         :disabled="visibleMod"
         v-model="fechaMod"
+        :max="getFechaMaxMin(true)"
+        :min="getFechaMaxMin(false)"
         class="w-full border-[1px] border-black outline-none rounded mb-1"
       />
       <input
@@ -71,22 +73,24 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
-import type { Produccion } from "../../interfaces/objetives";
 import { datosObjetivos } from "../../composables/objetivos/datosObjetivos";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
 const prodMod = ref();
 const prodPlan = ref();
 const date = new Date();
-const visibleMod = ref(true);
+const visibleMod = ref(false);
 const fechaMod = ref<Date | null>();
 const errorMod = ref<null | string>();
 const errorProd = ref<null | string>();
+const idCliente = useCookie("idCliente");
 
 const toast = useToast();
-const { objProduccion, getFecha } = datosObjetivos();
-const { createProduccion, updateProduccion } = useObjetivosApi();
+const { objObjetivo, objObjetivoUpd, getFecha, getFechaMaxMin } =
+  datosObjetivos();
+const { createObjetivos, updateObjetivos } = useObjetivosApi();
 
 const props = defineProps({
   visible: Boolean,
@@ -95,12 +99,10 @@ const emit = defineEmits(["setVisible"]);
 
 const submitPlanificada = async () => {
   if (prodPlan.value) {
-    limpiarObjeto();
-    objProduccion.tablero_id = 2;
-    objProduccion.fecha_produccion = date;
-    objProduccion.planificada = Number(prodPlan.value);
+    objObjetivo.tablero_sae_id = 1;
+    objObjetivo.planificada = Number(prodPlan.value);
 
-    const resultado = await createProduccion(objProduccion);
+    const resultado = await createObjetivos(objObjetivo);
 
     if (resultado.success) {
       emit("setVisible");
@@ -119,11 +121,11 @@ const submitPlanificada = async () => {
 const submitModificada = async () => {
   if (prodMod.value && fechaMod.value) {
     limpiarObjeto();
-    objProduccion.tablero_id = 2;
-    objProduccion.modificada = prodMod.value;
-    objProduccion.fecha_produccion = fechaMod.value;
+    objObjetivoUpd.cliente_id = Number(idCliente.value);
+    objObjetivoUpd.fecha = fechaMod.value;
+    objObjetivoUpd.modificada = prodMod.value;
 
-    const resultado = await updateProduccion(objProduccion);
+    const resultado = await updateObjetivos(objObjetivoUpd);
 
     if (resultado.success) {
       errorMod.value = null;
@@ -156,13 +158,11 @@ const showMessage = (
 };
 
 const limpiarObjeto = () => {
-  objProduccion.fecha_produccion = null;
-  objProduccion.planificada = null;
-  objProduccion.modificada = null;
-  objProduccion.plan_armado = null;
-  objProduccion.calidad = null;
-  objProduccion.desperfecto_me = null;
-  objProduccion.desperfecto_pp = null;
-  objProduccion.tablero_id = null;
+  objObjetivoUpd.planificada = null;
+  objObjetivoUpd.modificada = null;
+  objObjetivoUpd.plan_armado = null;
+  objObjetivoUpd.calidad = null;
+  objObjetivoUpd.desperfecto_me = null;
+  objObjetivoUpd.desperfecto_pp = null;
 };
 </script>

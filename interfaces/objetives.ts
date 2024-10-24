@@ -1,37 +1,44 @@
-export interface Objetives {
-    cumplimiento: string;
-    eficienciaProductiva: string;
-    calidad: string;
-    desperdicioME: string;
-    desperdicioPP: string;
-    tablero_id: number,
+export interface Meta {
+    cumplimiento: number;
+    eficienciaProductiva: number;
+    calidad: number;
+    desperdicioME: number;
+    desperdicioPP: number;
+    cliente_endpoint_id: string | null | undefined;
   }
 
   export interface Calidad {
-    checklist_mes: string,
-    checklist_calificacion: number,
-    inspeccion_mes: string,
-    inspeccion_calificacion: number,
-    tablero_id: number,
+    checklist: number,
+    inspeccion: number,
+    meta_id: number,
   }
 
   export interface Accidente {
     tipo_accidente: string,
     cantidad: number,
-    fecha_ingreso: Date,
-    tablero_id: number,
+    objetivos_id: number,
   }
 
-  export interface Produccion {
-    fecha_produccion: Date | null | undefined,
+  export interface Objetivos {
     planificada: number | null,
     modificada: number | null,
     plan_armado: number | null,
     calidad: number | null,
     desperfecto_me: number | null,
     desperfecto_pp: number | null,
-    tablero_id: number | null,
+    tablero_sae_id: number | null,
   }
+
+  export interface ObjetivosUpdate {
+    fecha: Date | null | undefined,
+    cliente_id: number | null,
+    planificada: number | null,
+    modificada: number | null,
+    plan_armado: number | null,
+    calidad: number | null,
+    desperfecto_me: number | null,
+    desperfecto_pp: number | null,
+  }s
 
   export interface ApiPromise<T> {
     success: boolean;

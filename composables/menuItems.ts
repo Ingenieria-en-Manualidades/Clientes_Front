@@ -57,13 +57,13 @@ export const useModulos = () => {
       }
     ]
   },
-  {
-    icono: "pi pi-exclamation-triangle",
-    nombre: "Accidentes",
-    ruta: "/accidentes",
-    visible: false,
-    permission: 'view_accidentes'
-  }
+  // {
+  //   icono: "pi pi-exclamation-triangle",
+  //   nombre: "Accidentes",
+  //   ruta: "/accidentes",
+  //   visible: false,
+  //   permission: 'view_accidentes'
+  // }
 ]);
   const verificarPermisos = () => {
     modulos.value.forEach(modulo => {

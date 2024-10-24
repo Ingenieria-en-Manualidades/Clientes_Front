@@ -61,6 +61,7 @@ import { useToast } from "primevue/usetoast";
 const pasos = ref(["pi pi-user", "pi pi-star"]);
 const pasoActual = ref(0);
 const toast = useToast();
+let metaID: number;
 
 // Función para avanzar de paso
 const pasoSig = () => {
@@ -90,15 +91,17 @@ const submitAndProceed = async () => {
   if (pasoActual.value === 0 && formObjetivos.value) {
     // Validar el formulario del paso 1
     const isFormValid = await formObjetivos.value.submitForm();
+    metaID = isFormValid.metaID;
+    console.log("METAID ISFORMVALID: ", isFormValid.metaID);
 
-    if (isFormValid) {
+    if (isFormValid.success) {
       console.log("Formulario válido, procede al siguiente paso");
       pasoSig(); // Avanzar al siguiente paso si es válido
     } else {
       console.log("Errores en el formulario, no puedes avanzar");
     }
   } else if (pasoActual.value === 1 && formCalidad.value) {
-    const isFormCalValid = await formCalidad.value.submitForm();
+    const isFormCalValid = await formCalidad.value.submitForm(metaID);
 
     if (isFormCalValid) {
       toast.add({

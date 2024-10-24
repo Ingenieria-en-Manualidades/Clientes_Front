@@ -12,6 +12,8 @@
           type="date"
           :readonly="visible"
           v-model="fecha"
+          :max="getFechaMaxMin(true)"
+          :min="getFechaMaxMin(false)"
           class="w-full border-[1px] border-black outline-none rounded mb-1"
         />
         <div class="mb-2">
@@ -96,11 +98,11 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import { datosObjetivos } from "../../composables/objetivos/datosObjetivos";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
-let error = true;
 const fecha = ref();
 const calidad = ref();
 const planArmado = ref();
@@ -108,6 +110,7 @@ const toast = useToast();
 const desperfectosME = ref();
 const desperfectosPP = ref();
 const visibilidad = ref(false);
+const idCliente = useCookie("idCliente");
 const errors = ref({
   fecha: false,
   calidad: false,
@@ -116,8 +119,8 @@ const errors = ref({
   desperfectosPP: false,
 });
 
-const { objProduccion } = datosObjetivos();
-const { updateProduccion } = useObjetivosApi();
+const { objObjetivoUpd, getFechaMaxMin } = datosObjetivos();
+const { updateObjetivos } = useObjetivosApi();
 
 const props = defineProps({
   visible: Boolean,
@@ -140,21 +143,18 @@ const submit = async () => {
   if (!desperfectosME.value) errors.value.desperfectosME = true;
   if (!desperfectosPP.value) errors.value.desperfectosPP = true;
 
-  for (const key in errors.value) {
-    if (errors.value[key]) {
-      error = false;
-    }
-  }
+  const noErrors = !Object.values(errors.value).includes(true);
 
-  if (error) {
+  if (noErrors) {
     limpiarObjeto();
-    objProduccion.calidad = calidad.value;
-    objProduccion.fecha_produccion = fecha.value;
-    objProduccion.plan_armado = planArmado.value;
-    objProduccion.desperfecto_me = desperfectosME.value;
-    objProduccion.desperfecto_pp = desperfectosPP.value;
+    objObjetivoUpd.fecha = fecha.value;
+    objObjetivoUpd.calidad = calidad.value;
+    objObjetivoUpd.plan_armado = planArmado.value;
+    objObjetivoUpd.cliente_id = Number(idCliente.value);
+    objObjetivoUpd.desperfecto_me = desperfectosME.value;
+    objObjetivoUpd.desperfecto_pp = desperfectosPP.value;
 
-    const resultado = await updateProduccion(objProduccion);
+    const resultado = await updateObjetivos(objObjetivoUpd);
 
     if (resultado.success) {
       //Reiniciar los errores
@@ -176,7 +176,6 @@ const submit = async () => {
       showMessage("error", "Error al guardar.", resultado.error);
     }
   } else {
-    error = true;
     showMessage("error", "Campos vacios", "Por favor llenar los campos.");
   }
 };
@@ -195,13 +194,13 @@ const showMessage = (
 };
 
 const limpiarObjeto = () => {
-  objProduccion.fecha_produccion = null;
-  objProduccion.planificada = null;
-  objProduccion.modificada = null;
-  objProduccion.plan_armado = null;
-  objProduccion.calidad = null;
-  objProduccion.desperfecto_me = null;
-  objProduccion.desperfecto_pp = null;
-  objProduccion.tablero_id = null;
+  objObjetivoUpd.fecha = null;
+  objObjetivoUpd.cliente_id = null;
+  objObjetivoUpd.planificada = null;
+  objObjetivoUpd.modificada = null;
+  objObjetivoUpd.plan_armado = null;
+  objObjetivoUpd.calidad = null;
+  objObjetivoUpd.desperfecto_me = null;
+  objObjetivoUpd.desperfecto_pp = null;
 };
 </script>

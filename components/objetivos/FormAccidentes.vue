@@ -93,9 +93,8 @@ const submit = async () => {
 
   const objAccidente = {
     tipo_accidente: accidente.value,
-    cantidad: cantidad.value,
-    fecha_ingreso: date,
-    tablero_id: 2,
+    cantidad: Number(cantidad.value),
+    objetivos_id: 3,
   };
 
   const resultado = await createAccidente(objAccidente);

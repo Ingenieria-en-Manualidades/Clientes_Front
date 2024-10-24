@@ -35,26 +35,6 @@
           :pag="false"
         />
       </fieldset>
-      <!-- <div class="w-[74%] ml-2">
-        <div class="w-full flex justify-center gap-10">
-          <div class="float-right">
-            <Tabla
-              :cabezas="cabezasProd"
-              :arrayData="dataProd"
-              :atributosDatos="atribProd"
-              :pag="false"
-            />
-          </div>
-        </div>
-        <div class="mt-1">
-          <Tabla
-            :cabezas="cabezasArm"
-            :arrayData="dataArm"
-            :atributosDatos="atribArm"
-            :pag="false"
-          />
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -67,14 +47,12 @@ import FormProduccion from "../../components/objetivos/FormProduccion.vue";
 import FormIndicadores from "../../components/objetivos/FormIndicadores.vue";
 import {
   datosTablaProd,
-  datosTablaArmado,
   datosObjetivos,
 } from "../../composables/objetivos/datosObjetivos";
 
 const dates = ref();
 const toast = useToast();
 const { meses } = datosObjetivos();
-const { cabezasArm, atribArm, dataArm } = datosTablaArmado();
 const { cabezasProd, atribProd, dataProd } = datosTablaProd();
 
 const visible = ref(true);

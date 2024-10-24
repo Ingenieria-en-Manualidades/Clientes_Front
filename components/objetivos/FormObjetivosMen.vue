@@ -65,15 +65,19 @@
 </template>
 
 <script setup lang="ts">
+import { useCookie } from "nuxt/app";
 import { defineExpose, ref } from "vue";
+import { useToast } from "primevue/usetoast";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi"; // Asegúrate de que esta ruta sea correcta
 
+const clienteID = useCookie("idCliente");
 // Variables reactivas de los campos del formulario
-const cumplimiento = ref("");
-const eficienciaProductiva = ref("");
 const calidad = ref("");
+const toast = useToast();
+const cumplimiento = ref("");
 const desperdicioME = ref("");
 const desperdicioPP = ref("");
+const eficienciaProductiva = ref("");
 
 // Variables de errores para la validación
 const errors = ref({
@@ -94,7 +98,7 @@ const submitForm = async () => {
     desperdicioME: false,
     desperdicioPP: false,
   };
-
+  // return true;
   // Validar los campos
   if (!cumplimiento.value) errors.value.cumplimiento = true;
   if (!eficienciaProductiva.value) errors.value.eficienciaProductiva = true;
@@ -104,31 +108,35 @@ const submitForm = async () => {
 
   //Comprobar si hay errores
   const noErrors = !Object.values(errors.value).includes(true);
+  if (noErrors) {
+    // Llamar a la API para crear los objetivos
+    const { createMeta } = useObjetivosApi();
+    const objetivosData = {
+      cumplimiento: Number(cumplimiento.value),
+      eficienciaProductiva: Number(eficienciaProductiva.value),
+      calidad: Number(calidad.value),
+      desperdicioME: Number(desperdicioME.value),
+      desperdicioPP: Number(desperdicioPP.value),
+      cliente_endpoint_id: clienteID.value,
+    };
 
-  //if (noErrors) {
-  // Llamar a la API para crear los objetivos
-  const { createObjetives } = useObjetivosApi();
-  const objetivosData = {
-    cumplimiento: cumplimiento.value,
-    eficienciaProductiva: eficienciaProductiva.value,
-    calidad: calidad.value,
-    desperdicioME: desperdicioME.value,
-    desperdicioPP: desperdicioPP.value,
-    tablero_id: 2,
-  };
-  // return true;
-  const response = await createObjetives(objetivosData);
+    const response = await createMeta(objetivosData);
 
-  if (response.success) {
-    console.log("Objetivos creados correctamente:", response.data);
-    return true; // Formulario válido, seguir adelante
+    if (response.success) {
+      console.log("Objetivos creados correctamente:", response.data.message);
+      return { success: true, metaID: response.data.metaID }; // Formulario válido, seguir adelante
+    } else {
+      console.error("Error al crear objetivos:", response.error);
+      return { success: false, metaID: 0 }; // Hubo un error en la creación
+    }
   } else {
-    console.error("Error al crear objetivos:", response.error);
-    return false; // Hubo un error en la creación
+    toast.add({
+      severity: "error",
+      summary: "Faltan campos",
+      detail: "Por favor ingresar los campos faltantes.",
+      life: 3000,
+    });
   }
-  //}
-
-  return false; // Hay errores en el formulario
 };
 
 // Exponer el método `submitForm` para que el componente padre pueda acceder a él

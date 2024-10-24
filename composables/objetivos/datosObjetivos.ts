@@ -1,17 +1,27 @@
-import { Produccion } from "../../interfaces/objetives";
+import { Objetivos, ObjetivosUpdate } from "../../interfaces/objetives";
 
 export const datosObjetivos = () => {
 
-  const objProduccion: Produccion = {
-    fecha_produccion: null,
+  const objObjetivo: Objetivos = {
     planificada: null,
     modificada: null,
     plan_armado: null,
     calidad: null,
     desperfecto_me: null,
     desperfecto_pp: null,
-    tablero_id: null,
+    tablero_sae_id: null
   };
+
+  const objObjetivoUpd: ObjetivosUpdate = {
+    fecha: null,
+    cliente_id: null,
+    planificada: null,
+    modificada: null,
+    plan_armado: null,
+    calidad: null,
+    desperfecto_me: null,
+    desperfecto_pp: null,
+  }
 
   const meses = [
     "Enero",
@@ -43,11 +53,39 @@ export const datosObjetivos = () => {
       }
     }
   };
+
+  /**
+   * Método que se encarga de retorna una fecha que es la actual pero 3 días adelantados o retrasados, se creo
+   * para ser la fecha maxima o minima a elegir para los input de "Date".
+   * @param maxima : Valor el cual ayuda a decidir si aumentar o reducir la fecha actual a 3 dias, en caso
+   * de ser 'true' se aumentan los 3 días si es 'false' se reducen a 3 días.
+   */
+  const getFechaMaxMin = (maxima: Boolean) => {
+    const hoy = new Date();
+    const fechaMax = new Date(hoy);
+
+    //Dependiendo del valor de 'maxima' se suma o resta los días a la fecha actual
+    if (maxima) {
+      fechaMax.setDate(hoy.getDate() + 3);
+    } else {
+      fechaMax.setDate(hoy.getDate() - 3);
+    }
+
+    //Nos aseguramos que la fecha sea en formato 'YYYY-MM-DD'
+    const año = fechaMax.getFullYear();
+    //Nos aseguramos que en el caso de ser solo un digito el mes, se rellene con un 0, de esta manera '02'
+    const mes = String(fechaMax.getMonth() + 1).padStart(2, '0');
+    const dia = String(fechaMax.getDate()).padStart(2, '0');
+
+    return `${año}-${mes}-${dia}`;
+  }
   
   return {
-    getFecha,
     meses,
-    objProduccion
+    getFecha,
+    objObjetivo,
+    objObjetivoUpd,
+    getFechaMaxMin
   };
 }
 
@@ -71,58 +109,4 @@ export const datosTablaProd = () => {
   };
 }
 
-export const datosTablaArmado = () => {
-  
-  const cabezasArm = ["Indicador","1","2","3","4","5"];
-
-  // const setCabezas = () => {
-  //   let dia: number = 28;
-  //   let date: Date = new Date();
-  //   const mesesTreintaUno = [4, 6, 9, 11];
-  //   const mesesTreinta = [1, 3, 5, 7, 8, 10, 12];
-
-  //   for (const mes of mesesTreinta) {
-  //     if (date.getMonth() == mes) {
-  //       dia = 30;
-  //     }
-  //   }
-
-  //   for (const mes of mesesTreintaUno) {
-  //     if (date.getMonth() == mes) {
-  //       dia = 31;
-  //     }
-  //   }
-
-  //   if (dia === 30) {
-      
-  //   } else {
-      
-  //   }
-    
-  //   // if ( ) {
-      
-  //   // } else {
-      
-  //   // }
-  // }
-  
-  const atribArm = ["label", "dia1", "dia2", "dia3", "dia4", "dia5"];
-  
-  const dataArm = [
-    {
-      label: "Cumplimiento Plan de armado",
-      dia1: "90%",
-      dia2: "90%",
-      dia3: "90%",
-      dia4: "90%",
-      dia5: "90%",
-    }
-  ];
-
-  return {
-    cabezasArm,
-    atribArm,
-    dataArm
-  };
-}
 

@@ -27,16 +27,16 @@
       </button>
     </div>
     <div
-  class="flex justify-start max-[760px]:justify-center overflow-hidden overflow-y-scroll h-full min-[1300px]:h-[90%] min-[1300px]:mt-10 scroll-container"
->
-  <Tabs>
+      class="flex justify-start max-[760px]:justify-center overflow-hidden h-full min-[1300px]:h-[90%] min-[1300px]:mt-10 scroll-container"
+    >
+      <Tabs>
         <TabList>
           <Tab
             v-for="modulo in modulos"
             :key="modulo.nombre"
             @click="toggleNavBarMovil"
           >
-            <li v-if="modulo.submodulos && modulo.visible">
+            <li v-if="modulo.submodulos && modulo.visible" class="list-none">
               <div
                 class="py-3 pl-6 hover:bg-white rounded-lg text-white hover:text-black w-[120%] cursor-pointer"
                 @click="visible = !visible"

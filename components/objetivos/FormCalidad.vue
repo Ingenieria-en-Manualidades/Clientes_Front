@@ -71,7 +71,7 @@ let errors = ref({
 });
 
 // Método para validar y enviar el formulario
-const submitForm = async () => {
+const submitForm = async (metaID: number) => {
   //Reiniciar los errores
   errors.value = {
     dateCheck: false,
@@ -80,17 +80,17 @@ const submitForm = async () => {
     calificacionInspSol: false,
   };
 
+  console.log("metaID calidad: ", metaID);
+
   if (!dateCheck.value) errors.value.dateCheck = true;
   if (!dateInspSol.value) errors.value.dateInspSol = true;
   if (!calCheck.value) errors.value.calificacionCheck = true;
   if (!calInspSol.value) errors.value.calificacionInspSol = true;
 
   const objCalidad = {
-    checklist_mes: dateCheck.value,
-    checklist_calificacion: Number(calCheck.value),
-    inspeccion_mes: dateInspSol.value,
-    inspeccion_calificacion: Number(calInspSol.value),
-    tablero_id: 1,
+    checklist: Number(calCheck.value),
+    inspeccion: Number(calInspSol.value),
+    meta_id: metaID,
   };
 
   const resultado = await createCalidad(objCalidad);
