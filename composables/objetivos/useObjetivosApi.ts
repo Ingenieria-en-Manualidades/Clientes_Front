@@ -1,9 +1,11 @@
 import { useCookie, useRuntimeConfig } from 'nuxt/app';
 import { Meta, Calidad, Accidente, ApiPromise, Objetivos, ObjetivosUpdate } from '../../interfaces/objetives';
+import autoprefixer from 'autoprefixer';
 
 export const useObjetivosApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
+  const { data } = autoprefixer;
 
   const createMeta = async (objetivosData: Meta): Promise<ApiPromise<any>> => {
     try {

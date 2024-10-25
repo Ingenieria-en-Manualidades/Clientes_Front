@@ -1,6 +1,6 @@
 import { Objetivos, ObjetivosUpdate } from "../../interfaces/objetives";
 
-export const datosObjetivos = () => {
+export const datosObjetivos = () => { 
 
   const objObjetivo: Objetivos = {
     planificada: null,

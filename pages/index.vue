@@ -29,6 +29,7 @@
 </template>
 
 <script lang="ts" setup>
+import logueado from "../middleware/logueado";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime";
 //Método para que no tenga la plantilla HTML por defecto
 definePageMeta({

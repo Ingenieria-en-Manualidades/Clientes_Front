@@ -3,10 +3,7 @@
 @tailwind utilities;
 
 /* Para navegadores basados en WebKit (como Chrome, Safari) */
-::-webkit-scrollbar {
-::-webkit-scrollbar {
-=======
->>>>>>> 9a5c549... fix-scroll-hidden
+.webkit-scrollbar {
     display: none; /* Oculta la barra de desplazamiento */
   }
   
