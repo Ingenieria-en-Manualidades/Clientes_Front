@@ -1,18 +1,8 @@
-import { Objetivos, ObjetivosUpdate } from "../../interfaces/objetives";
+import { Objetivos } from "../../interfaces/objetives";
 
 export const datosObjetivos = () => { 
 
   const objObjetivo: Objetivos = {
-    planificada: null,
-    modificada: null,
-    plan_armado: null,
-    calidad: null,
-    desperfecto_me: null,
-    desperfecto_pp: null,
-    tablero_sae_id: null
-  };
-
-  const objObjetivoUpd: ObjetivosUpdate = {
     fecha: null,
     cliente_id: null,
     planificada: null,
@@ -21,7 +11,7 @@ export const datosObjetivos = () => {
     calidad: null,
     desperfecto_me: null,
     desperfecto_pp: null,
-  }
+  };
 
   const meses = [
     "Enero",
@@ -84,7 +74,6 @@ export const datosObjetivos = () => {
     meses,
     getFecha,
     objObjetivo,
-    objObjetivoUpd,
     getFechaMaxMin
   };
 }

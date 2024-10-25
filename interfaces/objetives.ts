@@ -20,16 +20,6 @@ export interface Meta {
   }
 
   export interface Objetivos {
-    planificada: number | null,
-    modificada: number | null,
-    plan_armado: number | null,
-    calidad: number | null,
-    desperfecto_me: number | null,
-    desperfecto_pp: number | null,
-    tablero_sae_id: number | null,
-  }
-
-  export interface ObjetivosUpdate {
     fecha: Date | null | undefined,
     cliente_id: number | null,
     planificada: number | null,
@@ -38,7 +28,7 @@ export interface Meta {
     calidad: number | null,
     desperfecto_me: number | null,
     desperfecto_pp: number | null,
-  }s
+  }
 
   export interface ApiPromise<T> {
     success: boolean;

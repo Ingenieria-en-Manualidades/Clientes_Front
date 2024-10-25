@@ -119,7 +119,7 @@ const errors = ref({
   desperfectosPP: false,
 });
 
-const { objObjetivoUpd, getFechaMaxMin } = datosObjetivos();
+const { objObjetivo, getFechaMaxMin } = datosObjetivos();
 const { updateObjetivos } = useObjetivosApi();
 
 const props = defineProps({
@@ -147,14 +147,14 @@ const submit = async () => {
 
   if (noErrors) {
     limpiarObjeto();
-    objObjetivoUpd.fecha = fecha.value;
-    objObjetivoUpd.calidad = calidad.value;
-    objObjetivoUpd.plan_armado = planArmado.value;
-    objObjetivoUpd.cliente_id = Number(idCliente.value);
-    objObjetivoUpd.desperfecto_me = desperfectosME.value;
-    objObjetivoUpd.desperfecto_pp = desperfectosPP.value;
+    objObjetivo.fecha = fecha.value;
+    objObjetivo.calidad = calidad.value;
+    objObjetivo.plan_armado = planArmado.value;
+    objObjetivo.cliente_id = Number(idCliente.value);
+    objObjetivo.desperfecto_me = desperfectosME.value;
+    objObjetivo.desperfecto_pp = desperfectosPP.value;
 
-    const resultado = await updateObjetivos(objObjetivoUpd);
+    const resultado = await updateObjetivos(objObjetivo);
 
     if (resultado.success) {
       //Reiniciar los errores
@@ -194,13 +194,13 @@ const showMessage = (
 };
 
 const limpiarObjeto = () => {
-  objObjetivoUpd.fecha = null;
-  objObjetivoUpd.cliente_id = null;
-  objObjetivoUpd.planificada = null;
-  objObjetivoUpd.modificada = null;
-  objObjetivoUpd.plan_armado = null;
-  objObjetivoUpd.calidad = null;
-  objObjetivoUpd.desperfecto_me = null;
-  objObjetivoUpd.desperfecto_pp = null;
+  objObjetivo.fecha = null;
+  objObjetivo.cliente_id = null;
+  objObjetivo.planificada = null;
+  objObjetivo.modificada = null;
+  objObjetivo.plan_armado = null;
+  objObjetivo.calidad = null;
+  objObjetivo.desperfecto_me = null;
+  objObjetivo.desperfecto_pp = null;
 };
 </script>

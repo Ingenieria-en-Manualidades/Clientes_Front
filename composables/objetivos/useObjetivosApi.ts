@@ -1,11 +1,9 @@
 import { useCookie, useRuntimeConfig } from 'nuxt/app';
-import { Meta, Calidad, Accidente, ApiPromise, Objetivos, ObjetivosUpdate } from '../../interfaces/objetives';
-import autoprefixer from 'autoprefixer';
+import { Meta, Calidad, Accidente, ApiPromise, Objetivos } from '../../interfaces/objetives';
 
 export const useObjetivosApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
-  const { data } = autoprefixer;
 
   const createMeta = async (objetivosData: Meta): Promise<ApiPromise<any>> => {
     try {
@@ -139,7 +137,7 @@ export const useObjetivosApi = () => {
     }
   }
 
-  const updateObjetivos = async (objObjetivos: ObjetivosUpdate): Promise<ApiPromise<any>> => {
+  const updateObjetivos = async (objObjetivos: Objetivos): Promise<ApiPromise<any>> => {
     try {
       const response = await fetch(`${url}api/actualizarObjetivos`, {
         method: 'POST',
@@ -154,7 +152,7 @@ export const useObjetivosApi = () => {
       if (response.ok) {
         return {success: data.success, data: data.message};
       } else {
-        console.log("response: ", response);        
+        console.log("response: ", response);
         console.error("Error a la hora de actualizar la producción: ", data.message);
         return { success: false, error: data.message || 'Error a la hora de actualizar la "Producción"' }
       }

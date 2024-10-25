@@ -88,8 +88,7 @@ const errorProd = ref<null | string>();
 const idCliente = useCookie("idCliente");
 
 const toast = useToast();
-const { objObjetivo, objObjetivoUpd, getFecha, getFechaMaxMin } =
-  datosObjetivos();
+const { objObjetivo, getFecha, getFechaMaxMin } = datosObjetivos();
 const { createObjetivos, updateObjetivos } = useObjetivosApi();
 
 const props = defineProps({
@@ -99,7 +98,8 @@ const emit = defineEmits(["setVisible"]);
 
 const submitPlanificada = async () => {
   if (prodPlan.value) {
-    objObjetivo.tablero_sae_id = 1;
+    objObjetivo.fecha = date;
+    objObjetivo.cliente_id = Number(idCliente.value);
     objObjetivo.planificada = Number(prodPlan.value);
 
     const resultado = await createObjetivos(objObjetivo);
@@ -121,11 +121,11 @@ const submitPlanificada = async () => {
 const submitModificada = async () => {
   if (prodMod.value && fechaMod.value) {
     limpiarObjeto();
-    objObjetivoUpd.cliente_id = Number(idCliente.value);
-    objObjetivoUpd.fecha = fechaMod.value;
-    objObjetivoUpd.modificada = prodMod.value;
+    objObjetivo.cliente_id = Number(idCliente.value);
+    objObjetivo.fecha = fechaMod.value;
+    objObjetivo.modificada = prodMod.value;
 
-    const resultado = await updateObjetivos(objObjetivoUpd);
+    const resultado = await updateObjetivos(objObjetivo);
 
     if (resultado.success) {
       errorMod.value = null;
@@ -158,11 +158,13 @@ const showMessage = (
 };
 
 const limpiarObjeto = () => {
-  objObjetivoUpd.planificada = null;
-  objObjetivoUpd.modificada = null;
-  objObjetivoUpd.plan_armado = null;
-  objObjetivoUpd.calidad = null;
-  objObjetivoUpd.desperfecto_me = null;
-  objObjetivoUpd.desperfecto_pp = null;
+  objObjetivo.fecha = null;
+  objObjetivo.cliente_id = null;
+  objObjetivo.planificada = null;
+  objObjetivo.modificada = null;
+  objObjetivo.plan_armado = null;
+  objObjetivo.calidad = null;
+  objObjetivo.desperfecto_me = null;
+  objObjetivo.desperfecto_pp = null;
 };
 </script>
