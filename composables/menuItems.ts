@@ -54,6 +54,13 @@ export const useModulos = () => {
         ruta: "/objetivos",
         visible: false,
         permission: 'view_objetivos_mensuales'
+      },
+      {
+        icono: "pi pi-verified",
+        nombre: "Calidad",
+        ruta: "/objetivos/calidad",
+        visible: false,
+        permission: 'view_objetivos_calidad'
       }
     ]
   },

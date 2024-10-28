@@ -1,64 +1,89 @@
 <template>
-  <div>
-    <form class="flex gap-16" ref="formCalidad">
-      <fieldset class="border-[1px] border-black rounded-lg p-3">
-        <legend class="px-1 font-manrope-l">CheckList</legend>
-        <p class="font-manrope-b text-lg mb-1">Mes</p>
-        <p v-if="errors.dateCheck" class="text-red-500 text-sm pb-1">
-          Este campo es obligatorio
-        </p>
-        <select
-          v-model="dateCheck"
-          class="bg-white text-lg border-[1px] border-black py-1 px-2 rounded-md font-manrope-r mb-5"
+  <form class="flex gap-5">
+    <fieldset class="border-[1px] border-black rounded-lg p-3 font-manrope-r">
+      <legend class="px-1 font-manrope-l">CheckList</legend>
+      <p class="font-bold text-lg mb-1">Mes</p>
+      <p v-if="errors.dateCheck" class="text-red-500 text-sm pb-1">
+        Este campo es obligatorio
+      </p>
+      <input
+        type="month"
+        class="w-full border-[1px] border-gray-500 font-manrope-r outline-none rounded p-2"
+      />
+      <p class="font-bold text-lg mt-4 mb-1">Calificación</p>
+      <p v-if="errors.calificacionCheck" class="text-red-500 text-sm pb-1">
+        Este campo es obligatorio
+      </p>
+      <input
+        type="text"
+        v-model="calCheck"
+        class="border-[1px] border-gray-500 rounded-md p-2 outline-none w-full"
+      />
+      <div class="my-5">
+        <input type="file" class="hidden" id="fileCheck" />
+        <label
+          for="fileCheck"
+          class="flex justify-center mt-3 py-2 bg-[#c86a2b] font-bold text-white cursor-pointer rounded-lg"
         >
-          <option v-for="(mes, index) in meses" v-bind:key="index" :value="mes">
-            {{ mes }}
-          </option>
-        </select>
-        <p class="font-manrope-b text-lg mb-1">Calificación</p>
-        <p v-if="errors.calificacionCheck" class="text-red-500 text-sm pb-1">
-          Este campo es obligatorio
-        </p>
-        <input
-          type="text"
-          v-model="calCheck"
-          class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
-        />
-      </fieldset>
-      <fieldset class="border-[1px] border-black rounded-lg p-3">
-        <legend class="px-1 font-manrope-l">Inspección sol</legend>
-        <p class="font-manrope-b text-lg mb-1">Mes</p>
-        <p v-if="errors.dateInspSol" class="text-red-500 text-sm pb-1">
-          Este campo es obligatorio
-        </p>
-        <select
-          v-model="dateInspSol"
-          class="bg-white text-lg border-[1px] border-black py-1 px-2 rounded-md font-manrope-r mb-5"
+          <i class="pi pi-upload pr-3 pt-1"></i> Agregar evidencia</label
         >
-          <option v-for="(mes, index) in meses" v-bind:key="index" :value="mes">
-            {{ mes }}
-          </option>
-        </select>
-        <p class="font-manrope-b text-lg mb-1">Calificación</p>
-        <p v-if="errors.calificacionInspSol" class="text-red-500 text-sm pb-1">
-          Este campo es obligatorio
-        </p>
-        <input
-          type="text"
-          v-model="calInspSol"
-          class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
-        />
-      </fieldset>
-    </form>
-  </div>
+      </div>
+      <div class="flex justify-center font-bold">
+        <button
+          type="button"
+          class="bg-[#4789c8] w-full py-2 rounded-lg text-white"
+        >
+          Guardar
+        </button>
+      </div>
+    </fieldset>
+    <fieldset class="border-[1px] border-black font-manrope-r rounded-lg p-3">
+      <legend class="px-1 font-manrope-l">Inspección sol</legend>
+      <p class="font-bold text-lg mb-1">Mes</p>
+      <p v-if="errors.dateInspSol" class="text-red-500 text-sm pb-1">
+        Este campo es obligatorio
+      </p>
+      <input
+        type="month"
+        class="w-full border-[1px] border-gray-500 font-manrope-r outline-none rounded p-2"
+      />
+      <p class="font-bold text-lg mt-4 mb-1">Calificación</p>
+      <p v-if="errors.calificacionInspSol" class="text-red-500 text-sm pb-1">
+        Este campo es obligatorio
+      </p>
+      <input
+        type="text"
+        v-model="calInspSol"
+        class="border-[1px] border-gray-500 rounded-md p-2 outline-none w-full"
+      />
+      <div class="my-5">
+        <input type="file" class="hidden" id="fileSol" />
+        <label
+          for="fileSol"
+          class="flex justify-center mt-3 py-2 bg-[#c86a2b] font-bold text-white cursor-pointer rounded-lg"
+        >
+          <i class="pi pi-upload pr-3 pt-1"></i> Agregar evidencia</label
+        >
+      </div>
+      <div class="flex justify-center font-bold">
+        <button
+          type="button"
+          class="bg-[#4789c8] w-full py-2 rounded-lg text-white"
+        >
+          Guardar
+        </button>
+      </div>
+    </fieldset>
+  </form>
 </template>
 
 <script lang="ts" setup>
 import { defineExpose, ref } from "vue";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
-const dateCheck = ref("");
-const dateInspSol = ref("");
+const dateCheck = ref();
+const dateInspSol = ref();
+const archivo = ref<File | undefined>();
 const calCheck = ref();
 const calInspSol = ref();
 const { createCalidad } = useObjetivosApi();
@@ -106,21 +131,6 @@ const submitForm = async (metaID: number) => {
     return false;
   }
 };
-
-const meses = ref([
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
-]);
 
 // Exponer el método `submitForm` para que el componente padre pueda acceder a él
 defineExpose({

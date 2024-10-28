@@ -55,7 +55,7 @@ const toast = useToast();
 const { meses } = datosObjetivos();
 const { cabezasProd, atribProd, dataProd } = datosTablaProd();
 
-const visible = ref(true);
+const visible = ref(false);
 
 let cabezasInd = ref<String[]>(["Indicador", "Abril", "Junio"]);
 
