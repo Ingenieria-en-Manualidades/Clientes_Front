@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex justify-center p-2 md:p-5">
+  <div class="w-full flex justify-center p-2 gap-2 sm:gap-5 md:p-5">
     <FormCalidad />
   </div>
 </template>
