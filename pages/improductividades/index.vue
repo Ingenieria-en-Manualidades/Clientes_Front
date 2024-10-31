@@ -121,7 +121,6 @@ const listar = async () => {
   if (response.success) {
     data.value = response.data?.filter((rem) => rem.estado === null);
 
-    console.log("data improductividad: ", data.value);
     if (data.value.length === 0) {
       estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-check-circle text-5xl";

@@ -25,7 +25,7 @@ export interface postImproductividad {
     improductividad_id: number | undefined;
     estado: string | null | undefined;
     motivo: string | null | undefined;
-    usuario_gestiona: string;
-    usuario: string;
-    cliente_id: string;
+    usuario_gestiona: string | null | undefined;
+    usuario: string | null | undefined;
+    cliente_id: string | null | undefined;
 };

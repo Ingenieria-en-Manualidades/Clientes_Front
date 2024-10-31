@@ -101,7 +101,7 @@ let mensaje: mensajeSencillo = {
 //Método que bloquea el TextArea del motivo si la opción escogida es "Rechazar".
 const estadoTextArea = (estado: boolean) => {
   disable.value = estado;
-  if (disable) {
+  if (disable.value) {
     motivo.value = "";
   }
 };
