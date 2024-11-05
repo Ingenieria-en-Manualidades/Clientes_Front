@@ -8,10 +8,15 @@
       <p v-if="errorsCheck.dateCheck" class="text-red-500 text-sm pb-1">
         Este campo es obligatorio
       </p>
-      <input
-        type="month"
-        class="w-full border-[1px] border-gray-500 font-manrope-r outline-none rounded p-2"
+      <Calendar
         v-model="dateCheck"
+        :manualInput="false"
+        view="month"
+        dateFormat="yy/mm"
+        showIcon
+        fluid
+        inputClass="w-full"
+        iconDisplay="input"
       />
       <p class="font-bold mt-4 mb-1">Calificación</p>
       <p v-if="errorsCheck.calificacionCheck" class="text-red-500 text-sm pb-1">
@@ -59,10 +64,15 @@
       <p v-if="errorsInsp.dateInspSol" class="text-red-500 text-sm pb-1">
         Este campo es obligatorio
       </p>
-      <input
-        type="month"
-        class="w-full border-[1px] border-gray-500 font-manrope-r outline-none rounded p-2"
+      <Calendar
         v-model="dateInspSol"
+        :manualInput="false"
+        view="month"
+        dateFormat="yy/mm"
+        showIcon
+        fluid
+        inputClass="w-full"
+        iconDisplay="input"
       />
       <p class="font-bold mt-4 mb-1">Calificación</p>
       <p
@@ -108,13 +118,17 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useCookie } from "nuxt/app";
+import { useToast } from "primevue/usetoast";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
 const calCheck = ref();
 const dateCheck = ref();
+const toast = useToast();
 const calInspSol = ref();
 const dateInspSol = ref();
 const fileSol = ref<File | null>(null);
+const idCliente = useCookie("idCliente");
 const fileCheck = ref<File | null>(null);
 const errorFileSol = ref<string | null>(null);
 const errorFileCheck = ref<string | null>(null);
@@ -133,7 +147,7 @@ let errorsInsp = ref({
 });
 
 // Método para validar y enviar el formulario
-const submitCheck = () => {
+const submitCheck = async () => {
   //Reiniciar los errores de checkList
   errorsCheck.value = {
     dateCheck: false,
@@ -150,10 +164,33 @@ const submitCheck = () => {
 
   const noErrors = !Object.values(errorsCheck.value).includes(true);
 
+  const objCalidad = {
+    fecha: dateCheck.value,
+    cliente_endpoint_id: Number(idCliente.value),
+    checklist: Number(calCheck.value),
+    inspeccion: null,
+  };
+
   if (noErrors) {
-    console.log("yes");
-  } else {
-    console.log("nop");
+    const resultado = await createCalidad(objCalidad);
+
+    if (resultado.success) {
+      calCheck.value = "";
+      fileCheck.value = null;
+      toast.add({
+        severity: "success",
+        summary: "Guardado correctamente.",
+        detail: "Calidad con checklist guardada correctamente.",
+        life: 3000,
+      });
+    } else {
+      toast.add({
+        severity: "error",
+        summary: "Error al guardar.",
+        detail: resultado.error,
+        life: 3000,
+      });
+    }
   }
 };
 
@@ -173,30 +210,32 @@ const submitSol = async () => {
 
   const noErrors = !Object.values(errorsInsp.value).includes(true);
 
-  // const objCalidad = {
-  //   checklist: Number(calCheck.value),
-  //   inspeccion: Number(calInspSol.value),
-  //   meta_id: metaID,
-  // };
+  const objCalidad = {
+    fecha: dateInspSol.value,
+    cliente_endpoint_id: Number(idCliente.value),
+    checklist: null,
+    inspeccion: Number(calInspSol.value),
+  };
 
   if (noErrors) {
-    console.log("Sip SOL");
-  } else {
-    console.log("nope SOL");
+    const resultado = await createCalidad(objCalidad);
+
+    if (resultado.success) {
+      toast.add({
+        severity: "success",
+        summary: "Guardado correctamente.",
+        detail: "Calidad con inspección guardada correctamente.",
+        life: 3000,
+      });
+    } else {
+      toast.add({
+        severity: "error",
+        summary: "Error al guardar.",
+        detail: resultado.error,
+        life: 3000,
+      });
+    }
   }
-
-  // const resultado = await createCalidad(objCalidad);
-
-  // if (resultado.success) {
-  //   dateCheck.value = "";
-  //   dateInspSol.value = "";
-  //   calCheck.value = "";
-  //   calInspSol.value = "";
-  //   return true;
-  // } else {
-  //   console.error(resultado.error);
-  //   return false;
-  // }
 };
 
 const subirArchivoCheck = (event: Event) => {

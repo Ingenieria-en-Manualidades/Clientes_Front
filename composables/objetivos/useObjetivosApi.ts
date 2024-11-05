@@ -20,9 +20,8 @@ export const useObjetivosApi = () => {
       if (response.ok) {
         const resultado = await createTableroSae(data.meta_id, data.cliente_id);
         
-        const objData = {message: resultado.data, metaID: data.meta_id};
         if (resultado.success) {
-          return { success: resultado.success, data: objData };
+          return { success: resultado.success, data: resultado.data };
         } else {
           return { success: resultado.success, error: resultado.error };
         }

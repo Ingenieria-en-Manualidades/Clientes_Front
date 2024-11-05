@@ -1,6 +1,6 @@
 <template>
   <div class="my-5">
-    <form ref="formObjetivos">
+    <form>
       <div class="flex justify-center mb-12 gap-10">
         <div>
           <p class="font-manrope-b text-lg mb-1">Cumplimiento Plan de Armado</p>
@@ -60,6 +60,15 @@
           </p>
         </div>
       </div>
+      <div class="flex justify-center mt-8">
+        <button
+          type="button"
+          class="bg-[#0063a6] px-10 py-2 rounded-lg text-white font-manrope-b"
+          @click="submitForm"
+        >
+          Guardar
+        </button>
+      </div>
     </form>
   </div>
 </template>
@@ -98,7 +107,7 @@ const submitForm = async () => {
     desperdicioME: false,
     desperdicioPP: false,
   };
-  // return true;
+
   // Validar los campos
   if (!cumplimiento.value) errors.value.cumplimiento = true;
   if (!eficienciaProductiva.value) errors.value.eficienciaProductiva = true;
@@ -123,11 +132,20 @@ const submitForm = async () => {
     const response = await createMeta(objetivosData);
 
     if (response.success) {
-      console.log("Objetivos creados correctamente:", response.data.message);
-      return { success: true, metaID: response.data.metaID }; // Formulario válido, seguir adelante
+      toast.add({
+        severity: "success",
+        summary: "Meta guardada.",
+        detail: "Exito a la hora de guardar las metas.",
+        life: 3000,
+      });
     } else {
       console.error("Error al crear objetivos:", response.error);
-      return { success: false, metaID: 0 }; // Hubo un error en la creación
+      toast.add({
+        severity: "error",
+        summary: "Error al guardar.",
+        detail: response.error,
+        life: 3000,
+      });
     }
   } else {
     toast.add({
@@ -138,9 +156,4 @@ const submitForm = async () => {
     });
   }
 };
-
-// Exponer el método `submitForm` para que el componente padre pueda acceder a él
-defineExpose({
-  submitForm,
-});
 </script>

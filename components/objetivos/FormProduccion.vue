@@ -7,30 +7,20 @@
       <p>Producción Planificada:</p>
       <input
         type="date"
-        readonly
         class="w-full border-[1px] border-black outline-none rounded mb-1"
-        :value="getFecha(date)"
+        :min="getFechaMaxMin(false)"
+        :max="getFecha(date)"
       />
       <input
         type="text"
-        :disabled="!visible"
         v-model="prodPlan"
-        :class="[
-          'w-full border-[1px] rounded-md outline-none py-1 pl-2 mb-1',
-          visible ? 'border-black' : 'bg-gray-300 border-gray-500',
-        ]"
+        class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2 mb-1"
       />
       <p class="text-red-500 text-xs my-1">{{ errorProd }}</p>
       <button
         type="button"
-        :disabled="!visible"
         @click="submitPlanificada"
-        :class="[
-          'w-full py-1 rounded-md border-[1px] text-white font-manrope-b mb-5',
-          visible
-            ? 'bg-azulClaroIENM border-azulClaroIENM'
-            : 'bg-blue-400 border-blue-400',
-        ]"
+        class="w-full py-1 rounded-md border-[1px] bg-azulClaroIENM border-azulClaroIENM text-white font-manrope-b mb-5"
       >
         INGRESAR
       </button>
@@ -38,7 +28,6 @@
       <p class="mb-1 text-xs">* Elegir una fecha anterior</p>
       <input
         type="date"
-        :disabled="visibleMod"
         v-model="fechaMod"
         :max="getFechaMaxMin(true)"
         :min="getFechaMaxMin(false)"
@@ -46,24 +35,14 @@
       />
       <input
         type="text"
-        :disabled="visibleMod"
         v-model="prodMod"
-        :class="[
-          'w-full border-[1px] rounded-md outline-none py-1 pl-2 mb-1',
-          visibleMod ? 'bg-gray-300 border-gray-500' : 'border-black',
-        ]"
+        class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2 mb-1"
       />
       <p class="text-red-500 text-xs my-1">{{ errorMod }}</p>
       <button
         type="button"
-        :disabled="visibleMod"
         @click="submitModificada()"
-        :class="[
-          'w-full py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base',
-          visibleMod
-            ? 'bg-blue-400 border-blue-400'
-            : 'bg-azulClaroIENM border-azulClaroIENM',
-        ]"
+        class="w-full bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base"
       >
         INGRESAR
       </button>
@@ -81,7 +60,6 @@ import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 const prodMod = ref();
 const prodPlan = ref();
 const date = new Date();
-const visibleMod = ref(false);
 const fechaMod = ref<Date | null>();
 const errorMod = ref<null | string>();
 const errorProd = ref<null | string>();
@@ -90,11 +68,6 @@ const idCliente = useCookie("idCliente");
 const toast = useToast();
 const { objObjetivo, getFecha, getFechaMaxMin } = datosObjetivos();
 const { createObjetivos, updateObjetivos } = useObjetivosApi();
-
-const props = defineProps({
-  visible: Boolean,
-});
-const emit = defineEmits(["setVisible"]);
 
 const submitPlanificada = async () => {
   if (prodPlan.value) {
@@ -105,8 +78,6 @@ const submitPlanificada = async () => {
     const resultado = await createObjetivos(objObjetivo);
 
     if (resultado.success) {
-      emit("setVisible");
-      visibleMod.value = false;
       showMessage("success", "Guardado correctamente.", resultado.data);
       errorProd.value = null;
     } else {
@@ -129,7 +100,6 @@ const submitModificada = async () => {
 
     if (resultado.success) {
       errorMod.value = null;
-      visibleMod.value = true;
       showMessage("success", "Guardado correctamente.", resultado.data);
     } else {
       showMessage("error", "Error al guardar.", resultado.error);

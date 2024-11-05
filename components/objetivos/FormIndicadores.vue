@@ -10,10 +10,9 @@
         </p>
         <input
           type="date"
-          :readonly="visible"
           v-model="fecha"
-          :max="getFechaMaxMin(true)"
-          :min="getFechaMaxMin(false)"
+          :max="getFecha(date)"
+          :min="getFecha(ayer)"
           class="w-full border-[1px] border-black outline-none rounded mb-1"
         />
         <div class="mb-2">
@@ -23,12 +22,8 @@
           </p>
           <input
             type="text"
-            :readonly="visible"
             v-model="planArmado"
-            :class="[
-              'w-full border-[1px] rounded-md outline-none py-1 pl-2',
-              visible ? 'bg-gray-300 border-gray-500' : 'border-black',
-            ]"
+            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
           />
         </div>
         <div class="mb-2">
@@ -38,12 +33,8 @@
           </p>
           <input
             type="text"
-            :readonly="visible"
             v-model="calidad"
-            :class="[
-              'w-full border-[1px] rounded-md outline-none py-1 pl-2',
-              visible ? 'bg-gray-300 border-gray-500' : 'border-black',
-            ]"
+            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
           />
         </div>
         <div class="mb-2">
@@ -109,7 +100,6 @@ const planArmado = ref();
 const toast = useToast();
 const desperfectosME = ref();
 const desperfectosPP = ref();
-const visibilidad = ref(false);
 const idCliente = useCookie("idCliente");
 const errors = ref({
   fecha: false,
@@ -119,13 +109,17 @@ const errors = ref({
   desperfectosPP: false,
 });
 
-const { objObjetivo, getFechaMaxMin } = datosObjetivos();
+const { objObjetivo, getFecha } = datosObjetivos();
 const { updateObjetivos } = useObjetivosApi();
 
 const props = defineProps({
   visible: Boolean,
 });
 const emit = defineEmits(["setVisible"]);
+const date = new Date();
+const ayer = new Date(
+  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() - 1}`
+);
 
 const submit = async () => {
   //Reiniciar los errores

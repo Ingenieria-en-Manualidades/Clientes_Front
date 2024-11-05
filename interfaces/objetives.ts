@@ -8,9 +8,10 @@ export interface Meta {
   }
 
   export interface Calidad {
-    checklist: number,
-    inspeccion: number,
-    meta_id: number,
+    fecha: Date | string | null,
+    cliente_endpoint_id: number,
+    checklist: number | null | undefined,
+    inspeccion: number | null | undefined,
   }
 
   export interface Accidente {
