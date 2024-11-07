@@ -44,12 +44,8 @@
           </p>
           <input
             type="text"
-            :readonly="visible"
             v-model="desperfectosME"
-            :class="[
-              'w-full border-[1px] rounded-md outline-none py-1 pl-2',
-              visible ? 'bg-gray-300 border-gray-500' : 'border-black',
-            ]"
+            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
           />
         </div>
         <div class="mb-2">
@@ -59,12 +55,8 @@
           </p>
           <input
             type="text"
-            :readonly="visible"
             v-model="desperfectosPP"
-            :class="[
-              'w-full border-[1px] rounded-md outline-none py-1 pl-2',
-              visible ? 'bg-gray-300 border-gray-500' : 'border-black',
-            ]"
+            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
           />
         </div>
       </div>
@@ -72,13 +64,7 @@
         <button
           type="button"
           @click="submit()"
-          :disabled="visible"
-          :class="[
-            'py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base w-full',
-            visible
-              ? 'bg-blue-400 border-blue-400'
-              : 'bg-azulClaroIENM border-azulClaroIENM',
-          ]"
+          class="bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base w-full"
         >
           INGRESAR
         </button>
@@ -112,10 +98,6 @@ const errors = ref({
 const { objObjetivo, getFecha } = datosObjetivos();
 const { updateObjetivos } = useObjetivosApi();
 
-const props = defineProps({
-  visible: Boolean,
-});
-const emit = defineEmits(["setVisible"]);
 const date = new Date();
 const ayer = new Date(
   `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() - 1}`
@@ -165,7 +147,6 @@ const submit = async () => {
       desperfectosME.value = "";
       desperfectosPP.value = "";
       showMessage("success", "Guardado correctamente.", resultado.data);
-      emit("setVisible");
     } else {
       showMessage("error", "Error al guardar.", resultado.error);
     }

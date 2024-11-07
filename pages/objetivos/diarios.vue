@@ -1,11 +1,7 @@
 <template>
   <div class="w-full">
+    <title>Producción diaria</title>
     <p class="font-manrope-b text-center text-2xl my-1">PRODUCCIÓN</p>
-    <!-- <div class="text-center">
-      <p v-if="formVisible" class="font-manrope-r mb-3">
-        Ingresar producción del día
-      </p>
-    </div> -->
     <div class="w-full flex justify-center p-1 gap-2">
       <FormProduccion />
       <FormIndicadores :visible="visible" @setVisible="visible = !visible" />

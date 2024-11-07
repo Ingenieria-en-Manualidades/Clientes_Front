@@ -161,8 +161,32 @@ export const useObjetivosApi = () => {
     }
   }
 
+  const createFile = async (archivo: File, cliente_id: number) => {
+
+    const formData = new FormData();
+
+    formData.append('archivo', archivo);
+    formData.append('cliente_endpoint_id', cliente_id.toString());
+
+    const response = await fetch(`${url}api/guardarArchivo`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      console.log("TODO BENE: ", data.message);
+      return "no mames";
+    } else {
+      console.log("TODO MALO: ", data.message);
+      return "no funciono :v";
+    }
+  }
+
   return {
     createMeta,
+    createFile,
     createCalidad,
     createAccidente,
     createObjetivos,

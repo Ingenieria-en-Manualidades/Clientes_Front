@@ -6,6 +6,7 @@
       <legend class="font-manrope-b">Producción</legend>
       <p>Producción Planificada:</p>
       <input
+        v-model="fechaPlan"
         type="date"
         class="w-full border-[1px] border-black outline-none rounded mb-1"
         :min="getFechaMaxMin(false)"
@@ -61,6 +62,7 @@ const prodMod = ref();
 const prodPlan = ref();
 const date = new Date();
 const fechaMod = ref<Date | null>();
+const fechaPlan = ref<Date | null>();
 const errorMod = ref<null | string>();
 const errorProd = ref<null | string>();
 const idCliente = useCookie("idCliente");
@@ -71,7 +73,8 @@ const { createObjetivos, updateObjetivos } = useObjetivosApi();
 
 const submitPlanificada = async () => {
   if (prodPlan.value) {
-    objObjetivo.fecha = date;
+    limpiarObjeto();
+    objObjetivo.fecha = fechaPlan.value;
     objObjetivo.cliente_id = Number(idCliente.value);
     objObjetivo.planificada = Number(prodPlan.value);
 

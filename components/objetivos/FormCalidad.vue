@@ -128,11 +128,11 @@ const toast = useToast();
 const calInspSol = ref();
 const dateInspSol = ref();
 const fileSol = ref<File | null>(null);
-const idCliente = useCookie("idCliente");
 const fileCheck = ref<File | null>(null);
+const idCliente = useCookie("idCliente");
 const errorFileSol = ref<string | null>(null);
 const errorFileCheck = ref<string | null>(null);
-const { createCalidad } = useObjetivosApi();
+const { createCalidad, createFile } = useObjetivosApi();
 
 let errorsCheck = ref({
   dateCheck: false,
@@ -172,24 +172,33 @@ const submitCheck = async () => {
   };
 
   if (noErrors) {
-    const resultado = await createCalidad(objCalidad);
+    // const resultado = await createCalidad(objCalidad);
 
-    if (resultado.success) {
-      calCheck.value = "";
-      fileCheck.value = null;
-      toast.add({
-        severity: "success",
-        summary: "Guardado correctamente.",
-        detail: "Calidad con checklist guardada correctamente.",
-        life: 3000,
-      });
+    // if (resultado.success) {
+    //   calCheck.value = "";
+    //   fileCheck.value = null;
+    //   toast.add({
+    //     severity: "success",
+    //     summary: "Guardado correctamente.",
+    //     detail: "Calidad con checklist guardada correctamente.",
+    //     life: 3000,
+    //   });
+    // } else {
+    //   toast.add({
+    //     severity: "error",
+    //     summary: "Error al guardar.",
+    //     detail: resultado.error,
+    //     life: 3000,
+    //   });
+    // }
+
+    if (fileCheck.value) {
+      const resultado = await createFile(
+        fileCheck.value,
+        Number(idCliente.value)
+      );
     } else {
-      toast.add({
-        severity: "error",
-        summary: "Error al guardar.",
-        detail: resultado.error,
-        life: 3000,
-      });
+      console.log("No hay archivo seleccionado :b");
     }
   }
 };
