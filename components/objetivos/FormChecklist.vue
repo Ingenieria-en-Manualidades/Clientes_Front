@@ -1,15 +1,15 @@
 <template>
   <form class="w-[50%] max-w-[200px] sm:max-w-[250px] text-xs sm:text-base">
     <fieldset
-      class="border-[1px] border-black font-manrope-r rounded-lg p-2 sm:p-3"
+      class="border-[1px] border-black rounded-lg p-2 sm:p-3 font-manrope-r"
     >
-      <legend class="px-1 font-manrope-l">Inspección sol</legend>
+      <legend class="px-1 font-manrope-l">CheckList</legend>
       <p class="font-bold mb-1">Mes</p>
-      <p v-if="errorsInsp.dateInspSol" class="text-red-500 text-sm pb-1">
+      <p v-if="errorsCheck.dateCheck" class="text-red-500 text-sm pb-1">
         Este campo es obligatorio
       </p>
       <Calendar
-        v-model="dateInspSol"
+        v-model="dateCheck"
         :manualInput="false"
         view="month"
         dateFormat="yy/mm"
@@ -19,15 +19,12 @@
         iconDisplay="input"
       />
       <p class="font-bold mt-4 mb-1">Calificación</p>
-      <p
-        v-if="errorsInsp.calificacionInspSol"
-        class="text-red-500 text-sm pb-1"
-      >
+      <p v-if="errorsCheck.calificacionCheck" class="text-red-500 text-sm pb-1">
         Este campo es obligatorio
       </p>
       <input
         type="text"
-        v-model="calInspSol"
+        v-model="calCheck"
         class="border-[1px] border-gray-500 rounded-md p-2 outline-none w-full"
       />
       <div class="mt-5">
@@ -35,24 +32,31 @@
           type="file"
           ref="fileInput"
           class="hidden"
-          id="fileSol"
-          @change="subirArchivoSol"
+          id="fileCheck"
+          @change="subirArchivoCheck"
         />
         <label
-          for="fileSol"
+          for="fileCheck"
           class="flex justify-center mt-3 py-2 bg-[#c86a2b] font-bold text-white cursor-pointer rounded-lg"
         >
           <i class="pi pi-upload pr-3 pt-1"></i> Cargar evidencia</label
         >
       </div>
+      <button
+        type="button"
+        @click="removeArchivo"
+        class="hidden border-[1px] border-black"
+      >
+        x
+      </button>
       <p class="text-red-500 text-sm">
-        {{ errorFileSol }}
+        {{ errorFileCheck }}
       </p>
       <div class="flex justify-center font-bold mt-5">
         <button
           type="button"
           class="bg-[#4789c8] w-full py-2 rounded-lg text-white"
-          @click="submitSol()"
+          @click="submitCheck()"
         >
           Guardar
         </button>
@@ -67,62 +71,62 @@ import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
+const calCheck = ref();
+const dateCheck = ref();
+const fileCheck = ref<File | null>(null);
+let errorsCheck = ref({
+  dateCheck: false,
+  calificacionCheck: false,
+  fileCheck: false,
+});
+const errorFileCheck = ref<string | null>(null);
 const idCliente = useCookie("idCliente");
 const toast = useToast();
 const fileInput = ref<HTMLInputElement | null>(null);
 const { createCalidad, createFile } = useObjetivosApi();
 
-const calInspSol = ref();
-const dateInspSol = ref();
-const fileSol = ref<File | null>(null);
-const errorFileSol = ref<string | null>(null);
-
 const removeArchivo = () => {
-  fileSol.value = null;
+  fileCheck.value = null;
   if (fileInput.value) {
     fileInput.value.value = "";
   }
 };
 
-let errorsInsp = ref({
-  dateInspSol: false,
-  calificacionInspSol: false,
-  fileSol: false,
-});
-
-const submitSol = async () => {
-  errorsInsp.value = {
-    dateInspSol: false,
-    calificacionInspSol: false,
-    fileSol: false,
+// Método para validar y enviar el formulario
+const submitCheck = async () => {
+  //Reiniciar los errores de checkList
+  errorsCheck.value = {
+    dateCheck: false,
+    calificacionCheck: false,
+    fileCheck: false,
   };
 
-  if (!dateInspSol.value) errorsInsp.value.dateInspSol = true;
-  if (!calInspSol.value) errorsInsp.value.calificacionInspSol = true;
-  if (!fileSol.value) {
-    errorFileSol.value = "No hay ningún archivo agregado.";
-    errorsInsp.value.fileSol = true;
+  if (!dateCheck.value) errorsCheck.value.dateCheck = true;
+  if (!calCheck.value) errorsCheck.value.calificacionCheck = true;
+  if (!fileCheck.value) {
+    errorFileCheck.value = "No hay ningún archivo agregado.";
+    errorsCheck.value.fileCheck = true;
   }
 
-  const noErrors = !Object.values(errorsInsp.value).includes(true);
+  const noErrors = !Object.values(errorsCheck.value).includes(true);
 
   const objCalidad = {
-    fecha: dateInspSol.value,
+    fecha: dateCheck.value,
     cliente_endpoint_id: Number(idCliente.value),
-    checklist: null,
-    inspeccion: Number(calInspSol.value),
+    checklist: Number(calCheck.value),
+    inspeccion: null,
   };
 
   if (noErrors) {
     const resultado = await createCalidad(objCalidad);
 
     if (resultado.success) {
-      console.log("osea");
-
+      calCheck.value = "";
+      fileCheck.value = null;
       toast.add({
         severity: "success",
         summary: "Guardado correctamente.",
-        detail: "Calidad con inspección guardada correctamente.",
+        detail: "Calidad con checklist guardada correctamente.",
         life: 3000,
       });
     } else {
@@ -133,10 +137,19 @@ const submitSol = async () => {
         life: 3000,
       });
     }
+
+    if (fileCheck.value) {
+      const resultado = await createFile(
+        fileCheck.value,
+        Number(idCliente.value)
+      );
+    } else {
+      console.log("No hay archivo seleccionado :b");
+    }
   }
 };
 
-const subirArchivoSol = (event: Event) => {
+const subirArchivoCheck = (event: Event) => {
   const target = event.target as HTMLInputElement;
 
   // Obtenemos el archivo cargado
@@ -147,16 +160,16 @@ const subirArchivoSol = (event: Event) => {
     // Validamos que el archivo sea tipo .pdf
     if (archivoCargado.type === "application/pdf") {
       // Guardamos el archivo en una variable ref
-      fileSol.value = archivoCargado;
-      errorFileSol.value = null;
+      fileCheck.value = archivoCargado;
+      errorFileCheck.value = null;
     } else {
       // En caso de haber seleccionado un anterior y no volver a elegir uno
-      errorFileSol.value = "El archivo debe ser PDF.";
-      fileSol.value = null;
+      errorFileCheck.value = "El archivo debe ser PDF.";
+      fileCheck.value = null;
     }
   } else {
-    errorFileSol.value = "No hay ningún archivo agregado.";
-    fileSol.value = null;
+    errorFileCheck.value = "No hay ningún archivo agregado.";
+    fileCheck.value = null;
   }
 };
 </script>
