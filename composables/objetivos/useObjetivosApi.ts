@@ -1,5 +1,5 @@
 import { useCookie, useRuntimeConfig } from 'nuxt/app';
-import { Meta, Calidad, Accidente, ApiPromise, Objetivos } from '../../interfaces/objetives';
+import { Meta, Calidad, Accidente, ApiPromise, Objetivos, Archivo } from '../../interfaces/objetives';
 
 export const useObjetivosApi = () => {
   const config = useRuntimeConfig();
@@ -48,9 +48,22 @@ export const useObjetivosApi = () => {
       const data = await response.json();
 
       if (response.ok) {
-        return {success: true, data: data};
+        const objArchivo = {
+          archivo: objCalidad.archivo,
+          cliente_endpoint_id: objCalidad.cliente_endpoint_id,
+          tipo_formulario: objCalidad.tipo_formulario,
+          tablero_sae_id: data.tablero_sae_id,
+        };
+
+        const response = await createFile(objArchivo);
+
+        if (response.success) {
+          return {success: response.success, data: response.data};
+        } else {
+          return { success: false, error: response.error || 'Error a la hora de insertar en "File"' };
+        }
       } else {
-        return { success: false, error: data.message || 'Error a la hora de insertar en "Calidad"' }
+        return { success: false, error: data.message || 'Error a la hora de insertar en "Calidad"' };
       }
     } catch (error) {
       console.error("Error de catch en la inserción 'Calidad': ", error);
@@ -161,26 +174,32 @@ export const useObjetivosApi = () => {
     }
   }
 
-  const createFile = async (archivo: File, cliente_id: number) => {
+  const createFile = async (objArchivo: Archivo): Promise<ApiPromise<any>> => {
 
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
 
-    formData.append('archivo', archivo);
-    formData.append('cliente_endpoint_id', cliente_id.toString());
+      formData.append('archivo', objArchivo.archivo);
+      formData.append('cliente_endpoint_id', objArchivo.cliente_endpoint_id.toString());
+      formData.append('tipo_formulario', objArchivo.tipo_formulario);
+      formData.append('tablero_sae_id', objArchivo.tablero_sae_id.toString());
 
-    const response = await fetch(`${url}api/guardarArchivo`, {
-      method: 'POST',
-      body: formData,
-    });
+      const response = await fetch(`${url}api/guardarArchivo`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      console.log("TODO BENE: ", data.message);
-      return "no mames";
-    } else {
-      console.log("TODO MALO: ", data.message);
-      return "no funciono :v";
+      if (response.ok) {
+        return {success: data.success, data: data};
+      } else {
+        console.log("error en la inserción 'File': ", data.message);
+        return { success: false, error: data.messagge || 'Error a la hora de guardar el archivo' }
+      }
+    } catch (error) {
+      console.error("Error de catch en la inserción 'File': ", error);
+      return { success: false, error: data.messagge }
     }
   }
 

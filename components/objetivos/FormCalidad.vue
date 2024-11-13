@@ -111,18 +111,20 @@ const submitSol = async () => {
     cliente_endpoint_id: Number(idCliente.value),
     checklist: null,
     inspeccion: Number(calInspSol.value),
+    archivo: fileSol.value,
+    tipo_formulario: "inspeccion_sol",
   };
 
   if (noErrors) {
     const resultado = await createCalidad(objCalidad);
 
     if (resultado.success) {
-      console.log("osea");
-
+      calInspSol.value = "";
+      fileSol.value = null;
       toast.add({
         severity: "success",
         summary: "Guardado correctamente.",
-        detail: "Calidad con inspección guardada correctamente.",
+        detail: resultado.data.message,
         life: 3000,
       });
     } else {

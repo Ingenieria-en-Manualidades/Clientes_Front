@@ -115,6 +115,8 @@ const submitCheck = async () => {
     cliente_endpoint_id: Number(idCliente.value),
     checklist: Number(calCheck.value),
     inspeccion: null,
+    archivo: fileCheck.value,
+    tipo_formulario: "checklist",
   };
 
   if (noErrors) {
@@ -126,7 +128,7 @@ const submitCheck = async () => {
       toast.add({
         severity: "success",
         summary: "Guardado correctamente.",
-        detail: "Calidad con checklist guardada correctamente.",
+        detail: resultado.data.message,
         life: 3000,
       });
     } else {
@@ -136,15 +138,6 @@ const submitCheck = async () => {
         detail: resultado.error,
         life: 3000,
       });
-    }
-
-    if (fileCheck.value) {
-      const resultado = await createFile(
-        fileCheck.value,
-        Number(idCliente.value)
-      );
-    } else {
-      console.log("No hay archivo seleccionado :b");
     }
   }
 };

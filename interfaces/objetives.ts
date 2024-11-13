@@ -12,6 +12,8 @@ export interface Meta {
     cliente_endpoint_id: number,
     checklist: number | null | undefined,
     inspeccion: number | null | undefined,
+    archivo: File | null,
+    tipo_formulario: string,
   }
 
   export interface Accidente {
@@ -35,4 +37,11 @@ export interface Meta {
     success: boolean;
     data?: T | undefined;
     error?: string;
+  }
+
+  export interface Archivo {
+    archivo: File | null,
+    cliente_endpoint_id: number,
+    tipo_formulario: string,
+    tablero_sae_id: number
   }
