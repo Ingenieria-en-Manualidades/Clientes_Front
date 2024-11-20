@@ -38,11 +38,11 @@
           >
             <li v-if="modulo.submodulos && modulo.visible" class="list-none">
               <div
-                class="py-3 pl-6 hover:bg-white rounded-lg text-white hover:text-black w-[120%] cursor-pointer"
+                class="py-3 pl-4 hover:bg-white rounded-lg text-white hover:text-black w-[120%] cursor-pointer"
                 @click="visible = !visible"
               >
                 <i :class="modulo.icono"></i>
-                <span class="ml-6">{{ modulo.nombre }}</span>
+                <span class="ml-3">{{ modulo.nombre }}</span>
                 <i
                   :class="[
                     'pi pi-angle-right pl-2 transition origin-center duration-300 float-right pt-1 mr-2',
@@ -51,7 +51,7 @@
                 ></i>
               </div>
               <ul
-                :class="['ml-6 pl-5 text-white', visible ? 'block' : 'hidden']"
+                :class="['ml-2 pl-3 text-white', visible ? 'block' : 'hidden']"
               >
                 <router-link
                   v-for="(submodulo, index) in modulo.submodulos"
@@ -68,7 +68,7 @@
                     class="flex py-3 pl-6 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-[124%]"
                   >
                     <i :class="submodulo.icono"
-                      ><span class="ml-6 font-manrope-l text-base">{{
+                      ><span class="ml-3 font-manrope-l text-base">{{
                         submodulo.nombre
                       }}</span></i
                     >
@@ -86,10 +86,10 @@
                 v-ripple
                 :href="href"
                 @click="navigate"
-                class="flex py-3 pl-6 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-[124%]"
+                class="flex py-3 pl-4 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-[124%]"
               >
                 <i v-if="modulo.icono" :class="modulo.icono"
-                  ><span class="ml-6 font-manrope-l text-base">{{
+                  ><span class="ml-3 font-manrope-l text-base">{{
                     modulo.nombre
                   }}</span></i
                 >
