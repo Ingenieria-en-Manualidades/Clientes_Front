@@ -38,7 +38,7 @@
           >
             <li v-if="modulo.submodulos && modulo.visible" class="list-none">
               <div
-                class="py-3 pl-4 hover:bg-white rounded-lg text-white hover:text-black w-[120%] cursor-pointer"
+                class="py-3 pl-4 hover:bg-white rounded-lg text-white hover:text-black w-[245px] cursor-pointer"
                 @click="visible = !visible"
               >
                 <i :class="modulo.icono"></i>
@@ -51,7 +51,7 @@
                 ></i>
               </div>
               <ul
-                :class="['ml-2 pl-3 text-white', visible ? 'block' : 'hidden']"
+                :class="['ml-3 pl-3 text-white', visible ? 'block' : 'hidden']"
               >
                 <router-link
                   v-for="(submodulo, index) in modulo.submodulos"
@@ -65,7 +65,7 @@
                     v-if="submodulo.visible"
                     :href="href"
                     @click="navigate"
-                    class="flex py-3 pl-6 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-[124%]"
+                    class="flex py-3 px-3 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-full"
                   >
                     <i :class="submodulo.icono"
                       ><span class="ml-3 font-manrope-l text-base">{{
@@ -86,7 +86,7 @@
                 v-ripple
                 :href="href"
                 @click="navigate"
-                class="flex py-3 pl-4 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-[124%]"
+                class="flex py-3 pl-4 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-full"
               >
                 <i v-if="modulo.icono" :class="modulo.icono"
                   ><span class="ml-3 font-manrope-l text-base">{{

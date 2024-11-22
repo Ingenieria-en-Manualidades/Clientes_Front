@@ -36,27 +36,27 @@ export const useModulos = () => {
   },
   
   {
-    icono: "pi pi-bullseye",
+    icono: "pi pi-table",
     nombre: "Tablero Sae",
     visible: false,
     permission: 'view_objetivos',
     submodulos: [
       {
-        icono: "pi pi-user",
+        icono: "pi pi-bullseye",
         nombre: "Metas",
         ruta: "/objetivos",
         visible: false,
         permission: 'view_objetivos_mensuales'
       },
       {
-        icono: "pi pi-verified",
+        icono: "pi pi-check-square",
         nombre: "Cumplimiento Mensual",
         ruta: "/objetivos/calidad",
         visible: false,
         permission: 'view_objetivos_calidad'
       },
       {
-        icono: "pi pi-user",
+        icono: "pi pi-list-check",
         nombre: "Cumplimiento Diarios",
         ruta: "/objetivos/diarios",
         visible: false,

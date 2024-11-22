@@ -3,7 +3,7 @@
     <title>Improductividades</title>
     <TabPanelRemisiones :items="items" />
     <div v-if="data?.length !== 0">
-      <div v-if="calendario">
+      <div>
         <Calendar
           v-model="dates"
           selectionMode="range"
@@ -24,9 +24,9 @@
       </div>
       <button
         type="button"
-        class="bg-azulClaroIENM px-3 py-1 rounded mb-2 ml-[2.5%]"
+        v-if="recargar"
+        class="bg-azulClaroIENM px-3 py-1 rounded mb-2"
         @click="recargarTabla"
-        v-else
       >
         <i class="pi pi-refresh text-white"
           ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
@@ -105,7 +105,7 @@ let avisoIcono = ref();
 const toast = useToast();
 let avisodetalles = ref();
 const isLoading = ref(false);
-const calendario = ref(true);
+const recargar = ref(true);
 const botonRecargar = ref(false);
 const estadoImproductividades = ref(false);
 const data = ref<Improductividad[] | undefined>([]);
@@ -151,13 +151,13 @@ const consultarImproductividades = async () => {
         "No se encontro ninguna improductividad entre esas fechas";
       botonRecargar.value = true;
     }
-    calendario.value = false;
+    recargar.value = true;
   }
 };
 
 const recargarTabla = () => {
   listar();
-  calendario.value = true;
+  recargar.value = false;
   dates.value = null;
 };
 
