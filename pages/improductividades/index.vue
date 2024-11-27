@@ -118,8 +118,20 @@ const listar = async () => {
 
   const response = await listarImproductividades(idCliente.value);
 
-  if (response.success) {
-    data.value = response.data?.filter((rem) => rem.estado === null);
+  if (response.success && response.data) {
+    data.value = response.data.filter((rem) => rem.estado === null);
+
+    // const arrayTurnos = ["B", "C"];
+    // let dataFilter: Improductividad[] = [];
+    // for (const e of arrayTurnos) {
+    //   let arrayTurno: Improductividad[];
+    //   arrayTurno = data.value.filter((rem) => rem.turno === e);
+    //   console.log("arrayturno: ", arrayTurno);
+
+    //   dataFilter = dataFilter.concat(arrayTurno);
+    //   console.log("dataFilter loop: ", dataFilter);
+    // }
+    // console.log("dataFilter: ", dataFilter);
 
     if (data.value.length === 0) {
       estadoImproductividades.value = true;

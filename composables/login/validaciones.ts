@@ -99,7 +99,6 @@ export const useValidaciones = () => {
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
           const resultado = await response.json();
-          console.log(resultado);
           return resultado.success;
         } else {
           return false;
