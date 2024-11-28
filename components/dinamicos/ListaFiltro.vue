@@ -1,16 +1,16 @@
 <template>
-  <div class="w-[165px] relative">
+  <div class="relative">
     <button
       type="button"
       @click="visible = !visible"
-      class="w-[16%] float-right border-[1px] border-black rounded pt-1 px-1"
+      class="float-right border-[1px] border-black rounded pt-1 px-1 bg-white hover:bg-[#fdb740] hover:border-[#fdb740]"
     >
-      <i class="pi pi-angle-down"></i>
+      <i class="pi pi-angle-down text-black"></i>
     </button>
     <div
       :class="[
-        'w-full absolute border-[1px] border-black rounded',
-        visible ? 'block translate-y-8' : 'hidden',
+        'absolute border-[1px] border-black rounded top-0 right-0',
+        visible ? 'block translate-y-7' : 'hidden',
       ]"
     >
       <label
@@ -20,7 +20,7 @@
       >
         <div
           :class="[
-            'py-1 px-2 bg-white hover:bg-[#fdb740] cursor-pointer font-manrope-r',
+            'py-1 px-3 bg-white hover:bg-[#fdb740] flex cursor-pointer font-manrope-r text-black text-left',
             index === 0
               ? 'rounded-t border-b-[1px] border-b-black'
               : index + 1 === opciones?.length
@@ -29,11 +29,12 @@
           ]"
         >
           <Checkbox
-            v-model="lenguajes"
+            v-model="elegidos"
             :inputId="index + 'ID'"
             :value="opcion"
+            @click="seleccionar"
           />
-          <span class="ml-2">{{ opcion }}</span>
+          <p class="ml-2">{{ opcion }}</p>
         </div>
       </label>
     </div>
@@ -43,8 +44,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-const lenguajes = ref();
 const visible = ref(true);
+const elegidos = defineModel();
 
 const props = defineProps({
   opciones: {
@@ -52,4 +53,14 @@ const props = defineProps({
     require: true,
   },
 });
+const emit = defineEmits(["metodo"]);
+
+const seleccionar = async () => {
+  await dormir(100);
+  emit("metodo");
+};
+
+const dormir = (tiempo: number) => {
+  return new Promise((resolve) => setTimeout(resolve, tiempo));
+};
 </script>

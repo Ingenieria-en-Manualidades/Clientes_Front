@@ -40,9 +40,20 @@
           :pag="true"
         >
           <template #nuevaColumna>
+            <th class="bg-azulIENM text-white">
+              <div class="flex gap-2">
+                <p>LINEA</p>
+                <ListaFiltro
+                  :opciones="lineas"
+                  v-model="turnosElegidos"
+                  @metodo="getFiltrarTurno"
+                />
+              </div>
+            </th>
             <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
           </template>
           <template #botones="{ data }">
+            <td>{{ data.dispositivo }}</td>
             <td>
               <ModalGestionar
                 :idImproductividad="data.improductividad_id"
@@ -89,6 +100,7 @@ import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import ProgressSpinner from "primevue/progressspinner";
 import Tabla from "../../components/dinamicos/Tabla.vue";
+import ListaFiltro from "~/components/dinamicos/ListaFiltro.vue";
 import type { Improductividad } from "../../interfaces/improductividades";
 import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
@@ -98,40 +110,34 @@ import {
   cols,
   useDatosImproductividades,
   atributos,
+  lineas,
 } from "../../composables/improductividades/datosImproductividades";
 
 const dates = ref();
 let avisoIcono = ref();
 const toast = useToast();
 let avisodetalles = ref();
-const isLoading = ref(false);
 const recargar = ref(true);
+const idCliente = useCookie("idCliente");
+const turnosElegidos = ref<String[]>([]);
+const isLoading = ref(false);
 const botonRecargar = ref(false);
 const estadoImproductividades = ref(false);
 const data = ref<Improductividad[] | undefined>([]);
-const { setConsultar } = useDatosImproductividades();
+const { setConsultar, filtrarPorTurno } = useDatosImproductividades();
 const { listarImproductividades } = useImproductividadesAPI();
+
+const alerta = () => {
+  alert("Géneros: " + turnosElegidos.value);
+};
 
 const listar = async () => {
   isLoading.value = true;
-  const idCliente = useCookie("idCliente");
 
   const response = await listarImproductividades(idCliente.value);
 
   if (response.success && response.data) {
     data.value = response.data.filter((rem) => rem.estado === null);
-
-    // const arrayTurnos = ["B", "C"];
-    // let dataFilter: Improductividad[] = [];
-    // for (const e of arrayTurnos) {
-    //   let arrayTurno: Improductividad[];
-    //   arrayTurno = data.value.filter((rem) => rem.turno === e);
-    //   console.log("arrayturno: ", arrayTurno);
-
-    //   dataFilter = dataFilter.concat(arrayTurno);
-    //   console.log("dataFilter loop: ", dataFilter);
-    // }
-    // console.log("dataFilter: ", dataFilter);
 
     if (data.value.length === 0) {
       estadoImproductividades.value = true;
@@ -164,6 +170,20 @@ const consultarImproductividades = async () => {
       botonRecargar.value = true;
     }
     recargar.value = true;
+  }
+};
+
+const getFiltrarTurno = async () => {
+  const response = await listarImproductividades(idCliente.value);
+
+  if (response.success && response.data) {
+    data.value = response.data.filter((rem) => rem.estado === null);
+  }
+
+  if (turnosElegidos.value?.length === 0) {
+    listar();
+  } else {
+    data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
   }
 };
 

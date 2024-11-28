@@ -49,8 +49,25 @@ export const useDatosImproductividades = () => {
     return fechas;
   }
 
+  const filtrarPorTurno = (turnosElegidos: String[], data: Improductividad[] | undefined) => {
+    let dataFilter: Improductividad[] = [];
+
+    for (const e of turnosElegidos) {
+      let arrayTurno: Improductividad[] | undefined;
+      
+      if (data) {
+        arrayTurno = data.filter((rem) => rem.dispositivo === e);
+        // console.log("arrayturno: ", arrayTurno);
+        dataFilter = dataFilter.concat(arrayTurno);
+        // console.log("dataFilter loop: ", dataFilter);
+      }
+    }
+    return dataFilter;
+  };
+
   return {
     setConsultar,
+    filtrarPorTurno,
   };
 }
 
@@ -74,9 +91,7 @@ export const items = ref([
 
 export const cols = ref([
   "actividad",
-  "linea",
   "descripcion",
-  "turno",
   "fecha de ingreso",
   "horas",
   "minutos",
@@ -86,12 +101,12 @@ export const cols = ref([
 
 export const atributos = ref([
   "actividad",
-  "dispositivo",
   "descripcion",
-  "turno",
   "fecha_ingreso",
   "horas",
   "minutos",
   "cant_personas",
   "horasxpersonas"
 ]);
+
+export const lineas = ref(["1", "2", "3", "4", "5", "6"]);
