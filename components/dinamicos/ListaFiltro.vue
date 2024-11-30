@@ -14,7 +14,7 @@
       ]"
     >
       <label
-        :for="index + 'ID'"
+        :for="opcion + 'ID'"
         v-for="(opcion, index) in opciones"
         v-bind:key="index"
       >
@@ -30,7 +30,7 @@
         >
           <Checkbox
             v-model="elegidos"
-            :inputId="index + 'ID'"
+            :inputId="opcion + 'ID'"
             :value="opcion"
             @click="seleccionar"
           />
@@ -44,13 +44,13 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-const visible = ref(true);
+const visible = ref(false);
 const elegidos = defineModel();
 
 const props = defineProps({
   opciones: {
     type: Array as () => String[],
-    require: true,
+    required: true,
   },
 });
 const emit = defineEmits(["metodo"]);

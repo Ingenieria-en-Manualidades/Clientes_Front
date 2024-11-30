@@ -21,17 +21,17 @@
         >
           <i class="pi pi-search text-white"></i>
         </button>
-      </div>
-      <button
-        type="button"
-        v-if="recargar"
-        class="bg-azulClaroIENM px-3 py-1 rounded mb-2"
-        @click="recargarTabla"
-      >
-        <i class="pi pi-refresh text-white"
-          ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
+        <button
+          type="button"
+          v-if="recargar"
+          class="bg-azulClaroIENM px-3 py-1 rounded mb-2 float-right mt-2"
+          @click="recargarTabla"
         >
-      </button>
+          <i class="pi pi-refresh text-white"
+            ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
+          >
+        </button>
+      </div>
       <div class="w-[100%] overflow-x-auto">
         <Tabla
           :cabezas="cols"
@@ -45,6 +45,16 @@
                 <p>LINEA</p>
                 <ListaFiltro
                   :opciones="lineas"
+                  v-model="lineasElegidas"
+                  @metodo="getFiltrarLinea"
+                />
+              </div>
+            </th>
+            <th class="bg-azulIENM text-white">
+              <div class="flex gap-2">
+                <p>TURNO</p>
+                <ListaFiltro
+                  :opciones="turnos"
                   v-model="turnosElegidos"
                   @metodo="getFiltrarTurno"
                 />
@@ -54,6 +64,7 @@
           </template>
           <template #botones="{ data }">
             <td>{{ data.dispositivo }}</td>
+            <td>{{ data.turno }}</td>
             <td>
               <ModalGestionar
                 :idImproductividad="data.improductividad_id"
@@ -91,6 +102,7 @@
         Recargar tabla
       </button>
     </div>
+    {{ turnosElegidos }}
   </div>
 </template>
 
@@ -111,25 +123,24 @@ import {
   useDatosImproductividades,
   atributos,
   lineas,
+  turnos,
 } from "../../composables/improductividades/datosImproductividades";
 
 const dates = ref();
 let avisoIcono = ref();
 const toast = useToast();
 let avisodetalles = ref();
-const recargar = ref(true);
+const recargar = ref(false);
 const idCliente = useCookie("idCliente");
+const lineasElegidas = ref<String[]>([]);
 const turnosElegidos = ref<String[]>([]);
 const isLoading = ref(false);
 const botonRecargar = ref(false);
 const estadoImproductividades = ref(false);
 const data = ref<Improductividad[] | undefined>([]);
-const { setConsultar, filtrarPorTurno } = useDatosImproductividades();
+const { setConsultar, filtrarPorLinea, filtrarPorTurno } =
+  useDatosImproductividades();
 const { listarImproductividades } = useImproductividadesAPI();
-
-const alerta = () => {
-  alert("Géneros: " + turnosElegidos.value);
-};
 
 const listar = async () => {
   isLoading.value = true;
@@ -161,15 +172,30 @@ const consultarImproductividades = async () => {
       life: 3000,
     });
   } else {
-    data.value = await setConsultar(data.value, dates.value);
-    if (data.value.length === 0) {
-      estadoImproductividades.value = true;
-      avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
-      avisodetalles.value =
-        "No se encontro ninguna improductividad entre esas fechas";
-      botonRecargar.value = true;
+    const response = await listarImproductividades(idCliente.value);
+
+    if (response.success && response.data) {
+      data.value = response.data.filter((rem) => rem.estado === null);
+
+      if (lineasElegidas.value.length !== 0) {
+        data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
+      }
+
+      if (turnosElegidos.value.length !== 0) {
+        data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
+      }
+
+      data.value = await setConsultar(data.value, dates.value);
+
+      if (data.value.length === 0) {
+        estadoImproductividades.value = true;
+        avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+        avisodetalles.value =
+          "No se encontro ninguna improductividad entre esas fechas";
+        botonRecargar.value = true;
+      }
+      recargar.value = true;
     }
-    recargar.value = true;
   }
 };
 
@@ -178,12 +204,48 @@ const getFiltrarTurno = async () => {
 
   if (response.success && response.data) {
     data.value = response.data.filter((rem) => rem.estado === null);
-  }
 
-  if (turnosElegidos.value?.length === 0) {
-    listar();
-  } else {
-    data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
+    if (dates.value) {
+      data.value = await setConsultar(data.value, dates.value);
+    }
+
+    if (turnosElegidos.value.length === 0) {
+      if (dates.value) {
+        data.value = await setConsultar(data.value, dates.value);
+      } else {
+        listar();
+        recargar.value = false;
+        dates.value = null;
+      }
+    } else {
+      data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
+      recargar.value = true;
+    }
+  }
+};
+
+const getFiltrarLinea = async () => {
+  const response = await listarImproductividades(idCliente.value);
+
+  if (response.success && response.data) {
+    data.value = response.data.filter((rem) => rem.estado === null);
+
+    if (dates.value) {
+      data.value = await setConsultar(data.value, dates.value);
+    }
+
+    if (lineasElegidas.value.length === 0) {
+      if (dates.value) {
+        data.value = await setConsultar(data.value, dates.value);
+      } else {
+        listar();
+        recargar.value = false;
+        dates.value = null;
+      }
+    } else {
+      data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
+      recargar.value = true;
+    }
   }
 };
 
@@ -191,6 +253,8 @@ const recargarTabla = () => {
   listar();
   recargar.value = false;
   dates.value = null;
+  lineasElegidas.value.splice(0, lineasElegidas.value.length);
+  turnosElegidos.value.splice(0, turnosElegidos.value.length);
 };
 
 listar();
