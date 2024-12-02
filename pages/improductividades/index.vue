@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full md:w-[95%]">
+  <div class="w-full md:w-[97%]">
     <title>Improductividades</title>
     <TabPanelRemisiones :items="items" />
     <div v-if="data?.length !== 0">
@@ -34,6 +34,7 @@
       </div>
       <div class="w-[100%] overflow-x-auto">
         <Tabla
+          ref="compTabla"
           :cabezas="cols"
           :arrayData="data"
           :atributosDatos="atributos"
@@ -102,7 +103,6 @@
         Recargar tabla
       </button>
     </div>
-    {{ turnosElegidos }}
   </div>
 </template>
 
@@ -112,7 +112,7 @@ import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import ProgressSpinner from "primevue/progressspinner";
 import Tabla from "../../components/dinamicos/Tabla.vue";
-import ListaFiltro from "~/components/dinamicos/ListaFiltro.vue";
+import ListaFiltro from "../../components/dinamicos/ListaFiltro.vue";
 import type { Improductividad } from "../../interfaces/improductividades";
 import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
@@ -141,6 +141,12 @@ const data = ref<Improductividad[] | undefined>([]);
 const { setConsultar, filtrarPorLinea, filtrarPorTurno } =
   useDatosImproductividades();
 const { listarImproductividades } = useImproductividadesAPI();
+
+type ComponenteTabla = {
+  reestablecerPaginas: () => Promise<boolean>;
+};
+
+const compTabla = ref<ComponenteTabla | null>(null);
 
 const listar = async () => {
   isLoading.value = true;
@@ -190,9 +196,54 @@ const consultarImproductividades = async () => {
       if (data.value.length === 0) {
         estadoImproductividades.value = true;
         avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
-        avisodetalles.value =
-          "No se encontro ninguna improductividad entre esas fechas";
+        avisodetalles.value = "No se encontro ninguna improductividad";
         botonRecargar.value = true;
+      } else {
+        const x = await compTabla.value?.reestablecerPaginas();
+        console.log("x: ", x);
+      }
+      recargar.value = true;
+    }
+  }
+};
+
+const getFiltrarLinea = async () => {
+  const response = await listarImproductividades(idCliente.value);
+
+  if (response.success && response.data) {
+    data.value = response.data.filter((rem) => rem.estado === null);
+
+    if (dates.value) {
+      data.value = await setConsultar(data.value, dates.value);
+    }
+
+    if (turnosElegidos.value.length !== 0) {
+      data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
+    }
+
+    if (lineasElegidas.value.length === 0) {
+      if (dates.value) {
+        data.value = await setConsultar(data.value, dates.value);
+      } else {
+        if (turnosElegidos.value.length !== 0) {
+          data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
+        } else {
+          listar();
+          recargar.value = false;
+          dates.value = null;
+        }
+      }
+    } else {
+      data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
+
+      if (data.value.length === 0) {
+        estadoImproductividades.value = true;
+        avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+        avisodetalles.value = "No se encontro ninguna improductividad";
+        botonRecargar.value = true;
+      } else {
+        const x = await compTabla.value?.reestablecerPaginas();
+        console.log("x: ", x);
       }
       recargar.value = true;
     }
@@ -209,41 +260,34 @@ const getFiltrarTurno = async () => {
       data.value = await setConsultar(data.value, dates.value);
     }
 
+    if (lineasElegidas.value.length !== 0) {
+      data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
+    }
+
     if (turnosElegidos.value.length === 0) {
       if (dates.value) {
         data.value = await setConsultar(data.value, dates.value);
       } else {
-        listar();
-        recargar.value = false;
-        dates.value = null;
+        if (lineasElegidas.value.length !== 0) {
+          data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
+        } else {
+          listar();
+          recargar.value = false;
+          dates.value = null;
+        }
       }
     } else {
       data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
-      recargar.value = true;
-    }
-  }
-};
 
-const getFiltrarLinea = async () => {
-  const response = await listarImproductividades(idCliente.value);
-
-  if (response.success && response.data) {
-    data.value = response.data.filter((rem) => rem.estado === null);
-
-    if (dates.value) {
-      data.value = await setConsultar(data.value, dates.value);
-    }
-
-    if (lineasElegidas.value.length === 0) {
-      if (dates.value) {
-        data.value = await setConsultar(data.value, dates.value);
+      if (data.value.length === 0) {
+        estadoImproductividades.value = true;
+        avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+        avisodetalles.value = "No se encontro ninguna improductividad";
+        botonRecargar.value = true;
       } else {
-        listar();
-        recargar.value = false;
-        dates.value = null;
+        const x = await compTabla.value?.reestablecerPaginas();
+        console.log("x: ", x);
       }
-    } else {
-      data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
       recargar.value = true;
     }
   }

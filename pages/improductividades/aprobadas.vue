@@ -3,7 +3,7 @@
   <div class="w-full md:w-[90%]">
     <TabPanelRemisiones :items="items" />
     <div v-if="data?.length !== 0" class="px-3">
-      <div v-if="calendario">
+      <div>
         <Calendar
           v-model="dates"
           selectionMode="range"
@@ -16,29 +16,56 @@
           iconDisplay="input"
         />
         <button
-          @click="consultarRemisiones"
+          @click="consultarImproductividades"
           class="bg-azulClaroIENM ml-2 p-[11px] rounded"
         >
           <i class="pi pi-search text-white"></i>
         </button>
-      </div>
-      <button
-        type="button"
-        class="bg-azulClaroIENM px-3 py-1 rounded mb-2 ml-[2.5%]"
-        @click="recargarTabla"
-        v-else
-      >
-        <i class="pi pi-refresh text-white"
-          ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
+        <button
+          type="button"
+          v-if="recargar"
+          class="bg-azulClaroIENM px-3 py-1 rounded mb-2 float-right mt-2"
+          @click="recargarTabla"
         >
-      </button>
+          <i class="pi pi-refresh text-white"
+            ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
+          >
+        </button>
+      </div>
       <div class="w-[100%] overflow-x-auto">
         <Tabla
           :cabezas="cols"
           :arrayData="data"
           :atributosDatos="atributos"
           :pag="true"
-        />
+        >
+          <template #nuevaColumna>
+            <th class="bg-azulIENM text-white">
+              <div class="flex gap-2">
+                <p>LINEA</p>
+                <ListaFiltro
+                  :opciones="lineas"
+                  v-model="lineasElegidas"
+                  @metodo="getFiltrarLinea"
+                />
+              </div>
+            </th>
+            <th class="bg-azulIENM text-white">
+              <div class="flex gap-2">
+                <p>TURNO</p>
+                <ListaFiltro
+                  :opciones="turnos"
+                  v-model="turnosElegidos"
+                  @metodo="getFiltrarTurno"
+                />
+              </div>
+            </th>
+          </template>
+          <template #botones="{ data }">
+            <td>{{ data.dispositivo }}</td>
+            <td>{{ data.turno }}</td>
+          </template>
+        </Tabla>
       </div>
     </div>
     <div class="p-5 rounded-t-lg text-center" v-else-if="isLoading">
@@ -74,6 +101,7 @@ import { ref } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import Tabla from "../../components/dinamicos/Tabla.vue";
+import ListaFiltro from "../../components/dinamicos/ListaFiltro.vue";
 import ProgressSpinner from "primevue/progressspinner";
 import type { Improductividad } from "../../interfaces/improductividades";
 import {
@@ -81,6 +109,8 @@ import {
   cols,
   useDatosImproductividades,
   atributos,
+  lineas,
+  turnos,
 } from "../../composables/improductividades/datosImproductividades";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
@@ -89,13 +119,18 @@ const dates = ref();
 let avisoIcono = ref();
 const toast = useToast();
 let avisodetalles = ref();
+const recargar = ref(false);
+const idCliente = useCookie("idCliente");
 const isLoading = ref(false);
 const calendario = ref(true);
+const lineasElegidas = ref<String[]>([]);
+const turnosElegidos = ref<String[]>([]);
 const botonRecargar = ref(false);
 const estadoImproductividades = ref(false);
 const data = ref<Improductividad[]>([]);
 const { listarImproductividades } = useImproductividadesAPI();
-const { setConsultar } = useDatosImproductividades();
+const { setConsultar, filtrarPorLinea, filtrarPorTurno } =
+  useDatosImproductividades();
 
 const listar = async () => {
   isLoading.value = true;
@@ -103,13 +138,13 @@ const listar = async () => {
 
   const response = await listarImproductividades(idCliente.value);
 
-  if (response.success) {
-    data.value = response.data?.filter((rem) => rem.estado === "Aprobado");
+  if (response.success && response.data) {
+    data.value = response.data.filter((rem) => rem.estado === "Aprobado");
 
     if (data.value.length === 0) {
       estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-check-circle text-5xl";
-      avisodetalles.value = "Sin improductividades pendientes";
+      avisodetalles.value = "Sin improductividades aprobadas";
     }
   } else {
     estadoImproductividades.value = true;
@@ -119,7 +154,7 @@ const listar = async () => {
   isLoading.value = false;
 };
 
-const consultarRemisiones = async () => {
+const consultarImproductividades = async () => {
   if (!dates.value) {
     toast.add({
       severity: "error",
@@ -128,22 +163,118 @@ const consultarRemisiones = async () => {
       life: 3000,
     });
   } else {
-    data.value = await setConsultar(data.value, dates.value);
-    if (data.value.length === 0) {
-      estadoImproductividades.value = true;
-      avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
-      avisodetalles.value =
-        "No se encontro ninguna improductividad entre esas fechas";
-      botonRecargar.value = true;
+    const response = await listarImproductividades(idCliente.value);
+
+    if (response.success && response.data) {
+      data.value = response.data.filter((rem) => rem.estado === "Aprobado");
+
+      if (lineasElegidas.value.length !== 0) {
+        data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
+      }
+
+      if (turnosElegidos.value.length !== 0) {
+        data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
+      }
+
+      data.value = await setConsultar(data.value, dates.value);
+
+      if (data.value.length === 0) {
+        estadoImproductividades.value = true;
+        avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+        avisodetalles.value = "No se encontro ninguna improductividad";
+        botonRecargar.value = true;
+      }
+      recargar.value = true;
     }
-    calendario.value = false;
+  }
+};
+
+const getFiltrarLinea = async () => {
+  const response = await listarImproductividades(idCliente.value);
+
+  if (response.success && response.data) {
+    data.value = response.data.filter((rem) => rem.estado === "Aprobado");
+
+    if (dates.value) {
+      data.value = await setConsultar(data.value, dates.value);
+    }
+
+    if (turnosElegidos.value.length !== 0) {
+      data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
+    }
+
+    if (lineasElegidas.value.length === 0) {
+      if (dates.value) {
+        data.value = await setConsultar(data.value, dates.value);
+      } else {
+        if (turnosElegidos.value.length !== 0) {
+          data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
+        } else {
+          listar();
+          recargar.value = false;
+          dates.value = null;
+        }
+      }
+    } else {
+      data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
+
+      if (data.value.length === 0) {
+        estadoImproductividades.value = true;
+        avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+        avisodetalles.value = "No se encontro ninguna improductividad";
+        botonRecargar.value = true;
+      }
+      recargar.value = true;
+    }
+  }
+};
+
+const getFiltrarTurno = async () => {
+  const response = await listarImproductividades(idCliente.value);
+
+  if (response.success && response.data) {
+    data.value = response.data.filter((rem) => rem.estado === "Aprobado");
+
+    if (dates.value) {
+      data.value = await setConsultar(data.value, dates.value);
+    }
+
+    if (lineasElegidas.value.length !== 0) {
+      data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
+    }
+
+    if (turnosElegidos.value.length === 0) {
+      if (dates.value) {
+        data.value = await setConsultar(data.value, dates.value);
+      } else {
+        if (lineasElegidas.value.length !== 0) {
+          data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
+        } else {
+          listar();
+          recargar.value = false;
+          dates.value = null;
+        }
+      }
+    } else {
+      data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
+
+      if (data.value.length === 0) {
+        estadoImproductividades.value = true;
+        avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+        avisodetalles.value = "No se encontro ninguna improductividad";
+        botonRecargar.value = true;
+      }
+      recargar.value = true;
+    }
   }
 };
 
 const recargarTabla = () => {
   listar();
-  calendario.value = true;
+  recargar.value = false;
   dates.value = null;
+  lineasElegidas.value.splice(0, lineasElegidas.value.length);
+  turnosElegidos.value.splice(0, turnosElegidos.value.length);
 };
 
 listar();

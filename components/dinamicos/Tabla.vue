@@ -117,4 +117,12 @@ const remisionesData = computed(() => {
   const end = start + itemsPorPagina.value;
   return props.arrayData.slice(start, end);
 });
+
+const reestablecerPaginas = async () => {
+  if (paginaActual.value > totalPaginas.value) {
+    paginaActual.value = totalPaginas.value;
+  }
+
+  return true;
+};
 </script>
