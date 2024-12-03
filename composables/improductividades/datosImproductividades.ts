@@ -49,6 +49,12 @@ export const useDatosImproductividades = () => {
     return fechas;
   }
 
+  /**
+   * Method to filter unproductivity by the chosen lines.
+   * @param lineasElegidas : Array of String 's with all the lines chosen by the user.
+   * @param data : Array of "Unproductivity" type objects, which is the data of the table.
+   * @returns Array of "Unproductivity" type objects.
+   */
   const filtrarPorLinea = (lineasElegidas: String[], data: Improductividad[] | undefined) => {
     let dataFilter: Improductividad[] = [];
 
@@ -63,6 +69,12 @@ export const useDatosImproductividades = () => {
     return dataFilter;
   };
 
+  /**
+   * Method to filter unproductivity by the chosen shifts.
+   * @param turnosElegidos : Array of String type objects, which contains all the shifts chosen by the user.
+   * @param data : Array of "Unproductivity" type objects, which is the data of the table.
+   * @returns Array of "Unproductivity" type objects.
+   */
   const filtrarPorTurno = (turnosElegidos: String[], data: Improductividad[] | undefined) => {
     let dataFilter: Improductividad[] = [];
 
@@ -71,9 +83,7 @@ export const useDatosImproductividades = () => {
       
       if (data) {
         arrayTurno = data.filter((rem) => rem.turno === e);
-        // console.log("arrayturno: ", arrayTurno);
         dataFilter = dataFilter.concat(arrayTurno);
-        // console.log("dataFilter loop: ", dataFilter);
       }
     }
     return dataFilter;

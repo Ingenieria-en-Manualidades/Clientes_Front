@@ -32,8 +32,9 @@
           >
         </button>
       </div>
-      <div class="w-[100%] overflow-x-auto">
+      <div class="w-[100%]">
         <Tabla
+          ref="compTabla"
           :cabezas="cols"
           :arrayData="data"
           :atributosDatos="atributos"
@@ -125,17 +126,19 @@ let avisoIcono = ref();
 const toast = useToast();
 let avisodetalles = ref();
 const recargar = ref(false);
-const idCliente = useCookie("idCliente");
 const isLoading = ref(false);
-const calendario = ref(true);
-const lineasElegidas = ref<String[]>([]);
-const turnosElegidos = ref<String[]>([]);
 const botonRecargar = ref(false);
-const estadoImproductividades = ref(false);
 const data = ref<Improductividad[]>([]);
+const idCliente = useCookie("idCliente");
+const lineasElegidas = ref<String[]>([]); // Variable to save the chosen lines.
+const turnosElegidos = ref<String[]>([]); // Variable to save the chosen turns.
+const estadoImproductividades = ref(false);
 const { listarImproductividades } = useImproductividadesAPI();
 const { setConsultar, filtrarPorLinea, filtrarPorTurno } =
   useDatosImproductividades();
+
+// We save the component as a variable so we can manage it.
+const compTabla = ref<InstanceType<typeof Tabla> | null>(null);
 
 const listar = async () => {
   isLoading.value = true;
@@ -159,7 +162,9 @@ const listar = async () => {
   isLoading.value = false;
 };
 
+// Method to consult by dates.
 const consultarImproductividades = async () => {
+  // Check that there are dates entered.
   if (!dates.value) {
     toast.add({
       severity: "error",
@@ -168,11 +173,15 @@ const consultarImproductividades = async () => {
       life: 3000,
     });
   } else {
+    // We execute the method of listing the unproductives.
     const response = await listarImproductividades(idCliente.value);
 
+    // We verify that the method has worked.
     if (response.success && response.data) {
+      // We fill the table data again.
       data.value = response.data.filter((rem) => rem.estado === "Rechazado");
 
+      // We verify that there are no previous filters of lines or shifts, if there are, perform the filters.
       if (lineasElegidas.value.length !== 0) {
         data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
       }
@@ -181,25 +190,36 @@ const consultarImproductividades = async () => {
         data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
       }
 
+      // We perform the filter to consult by dates.
       data.value = await setConsultar(data.value, dates.value);
 
+      // We check if the query returns results.
       if (data.value.length === 0) {
+        // If we do not bring anything we activate the warnings.
         estadoImproductividades.value = true;
         avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
         avisodetalles.value = "No se encontro ninguna improductividad";
         botonRecargar.value = true;
+      } else {
+        // If something is returned, we call the "Table" component method, which, if the pagination is greater than the total number of pages, places the current page as the last one.
+        compTabla.value?.reestablecerPaginas();
       }
       recargar.value = true;
     }
   }
 };
 
+// Method to consult by lines.
 const getFiltrarLinea = async () => {
+  // We execute the method of listing the unproductives.
   const response = await listarImproductividades(idCliente.value);
 
+  // We verify that the method has worked.
   if (response.success && response.data) {
+    // We fill the table data again.
     data.value = response.data.filter((rem) => rem.estado === "Rechazado");
 
+    // We verify that there are no previous filters for dates or shifts, if there are, perform the filters.
     if (dates.value) {
       data.value = await setConsultar(data.value, dates.value);
     }
@@ -208,38 +228,53 @@ const getFiltrarLinea = async () => {
       data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
     }
 
+    // We verify that if you execute this "getFiltrarLinea" method and there is no line chosen, take into account what to do.
     if (lineasElegidas.value.length === 0) {
+      // We verify that there are no date filters, if there are any, the query is made.
       if (dates.value) {
         data.value = await setConsultar(data.value, dates.value);
       } else {
+        // We verify that there are no shift filters, if there are, the query is made.
         if (turnosElegidos.value.length !== 0) {
           data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
         } else {
+          // If there are no filters, we list the table again as before.
           listar();
           recargar.value = false;
           dates.value = null;
         }
       }
     } else {
+      // We use this method that will return the filtered shifts.
       data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
 
+      // We check if the query returns results.
       if (data.value.length === 0) {
+        // If we do not bring anything we activate the warnings.
         estadoImproductividades.value = true;
         avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
         avisodetalles.value = "No se encontro ninguna improductividad";
         botonRecargar.value = true;
+      } else {
+        // If something is returned, we call the "Table" component method, which, if the pagination is greater than the total number of pages, places the current page as the last one.
+        compTabla.value?.reestablecerPaginas();
       }
       recargar.value = true;
     }
   }
 };
 
+// Method that queries in turns.
 const getFiltrarTurno = async () => {
+  // We execute the method of listing the unproductives.
   const response = await listarImproductividades(idCliente.value);
 
+  // We verify that the method has worked.
   if (response.success && response.data) {
+    // We fill the table data again.
     data.value = response.data.filter((rem) => rem.estado === "Rechazado");
 
+    // We verify that there are no previous filters by dates or lines, if the filters have been made.
     if (dates.value) {
       data.value = await setConsultar(data.value, dates.value);
     }
@@ -248,36 +283,47 @@ const getFiltrarTurno = async () => {
       data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
     }
 
+    // We verify that if you execute this "getFiltrarTurno" method and there is no line chosen, take into account what to do.
     if (turnosElegidos.value.length === 0) {
+      // We verify that there are no date filters, if there are any, the query is made.
       if (dates.value) {
         data.value = await setConsultar(data.value, dates.value);
       } else {
+        // We verify that there are no shift filters, if there are, the query is made.
         if (lineasElegidas.value.length !== 0) {
           data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
         } else {
+          // If there are no filters, we list the table again as before.
           listar();
           recargar.value = false;
           dates.value = null;
         }
       }
     } else {
+      // We use this method that will return the filtered shifts.
       data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
 
+      // We verify that the method has returned something.
       if (data.value.length === 0) {
         estadoImproductividades.value = true;
         avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
         avisodetalles.value = "No se encontro ninguna improductividad";
         botonRecargar.value = true;
+      } else {
+        // If something is returned, we call the "Table" component method, which, if the pagination is greater than the total number of pages, places the current page as the last one.
+        compTabla.value?.reestablecerPaginas();
       }
       recargar.value = true;
     }
   }
 };
 
+// Method that helps to relist the table and clean the filters made previously.
 const recargarTabla = () => {
   listar();
   recargar.value = false;
   dates.value = null;
+  // Delete arrangements of chosen shifts and lines.
   lineasElegidas.value.splice(0, lineasElegidas.value.length);
   turnosElegidos.value.splice(0, turnosElegidos.value.length);
 };

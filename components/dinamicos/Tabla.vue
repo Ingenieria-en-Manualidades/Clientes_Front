@@ -118,11 +118,20 @@ const remisionesData = computed(() => {
   return props.arrayData.slice(start, end);
 });
 
+// Method that is executed after a query and ensures that if the current page is greater than the total number of pages, the current page will be the last one.
 const reestablecerPaginas = async () => {
+  await dormir(1); // We pause the code so that the total number of pages is updated.
   if (paginaActual.value > totalPaginas.value) {
     paginaActual.value = totalPaginas.value;
   }
-
-  return true;
 };
+
+// Method made to stop the code from working.
+const dormir = (tiempo: number) => {
+  return new Promise((resolve) => setTimeout(resolve, tiempo));
+};
+
+defineExpose({
+  reestablecerPaginas,
+});
 </script>
