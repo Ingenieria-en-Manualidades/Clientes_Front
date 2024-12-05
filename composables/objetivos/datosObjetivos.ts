@@ -98,4 +98,8 @@ export const datosTablaProd = () => {
   };
 }
 
+export const datosTablaCalidad = () => {
+  const cabezas = ["nombre del archivo", "tipo", "fecha de creación", "acciones"];
+}
+
 

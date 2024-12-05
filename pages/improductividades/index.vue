@@ -32,7 +32,7 @@
           >
         </button>
       </div>
-      <div class="w-[100%]">
+      <div class="overflow-x-auto">
         <Tabla
           ref="compTabla"
           :cabezas="cols"

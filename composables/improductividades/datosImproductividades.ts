@@ -115,6 +115,7 @@ export const items = ref([
 ]);
 
 export const cols = ref([
+  "orden",
   "actividad",
   "descripcion",
   "fecha de ingreso",
@@ -125,6 +126,7 @@ export const cols = ref([
 ]);
 
 export const atributos = ref([
+  "programacion_id",
   "actividad",
   "descripcion",
   "fecha_ingreso",

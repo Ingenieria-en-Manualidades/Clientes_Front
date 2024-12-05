@@ -37,7 +37,7 @@
       <slot name="tfoot"></slot>
     </tfoot>
   </table>
-  <div v-if="pag" class="w-full mx-[2.5%] py-4 flex justify-center">
+  <div v-if="pag" class="w-full text-center py-3">
     <button
       type="button"
       :disabled="paginaActual === 1"
