@@ -1,5 +1,5 @@
 <template>
-  <form class="w-[50%] max-w-[200px] sm:max-w-[250px] text-xs sm:text-base">
+  <form class="w-[50%] max-w-[200px] sm:max-w-[230px] text-xs sm:text-base">
     <fieldset
       class="border-[1px] border-black font-manrope-r rounded-lg p-2 sm:p-3"
     >

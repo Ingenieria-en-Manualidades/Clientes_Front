@@ -45,3 +45,10 @@ export interface Meta {
     tipo_formulario: string,
     tablero_sae_id: number
   }
+
+  export interface DataArchivos {
+    nombre: string | null,
+    tipo_calidad: string | null,
+    meta: string | null,
+    url: string | null,
+  }

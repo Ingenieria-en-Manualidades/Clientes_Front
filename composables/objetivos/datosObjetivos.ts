@@ -99,7 +99,10 @@ export const datosTablaProd = () => {
 }
 
 export const datosTablaCalidad = () => {
-  const cabezas = ["nombre del archivo", "tipo", "fecha de creación", "acciones"];
+  const cabezas = ["nombre", "tipo", "meta"];
+  const atributos = ["nombre", "tipo_calidad", "meta"];
+
+  return {cabezas, atributos};
 }
 
 

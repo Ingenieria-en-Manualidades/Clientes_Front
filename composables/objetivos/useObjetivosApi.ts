@@ -175,7 +175,6 @@ export const useObjetivosApi = () => {
   }
 
   const createFile = async (objArchivo: Archivo): Promise<ApiPromise<any>> => {
-
     try {
       const formData = new FormData();
 
@@ -203,9 +202,34 @@ export const useObjetivosApi = () => {
     }
   }
 
+  const listarFiles = async (clienteID: number): Promise<ApiPromise<any>> => {
+    try {
+      const response = await fetch(`${url}api/listarArchivos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({cliente_endpoint: clienteID}),
+      });
+
+      const data = await response.json();
+      console.log("data archivos: ", data.archivos);
+      
+
+      if (response.ok) {
+        return {success: data.success, data: data};
+      } else {
+        return {success: false, error: data.messagge || "Error a la hora de listar los archivos."};
+      }
+    } catch (error) {
+      return {success: false, error: data.messagge || "Error en el catch a la hora de listar los archivos."};
+    }
+  }
+
   return {
     createMeta,
     createFile,
+    listarFiles,
     createCalidad,
     createAccidente,
     createObjetivos,
