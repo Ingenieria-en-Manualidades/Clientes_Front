@@ -20,7 +20,7 @@
     <tbody>
       <tr
         class="border-x-[1px] border-b-[1px] border-gray-400 text-center"
-        v-for="(data, index) in remisionesData"
+        v-for="(data, index) in arrayData"
         v-bind:key="index"
       >
         <td
@@ -101,7 +101,10 @@ const props = defineProps({
     type: Object as () => String[],
     required: false,
   },
-  arrayData: Array,
+  arrayData: {
+    type: Object as () => any[],
+    required: true,
+  },
   pag: Boolean,
 });
 
@@ -112,7 +115,7 @@ const totalPaginas = computed(() =>
   Math.ceil(totalItems.value / itemsPorPagina.value)
 );
 
-const remisionesData = computed(() => {
+const arrayData = computed(() => {
   const start = (paginaActual.value - 1) * itemsPorPagina.value;
   const end = start + itemsPorPagina.value;
   return props.arrayData.slice(start, end);

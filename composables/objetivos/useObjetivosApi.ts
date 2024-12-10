@@ -198,7 +198,7 @@ export const useObjetivosApi = () => {
       }
     } catch (error) {
       console.error("Error de catch en la inserción 'File': ", error);
-      return { success: false, error: data.messagge }
+      return { success: false, error: data.message }
     }
   }
 
@@ -213,16 +213,45 @@ export const useObjetivosApi = () => {
       });
 
       const data = await response.json();
-      console.log("data archivos: ", data.archivos);
-      
 
       if (response.ok) {
-        return {success: data.success, data: data};
+        return {success: data.success, data: data.archivos};
       } else {
-        return {success: false, error: data.messagge || "Error a la hora de listar los archivos."};
+        return {success: false, error: data.message || "Error a la hora de listar los archivos."};
       }
     } catch (error) {
-      return {success: false, error: data.messagge || "Error en el catch a la hora de listar los archivos."};
+      return {success: false, error: data.message || "Error en el catch a la hora de listar los archivos."};
+    }
+  }
+
+  const descargarArchivo = async (urlArchivo: string, nombreArchivo: string): Promise<ApiPromise<any>> => {
+    try {
+      const response = await fetch(`${url}api/descargar-pdf`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({url: urlArchivo}),
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const urlPDF = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = urlPDF;
+        a.download = nombreArchivo;
+        a.click();
+
+        window.URL.revokeObjectURL(urlPDF);
+
+        return {success: true, data: "Archivo descargado con exito."};
+      } else {
+        const data = await response.json();
+        return {success: false, error: data.message || "Error a la hora de descargar los archivos."};
+      }
+    } catch (error) {
+      return {success: false, error: error.message || "Error dentro del catch al descargar los archivos."};
     }
   }
 
@@ -233,6 +262,7 @@ export const useObjetivosApi = () => {
     createCalidad,
     createAccidente,
     createObjetivos,
-    updateObjetivos
+    updateObjetivos,
+    descargarArchivo
   };
 };

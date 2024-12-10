@@ -1,3 +1,4 @@
+import { ref } from "vue";
 import { Objetivos } from "../../interfaces/objetives";
 
 export const datosObjetivos = () => { 
@@ -97,12 +98,3 @@ export const datosTablaProd = () => {
     dataProd
   };
 }
-
-export const datosTablaCalidad = () => {
-  const cabezas = ["nombre", "tipo", "meta"];
-  const atributos = ["nombre", "tipo_calidad", "meta"];
-
-  return {cabezas, atributos};
-}
-
-
