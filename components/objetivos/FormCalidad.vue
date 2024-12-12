@@ -45,6 +45,21 @@
           <i class="pi pi-upload pr-3 pt-1"></i> Cargar evidencia</label
         >
       </div>
+      <div v-if="fileSol" class="flex mt-1 max-w-[203px]">
+        <p
+          class="p-1 text-sm truncate w-[85%] border-[1px] border-gray-400"
+          :title="fileSol.name"
+        >
+          {{ fileSol.name }}
+        </p>
+        <button
+          type="button"
+          @click="removeArchivo"
+          class="px-2 font-bold bg-red-500 border-[1px] border-red-500"
+        >
+          <i class="pi pi-times text-sm text-white"></i>
+        </button>
+      </div>
       <p class="text-red-500 text-sm">
         {{ errorFileSol }}
       </p>
@@ -70,12 +85,14 @@ import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 const idCliente = useCookie("idCliente");
 const toast = useToast();
 const fileInput = ref<HTMLInputElement | null>(null);
-const { createCalidad, createFile } = useObjetivosApi();
+const { createCalidad } = useObjetivosApi();
 
 const calInspSol = ref();
 const dateInspSol = ref();
 const fileSol = ref<File | null>(null);
 const errorFileSol = ref<string | null>(null);
+
+const emits = defineEmits(["listar"]);
 
 const removeArchivo = () => {
   fileSol.value = null;
@@ -120,7 +137,8 @@ const submitSol = async () => {
 
     if (resultado.success) {
       calInspSol.value = "";
-      fileSol.value = null;
+      removeArchivo();
+      emits("listar");
       toast.add({
         severity: "success",
         summary: "Guardado correctamente.",

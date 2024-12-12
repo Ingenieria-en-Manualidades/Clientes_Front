@@ -1,10 +1,11 @@
 <template>
   <div class="w-full flex justify-center p-2 gap-1 sm:gap-3 md:p-5">
     <title>Calidad</title>
-    <FormChecklist />
-    <FormCalidad />
-    <div class="ml-[3%] mt-[6%]" v-if="dataArchivos.length !== 0">
+    <FormChecklist @listar="listar" />
+    <FormCalidad @listar="listar" />
+    <div class="ml-[3%] mt-[1%]" v-if="dataArchivos.length !== 0">
       <Tabla
+        :titulo="'EVIDENCIAS'"
         :cabezas="colsCalidad"
         :arrayData="dataArchivos"
         :atributosDatos="atributosCalidad"
@@ -64,6 +65,7 @@ const isLoading = ref(false);
 const estadoArchivos = ref(false);
 
 const dataArchivos = ref<DataArchivos[]>([]);
+const dataArchivosInex = ref<DataArchivos[]>([]);
 const clienteID = useCookie("idCliente");
 const colsCalidad = ref(["nombre", "tipo", "meta"]);
 const { listarFiles, descargarArchivo } = useObjetivosApi();
@@ -74,7 +76,18 @@ const listar = async () => {
   const resultado = await listarFiles(Number(clienteID.value));
 
   if (resultado.success) {
-    dataArchivos.value = resultado.data;
+    dataArchivos.value = resultado.data.archivos;
+    dataArchivosInex.value = resultado.data.archivosIne;
+    console.log("archivos inex:", dataArchivosInex.value);
+    if (dataArchivosInex.value.length != 0) {
+      for (const archivo of dataArchivosInex.value) {
+        toast.add({
+          severity: "info",
+          summary: `Archivo de ${archivo.tipo_calidad} borrado.`,
+          detail: `${archivo.nombre} de la meta ${archivo.meta}`,
+        });
+      }
+    }
 
     if (dataArchivos.value.length === 0) {
       estadoArchivos.value = true;
@@ -84,9 +97,9 @@ const listar = async () => {
   } else {
     estadoArchivos.value = true;
     avisoIcono.value = "pi pi-times-circle text-5xl";
-    avisodetalles.value = "Fallo a la hora de cargar";
+    avisodetalles.value = resultado.error;
+    console.error("Fallo a la hora de cargar: ", resultado.error);
   }
-
   isLoading.value = false;
 };
 

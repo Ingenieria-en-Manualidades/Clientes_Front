@@ -1,5 +1,5 @@
 import { useCookie, useRuntimeConfig } from 'nuxt/app';
-import { Meta, Calidad, Accidente, ApiPromise, Objetivos, Archivo } from '../../interfaces/objetives';
+import { Meta, Calidad, Accidente, ApiPromise, Objetivos, Archivo, DataArchivos } from '../../interfaces/objetives';
 
 export const useObjetivosApi = () => {
   const config = useRuntimeConfig();
@@ -215,7 +215,7 @@ export const useObjetivosApi = () => {
       const data = await response.json();
 
       if (response.ok) {
-        return {success: data.success, data: data.archivos};
+        return {success: data.success, data: {archivos: data.archivos, archivosIne: data.archivosInexistentes}};
       } else {
         return {success: false, error: data.message || "Error a la hora de listar los archivos."};
       }

@@ -39,16 +39,24 @@
           for="fileCheck"
           class="flex justify-center mt-3 py-2 bg-[#c86a2b] font-bold text-white cursor-pointer rounded-lg"
         >
-          <i class="pi pi-upload pr-3 pt-1"></i> Cargar evidencia</label
+          <i class="pi pi-upload pr-3 pt-1"></i>Cargar evidencia</label
         >
       </div>
-      <button
-        type="button"
-        @click="removeArchivo"
-        class="hidden border-[1px] border-black"
-      >
-        x
-      </button>
+      <div v-if="fileCheck" class="flex mt-1 max-w-[203px]">
+        <p
+          class="p-1 text-sm truncate w-[85%] border-[1px] border-gray-400"
+          :title="fileCheck.name"
+        >
+          {{ fileCheck.name }}
+        </p>
+        <button
+          type="button"
+          @click="removeArchivo"
+          class="px-2 font-bold bg-red-500 border-[1px] border-red-500"
+        >
+          <i class="pi pi-times text-sm text-white"></i>
+        </button>
+      </div>
       <p class="text-red-500 text-sm">
         {{ errorFileCheck }}
       </p>
@@ -83,7 +91,9 @@ const errorFileCheck = ref<string | null>(null);
 const idCliente = useCookie("idCliente");
 const toast = useToast();
 const fileInput = ref<HTMLInputElement | null>(null);
-const { createCalidad, createFile } = useObjetivosApi();
+const { createCalidad } = useObjetivosApi();
+
+const emits = defineEmits(["listar"]);
 
 const removeArchivo = () => {
   fileCheck.value = null;
@@ -124,7 +134,8 @@ const submitCheck = async () => {
 
     if (resultado.success) {
       calCheck.value = "";
-      fileCheck.value = null;
+      removeArchivo();
+      emits("listar");
       toast.add({
         severity: "success",
         summary: "Guardado correctamente.",

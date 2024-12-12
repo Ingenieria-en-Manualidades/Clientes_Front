@@ -116,6 +116,7 @@ export const items = ref([
 
 export const cols = ref([
   "orden",
+  "codigo cobro",
   "actividad",
   "descripcion",
   "fecha de ingreso",
@@ -127,6 +128,7 @@ export const cols = ref([
 
 export const atributos = ref([
   "programacion_id",
+  "codigo_cobro",
   "actividad",
   "descripcion",
   "fecha_ingreso",
@@ -137,4 +139,7 @@ export const atributos = ref([
 ]);
 
 export const lineas = ref(["1", "2", "3", "4", "5", "6", "7", "NA"]);
+export const lineasDos = (arrayImprod: Improductividad[]) => {
+  
+}
 export const turnos = ref(["A", "B", "C"]);

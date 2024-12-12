@@ -152,6 +152,7 @@ const listar = async () => {
 
   if (response.success && response.data) {
     data.value = response.data.filter((rem) => rem.estado === null);
+    console.log("data imp: ", data.value);
 
     if (data.value.length === 0) {
       estadoImproductividades.value = true;
