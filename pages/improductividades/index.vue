@@ -3,7 +3,8 @@
     <title>Improductividades</title>
     <TabPanelRemisiones :items="items" />
     <div v-if="data?.length !== 0">
-      <div>
+      <Filtros />
+      <!-- <div>
         <Calendar
           v-model="dates"
           selectionMode="range"
@@ -31,7 +32,7 @@
             ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
           >
         </button>
-      </div>
+      </div> -->
       <div class="min-h-[396px]">
         <Tabla
           ref="compTabla"
@@ -44,21 +45,11 @@
             <th class="bg-azulIENM text-white">
               <div class="flex gap-2">
                 <p>LINEA</p>
-                <ListaFiltro
-                  :opciones="lineas"
-                  v-model="lineasElegidas"
-                  @metodo="getFiltrarLinea"
-                />
               </div>
             </th>
             <th class="bg-azulIENM text-white">
               <div class="flex gap-2">
                 <p>TURNO</p>
-                <ListaFiltro
-                  :opciones="turnos"
-                  v-model="turnosElegidos"
-                  @metodo="getFiltrarTurno"
-                />
               </div>
             </th>
             <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
@@ -115,6 +106,7 @@ import Tabla from "../../components/dinamicos/Tabla.vue";
 import ListaFiltro from "../../components/dinamicos/ListaFiltro.vue";
 import type { Improductividad } from "../../interfaces/improductividades";
 import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
+import Filtros from "../../components/improductividades/Filtros.vue";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 import {
