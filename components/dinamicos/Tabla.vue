@@ -1,42 +1,44 @@
 <template>
-  <table class="text-xs sm:text-sm w-[95%] lg:w-full font-manrope-r">
-    <caption class="text-base" v-if="titulo">
-      {{
-        titulo
-      }}
-    </caption>
-    <thead>
-      <tr class="sm:text-sm">
-        <th
-          class="bg-azulIENM text-white py-2 px-3"
-          v-for="(cabeza, index) in cabezas"
+  <div class="overflow-x-scroll">
+    <table class="text-xs sm:text-sm w-[95%] lg:w-full font-manrope-r">
+      <caption class="text-base" v-if="titulo">
+        {{
+          titulo
+        }}
+      </caption>
+      <thead>
+        <tr class="sm:text-sm">
+          <th
+            class="bg-azulIENM text-white py-2 px-3"
+            v-for="(cabeza, index) in cabezas"
+            v-bind:key="index"
+          >
+            {{ cabeza.toUpperCase() }}
+          </th>
+          <slot name="nuevaColumna"></slot>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="border-x-[1px] border-b-[1px] border-gray-400 text-center"
+          v-for="(data, index) in arrayData"
           v-bind:key="index"
         >
-          {{ cabeza.toUpperCase() }}
-        </th>
-        <slot name="nuevaColumna"></slot>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        class="border-x-[1px] border-b-[1px] border-gray-400 text-center"
-        v-for="(data, index) in arrayData"
-        v-bind:key="index"
-      >
-        <td
-          class="p-[5px]"
-          v-for="(atributo, index) in atributosDatos"
-          v-bind:key="index"
-        >
-          {{ data[atributo] }}
-        </td>
-        <slot name="botones" :data="data"></slot>
-      </tr>
-    </tbody>
-    <tfoot>
-      <slot name="tfoot"></slot>
-    </tfoot>
-  </table>
+          <td
+            class="p-[5px]"
+            v-for="(atributo, index) in atributosDatos"
+            v-bind:key="index"
+          >
+            {{ data[atributo] }}
+          </td>
+          <slot name="botones" :data="data"></slot>
+        </tr>
+      </tbody>
+      <tfoot>
+        <slot name="tfoot"></slot>
+      </tfoot>
+    </table>
+  </div>
   <div v-if="pag" class="w-full text-center py-3">
     <button
       type="button"

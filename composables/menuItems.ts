@@ -34,7 +34,13 @@ export const useModulos = () => {
     visible: false,
     permission: 'view_improductividades'
   },
-  
+  {
+    icono: "pi pi-sliders-h",
+    nombre: "Improductividades 2",
+    ruta: "/improductividades_2",
+    visible: false,
+    permission: 'view_improductividades'
+  },
   {
     icono: "pi pi-table",
     nombre: "Tablero Sae",

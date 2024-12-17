@@ -78,7 +78,7 @@ const listar = async () => {
   if (resultado.success) {
     dataArchivos.value = resultado.data.archivos;
     dataArchivosInex.value = resultado.data.archivosIne;
-    console.log("archivos inex:", dataArchivosInex.value);
+
     if (dataArchivosInex.value.length != 0) {
       for (const archivo of dataArchivosInex.value) {
         toast.add({

@@ -1,8 +1,8 @@
 <template>
-  <div class="w-full md:w-[97%]">
-    <title>Improductividades</title>
-    <TabPanelRemisiones :items="items" />
-    <div v-if="data?.length !== 0">
+  <title>Improductividades</title>
+  <div class="w-full md:w-[90%]">
+    <TabPanelRemisiones :items="items2" />
+    <div v-if="data?.length !== 0" class="px-3">
       <div>
         <Calendar
           v-model="dates"
@@ -32,7 +32,7 @@
           >
         </button>
       </div>
-      <div class="min-h-[396px]">
+      <div class="w-[100%] overflow-x-auto">
         <Tabla
           ref="compTabla"
           :cabezas="cols"
@@ -61,19 +61,10 @@
                 />
               </div>
             </th>
-            <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
           </template>
           <template #botones="{ data }">
             <td>{{ data.dispositivo }}</td>
             <td>{{ data.turno }}</td>
-            <td>
-              <ModalGestionar
-                :idImproductividad="data.improductividad_id"
-                :actividad="data.actividad"
-                :descripcion="data.descripcion"
-                @postGuardar="listar"
-              />
-            </td>
           </template>
         </Tabla>
       </div>
@@ -110,70 +101,54 @@
 import { ref } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
-import ProgressSpinner from "primevue/progressspinner";
 import Tabla from "../../components/dinamicos/Tabla.vue";
 import ListaFiltro from "../../components/dinamicos/ListaFiltro.vue";
+import ProgressSpinner from "primevue/progressspinner";
 import type { Improductividad } from "../../interfaces/improductividades";
-import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
-import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
-import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 import {
-  items,
+  items2,
   cols,
   useDatosImproductividades,
   atributos,
+  lineas,
+  turnos,
 } from "../../composables/improductividades/datosImproductividades";
+import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
+import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 
 const dates = ref();
-const lineas = ref();
-const turnos = ref();
 let avisoIcono = ref();
 const toast = useToast();
 let avisodetalles = ref();
 const recargar = ref(false);
 const isLoading = ref(false);
+const calendario = ref(true);
 const botonRecargar = ref(false);
+const data = ref<Improductividad[]>([]);
 const idCliente = useCookie("idCliente");
 const lineasElegidas = ref<String[]>([]); // Variable to save the chosen lines.
 const turnosElegidos = ref<String[]>([]); // Variable to save the chosen turns.
 const estadoImproductividades = ref(false);
-const data = ref<Improductividad[] | undefined>([]);
 const { listarImproductividades } = useImproductividadesAPI();
-const {
-  setConsultar,
-  filtrarPorLinea,
-  filtrarPorTurno,
-  getFiltros,
-  getImprodFiltradas,
-} = useDatosImproductividades();
+const { setConsultar, filtrarPorLinea, filtrarPorTurno } =
+  useDatosImproductividades();
 
 // We save the component as a variable so we can manage it.
 const compTabla = ref<InstanceType<typeof Tabla> | null>(null);
 
 const listar = async () => {
   isLoading.value = true;
+  const idCliente = useCookie("idCliente");
 
   const response = await listarImproductividades(idCliente.value);
 
   if (response.success && response.data) {
-    data.value = response.data.filter((rem) => rem.estado === null);
-
-    // const filtradas = await getImprodFiltradas(data.value);
-    // console.log("Filtradas: ", filtradas);
-
-    // data.value = filtradas;
-    // data.value = data.value.filter(
-    //   (rem) => rem.programacion_id === "130000075079"
-    // );
-    // console.log("data imp: ", data.value);
-
-    lineas.value = await getFiltros(data.value, "lineas");
-    turnos.value = await getFiltros(data.value, "turnos");
+    data.value = response.data.filter((rem) => rem.estado === "Aprobado");
 
     if (data.value.length === 0) {
       estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-check-circle text-5xl";
-      avisodetalles.value = "Sin improductividades pendientes";
+      avisodetalles.value = "Sin improductividades aprobadas";
     }
   } else {
     estadoImproductividades.value = true;
@@ -200,7 +175,7 @@ const consultarImproductividades = async () => {
     // We verify that the method has worked.
     if (response.success && response.data) {
       // We fill the table data again.
-      data.value = response.data.filter((rem) => rem.estado === null);
+      data.value = response.data.filter((rem) => rem.estado === "Aprobado");
 
       // We verify that there are no previous filters of lines or shifts, if there are, perform the filters.
       if (lineasElegidas.value.length !== 0) {
@@ -238,7 +213,7 @@ const getFiltrarLinea = async () => {
   // We verify that the method has worked.
   if (response.success && response.data) {
     // We fill the table data again.
-    data.value = response.data.filter((rem) => rem.estado === null);
+    data.value = response.data.filter((rem) => rem.estado === "Aprobado");
 
     // We verify that there are no previous filters for dates or shifts, if there are, perform the filters.
     if (dates.value) {
@@ -293,7 +268,7 @@ const getFiltrarTurno = async () => {
   // We verify that the method has worked.
   if (response.success && response.data) {
     // We fill the table data again.
-    data.value = response.data.filter((rem) => rem.estado === null);
+    data.value = response.data.filter((rem) => rem.estado === "Aprobado");
 
     // We verify that there are no previous filters by dates or lines, if the filters have been made.
     if (dates.value) {

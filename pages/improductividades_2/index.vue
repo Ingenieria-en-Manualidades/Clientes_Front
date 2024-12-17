@@ -1,7 +1,7 @@
 <template>
   <div class="w-full md:w-[97%]">
-    <title>Improductividades</title>
-    <TabPanelRemisiones :items="items" />
+    <title>Improductividades 2</title>
+    <TabPanelRemisiones :items="items2" />
     <div v-if="data?.length !== 0">
       <div>
         <Calendar
@@ -118,7 +118,7 @@ import ModalGestionar from "../../components/improductividades/ModalGestionar.vu
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 import {
-  items,
+  items2,
   cols,
   useDatosImproductividades,
   atributos,

@@ -89,10 +89,58 @@ export const useDatosImproductividades = () => {
     return dataFilter;
   };
 
+  const getFiltros = (arrayImprod: Improductividad[], tipoFiltro: string) => {
+
+    const opciones = arrayImprod.reduce((acc, item) => {
+
+      if (tipoFiltro === "lineas") {
+        if (!acc.includes(item.dispositivo)) {
+          acc.push(item.dispositivo);
+        }
+        return acc;
+      } else {
+        if (!acc.includes(item.turno)) {
+          acc.push(item.turno);
+        }
+        return acc;
+      }
+    }, [])
+
+    return opciones.sort();
+  }
+
+  const getImprodFiltradas = (arrayImprod: Improductividad[]) => {
+    const operaciones = arrayImprod.reduce((acc, item) => {
+      if (!acc.includes(item.programacion_id)) {
+        acc.push(item.programacion_id);
+      }
+      return acc;
+    }, []);
+    const filtradas = arrayImprod.reduce((acc, item) => {
+      if (item.descripcion !== "Toma de Alimentos " && item.descripcion !== "Pausas Activas ") {
+        acc.push(item);
+      }
+      return acc;
+    }, []);
+
+    // const array: Improductividad[] = [arrayImprod[0]];
+    // for (const imp of arrayImprod) {
+      
+    // }
+
+    console.log("Operaciones: ", operaciones[7]);
+    const resultado = arrayImprod.filter((imp) => imp.programacion_id === operaciones[7]);
+    console.log("Resultado: ", resultado);
+    
+    return filtradas;
+  }
+
   return {
     setConsultar,
     filtrarPorLinea,
-    filtrarPorTurno
+    filtrarPorTurno,
+    getFiltros,
+    getImprodFiltradas,
   };
 }
 
@@ -114,9 +162,27 @@ export const items = ref([
   }
 ]);
 
+export const items2 = ref([
+  {
+    route: "/improductividades_2",
+    label: "Pendientes",
+    icon: "pi  pi-clipboard"
+  },
+  {
+    route: "/improductividades_2/aprobadas",
+    label: "Aprobadas",
+    icon: "pi  pi-check"
+  },
+  {
+    route: "/improductividades_2/rechazadas",
+    label: "Rechazadas",
+    icon: "pi  pi-times"
+  }
+]);
+
 export const cols = ref([
-  "orden",
-  "codigo cobro",
+  "op",
+  "referencia",
   "actividad",
   "descripcion",
   "fecha de ingreso",
@@ -138,8 +204,5 @@ export const atributos = ref([
   "horasxpersonas"
 ]);
 
-export const lineas = ref(["1", "2", "3", "4", "5", "6", "7", "NA"]);
-export const lineasDos = (arrayImprod: Improductividad[]) => {
-  
-}
-export const turnos = ref(["A", "B", "C"]);
+export const lineas = ref(["1", "2", "7"]);
+export const turnos = ref(["A", "B"]);
