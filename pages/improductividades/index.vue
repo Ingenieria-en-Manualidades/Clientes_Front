@@ -3,7 +3,33 @@
     <title>Improductividades</title>
     <TabPanelRemisiones :items="items" />
     <div v-if="data?.length !== 0">
-      <Filtros />
+      <Filtros
+        ref="compFiltros"
+        :lineas="lineas"
+        :turnos="turnos"
+        @consultarLineas="consultarLinea"
+        @consultarTurnos="consultarTurno"
+        @recargar="recargar = false"
+      >
+        <template #botonOP>
+          <button class="bg-azulClaroIENM py-1 px-2 rounded-r">
+            <i class="pi pi-search text-white"></i>
+          </button>
+        </template>
+        <template #botonRef>
+          <button class="bg-azulClaroIENM py-1 px-2 rounded-r">
+            <i class="pi pi-search text-white"></i>
+          </button>
+        </template>
+        <template #botonFecha>
+          <button
+            @click="consultarFechas"
+            class="bg-azulClaroIENM py-1 px-2 rounded"
+          >
+            <i class="pi pi-search text-white"></i>
+          </button>
+        </template>
+      </Filtros>
       <!-- <div>
         <Calendar
           v-model="dates"
@@ -135,12 +161,13 @@ const {
   setConsultar,
   filtrarPorLinea,
   filtrarPorTurno,
-  getFiltros,
   getImprodFiltradas,
+  getFiltros,
 } = useDatosImproductividades();
 
 // We save the component as a variable so we can manage it.
 const compTabla = ref<InstanceType<typeof Tabla> | null>(null);
+const compFiltros = ref<InstanceType<typeof Filtros> | null>(null);
 
 const listar = async () => {
   isLoading.value = true;
@@ -158,7 +185,6 @@ const listar = async () => {
     //   (rem) => rem.programacion_id === "130000075079"
     // );
     // console.log("data imp: ", data.value);
-
     lineas.value = await getFiltros(data.value, "lineas");
     turnos.value = await getFiltros(data.value, "turnos");
 
@@ -173,6 +199,86 @@ const listar = async () => {
     avisodetalles.value = "Fallo a la hora de cargar";
   }
   isLoading.value = false;
+};
+
+const consultarFechas = async () => {
+  // We execute the method of listing the unproductives.
+  const response = await listarImproductividades(idCliente.value);
+
+  // We verify that the method has worked.
+  if (response.success && response.data) {
+    // We fill the table data again.
+    data.value = response.data.filter((rem) => rem.estado === null);
+
+    const resultado = await compFiltros.value?.getDataFecha(data.value);
+    data.value = resultado;
+
+    // We check if the query returns results.
+    if (data.value.length === 0) {
+      // If we do not bring anything we activate the warnings.
+      estadoImproductividades.value = true;
+      avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+      avisodetalles.value = "No se encontro ninguna improductividad";
+      botonRecargar.value = true;
+    } else {
+      // If something is returned, we call the "Table" component method, which, if the pagination is greater than the total number of pages, places the current page as the last one.
+      compTabla.value?.reestablecerPaginas();
+    }
+    recargar.value = true;
+  }
+};
+
+const consultarLinea = async () => {
+  // We execute the method of listing the unproductives.
+  const response = await listarImproductividades(idCliente.value);
+
+  // We verify that the method has worked.
+  if (response.success && response.data) {
+    // We fill the table data again.
+    data.value = response.data.filter((rem) => rem.estado === null);
+
+    const resultado = await compFiltros.value?.getDataLineas(data.value);
+    data.value = resultado;
+
+    // We check if the query returns results.
+    if (data.value.length === 0) {
+      // If we do not bring anything we activate the warnings.
+      estadoImproductividades.value = true;
+      avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+      avisodetalles.value = "No se encontro ninguna improductividad";
+      botonRecargar.value = true;
+    } else {
+      // If something is returned, we call the "Table" component method, which, if the pagination is greater than the total number of pages, places the current page as the last one.
+      compTabla.value?.reestablecerPaginas();
+    }
+    recargar.value = true;
+  }
+};
+
+const consultarTurno = async () => {
+  // We execute the method of listing the unproductives.
+  const response = await listarImproductividades(idCliente.value);
+
+  // We verify that the method has worked.
+  if (response.success && response.data) {
+    // We fill the table data again.
+    data.value = response.data.filter((rem) => rem.estado === null);
+
+    const resultado = await compFiltros.value?.getDataTurnos(data.value);
+    data.value = resultado;
+
+    // We verify that the method has returned something.
+    if (data.value.length === 0) {
+      estadoImproductividades.value = true;
+      avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
+      avisodetalles.value = "No se encontro ninguna improductividad";
+      botonRecargar.value = true;
+    } else {
+      // If something is returned, we call the "Table" component method, which, if the pagination is greater than the total number of pages, places the current page as the last one.
+      compTabla.value?.reestablecerPaginas();
+    }
+    recargar.value = true;
+  }
 };
 
 // Method to consult by dates.

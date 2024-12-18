@@ -29,3 +29,21 @@ export interface postImproductividad {
     usuario: string | null | undefined;
     cliente_id: string | null | undefined;
 };
+
+export interface Error {
+    estadoImproductividades: boolean,
+    avisoIcono: string | null,
+    avisodetalles: string | null,
+}
+
+export interface Alert {
+    severity: "error" | "contrast" | "info" | "secondary" | "warn" | "success",
+    summary: string,
+    detail: string,
+    life: number,
+}
+
+export interface promiseComp {
+    success: boolean;
+    data?: Improductividad[] | undefined;
+}
