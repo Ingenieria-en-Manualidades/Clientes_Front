@@ -1,6 +1,6 @@
 <template>
-  <div class="flex font-manrope-r gap-2 mb-2">
-    <div class="w-1/5">
+  <div class="lg:flex font-manrope-r gap-2 mb-2">
+    <div class="lg:w-1/6 mb-2">
       <div>
         <label for="op">Filtrar por operación</label>
       </div>
@@ -8,12 +8,13 @@
         <input
           type="text"
           id="op"
-          class="border-[1px] border-black outline-none p-1 text-sm rounded-l w-[80%]"
+          v-model="op"
+          class="border-[1px] border-black outline-none p-1 text-sm rounded-l lg:w-[75%]"
         />
         <slot name="botonOP"></slot>
       </div>
     </div>
-    <div class="w-1/5">
+    <div class="lg:w-1/6 mb-2">
       <div>
         <label for="ref">Filtrar por referencía</label>
       </div>
@@ -21,12 +22,13 @@
         <input
           type="text"
           id="ref"
-          class="border-[1px] border-black outline-none p-1 text-sm rounded-l w-[78%]"
+          v-model="referencia"
+          class="border-[1px] border-black outline-none p-1 text-sm rounded-l lg:w-[75%]"
         />
         <slot name="botonRef"></slot>
       </div>
     </div>
-    <div class="w-1/5 mr-2">
+    <div :class="['mb-2', recargar ? 'lg:w-1/6' : 'lg:w-2/6']">
       <div>
         <label for="ref">Filtrar por fecha</label>
       </div>
@@ -46,27 +48,34 @@
         <slot name="botonFecha"></slot>
       </div>
     </div>
-    <div class="w-1/5">
-      <div>
-        <label>Filtrar por líneas</label>
+    <div class="flex w-2/6 gap-5 lg:ml-2">
+      <div class="lg:pt-[22px] text-center mb-2">
+        <SelectFiltro
+          v-model="lineasElegidas"
+          :opciones="lineas"
+          :placeholder="'Filtrar por líneas'"
+          @metodo="$emit('consultarLineas')"
+        />
       </div>
-      <SelectFiltro
-        v-model="lineasElegidas"
-        :opciones="lineas"
-        :placeholder="'Elige varias opciones'"
-        @metodo="$emit('consultarLineas')"
-      />
+      <div class="lg:pt-[22px] mb-2">
+        <SelectFiltro
+          v-model="turnosElegidos"
+          :opciones="turnos"
+          :placeholder="'Filtrar por turnos'"
+          @metodo="$emit('consultarTurnos')"
+        />
+      </div>
     </div>
-    <div class="w-1/5">
-      <div>
-        <label>Filtrar por turnos</label>
-      </div>
-      <SelectFiltro
-        v-model="turnosElegidos"
-        :opciones="turnos"
-        :placeholder="'Elige varias opciones'"
-        @metodo="$emit('consultarTurnos')"
-      />
+    <div class="lg:w-1/6" v-if="recargar">
+      <button
+        type="button"
+        class="bg-azulClaroIENM px-3 py-1 rounded mt-6"
+        @click="recargarTabla"
+      >
+        <i class="pi pi-refresh text-white"
+          ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
+        >
+      </button>
     </div>
   </div>
 </template>
@@ -76,22 +85,18 @@ import { ref } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import SelectFiltro from "../dinamicos/SelectFiltro.vue";
-import type {
-  Improductividad,
-  promiseComp,
-} from "../../interfaces/improductividades";
+import type { Improductividad } from "../../interfaces/improductividades";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 import { useDatosImproductividades } from "../../composables/improductividades/datosImproductividades";
 
+const op = ref();
 const dates = ref();
-const idCliente = useCookie("idCliente");
-const lineasElegidas = ref();
-const turnosElegidos = ref();
+const referencia = ref();
 const toast = useToast();
-const opciones = ref(["Masculino", "Gay", "Helicoptero"]);
-const alerta = () => {
-  alert("Opción: ");
-};
+const recargar = ref(false);
+const idCliente = useCookie("idCliente");
+const lineasElegidas = ref<String[]>([]);
+const turnosElegidos = ref<String[]>([]);
 
 const props = defineProps({
   lineas: {
@@ -103,16 +108,99 @@ const props = defineProps({
     required: true,
   },
 });
-
-const emits = defineEmits(["consultarLineas", "consultarTurnos", "recargar"]);
+const emits = defineEmits(["consultarLineas", "consultarTurnos", "listar"]);
 const { listarImproductividades } = useImproductividadesAPI();
-const {
-  setConsultar,
-  filtrarPorLinea,
-  filtrarPorTurno,
-  getFiltros,
-  getImprodFiltradas,
-} = useDatosImproductividades();
+const { setConsultar, filtrarPorLinea, filtrarPorTurno } =
+  useDatosImproductividades();
+
+const getDataOP = async (improductividades: Improductividad[]) => {
+  // Check that there are dates entered.
+  if (!op.value) {
+    toast.add({
+      severity: "error",
+      summary: "Operación no asignada.",
+      detail: "Por favor escribe una op para buscar.",
+      life: 3000,
+    });
+    return improductividades;
+  } else {
+    if (lineasElegidas.value.length !== 0) {
+      improductividades = await filtrarPorLinea(
+        lineasElegidas.value,
+        improductividades
+      );
+    }
+
+    if (turnosElegidos.value.length !== 0) {
+      improductividades = await filtrarPorTurno(
+        turnosElegidos.value,
+        improductividades
+      );
+    }
+
+    // We perform the filter to consult by dates.
+    if (dates.value) {
+      improductividades = await setConsultar(improductividades, dates.value);
+    }
+
+    if (referencia.value) {
+      improductividades = improductividades.filter(
+        (imp) => imp.codigo_cobro === referencia.value
+      );
+    }
+
+    improductividades = improductividades.filter(
+      (imp) => imp.programacion_id === op.value
+    );
+
+    recargar.value = true;
+    return improductividades;
+  }
+};
+
+const getDataRef = async (improductividades: Improductividad[]) => {
+  // Check that there are dates entered.
+  if (!referencia.value) {
+    toast.add({
+      severity: "error",
+      summary: "Referencia no asignada.",
+      detail: "Por favor escribe una referencia para buscar.",
+      life: 3000,
+    });
+    return improductividades;
+  } else {
+    if (lineasElegidas.value.length !== 0) {
+      improductividades = await filtrarPorLinea(
+        lineasElegidas.value,
+        improductividades
+      );
+    }
+
+    if (turnosElegidos.value.length !== 0) {
+      improductividades = await filtrarPorTurno(
+        turnosElegidos.value,
+        improductividades
+      );
+    }
+
+    // We perform the filter to consult by dates.
+    if (dates.value) {
+      improductividades = await setConsultar(improductividades, dates.value);
+    }
+
+    if (op.value) {
+      improductividades = improductividades.filter(
+        (imp) => imp.programacion_id === op.value
+      );
+    }
+
+    improductividades = improductividades.filter(
+      (imp) => imp.codigo_cobro === referencia.value
+    );
+    recargar.value = true;
+    return improductividades;
+  }
+};
 
 const getDataFecha = async (
   improductividades: Improductividad[]
@@ -127,9 +215,34 @@ const getDataFecha = async (
     });
     return improductividades;
   } else {
-    // We perform the filter to consult by dates.
-    improductividades = await setConsultar(improductividades, dates.value);
+    if (lineasElegidas.value.length !== 0) {
+      improductividades = await filtrarPorLinea(
+        lineasElegidas.value,
+        improductividades
+      );
+    }
 
+    if (turnosElegidos.value.length !== 0) {
+      improductividades = await filtrarPorTurno(
+        turnosElegidos.value,
+        improductividades
+      );
+    }
+
+    if (op.value) {
+      improductividades = improductividades.filter(
+        (imp) => imp.programacion_id === op.value
+      );
+    }
+
+    if (referencia.value) {
+      improductividades = improductividades.filter(
+        (imp) => imp.codigo_cobro === referencia.value
+      );
+    }
+
+    improductividades = await setConsultar(improductividades, dates.value);
+    recargar.value = true;
     return improductividades;
   }
 };
@@ -142,10 +255,22 @@ const getDataLineas = async (
     improductividades = await setConsultar(improductividades, dates.value);
   }
 
-  if (turnosElegidos.value) {
+  if (turnosElegidos.value.length !== 0) {
     improductividades = await filtrarPorTurno(
       turnosElegidos.value,
       improductividades
+    );
+  }
+
+  if (op.value) {
+    improductividades = improductividades.filter(
+      (imp) => imp.programacion_id === op.value
+    );
+  }
+
+  if (referencia.value) {
+    improductividades = improductividades.filter(
+      (imp) => imp.codigo_cobro === referencia.value
     );
   }
 
@@ -164,18 +289,25 @@ const getDataLineas = async (
         );
         return improductividades;
       } else {
-        // If there are no filters, we list the table again as before.
-        const response = await listarImproductividades(idCliente.value);
-
-        // We verify that the method has worked.
-        if (response.success && response.data) {
-          improductividades = response.data.filter(
-            (rem) => rem.estado === null
+        if (referencia.value) {
+          improductividades = improductividades.filter(
+            (imp) => imp.codigo_cobro === referencia.value
           );
-          dates.value = null;
-          emits("recargar");
+          return improductividades;
+        } else {
+          recargar.value = false;
+          // If there are no filters, we list the table again as before.
+          const response = await listarImproductividades(idCliente.value);
+
+          // We verify that the method has worked.
+          if (response.success && response.data) {
+            improductividades = response.data.filter(
+              (rem) => rem.estado === null
+            );
+            dates.value = null;
+          }
+          return improductividades;
         }
-        return improductividades;
       }
     }
   } else {
@@ -184,6 +316,7 @@ const getDataLineas = async (
       lineasElegidas.value,
       improductividades
     );
+    recargar.value = true;
     return improductividades;
   }
 };
@@ -196,10 +329,22 @@ const getDataTurnos = async (
     improductividades = await setConsultar(improductividades, dates.value);
   }
 
-  if (lineasElegidas.value) {
+  if (lineasElegidas.value.length !== 0) {
     improductividades = await filtrarPorLinea(
       lineasElegidas.value,
       improductividades
+    );
+  }
+
+  if (op.value) {
+    improductividades = improductividades.filter(
+      (imp) => imp.programacion_id === op.value
+    );
+  }
+
+  if (referencia.value) {
+    improductividades = improductividades.filter(
+      (imp) => imp.codigo_cobro === referencia.value
     );
   }
 
@@ -218,18 +363,25 @@ const getDataTurnos = async (
         );
         return improductividades;
       } else {
-        // If there are no filters, we list the table again as before.
-        const response = await listarImproductividades(idCliente.value);
-
-        // We verify that the method has worked.
-        if (response.success && response.data) {
-          improductividades = response.data.filter(
-            (rem) => rem.estado === null
+        if (referencia.value) {
+          improductividades = improductividades.filter(
+            (imp) => imp.codigo_cobro === referencia.value
           );
-          dates.value = null;
-          emits("recargar");
+          return improductividades;
+        } else {
+          recargar.value = false;
+          // If there are no filters, we list the table again as before.
+          const response = await listarImproductividades(idCliente.value);
+
+          // We verify that the method has worked.
+          if (response.success && response.data) {
+            improductividades = response.data.filter(
+              (rem) => rem.estado === null
+            );
+            dates.value = null;
+          }
+          return improductividades;
         }
-        return improductividades;
       }
     }
   } else {
@@ -238,14 +390,27 @@ const getDataTurnos = async (
       turnosElegidos.value,
       improductividades
     );
-
+    recargar.value = true;
     return improductividades;
   }
 };
 
+const recargarTabla = () => {
+  emits("listar");
+  dates.value = null;
+  recargar.value = false;
+  op.value = "";
+  // Delete arrangements of chosen shifts and lines.
+  lineasElegidas.value.splice(0, lineasElegidas.value.length);
+  turnosElegidos.value.splice(0, turnosElegidos.value.length);
+};
+
 defineExpose({
+  getDataOP,
+  getDataRef,
   getDataFecha,
   getDataLineas,
   getDataTurnos,
+  recargarTabla,
 });
 </script>

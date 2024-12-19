@@ -189,7 +189,9 @@ export const cols = ref([
   "horas",
   "minutos",
   "cantidad de personas",
-  "improductividades hora hombre"
+  "improductividades hora hombre",
+  "lineas",
+  "turnos",
 ]);
 
 export const atributos = ref([
@@ -201,8 +203,7 @@ export const atributos = ref([
   "horas",
   "minutos",
   "cant_personas",
-  "horasxpersonas"
+  "horasxpersonas",
+  "dispositivo",
+  "turno"
 ]);
-
-export const lineas = ref(["1", "2", "7"]);
-export const turnos = ref(["A", "B"]);

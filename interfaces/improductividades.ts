@@ -2,6 +2,7 @@ export interface Improductividad {
     actividad: string;
     cant_personas: number;
     cliente_id: number;
+    codigo_cobro: string;
     descripcion: string;
     dispositivo:string;
     estado: string;
