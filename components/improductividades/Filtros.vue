@@ -400,6 +400,7 @@ const recargarTabla = () => {
   dates.value = null;
   recargar.value = false;
   op.value = "";
+  referencia.value = "";
   // Delete arrangements of chosen shifts and lines.
   lineasElegidas.value.splice(0, lineasElegidas.value.length);
   turnosElegidos.value.splice(0, turnosElegidos.value.length);
