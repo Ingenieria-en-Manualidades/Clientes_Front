@@ -12,7 +12,7 @@
     </button>
     <div
       :class="[
-        'absolute border-[1px] border-black rounded top-2 left-0',
+        'absolute border-[1px] border-black rounded top-2 left-0 z-30',
         visible ? 'block translate-y-7' : 'hidden',
       ]"
     >

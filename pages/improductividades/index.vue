@@ -36,29 +36,27 @@
           </button>
         </template>
       </Filtros>
-      <div class="min-h-[396px]">
-        <Tabla
-          ref="compTabla"
-          :cabezas="cols"
-          :arrayData="data"
-          :atributosDatos="atributos"
-          :pag="true"
-        >
-          <template #nuevaColumna>
-            <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
-          </template>
-          <template #botones="{ data }">
-            <td>
-              <ModalGestionar
-                :idImproductividad="data.improductividad_id"
-                :actividad="data.actividad"
-                :descripcion="data.descripcion"
-                @postGuardar="listar"
-              />
-            </td>
-          </template>
-        </Tabla>
-      </div>
+      <Tabla
+        ref="compTabla"
+        :cabezas="cols"
+        :arrayData="data"
+        :atributosDatos="atributos"
+        :pag="true"
+      >
+        <template #nuevaColumna>
+          <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
+        </template>
+        <template #botones="{ data }">
+          <td>
+            <ModalGestionar
+              :idImproductividad="data.improductividad_id"
+              :actividad="data.actividad"
+              :descripcion="data.descripcion"
+              @postGuardar="listar"
+            />
+          </td>
+        </template>
+      </Tabla>
     </div>
     <div class="p-5 rounded-t-lg text-center" v-else-if="isLoading">
       <ProgressSpinner

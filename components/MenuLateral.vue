@@ -86,7 +86,7 @@
                 v-ripple
                 :href="href"
                 @click="navigate"
-                class="flex py-3 pl-4 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-full"
+                class="flex py-3 px-4 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-full"
               >
                 <i v-if="modulo.icono" :class="modulo.icono"
                   ><span class="ml-3 font-manrope-l text-base">{{
