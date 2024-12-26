@@ -110,8 +110,7 @@ import {
   cols,
   useDatosImproductividades,
   atributos,
-  lineas,
-  turnos,
+ 
 } from "../../composables/improductividades/datosImproductividades";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
@@ -141,10 +140,12 @@ const listar = async () => {
   const idCliente = useCookie("idCliente");
 
   const response = await listarImproductividades(idCliente.value);
-
+  
+  
   if (response.success && response.data) {
     data.value = response.data.filter((rem) => rem.estado === "Aprobado");
-
+    //console.log('log impro:', data.value);
+    
     if (data.value.length === 0) {
       estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-check-circle text-5xl";

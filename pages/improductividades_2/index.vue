@@ -1,83 +1,50 @@
 <template>
   <div class="w-full md:w-[97%]">
-    <title>Improductividades 2</title>
-    <TabPanelRemisiones :items="items2" />
+    <title>Improductividades</title>
+    <TabPanelRemisiones :items="items2" v-if="items2"/>
+
     <div v-if="data?.length !== 0">
-      <div>
-        <Calendar
-          v-model="dates"
-          selectionMode="range"
-          :manualInput="false"
-          dateFormat="yy/mm/dd"
-          class="mb-3 z-0"
-          placeholder="Escoge una o dos fechas"
-          showIcon
-          fluid
-          iconDisplay="input"
-        />
-        <button
-          @click="consultarImproductividades"
-          class="bg-azulClaroIENM ml-2 p-[11px] rounded"
-        >
-          <i class="pi pi-search text-white"></i>
-        </button>
-        <button
-          type="button"
-          v-if="recargar"
-          class="bg-azulClaroIENM px-3 py-1 rounded mb-2 float-right mt-2"
-          @click="recargarTabla"
-        >
-          <i class="pi pi-refresh text-white"
-            ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
-          >
-        </button>
-      </div>
-      <div class="min-h-[396px]">
+
+      <!-- Tabla agrupada -->
+      <div class="min-h-[396px] mt-5">
+        <h2 class="text-lg font-bold mb-4">Improductividades Agrupadas</h2>
         <Tabla
-          ref="compTabla"
-          :cabezas="cols"
-          :arrayData="data"
-          :atributosDatos="atributos"
+          :cabezas="encabezadosAgrupados"
+          :atributosDatos="atributosAgrupados"
+          :arrayData="improductividadesAgrupadas"
           :pag="true"
+          @rowClick="mostrarDetalles"
         >
           <template #nuevaColumna>
-            <th class="bg-azulIENM text-white">
-              <div class="flex gap-2">
-                <p>LINEA</p>
-                <ListaFiltro
-                  :opciones="lineas"
-                  v-model="lineasElegidas"
-                  @metodo="getFiltrarLinea"
-                />
-              </div>
-            </th>
-            <th class="bg-azulIENM text-white">
-              <div class="flex gap-2">
-                <p>TURNO</p>
-                <ListaFiltro
-                  :opciones="turnos"
-                  v-model="turnosElegidos"
-                  @metodo="getFiltrarTurno"
-                />
-              </div>
-            </th>
             <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
           </template>
           <template #botones="{ data }">
-            <td>{{ data.dispositivo }}</td>
-            <td>{{ data.turno }}</td>
             <td>
               <ModalGestionar
-                :idImproductividad="data.improductividad_id"
-                :actividad="data.actividad"
-                :descripcion="data.descripcion"
-                @postGuardar="listar"
+                :idImproductividad="data.op"
+                :actividad="data.referencia"
+                :descripcion="data.sumHoraHombre"
+                @postGuardar="guardarImproductividades(data.op, data.referencia)"
               />
+            </td>
+          </template>
+
+          <!-- Redondeo de los campos excepto setupLinea -->
+          <template #columnaTiempoParaCobrar="{ data }">
+            <td>
+              {{ Math.round(data.tiempoParaCobrar) }}
+            </td>
+          </template>
+          <template #columnaSetupLinea="{ data }">
+            <td>
+              {{ data.setupLinea }}
             </td>
           </template>
         </Tabla>
       </div>
     </div>
+
+    <!-- Loading -->
     <div class="p-5 rounded-t-lg text-center" v-else-if="isLoading">
       <ProgressSpinner
         style="width: 50px; height: 50px"
@@ -87,14 +54,11 @@
         aria-label="Custom ProgressSpinner"
       />
     </div>
-    <div
-      class="p-10 rounded-t-lg text-center"
-      v-else-if="estadoImproductividades"
-    >
+
+    <!-- Mensaje de estado -->
+    <div class="p-10 rounded-t-lg text-center" v-else-if="estadoImproductividades">
       <i :class="avisoIcono"></i>
-      <p class="font-manrope-b text-xl mt-3">
-        {{ avisodetalles }}
-      </p>
+      <p class="font-manrope-b text-xl mt-3">{{ avisodetalles }}</p>
       <button
         v-if="botonRecargar"
         class="bg-azulClaroIENM px-3 py-1 rounded mt-3 font-manrope-b text-white"
@@ -106,86 +70,149 @@
   </div>
 </template>
 
+
+
+
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import ProgressSpinner from "primevue/progressspinner";
 import Tabla from "../../components/dinamicos/Tabla.vue";
-import ListaFiltro from "../../components/dinamicos/ListaFiltro.vue";
-import type { Improductividad } from "../../interfaces/improductividades";
-import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
+import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
-import {
-  items2,
-  cols,
-  useDatosImproductividades,
-  atributos,
-} from "../../composables/improductividades/datosImproductividades";
 
+// Variables reactivas
 const dates = ref();
-const lineas = ref();
-const turnos = ref();
-let avisoIcono = ref();
-const toast = useToast();
-let avisodetalles = ref();
-const recargar = ref(false);
-const isLoading = ref(false);
-const botonRecargar = ref(false);
-const idCliente = useCookie("idCliente");
-const lineasElegidas = ref<String[]>([]); // Variable to save the chosen lines.
-const turnosElegidos = ref<String[]>([]); // Variable to save the chosen turns.
 const estadoImproductividades = ref(false);
-const data = ref<Improductividad[] | undefined>([]);
-const { listarImproductividades } = useImproductividadesAPI();
-const {
-  setConsultar,
-  filtrarPorLinea,
-  filtrarPorTurno,
-  getFiltros,
-  getImprodFiltradas,
-} = useDatosImproductividades();
+const isLoading = ref(false);
+const recargar = ref(false);
+const toast = useToast();
+const idCliente = useCookie("idCliente");
+const items2 = ref([]); // Define items2 para evitar errores
 
-// We save the component as a variable so we can manage it.
-const compTabla = ref<InstanceType<typeof Tabla> | null>(null);
+interface Improductividad {
+  programacion_id: string;
+  codigo_cobro: string;
+  horasxpersonas?: number;
+  cant_personas: number;
+  allocated_time?: number;
+  fecha: string; // Asegúrate de que el tipo sea correcto (string, Date, etc.)
+}
+
+interface ImproductividadAgrupada {
+  op: string;
+  referencia: string;
+  cantPersonasMax: number;
+  sumHoraHombre: number;
+  setup: number;
+  setupLinea: number;
+  tiempoParaCobrar: number;
+}
+
+const data = ref<Improductividad[]>([]);
+const improductividadesAgrupadas = ref<ImproductividadAgrupada[]>([]);
+
+// Encabezados y atributos
+const encabezadosAgrupados = [
+  "OP",
+  "Referencia",
+  "Total Tiempo Improductivo",
+  "Personal Improductivo",
+  "Setup",
+  "Setup Línea",
+  "Tiempo para Cobrar",
+];
+const atributosAgrupados = [
+  "op",
+  "referencia",
+  "sumHoraHombre",
+  "cantPersonasMax",
+  "setup",
+  "setupLinea",
+  "tiempoParaCobrar",
+];
+
+// Datos y métodos
+const { listarImproductividades, guardarCambiosImproductividades } = useImproductividadesAPI();
+
+const procesarImproductividades = (data: any[]): ImproductividadAgrupada[] => {
+  const agrupadas = data.reduce((acc, item) => {
+    const key = `${item.programacion_id}-${item.codigo_cobro}`;
+    if (!acc[key]) {
+      acc[key] = {
+        op: item.programacion_id,
+        referencia: item.codigo_cobro,
+        cantPersonasMax: 0,
+        sumHoraHombre: 0,
+        setup: item.allocated_time || 0,
+        setupLinea: 0,
+        tiempoParaCobrar: 0, // Inicializamos en 0
+      };
+    }
+    const horas = Number(item.horasxpersonas) || 0;
+    acc[key].cantPersonasMax = Math.max(acc[key].cantPersonasMax, item.cant_personas);
+    acc[key].sumHoraHombre += horas;
+    acc[key].setupLinea = acc[key].cantPersonasMax * acc[key].setup;
+    // Calcular 'tiempoParaCobrar' y redondearlo
+    acc[key].tiempoParaCobrar = Math.round(acc[key].sumHoraHombre - acc[key].setupLinea); // Redondeo aquí
+    return acc;
+  }, {} as Record<string, ImproductividadAgrupada>);
+  return Object.values(agrupadas);
+};
+
 
 const listar = async () => {
   isLoading.value = true;
-
   const response = await listarImproductividades(idCliente.value);
 
-  if (response.success && response.data) {
-    data.value = response.data.filter((rem) => rem.estado === null);
-
-    // const filtradas = await getImprodFiltradas(data.value);
-    // console.log("Filtradas: ", filtradas);
-
-    // data.value = filtradas;
-    // data.value = data.value.filter(
-    //   (rem) => rem.programacion_id === "130000075079"
-    // );
-    // console.log("data imp: ", data.value);
-
-    lineas.value = await getFiltros(data.value, "lineas");
-    turnos.value = await getFiltros(data.value, "turnos");
-
-    if (data.value.length === 0) {
-      estadoImproductividades.value = true;
-      avisoIcono.value = "pi pi-check-circle text-5xl";
-      avisodetalles.value = "Sin improductividades pendientes";
-    }
+  if (response.success && response.data) { // Verificación adicional
+    data.value = response.data;
+    improductividadesAgrupadas.value = procesarImproductividades(data.value);
   } else {
-    estadoImproductividades.value = true;
-    avisoIcono.value = "pi pi-times-circle text-5xl";
-    avisodetalles.value = "Fallo a la hora de cargar";
+    // Manejo de casos en los que response.success es false o response.data es undefined
+    data.value = [];
+    improductividadesAgrupadas.value = [];
+    toast.add({
+      severity: "error",
+      summary: "Error al listar improductividades",
+      detail: "No se pudo obtener la información.",
+      life: 3000,
+    });
   }
+
   isLoading.value = false;
 };
 
-// Method to consult by dates.
+const guardarImproductividades = async (programacion_id: string, codigo_cobro: string) => {
+  const response = await guardarCambiosImproductividades({ programacion_id, codigo_cobro });
+
+  if (response.success) {
+    toast.add({
+      severity: "success",
+      summary: "Guardado exitoso",
+      detail: "Los cambios se han guardado correctamente.",
+      life: 3000,
+    });
+    listar();
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Error al guardar",
+      detail: "No se pudieron guardar los cambios.",
+      life: 3000,
+    });
+  }
+};
+
+const recargarTabla = () => {
+  listar();
+  recargar.value = false;
+  dates.value = null;
+};
+
 const consultarImproductividades = async () => {
-  // Check that there are dates entered.
   if (!dates.value) {
     toast.add({
       severity: "error",
@@ -193,160 +220,34 @@ const consultarImproductividades = async () => {
       detail: "Por favor elige una fecha o dos con el calendario.",
       life: 3000,
     });
+    return;
+  }
+
+  isLoading.value = true;
+  const response = await listarImproductividades(idCliente.value);
+
+  if (response.success && response.data) {
+    const filtradas = response.data.filter((item: Improductividad) => {
+      const itemDate = new Date(item.fecha); // Asegúrate de que 'fecha' existe
+      return (
+        itemDate >= new Date(dates.value[0]) &&
+        itemDate <= new Date(dates.value[1])
+      );
+    });
+    data.value = filtradas;
+    improductividadesAgrupadas.value = procesarImproductividades(filtradas);
   } else {
-    // We execute the method of listing the unproductives.
-    const response = await listarImproductividades(idCliente.value);
-
-    // We verify that the method has worked.
-    if (response.success && response.data) {
-      // We fill the table data again.
-      data.value = response.data.filter((rem) => rem.estado === null);
-
-      // We verify that there are no previous filters of lines or shifts, if there are, perform the filters.
-      if (lineasElegidas.value.length !== 0) {
-        data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
-      }
-
-      if (turnosElegidos.value.length !== 0) {
-        data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
-      }
-
-      // We perform the filter to consult by dates.
-      data.value = await setConsultar(data.value, dates.value);
-
-      // We check if the query returns results.
-      if (data.value.length === 0) {
-        // If we do not bring anything we activate the warnings.
-        estadoImproductividades.value = true;
-        avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
-        avisodetalles.value = "No se encontro ninguna improductividad";
-        botonRecargar.value = true;
-      } else {
-        // If something is returned, we call the "Table" component method, which, if the pagination is greater than the total number of pages, places the current page as the last one.
-        compTabla.value?.reestablecerPaginas();
-      }
-      recargar.value = true;
-    }
+    toast.add({
+      severity: "error",
+      summary: "Error al consultar",
+      detail: "No se pudieron cargar las improductividades.",
+      life: 3000,
+    });
   }
+
+  isLoading.value = false;
 };
 
-// Method to consult by lines.
-const getFiltrarLinea = async () => {
-  // We execute the method of listing the unproductives.
-  const response = await listarImproductividades(idCliente.value);
-
-  // We verify that the method has worked.
-  if (response.success && response.data) {
-    // We fill the table data again.
-    data.value = response.data.filter((rem) => rem.estado === null);
-
-    // We verify that there are no previous filters for dates or shifts, if there are, perform the filters.
-    if (dates.value) {
-      data.value = await setConsultar(data.value, dates.value);
-    }
-
-    if (turnosElegidos.value.length !== 0) {
-      data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
-    }
-
-    // We verify that if you execute this "getFiltrarLinea" method and there is no line chosen, take into account what to do.
-    if (lineasElegidas.value.length === 0) {
-      // We verify that there are no date filters, if there are any, the query is made.
-      if (dates.value) {
-        data.value = await setConsultar(data.value, dates.value);
-      } else {
-        // We verify that there are no shift filters, if there are, the query is made.
-        if (turnosElegidos.value.length !== 0) {
-          data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
-        } else {
-          // If there are no filters, we list the table again as before.
-          listar();
-          recargar.value = false;
-          dates.value = null;
-        }
-      }
-    } else {
-      // We use this method that will return the filtered shifts.
-      data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
-
-      // We check if the query returns results.
-      if (data.value.length === 0) {
-        // If we do not bring anything we activate the warnings.
-        estadoImproductividades.value = true;
-        avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
-        avisodetalles.value = "No se encontro ninguna improductividad";
-        botonRecargar.value = true;
-      } else {
-        // If something is returned, we call the "Table" component method, which, if the pagination is greater than the total number of pages, places the current page as the last one.
-        compTabla.value?.reestablecerPaginas();
-      }
-      recargar.value = true;
-    }
-  }
-};
-
-// Method that queries in turns.
-const getFiltrarTurno = async () => {
-  // We execute the method of listing the unproductives.
-  const response = await listarImproductividades(idCliente.value);
-
-  // We verify that the method has worked.
-  if (response.success && response.data) {
-    // We fill the table data again.
-    data.value = response.data.filter((rem) => rem.estado === null);
-
-    // We verify that there are no previous filters by dates or lines, if the filters have been made.
-    if (dates.value) {
-      data.value = await setConsultar(data.value, dates.value);
-    }
-
-    if (lineasElegidas.value.length !== 0) {
-      data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
-    }
-
-    // We verify that if you execute this "getFiltrarTurno" method and there is no line chosen, take into account what to do.
-    if (turnosElegidos.value.length === 0) {
-      // We verify that there are no date filters, if there are any, the query is made.
-      if (dates.value) {
-        data.value = await setConsultar(data.value, dates.value);
-      } else {
-        // We verify that there are no shift filters, if there are, the query is made.
-        if (lineasElegidas.value.length !== 0) {
-          data.value = await filtrarPorLinea(lineasElegidas.value, data.value);
-        } else {
-          // If there are no filters, we list the table again as before.
-          listar();
-          recargar.value = false;
-        }
-      }
-    } else {
-      // We use this method that will return the filtered shifts.
-      data.value = await filtrarPorTurno(turnosElegidos.value, data.value);
-
-      // We verify that the method has returned something.
-      if (data.value.length === 0) {
-        estadoImproductividades.value = true;
-        avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
-        avisodetalles.value = "No se encontro ninguna improductividad";
-        botonRecargar.value = true;
-      } else {
-        // If something is returned, we call the "Table" component method, which, if the pagination is greater than the total number of pages, places the current page as the last one.
-        compTabla.value?.reestablecerPaginas();
-      }
-      recargar.value = true;
-    }
-  }
-};
-
-// Method that helps to relist the table and clean the filters made previously.
-const recargarTabla = () => {
-  listar();
-  recargar.value = false;
-  dates.value = null;
-  // Delete arrangements of chosen shifts and lines.
-  lineasElegidas.value.splice(0, lineasElegidas.value.length);
-  turnosElegidos.value.splice(0, turnosElegidos.value.length);
-};
-
+// Inicialización
 listar();
 </script>

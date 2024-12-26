@@ -115,8 +115,7 @@ import {
   cols,
   useDatosImproductividades,
   atributos,
-  lineas,
-  turnos,
+ 
 } from "../../composables/improductividades/datosImproductividades";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";

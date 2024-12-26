@@ -20,6 +20,7 @@ export interface Improductividad {
     turno: string;
     usuario_gestiona: string;
     usuario_reporta: string;
+    allocated_time: number;
 }
 
 export interface postImproductividad {
