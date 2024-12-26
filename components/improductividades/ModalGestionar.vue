@@ -39,7 +39,12 @@
             "
           ></i>
         </p>
-        <Textarea v-model="motivo" autoResize rows="5" cols="29" />
+        <textarea
+          name=""
+          id=""
+          v-model="motivo"
+          class="w-full p-1 border-[1px] border-black rounded outline-none"
+        ></textarea>
       </div>
       <div class="flex justify-end gap-2 mt-2">
         <button
