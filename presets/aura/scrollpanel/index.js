@@ -38,13 +38,13 @@ export default {
             'h-[9px] bottom-0',
 
             // Appearance
-            'bg-surface-50 dark:bg-surface-700 rounded',
+            'bg-[#28B67A] dark:bg-surface-700 rounded',
 
             // Interactivity
             'cursor-pointer',
 
             // Visibility & Layering
-            'invisible z-20',
+            'z-20',
 
             // Transition
             'transition duration-[250ms] ease-linear',
@@ -59,7 +59,7 @@ export default {
             'w-[9px] top-0',
 
             // Appearance
-            'bg-surface-50 dark:bg-surface-700 rounded',
+            'bg-[#28B67A] dark:bg-surface-700 rounded',
 
             // Interactivity
             'cursor-pointer',

@@ -148,17 +148,17 @@ export const items = ref([
   {
     route: "/improductividades",
     label: "Pendientes",
-    icon: "pi  pi-clipboard"
+    icon: "pi pi-clipboard"
   },
   {
     route: "/improductividades/aprobadas",
     label: "Aprobadas",
-    icon: "pi  pi-check"
+    icon: "pi pi-check"
   },
   {
     route: "/improductividades/rechazadas",
     label: "Rechazadas",
-    icon: "pi  pi-times"
+    icon: "pi pi-times"
   }
 ]);
 

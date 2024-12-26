@@ -1,6 +1,6 @@
 <template>
-  <div class="overflow-x-scroll">
-    <table class="text-xs sm:text-sm w-[95%] lg:w-full font-manrope-r">
+  <ScrollPanel style="width: 100%; height: 319px">
+    <table class="text-xs sm:text-sm lg:w-full font-manrope-r">
       <caption class="text-base" v-if="titulo">
         {{
           titulo
@@ -38,7 +38,7 @@
         <slot name="tfoot"></slot>
       </tfoot>
     </table>
-  </div>
+  </ScrollPanel>
   <div v-if="pag" class="w-full text-center py-3">
     <button
       type="button"
