@@ -11,10 +11,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     const resultado = await verificarLogin();
     
-    if (!resultado) {
-        if (to.path !== "/") {
-            return navigateTo("/");
-        }
-        // return navigateTo("/");
-    }
+    // if (!resultado) {
+    //     if (to.path !== "/") {
+    //         return navigateTo("/");
+    //     }
+    //     // return navigateTo("/");
+    // }
 })
