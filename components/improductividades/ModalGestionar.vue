@@ -39,13 +39,7 @@
             "
           ></i>
         </p>
-        <Textarea
-          v-model="motivo"
-          autoResize
-          rows="5"
-          cols="29"
-          :disabled="disable"
-        />
+        <Textarea v-model="motivo" autoResize rows="5" cols="29" />
       </div>
       <div class="flex justify-end gap-2 mt-2">
         <button
