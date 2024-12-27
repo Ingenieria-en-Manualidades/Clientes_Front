@@ -110,9 +110,9 @@ import {
   cols,
   useDatosImproductividades,
   atributos,
- 
 } from "../../composables/improductividades/datosImproductividades";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
+import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 
 const dates = ref();
@@ -140,12 +140,11 @@ const listar = async () => {
   const idCliente = useCookie("idCliente");
 
   const response = await listarImproductividades(idCliente.value);
-  
-  
+
   if (response.success && response.data) {
     data.value = response.data.filter((rem) => rem.estado === "Aprobado");
     //console.log('log impro:', data.value);
-    
+
     if (data.value.length === 0) {
       estadoImproductividades.value = true;
       avisoIcono.value = "pi pi-check-circle text-5xl";
@@ -325,4 +324,8 @@ const recargarTabla = () => {
 };
 
 listar();
+
+definePageMeta({
+  middleware: "usuario-verificado",
+});
 </script>

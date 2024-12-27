@@ -115,9 +115,9 @@ import {
   cols,
   useDatosImproductividades,
   atributos,
- 
 } from "../../composables/improductividades/datosImproductividades";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
+import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 
 const dates = ref();
@@ -328,4 +328,8 @@ const recargarTabla = () => {
 };
 
 listar();
+
+definePageMeta({
+  middleware: "usuario-verificado",
+});
 </script>

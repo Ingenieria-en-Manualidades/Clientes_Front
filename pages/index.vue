@@ -29,12 +29,11 @@
 </template>
 
 <script lang="ts" setup>
-import logueado from "../middleware/logueado";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime";
+import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
+
 //Método para que no tenga la plantilla HTML por defecto
 definePageMeta({
   layout: false,
-  middleware: "logueado",
-  skipGlobalMiddleware: true,
+  middleware: "usuario-no-verificado",
 });
 </script>

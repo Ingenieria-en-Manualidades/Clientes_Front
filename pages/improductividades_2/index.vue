@@ -1,10 +1,9 @@
 <template>
   <div class="w-full md:w-[97%]">
     <title>Improductividades</title>
-    <TabPanelRemisiones :items="items2" v-if="items2"/>
+    <TabPanelRemisiones :items="items2" v-if="items2" />
 
     <div v-if="data?.length !== 0">
-
       <!-- Tabla agrupada -->
       <div class="min-h-[396px] mt-5">
         <h2 class="text-lg font-bold mb-4">Improductividades Agrupadas</h2>
@@ -24,7 +23,9 @@
                 :idImproductividad="data.op"
                 :actividad="data.referencia"
                 :descripcion="data.sumHoraHombre"
-                @postGuardar="guardarImproductividades(data.op, data.referencia)"
+                @postGuardar="
+                  guardarImproductividades(data.op, data.referencia)
+                "
               />
             </td>
           </template>
@@ -56,7 +57,10 @@
     </div>
 
     <!-- Mensaje de estado -->
-    <div class="p-10 rounded-t-lg text-center" v-else-if="estadoImproductividades">
+    <div
+      class="p-10 rounded-t-lg text-center"
+      v-else-if="estadoImproductividades"
+    >
       <i :class="avisoIcono"></i>
       <p class="font-manrope-b text-xl mt-3">{{ avisodetalles }}</p>
       <button
@@ -70,9 +74,6 @@
   </div>
 </template>
 
-
-
-
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useCookie } from "nuxt/app";
@@ -81,6 +82,7 @@ import ProgressSpinner from "primevue/progressspinner";
 import Tabla from "../../components/dinamicos/Tabla.vue";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
 import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
+import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 
 // Variables reactivas
@@ -135,7 +137,8 @@ const atributosAgrupados = [
 ];
 
 // Datos y métodos
-const { listarImproductividades, guardarCambiosImproductividades } = useImproductividadesAPI();
+const { listarImproductividades, guardarCambiosImproductividades } =
+  useImproductividadesAPI();
 
 const procesarImproductividades = (data: any[]): ImproductividadAgrupada[] => {
   const agrupadas = data.reduce((acc, item) => {
@@ -152,22 +155,27 @@ const procesarImproductividades = (data: any[]): ImproductividadAgrupada[] => {
       };
     }
     const horas = Number(item.horasxpersonas) || 0;
-    acc[key].cantPersonasMax = Math.max(acc[key].cantPersonasMax, item.cant_personas);
+    acc[key].cantPersonasMax = Math.max(
+      acc[key].cantPersonasMax,
+      item.cant_personas
+    );
     acc[key].sumHoraHombre += horas;
     acc[key].setupLinea = acc[key].cantPersonasMax * acc[key].setup;
     // Calcular 'tiempoParaCobrar' y redondearlo
-    acc[key].tiempoParaCobrar = Math.round(acc[key].sumHoraHombre - acc[key].setupLinea); // Redondeo aquí
+    acc[key].tiempoParaCobrar = Math.round(
+      acc[key].sumHoraHombre - acc[key].setupLinea
+    ); // Redondeo aquí
     return acc;
   }, {} as Record<string, ImproductividadAgrupada>);
   return Object.values(agrupadas);
 };
 
-
 const listar = async () => {
   isLoading.value = true;
   const response = await listarImproductividades(idCliente.value);
 
-  if (response.success && response.data) { // Verificación adicional
+  if (response.success && response.data) {
+    // Verificación adicional
     data.value = response.data;
     improductividadesAgrupadas.value = procesarImproductividades(data.value);
   } else {
@@ -185,8 +193,14 @@ const listar = async () => {
   isLoading.value = false;
 };
 
-const guardarImproductividades = async (programacion_id: string, codigo_cobro: string) => {
-  const response = await guardarCambiosImproductividades({ programacion_id, codigo_cobro });
+const guardarImproductividades = async (
+  programacion_id: string,
+  codigo_cobro: string
+) => {
+  const response = await guardarCambiosImproductividades({
+    programacion_id,
+    codigo_cobro,
+  });
 
   if (response.success) {
     toast.add({
@@ -250,4 +264,8 @@ const consultarImproductividades = async () => {
 
 // Inicialización
 listar();
+
+definePageMeta({
+  middleware: "usuario-verificado",
+});
 </script>

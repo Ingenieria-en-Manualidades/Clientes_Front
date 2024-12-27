@@ -56,6 +56,7 @@ import Tabla from "~/components/dinamicos/Tabla.vue";
 import FormCalidad from "../../components/objetivos/FormCalidad.vue";
 import FormChecklist from "../../components/objetivos/FormChecklist.vue";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
+import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import type { DataArchivos } from "../../interfaces/objetives";
 
 let avisoIcono = ref();
@@ -117,4 +118,8 @@ const descargarPDF = async (urlArchivo: string, nombreArchivo: string) => {
 };
 
 listar();
+
+definePageMeta({
+  middleware: "usuario-verificado",
+});
 </script>

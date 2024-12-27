@@ -41,6 +41,7 @@ import { useToast } from "primevue/usetoast";
 import Tabla from "../../components/dinamicos/Tabla.vue";
 import FormProduccion from "../../components/objetivos/FormProduccion.vue";
 import FormIndicadores from "../../components/objetivos/FormIndicadores.vue";
+import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import {
   datosTablaProd,
   datosObjetivos,
@@ -110,4 +111,8 @@ const getMeses = (fechas: Date[]): String[] => {
   }
   return arrayMeses;
 };
+
+definePageMeta({
+  middleware: "usuario-verificado",
+});
 </script>

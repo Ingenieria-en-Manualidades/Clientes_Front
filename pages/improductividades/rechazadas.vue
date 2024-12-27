@@ -90,13 +90,13 @@ import type { Improductividad } from "../../interfaces/improductividades";
 import ModalRechazo from "../../components/improductividades/ModalRechazo.vue";
 import Filtros from "../../components/improductividades/Filtros.vue";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
+import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 import {
   items,
   cols,
   useDatosImproductividades,
   atributos,
-
 } from "../../composables/improductividades/datosImproductividades";
 
 const lineas = ref();
@@ -122,6 +122,7 @@ const listar = async () => {
 
   if (response.success && response.data) {
     data.value = response.data.filter((rem) => rem.estado === "Rechazado");
+    console.log("RECHAZADOS: ", data.value);
 
     lineas.value = await getFiltros(data.value, "lineas");
     turnos.value = await getFiltros(data.value, "turnos");
@@ -275,4 +276,8 @@ const recargarTabla = () => {
 };
 
 listar();
+
+definePageMeta({
+  middleware: "usuario-verificado",
+});
 </script>
