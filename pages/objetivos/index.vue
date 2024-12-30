@@ -10,6 +10,7 @@ import FormObjetivosMen from "~/components/objetivos/FormObjetivosMen.vue";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 definePageMeta({
-  middleware: "usuario-verificado",
-});
+    layout: 'default',
+    middleware: "auth",
+  })
 </script>

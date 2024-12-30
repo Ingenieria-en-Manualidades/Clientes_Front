@@ -120,6 +120,7 @@ const descargarPDF = async (urlArchivo: string, nombreArchivo: string) => {
 listar();
 
 definePageMeta({
-  middleware: "usuario-verificado",
-});
+    layout: 'default',
+    middleware: "auth",
+  })
 </script>

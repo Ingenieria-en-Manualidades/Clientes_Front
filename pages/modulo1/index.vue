@@ -15,4 +15,8 @@
 
 <script lang="ts" setup>
 import { useCookie, navigateTo } from "nuxt/app";
+definePageMeta({
+    layout: 'default',
+    middleware: "auth",
+  })
 </script>

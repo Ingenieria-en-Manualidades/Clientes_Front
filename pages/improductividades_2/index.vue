@@ -266,6 +266,7 @@ const consultarImproductividades = async () => {
 listar();
 
 definePageMeta({
-  middleware: "usuario-verificado",
-});
+    layout: 'default',
+    middleware: "auth",
+  })
 </script>
