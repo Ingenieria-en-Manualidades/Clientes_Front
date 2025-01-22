@@ -12,6 +12,7 @@ export const useModulos = () => {
     nombre: "Inicio",
     ruta: "/",
     visible: true,
+    permission: 'view'
   },
   {
     icono: "pi pi-bell",

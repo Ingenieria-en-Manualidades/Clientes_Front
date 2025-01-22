@@ -100,7 +100,7 @@ const handleSubmit = async () => {
 
     //Enviando al usuario al "dashboard" de las remisiones en caso de que el usuario este registrado.
     if (resultado.success) {
-      await router.push("/remisiones");
+      await router.push("/");
       isLoading.value = false;
     } else {
       isLoading.value = false;
