@@ -1,5 +1,5 @@
 <template>
-  <form class="w-[40%] max-w-[210px] text-sm sm:text-base">
+  <form class="font-manrope-r w-[40%] max-w-[210px] text-sm sm:text-base">
     <fieldset
       class="border-[1px] border-black px-2 py-[11px] min-[444px]:py-[31px] min-[640px]:py-[37px] md:py-3 font-manrope-r rounded"
     >
