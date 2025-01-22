@@ -28,7 +28,7 @@
         </div>
         <div>
           <textarea
-            class="border-[1px] border-black rounded p-1 h-[150px]"
+            class="border-[1px] border-black rounded p-1 h-[150px] outline-none"
             id="motive"
             v-model="motive"
           ></textarea>
