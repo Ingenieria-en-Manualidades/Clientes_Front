@@ -5,7 +5,7 @@
     <div class="w-full flex justify-center p-1 gap-2">
       <FormProduccion />
       <FormIndicadores :visible="visible" @setVisible="visible = !visible" />
-      <fieldset class="border-[1px] border-black rounded p-2 font-manrope-r">
+      <!-- <fieldset class="border-[1px] border-black rounded p-2 font-manrope-r">
         <legend class="font-manrope-b">Meses Anteriores</legend>
         <Calendar
           v-model="dates"
@@ -30,7 +30,7 @@
           :atributosDatos="atribInd"
           :pag="false"
         />
-      </fieldset>
+      </fieldset> -->
     </div>
   </div>
 </template>
@@ -113,7 +113,7 @@ const getMeses = (fechas: Date[]): String[] => {
 };
 
 definePageMeta({
-    layout: 'default',
-    middleware: "auth",
-  })
+  layout: "default",
+  middleware: "auth",
+});
 </script>

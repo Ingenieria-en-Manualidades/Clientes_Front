@@ -80,15 +80,15 @@ const listar = async () => {
     dataArchivos.value = resultado.data.archivos;
     dataArchivosInex.value = resultado.data.archivosIne;
 
-    if (dataArchivosInex.value.length != 0) {
-      for (const archivo of dataArchivosInex.value) {
-        toast.add({
-          severity: "info",
-          summary: `Archivo de ${archivo.tipo_calidad} borrado.`,
-          detail: `${archivo.nombre} de la meta ${archivo.meta}`,
-        });
-      }
-    }
+    // if (dataArchivosInex.value.length != 0) {
+    //   for (const archivo of dataArchivosInex.value) {
+    //     toast.add({
+    //       severity: "info",
+    //       summary: `Archivo de ${archivo.tipo_calidad} borrado.`,
+    //       detail: `${archivo.nombre} de la meta ${archivo.meta}`,
+    //     });
+    //   }
+    // }
 
     if (dataArchivos.value.length === 0) {
       estadoArchivos.value = true;
@@ -120,7 +120,7 @@ const descargarPDF = async (urlArchivo: string, nombreArchivo: string) => {
 listar();
 
 definePageMeta({
-    layout: 'default',
-    middleware: "auth",
-  })
+  layout: "default",
+  middleware: "auth",
+});
 </script>
