@@ -22,10 +22,14 @@ export const useImproductividadesAPI = () => {
       const valueJSON = await response.json();
       const improductividades: Improductividad[] = valueJSON.data;
 
-      return { success: true, data: improductividades }
+      if (response.ok) {
+        return { success: true, data: improductividades }
+      } else {
+        return { success: false, error: "Error al listar improductividades." }
+      }
     } catch (error) {
-      console.error("Error a la hora de realizar el listarImproductividades");
-      return { success: false, error: error }
+      console.error("Error dentro del catch al listar improductividades: ", error);
+      return { success: false, error: "Error en el catch al listar improductividades." }
     }
   }
   

@@ -127,7 +127,6 @@ const listar = async () => {
 
   if (response.success && response.data) {
     data.value = response.data.filter((rem) => rem.estado === null);
-    console.log("NULOS: ", data.value);
 
     lineas.value = await getFiltros(data.value, "lineas");
     turnos.value = await getFiltros(data.value, "turnos");

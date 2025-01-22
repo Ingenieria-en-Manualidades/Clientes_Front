@@ -25,6 +25,7 @@
       <input
         type="text"
         v-model="calCheck"
+        maxlength="3"
         class="border-[1px] border-gray-500 rounded-md p-2 outline-none w-full"
       />
       <div class="mt-5">
@@ -79,6 +80,7 @@ import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
+const regex = /[0-9]/;
 const calCheck = ref();
 const dateCheck = ref();
 const fileCheck = ref<File | null>(null);
@@ -130,23 +132,32 @@ const submitCheck = async () => {
   };
 
   if (noErrors) {
-    const resultado = await createCalidad(objCalidad);
+    if (regex.test(calCheck.value)) {
+      const resultado = await createCalidad(objCalidad);
 
-    if (resultado.success) {
-      calCheck.value = "";
-      removeArchivo();
-      emits("listar");
-      toast.add({
-        severity: "success",
-        summary: "Guardado correctamente.",
-        detail: resultado.data.message,
-        life: 3000,
-      });
+      if (resultado.success) {
+        calCheck.value = "";
+        removeArchivo();
+        emits("listar");
+        toast.add({
+          severity: "success",
+          summary: "Guardado correctamente.",
+          detail: resultado.data.message,
+          life: 3000,
+        });
+      } else {
+        toast.add({
+          severity: "error",
+          summary: "Error al guardar.",
+          detail: resultado.error,
+          life: 3000,
+        });
+      }
     } else {
       toast.add({
         severity: "error",
-        summary: "Error al guardar.",
-        detail: resultado.error,
+        summary: "Error de valores.",
+        detail: "Por favor solo ingresar números en los campos.",
         life: 3000,
       });
     }

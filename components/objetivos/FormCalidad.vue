@@ -28,6 +28,7 @@
       <input
         type="text"
         v-model="calInspSol"
+        maxlength="3"
         class="border-[1px] border-gray-500 rounded-md p-2 outline-none w-full"
       />
       <div class="mt-5">
@@ -87,6 +88,7 @@ const toast = useToast();
 const fileInput = ref<HTMLInputElement | null>(null);
 const { createCalidad } = useObjetivosApi();
 
+const regex = /[0-9]/;
 const calInspSol = ref();
 const dateInspSol = ref();
 const fileSol = ref<File | null>(null);
@@ -133,23 +135,32 @@ const submitSol = async () => {
   };
 
   if (noErrors) {
-    const resultado = await createCalidad(objCalidad);
+    if (regex.test(calInspSol.value)) {
+      const resultado = await createCalidad(objCalidad);
 
-    if (resultado.success) {
-      calInspSol.value = "";
-      removeArchivo();
-      emits("listar");
-      toast.add({
-        severity: "success",
-        summary: "Guardado correctamente.",
-        detail: resultado.data.message,
-        life: 3000,
-      });
+      if (resultado.success) {
+        calInspSol.value = "";
+        removeArchivo();
+        emits("listar");
+        toast.add({
+          severity: "success",
+          summary: "Guardado correctamente.",
+          detail: resultado.data.message,
+          life: 3000,
+        });
+      } else {
+        toast.add({
+          severity: "error",
+          summary: "Error al guardar.",
+          detail: resultado.error,
+          life: 3000,
+        });
+      }
     } else {
       toast.add({
         severity: "error",
-        summary: "Error al guardar.",
-        detail: resultado.error,
+        summary: "Error de valores.",
+        detail: "Por favor solo ingresar números en los campos.",
         life: 3000,
       });
     }

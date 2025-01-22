@@ -7,6 +7,7 @@
           <input
             v-model="cumplimiento"
             type="text"
+            maxlength="3"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
           <p v-if="errors.cumplimiento" class="text-red-500 text-sm">
@@ -18,6 +19,7 @@
           <input
             v-model="eficienciaProductiva"
             type="text"
+            maxlength="3"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
           <p v-if="errors.eficienciaProductiva" class="text-red-500 text-sm">
@@ -29,6 +31,7 @@
           <input
             v-model="calidad"
             type="text"
+            maxlength="3"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
           <p v-if="errors.calidad" class="text-red-500 text-sm">
@@ -42,6 +45,7 @@
           <input
             v-model="desperdicioME"
             type="text"
+            maxlength="3"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
           <p v-if="errors.desperdicioME" class="text-red-500 text-sm">
@@ -53,6 +57,7 @@
           <input
             v-model="desperdicioPP"
             type="text"
+            maxlength="3"
             class="border-[1px] border-black rounded-md w-[90%] font-manrope-r p-1 outline-none"
           />
           <p v-if="errors.desperdicioPP" class="text-red-500 text-sm">
@@ -83,10 +88,12 @@ const clienteID = useCookie("idCliente");
 // Variables reactivas de los campos del formulario
 const calidad = ref("");
 const toast = useToast();
+const errorRegex = ref(false);
 const cumplimiento = ref("");
 const desperdicioME = ref("");
 const desperdicioPP = ref("");
 const eficienciaProductiva = ref("");
+const regex = /[0-9]/;
 
 // Variables de errores para la validación
 const errors = ref({
@@ -107,6 +114,7 @@ const submitForm = async () => {
     desperdicioME: false,
     desperdicioPP: false,
   };
+  errorRegex.value = false;
 
   // Validar los campos
   if (!cumplimiento.value) errors.value.cumplimiento = true;
@@ -115,35 +123,51 @@ const submitForm = async () => {
   if (!desperdicioME.value) errors.value.desperdicioME = true;
   if (!desperdicioPP.value) errors.value.desperdicioPP = true;
 
+  if (!regex.test(cumplimiento.value)) errorRegex.value = true;
+  if (!regex.test(eficienciaProductiva.value)) errorRegex.value = true;
+  if (!regex.test(calidad.value)) errorRegex.value = true;
+  if (!regex.test(desperdicioME.value)) errorRegex.value = true;
+  if (!regex.test(desperdicioPP.value)) errorRegex.value = true;
+
   //Comprobar si hay errores
   const noErrors = !Object.values(errors.value).includes(true);
+  // const noErrors = false;
   if (noErrors) {
-    // Llamar a la API para crear los objetivos
-    const { createMeta } = useObjetivosApi();
-    const objetivosData = {
-      cumplimiento: Number(cumplimiento.value),
-      eficienciaProductiva: Number(eficienciaProductiva.value),
-      calidad: Number(calidad.value),
-      desperdicioME: Number(desperdicioME.value),
-      desperdicioPP: Number(desperdicioPP.value),
-      cliente_endpoint_id: clienteID.value,
-    };
+    if (!errorRegex.value) {
+      // Llamar a la API para crear los objetivos
+      const { createMeta } = useObjetivosApi();
+      const objetivosData = {
+        cumplimiento: Number(cumplimiento.value),
+        eficienciaProductiva: Number(eficienciaProductiva.value),
+        calidad: Number(calidad.value),
+        desperdicioME: Number(desperdicioME.value),
+        desperdicioPP: Number(desperdicioPP.value),
+        cliente_endpoint_id: clienteID.value,
+      };
 
-    const response = await createMeta(objetivosData);
+      const response = await createMeta(objetivosData);
 
-    if (response.success) {
-      toast.add({
-        severity: "success",
-        summary: "Meta guardada.",
-        detail: "Exito a la hora de guardar las metas.",
-        life: 3000,
-      });
+      if (response.success) {
+        toast.add({
+          severity: "success",
+          summary: "Meta guardada.",
+          detail: "Exito a la hora de guardar las metas.",
+          life: 3000,
+        });
+      } else {
+        console.error("Error al crear objetivos:", response.error);
+        toast.add({
+          severity: "error",
+          summary: "Error al guardar.",
+          detail: response.error,
+          life: 3000,
+        });
+      }
     } else {
-      console.error("Error al crear objetivos:", response.error);
       toast.add({
         severity: "error",
-        summary: "Error al guardar.",
-        detail: response.error,
+        summary: "Error de valores.",
+        detail: "Por favor solo ingresar números en los campos.",
         life: 3000,
       });
     }

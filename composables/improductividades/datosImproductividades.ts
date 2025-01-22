@@ -1,4 +1,5 @@
-import { ref } from "vue"
+import { computed, ref } from "vue"
+import type { HeaderWithFilters } from "../../interfaces/filters";
 import type { Improductividad } from "../../interfaces/improductividades";
 
 export const useDatosImproductividades = () => {
@@ -135,12 +136,34 @@ export const useDatosImproductividades = () => {
     return filtradas;
   }
 
+  const getLineas = (data: Improductividad[]): string[] => {
+    const opciones = data.reduce((acc, imp) => {
+      if (!acc.includes(imp.dispositivo)) {
+        acc.push(imp.dispositivo);
+      }
+      return acc;
+    }, []);
+    return opciones.sort();
+  };
+  
+  const getTurnos = (data: Improductividad[]): string[] => {
+    const opciones = data.reduce((acc, imp) => {
+      if (!acc.includes(imp.turno)) {
+        acc.push(imp.turno);
+      }
+      return acc;
+    }, []);
+    return opciones.sort();
+  };
+
   return {
     setConsultar,
     filtrarPorLinea,
     filtrarPorTurno,
     getFiltros,
     getImprodFiltradas,
+    getTurnos,
+    getLineas
   };
 }
 
@@ -192,6 +215,54 @@ export const cols = ref([
   "improductividades hora hombre",
   "lineas",
   "turnos",
+]);
+
+// NUEVOS DATOS DE IMPRODUCTIVIDADES
+export const headers = computed<HeaderWithFilters[]>(() => [
+  {
+    label: "op",
+    options: null,
+  },
+  {
+    label: "referencia",
+    options: null,
+  },
+  {
+    label: "actividad",
+    options: null,
+  },
+  {
+    label: "descripcion",
+    options: null,
+  },
+  {
+    label: "fecha de ingreso",
+    options: null,
+  },
+  {
+    label: "horas",
+    options: null,
+  },
+  {
+    label: "minutos",
+    options: null,
+  },
+  {
+    label: "cantidad de personas",
+    options: null,
+  },
+  {
+    label: "improductividades hora hombre",
+    options: null,
+  },
+  {
+    label: "lineas",
+    options: null,
+  },
+  {
+    label: "turnos",
+    options: null,
+  },
 ]);
 
 export const atributos = ref([
