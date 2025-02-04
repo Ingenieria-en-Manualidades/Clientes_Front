@@ -74,28 +74,6 @@
         </button>
       </div>
     </fieldset>
-    <Toast position="top-center" group="messageConfirmInsp">
-      <template #message="slotProps">
-        <div class="flex flex-col items-start flex-auto font-manrope-r">
-          <div class="font-medium text-lg my-4">
-            {{ slotProps.message.summary }}
-          </div>
-          <div
-            class="w-full inline-flex justify-center items-center text-white font-semibold gap-5"
-          >
-            <ObjetivosModalConfirmFile
-              @removeMessage="toast.removeGroup('messageConfirmInsp')"
-            />
-            <button
-              class="border-[1px] border-red-500 bg-red-500 px-6 py-1 rounded"
-              @click="toast.removeGroup('messageConfirmInsp')"
-            >
-              No
-            </button>
-          </div>
-        </div>
-      </template>
-    </Toast>
   </form>
 </template>
 
@@ -105,8 +83,10 @@ import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
-const idCliente = useCookie("idCliente");
+const date = new Date();
 const toast = useToast();
+const idCliente = useCookie("idCliente");
+
 const fileInput = ref<HTMLInputElement | null>(null);
 const { createCalidad } = useObjetivosApi();
 
@@ -132,12 +112,6 @@ let errorsInsp = ref({
 });
 
 const submitSol = async () => {
-  toast.add({
-    severity: "info",
-    summary: "¿Desea sobreescribir el archivo de la meta?",
-    group: "messageConfirmInsp",
-  });
-
   errorsInsp.value = {
     dateInspSol: false,
     calificacionInspSol: false,
@@ -160,6 +134,7 @@ const submitSol = async () => {
     inspeccion: Number(calInspSol.value),
     archivo: fileSol.value,
     tipo_formulario: "inspeccion_sol",
+    yearFile: String(date.getFullYear()),
   };
 
   if (noErrors) {

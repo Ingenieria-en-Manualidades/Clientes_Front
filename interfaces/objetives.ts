@@ -14,6 +14,7 @@ export interface Meta {
     inspeccion: number | null | undefined,
     archivo: File | null,
     tipo_formulario: string,
+    yearFile: string,
   }
 
   export interface Accidente {
@@ -37,18 +38,32 @@ export interface Meta {
     success: boolean;
     data?: T | undefined;
     error?: string;
+    status?: number;
   }
 
   export interface Archivo {
     archivo: File | null,
     cliente_endpoint_id: number,
     tipo_formulario: string,
-    tablero_sae_id: number
+    tablero_sae_id: number,
+    year_file: string,
   }
 
   export interface DataArchivos {
     nombre: string | null,
     tipo_calidad: string | null,
+    tablero_sae_id: number | null,
     meta: string | null,
     url: string | null,
+    id: number | null,
+  }
+
+  export interface UpdateArchivo {
+    archivo: File | null,
+    cliente_endpoint_id: number,
+    tipo_formulario: string,
+    tablero_sae_id: number,
+    year_file: string,
+    url: string,
+    id: number,
   }

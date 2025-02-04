@@ -1,5 +1,5 @@
-import { useCookie, useRuntimeConfig } from 'nuxt/app';
-import { Meta, Calidad, Accidente, ApiPromise, Objetivos, Archivo, DataArchivos } from '../../interfaces/objetives';
+import { useRuntimeConfig } from 'nuxt/app';
+import { Meta, Calidad, Accidente, ApiPromise, Objetivos, Archivo } from '../../interfaces/objetives';
 
 export const useObjetivosApi = () => {
   const config = useRuntimeConfig();
@@ -46,7 +46,6 @@ export const useObjetivosApi = () => {
       });
 
       const data = await response.json();
-      console.log("data: ", data);
       
       if (response.ok) {
         const objArchivo = {
@@ -54,6 +53,7 @@ export const useObjetivosApi = () => {
           cliente_endpoint_id: objCalidad.cliente_endpoint_id,
           tipo_formulario: objCalidad.tipo_formulario,
           tablero_sae_id: data.tablero_sae_id,
+          year_file: objCalidad.yearFile,
         };
 
         const response = await createFile(objArchivo);
@@ -68,6 +68,33 @@ export const useObjetivosApi = () => {
       }
     } catch (error) {
       console.error("Error de catch en la inserción 'Calidad': ", error);
+      return { success: false, error: error }
+    }
+  }
+
+  const verificarValoresCalidad = async (objCalidad: Calidad): Promise<ApiPromise<any>> => {
+    try {
+      const response = await fetch(`${url}api/verificarCalidad`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(objCalidad),
+      });
+
+      const resultado = await response.json();
+
+      if (response.ok) {
+        const data = {
+          calificacion: resultado.calificacion,
+          message: resultado.message,
+        }
+        return { success: resultado.success, data: data }
+      } else {
+        return { success: resultado.success, error: resultado.message, status: response.status }
+      }
+    } catch (error) {
+      console.error("Error de catch en la verificación de 'Calidad': ", error);
       return { success: false, error: error }
     }
   }
@@ -183,6 +210,7 @@ export const useObjetivosApi = () => {
       formData.append('cliente_endpoint_id', objArchivo.cliente_endpoint_id.toString());
       formData.append('tipo_formulario', objArchivo.tipo_formulario);
       formData.append('tablero_sae_id', objArchivo.tablero_sae_id.toString());
+      formData.append('year_file', objArchivo.year_file);
 
       const response = await fetch(`${url}api/guardarArchivo`, {
         method: 'POST',
@@ -264,6 +292,7 @@ export const useObjetivosApi = () => {
     createAccidente,
     createObjetivos,
     updateObjetivos,
-    descargarArchivo
+    descargarArchivo,
+    verificarValoresCalidad
   };
 };

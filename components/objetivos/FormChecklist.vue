@@ -71,28 +71,6 @@
         </button>
       </div>
     </fieldset>
-    <Toast position="top-center" group="messageConfirmCheck">
-      <template #message="slotProps">
-        <div class="flex flex-col items-start flex-auto font-manrope-r">
-          <div class="font-medium text-lg my-4">
-            {{ slotProps.message.summary }}
-          </div>
-          <div
-            class="w-full inline-flex justify-center items-center text-white font-semibold gap-5"
-          >
-            <ObjetivosModalConfirmFile
-              @removeMessage="toast.removeGroup('messageConfirmCheck')"
-            />
-            <button
-              class="border-[1px] border-red-500 bg-red-500 px-6 py-1 rounded"
-              @click="toast.removeGroup('messageConfirmCheck')"
-            >
-              No
-            </button>
-          </div>
-        </div>
-      </template>
-    </Toast>
   </form>
 </template>
 
@@ -104,6 +82,7 @@ import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
 const regex = /[0-9]/;
 const calCheck = ref();
+const date = new Date();
 const dateCheck = ref();
 const fileCheck = ref<File | null>(null);
 let errorsCheck = ref({
@@ -115,7 +94,7 @@ const errorFileCheck = ref<string | null>(null);
 const idCliente = useCookie("idCliente");
 const toast = useToast();
 const fileInput = ref<HTMLInputElement | null>(null);
-const { createCalidad } = useObjetivosApi();
+const { createCalidad, verificarValoresCalidad } = useObjetivosApi();
 
 const emits = defineEmits(["listar"]);
 
@@ -128,18 +107,6 @@ const removeArchivo = () => {
 
 // Método para validar y enviar el formulario
 const submitCheck = async () => {
-  toast.add({
-    severity: "info",
-    summary: "¿Desea sobreescribir el archivo de la meta?",
-    group: "messageConfirmCheck",
-  });
-  //Reiniciar los errores de checkList
-  errorsCheck.value = {
-    dateCheck: false,
-    calificacionCheck: false,
-    fileCheck: false,
-  };
-
   if (!dateCheck.value) errorsCheck.value.dateCheck = true;
   if (!calCheck.value) errorsCheck.value.calificacionCheck = true;
   if (!fileCheck.value) {
@@ -156,6 +123,7 @@ const submitCheck = async () => {
     inspeccion: null,
     archivo: fileCheck.value,
     tipo_formulario: "checklist",
+    yearFile: String(date.getFullYear()),
   };
 
   if (noErrors) {
@@ -166,27 +134,16 @@ const submitCheck = async () => {
         calCheck.value = "";
         removeArchivo();
         emits("listar");
-        toast.add({
-          severity: "success",
-          summary: "Guardado correctamente.",
-          detail: resultado.data.message,
-          life: 3000,
-        });
+        showAlert("success", "Guardado correctamente.", resultado.data.message);
       } else {
-        toast.add({
-          severity: "error",
-          summary: "Error al guardar.",
-          detail: resultado.error,
-          life: 3000,
-        });
+        showAlert("error", "Error al guardar.", resultado.error);
       }
     } else {
-      toast.add({
-        severity: "error",
-        summary: "Error de valores.",
-        detail: "Por favor solo ingresar números en los campos.",
-        life: 3000,
-      });
+      showAlert(
+        "error",
+        "Error de valores.",
+        "Por favor solo ingresar números en los campos."
+      );
     }
   }
 };
@@ -213,5 +170,40 @@ const subirArchivoCheck = (event: Event) => {
     errorFileCheck.value = "No hay ningún archivo agregado.";
     fileCheck.value = null;
   }
+};
+
+// watch(dateCheck, async (newVal) => {
+//   const objCalidad = {
+//     fecha: newVal,
+//     cliente_endpoint_id: Number(idCliente.value),
+//     checklist: null,
+//     inspeccion: null,
+//     archivo: null,
+//     tipo_formulario: "checklist",
+//   };
+
+//   const responsive = await verificarValoresCalidad(objCalidad);
+
+//   if (responsive.success) {
+//     calCheck.value = responsive.data.calificacion;
+//     showAlert(
+//       "warn",
+//       "Meta con checklist registrado.",
+//       responsive.data.message
+//     );
+//   } else {
+//     if (responsive.status) {
+//       showAlert("error", "Error con la meta.", responsive.error);
+//     }
+//   }
+// });
+
+const showAlert = (sev: string, sum: string, det: string | undefined) => {
+  toast.add({
+    severity: sev,
+    summary: sum,
+    detail: det,
+    life: 5000,
+  });
 };
 </script>

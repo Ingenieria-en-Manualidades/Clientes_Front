@@ -12,7 +12,7 @@
         :pag="true"
       >
         <template #nuevaColumna>
-          <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
+          <th colspan="2" class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
         </template>
         <template #botones="{ data }">
           <td>
@@ -23,6 +23,17 @@
             >
               Descargar
             </button>
+          </td>
+          <td>
+            <ObjetivosModalUpdateFile
+              :nameFile="data.nombre"
+              :idFile="data.id"
+              :tipoFormulario="data.tipo_calidad"
+              :yearFile="data.meta"
+              :url="data.url"
+              :tableroSaeID="data.tablero_sae_id"
+              @listar="listar"
+            />
           </td>
         </template>
       </Tabla>
