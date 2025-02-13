@@ -29,10 +29,8 @@
 </template>
 
 <script lang="ts" setup>
-
 definePageMeta({
-    layout: 'login',
-    middleware: 'guest'
-  })
-  
-  </script>
+  layout: "login",
+  middleware: "guest",
+});
+</script>

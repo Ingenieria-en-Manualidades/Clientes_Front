@@ -38,15 +38,18 @@ definePageMeta({
 });
 </script> -->
 
-
 <template>
   <title>Bienvenido al Módulo de Clientes</title>
   <div class="flex flex-col items-center mt-20">
     <!-- Contenedor Principal -->
-    <div class="border-2 rounded-lg shadow-lg w-[90%] md:w-[80%] lg:w-[70%] bg-white overflow-hidden">
+    <div
+      class="border-2 rounded-lg shadow-lg w-[90%] md:w-[80%] lg:w-[70%] bg-white overflow-hidden"
+    >
       <!-- Sección de Encabezado -->
       <div class="flex flex-col md:flex-row">
-        <div class="w-full md:w-1/2 bg-cover flex items-center justify-center bg-gradient-to-r from-azulIENM to-azulClaroIENM">
+        <div
+          class="w-full md:w-1/2 bg-cover flex items-center justify-center bg-gradient-to-r from-azulIENM to-azulClaroIENM"
+        >
           <img
             src="/assets/img/im-policromia-vert.png"
             alt="IENM Logo"
@@ -59,11 +62,14 @@ definePageMeta({
           />
         </div>
         <div class="w-full md:w-1/2 p-8">
-          <h1 class="text-center font-manrope-r text-3xl lg:text-4xl text-gray-800">
+          <h1
+            class="text-center font-manrope-r text-3xl lg:text-4xl text-gray-800"
+          >
             Bienvenido al Módulo de Clientes
           </h1>
           <p class="text-center text-gray-600 mt-4 text-lg">
-            Transformamos desafíos en triunfos y creamos juntos un futuro circular.
+            Transformamos desafíos en triunfos y creamos juntos un futuro
+            circular.
           </p>
         </div>
       </div>
@@ -77,13 +83,15 @@ definePageMeta({
           Con más de 30 años de experiencia, somos líderes en la mejora de la
           eficiencia de las cadenas de suministro. Nuestra misión es ofrecer
           soluciones personalizadas que aborden de manera integral los desafíos
-          en manufactura, logística, gestión de recursos humanos y comercialización de bienes y servicios.
+          en manufactura, logística, gestión de recursos humanos y
+          comercialización de bienes y servicios.
         </p>
         <p class="text-gray-700 mt-4 text-justify leading-relaxed">
           Especializados en la administración de procesos, garantizamos un
           funcionamiento óptimo en cada fase. Transformamos cada desafío en una
           oportunidad estratégica, impulsando no solo el crecimiento
-          empresarial, sino también el bienestar y desarrollo de los trabajadores.
+          empresarial, sino también el bienestar y desarrollo de los
+          trabajadores.
         </p>
       </div>
 
@@ -101,13 +109,15 @@ definePageMeta({
         </p>
         <p class="text-gray-700 mt-4 text-justify leading-relaxed">
           Nuestro compromiso con la excelencia está respaldado por la
-          certificación ISO 9001:2015, lo que asegura altos estándares en
-          cada una de nuestras iniciativas.
+          certificación ISO 9001:2015, lo que asegura altos estándares en cada
+          una de nuestras iniciativas.
         </p>
       </div>
 
       <!-- Call to Action -->
-      <div class="p-8 text-center bg-gradient-to-r from-azulIENM to-azulClaroIENM text-white">
+      <div
+        class="p-8 text-center bg-gradient-to-r from-azulIENM to-azulClaroIENM text-white"
+      >
         <h3 class="text-xl lg:text-2xl font-bold">
           Trabajemos juntos para construir un futuro sostenible.
         </h3>
@@ -130,9 +140,9 @@ import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composab
 
 // Configuración de la página
 definePageMeta({
-    layout: 'default',
-    middleware: "auth",
-  })
+  layout: "default",
+  middleware: "auth",
+});
 </script>
 
 <style scoped>
@@ -147,4 +157,3 @@ definePageMeta({
   background-color: #0096ff; /* Azul más claro */
 }
 </style>
-

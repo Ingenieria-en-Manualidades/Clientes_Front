@@ -93,7 +93,7 @@ const enviar = async () => {
     severity: mensaje.value.status,
     summary: mensaje.value.tittle,
     detail: mensaje.value.detail,
-    life: 3000,
+    life: 4000,
   });
 };
 </script>
