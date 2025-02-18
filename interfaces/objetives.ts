@@ -1,4 +1,5 @@
 export interface Meta {
+    fecha: string;
     cumplimiento: number;
     eficienciaProductiva: number;
     calidad: number;

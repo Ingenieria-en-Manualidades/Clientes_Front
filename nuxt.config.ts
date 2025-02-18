@@ -26,6 +26,17 @@ export default defineNuxtConfig({
     importPT: { as: 'Aura', from: '~/presets/aura' }
   },
 
+  ignore: [
+    'pages/improductividades/aprobadas.vue',
+    'pages/improductividades/index.vue',
+    'pages/improductividades/principal.vue',
+    'pages/improductividades/rechazadas.vue',
+    'pages/improductividades_2/aprobadas.vue',
+    'pages/improductividades_2/index.vue',
+    'pages/improductividades_2/rechazadas.vue',
+    'composables/improductividades/datosImproductividades.ts',
+    'composables/improductividades/improductividadesAPI.ts'
+  ],
 
   runtimeConfig: {
     //URL del backend del modulo clientes

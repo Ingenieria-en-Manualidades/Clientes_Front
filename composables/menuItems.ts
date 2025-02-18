@@ -28,13 +28,13 @@ export const useModulos = () => {
   //   visible: true,
   // permission: 'view_programacion'
   // },
-  {
-    icono: "pi pi-sliders-h",
-    nombre: "Improductividades",
-    ruta: "/improductividades",
-    visible: false,
-    permission: 'view_improductividades'
-  },
+  // {
+  //   icono: "pi pi-sliders-h",
+  //   nombre: "Improductividades",
+  //   ruta: "/improductividades",
+  //   visible: false,
+  //   permission: 'view_improductividades'
+  // },
   // {
   //   icono: "pi pi-sliders-h",
   //   nombre: "Improductividades 2",

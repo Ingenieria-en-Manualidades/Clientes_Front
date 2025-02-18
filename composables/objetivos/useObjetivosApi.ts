@@ -18,7 +18,7 @@ export const useObjetivosApi = () => {
       const data = await response.json();
       
       if (response.ok) {
-        const resultado = await createTableroSae(data.meta_id, data.cliente_id);
+        const resultado = await createTableroSae(data.meta_id, data.cliente_id, objetivosData.fecha);
         
         if (resultado.success) {
           return { success: resultado.success, data: resultado.data };
@@ -27,7 +27,7 @@ export const useObjetivosApi = () => {
         }
       } else {
         console.error('Error en la respuesta de la API:', data);
-        return { success: false, error: data.message || 'Error en la creación de meta' };
+        return { success: false, error: data.message };
       }
     } catch (error) {
       console.error("Error al realizar la creación de objetivos:", error);
@@ -124,17 +124,15 @@ export const useObjetivosApi = () => {
     }
   }
 
-  const createTableroSae = async (metaID: number, clienteID: number): Promise<ApiPromise<any>> => {
+  const createTableroSae = async (metaID: number, clienteID: number, fecha: string): Promise<ApiPromise<any>> => {
     try {
-      const date = new Date();
-
       const response = await fetch(`${url}api/guardarTablero`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          fecha: date,
+          fecha: fecha,
           meta_id: metaID,
           cliente_id: clienteID,
         }),
