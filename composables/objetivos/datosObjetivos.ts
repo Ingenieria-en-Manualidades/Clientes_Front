@@ -44,7 +44,7 @@ export const datosObjetivos = () => {
       }
     }
   };
-
+  
   /**
    * Método que se encarga de retorna una fecha que es la actual pero 3 días adelantados o retrasados, se creo
    * para ser la fecha maxima o minima a elegir para los input de "Date".

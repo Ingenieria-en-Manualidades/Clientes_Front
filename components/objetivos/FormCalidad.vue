@@ -18,7 +18,7 @@
         inputClass="w-full"
         iconDisplay="input"
       />
-      <p class="font-bold mt-4 mb-1">Calificación</p>
+      <p class="font-bold mt-4 mb-1">Calificación (%)</p>
       <p
         v-if="errorsInsp.calificacionInspSol"
         class="text-red-500 text-sm pb-1"
@@ -142,6 +142,7 @@ const submitSol = async () => {
       const resultado = await createCalidad(objCalidad);
 
       if (resultado.success) {
+        dateInspSol.value = "";
         calInspSol.value = "";
         removeArchivo();
         emits("listar");

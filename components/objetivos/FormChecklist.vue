@@ -18,7 +18,7 @@
         inputClass="w-full"
         iconDisplay="input"
       />
-      <p class="font-bold mt-4 mb-1">Calificación</p>
+      <p class="font-bold mt-4 mb-1">Calificación (%)</p>
       <p v-if="errorsCheck.calificacionCheck" class="text-red-500 text-sm pb-1">
         Este campo es obligatorio
       </p>
@@ -131,6 +131,7 @@ const submitCheck = async () => {
       const resultado = await createCalidad(objCalidad);
 
       if (resultado.success) {
+        dateCheck.value = "";
         calCheck.value = "";
         removeArchivo();
         emits("listar");
@@ -171,32 +172,6 @@ const subirArchivoCheck = (event: Event) => {
     fileCheck.value = null;
   }
 };
-
-// watch(dateCheck, async (newVal) => {
-//   const objCalidad = {
-//     fecha: newVal,
-//     cliente_endpoint_id: Number(idCliente.value),
-//     checklist: null,
-//     inspeccion: null,
-//     archivo: null,
-//     tipo_formulario: "checklist",
-//   };
-
-//   const responsive = await verificarValoresCalidad(objCalidad);
-
-//   if (responsive.success) {
-//     calCheck.value = responsive.data.calificacion;
-//     showAlert(
-//       "warn",
-//       "Meta con checklist registrado.",
-//       responsive.data.message
-//     );
-//   } else {
-//     if (responsive.status) {
-//       showAlert("error", "Error con la meta.", responsive.error);
-//     }
-//   }
-// });
 
 const showAlert = (sev: string, sum: string, det: string | undefined) => {
   toast.add({
