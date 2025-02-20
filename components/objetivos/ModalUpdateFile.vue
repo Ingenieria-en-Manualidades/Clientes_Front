@@ -2,14 +2,9 @@
   <button
     type="button"
     @click="visible = true"
-    class="bg-green-400 rounded my-1 mx-2 py-1 px-2 text-white text-center font-manrope-r relative"
+    class="bg-green-400 rounded m-1 py-1 px-3 text-white text-center font-manrope-r relative group"
   >
-    <i class="pi pi-file-edit"></i>
-    <br />
-    <span
-      class="hidden bg-red-500 rounded py-1 px-2 absolute left-[-7px] transition translate-y-2 z-10"
-      >hola</span
-    >
+    <span>Actualizar</span>
   </button>
   <div class="font-manrope-r">
     <Dialog

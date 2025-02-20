@@ -26,9 +26,9 @@
               <button
                 type="button"
                 @click="descargarPDF(data.url, data.nombre)"
-                class="bg-[#c86a2b] rounded py-1 px-2 my-1 text-white"
+                class="bg-[#c86a2b] rounded py-1 px-3 my-1 text-white"
               >
-                Descargar
+                <span>Exportar</span>
               </button>
             </td>
             <td>

@@ -1,5 +1,5 @@
 <template>
-  <form class="font-manrope-r w-[40%] max-w-[210px] text-sm sm:text-base">
+  <form class="font-manrope-r w-1/2 max-w-[250px] text-sm sm:text-base">
     <fieldset
       class="border-[1px] border-black px-2 py-[11px] min-[444px]:py-[31px] min-[640px]:py-[37px] md:py-3 font-manrope-r rounded"
     >
@@ -83,6 +83,8 @@ const submitPlanificada = async () => {
     if (resultado.success) {
       showMessage("success", "Guardado correctamente.", resultado.data);
       errorProd.value = null;
+      fechaPlan.value = null;
+      prodPlan.value = "";
     } else {
       showMessage("error", "Error al guardar.", resultado.error);
     }
@@ -102,8 +104,10 @@ const submitModificada = async () => {
     const resultado = await updateObjetivos(objObjetivo);
 
     if (resultado.success) {
-      errorMod.value = null;
       showMessage("success", "Guardado correctamente.", resultado.data);
+      errorMod.value = null;
+      fechaMod.value = null;
+      prodMod.value = "";
     } else {
       showMessage("error", "Error al guardar.", resultado.error);
     }

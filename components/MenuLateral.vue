@@ -29,30 +29,28 @@
     <div
       class="flex justify-start max-[760px]:justify-center overflow-hidden h-full min-[1300px]:h-[90%] min-[1300px]:mt-10 scroll-container"
     >
-      <Tabs>
-        <TabList>
-          <Tab
-            v-for="modulo in modulos"
-            :key="modulo.nombre"
-            @click="toggleNavBarMovil"
-          >
-            <li v-if="modulo.submodulos && modulo.visible" class="list-none">
-              <div
-                class="py-3 pl-4 hover:bg-white rounded-lg text-white hover:text-black w-[245px] cursor-pointer"
-                @click="visible = !visible"
-              >
-                <i :class="modulo.icono"></i>
-                <span class="ml-3">{{ modulo.nombre }}</span>
-                <i
-                  :class="[
-                    'pi pi-angle-right pl-2 transition origin-center duration-300 float-right pt-1 mr-2',
-                    visible ? 'rotate-90' : 'rotate-0',
-                  ]"
-                ></i>
-              </div>
-              <ul
-                :class="['ml-3 pl-3 text-white', visible ? 'block' : 'hidden']"
-              >
+      <ul class="w-full items-center">
+        <li
+          v-for="(modulo, indexModulo) in modulos"
+          class="max-[760px]:flex max-[760px]:justify-center"
+          v-bind:key="indexModulo"
+        >
+          <div v-if="modulo.submodulos && modulo.visible" class="list-none">
+            <div
+              class="py-3 pl-4 hover:bg-white rounded-lg text-white hover:text-black cursor-pointer"
+              @click="visible = !visible"
+            >
+              <i :class="modulo.icono"></i>
+              <span class="ml-3">{{ modulo.nombre }}</span>
+              <i
+                :class="[
+                  'pi pi-angle-right pl-2 transition origin-center duration-300 float-right pt-1 mr-2',
+                  visible ? 'rotate-90' : 'rotate-0',
+                ]"
+              ></i>
+            </div>
+            <ul :class="['ml-3 pl-3 text-white', visible ? 'block' : 'hidden']">
+              <li @click="toggleNavBarMovil">
                 <router-link
                   v-for="(submodulo, index) in modulo.submodulos"
                   v-bind:key="index"
@@ -74,14 +72,11 @@
                     >
                   </a>
                 </router-link>
-              </ul>
-            </li>
-            <router-link
-              v-else-if="modulo.visible"
-              v-slot="{ href, navigate }"
-              :to="modulo.ruta"
-              custom
-            >
+              </li>
+            </ul>
+          </div>
+          <div v-else-if="modulo.visible" @click="toggleNavBarMovil">
+            <router-link v-slot="{ href, navigate }" :to="modulo.ruta" custom>
               <a
                 v-ripple
                 :href="href"
@@ -95,9 +90,9 @@
                 >
               </a>
             </router-link>
-          </Tab>
-        </TabList>
-      </Tabs>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>

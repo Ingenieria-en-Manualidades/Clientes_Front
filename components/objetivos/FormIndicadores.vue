@@ -1,5 +1,5 @@
 <template>
-  <form class="font-manrope-r w-[22%] max-w-[220px] text-sm sm:text-base">
+  <form class="font-manrope-r w-1/2 max-w-[260px] text-sm sm:text-base">
     <fieldset
       class="w-full border-[1px] border-black p-2 font-manrope-r rounded"
     >
@@ -16,7 +16,7 @@
           class="w-full border-[1px] border-black outline-none rounded mb-1"
         />
         <div class="mb-2">
-          <p>Cumplimiento plan armado:</p>
+          <p>Cumplimiento plan armado (%):</p>
           <p v-if="errors.planArmado" class="text-xs text-red-500">
             Este campo es obligatorio
           </p>
@@ -27,7 +27,7 @@
           />
         </div>
         <div class="mb-2">
-          <p>Calidad:</p>
+          <p>Calidad (%):</p>
           <p v-if="errors.calidad" class="text-xs text-red-500">
             Este campo es obligatorio
           </p>
@@ -38,7 +38,7 @@
           />
         </div>
         <div class="mb-2">
-          <p>Desperfecto M.E:</p>
+          <p>Desperfecto M.E (%):</p>
           <p v-if="errors.desperfectosME" class="text-xs text-red-500">
             Este campo es obligatorio
           </p>
@@ -49,7 +49,7 @@
           />
         </div>
         <div class="mb-2">
-          <p>Desperfecto P.P:</p>
+          <p>Desperfecto P.P (%):</p>
           <p v-if="errors.desperfectosPP" class="text-xs text-red-500">
             Este campo es obligatorio
           </p>
