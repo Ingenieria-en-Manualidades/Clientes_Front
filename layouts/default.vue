@@ -27,8 +27,4 @@ import { useCookie } from "nuxt/app";
 
 const isOpen = ref(true);
 const usuario = useCookie("usuario");
-
-definePageMeta({
-  middleware: 'auth',
-});
 </script>
