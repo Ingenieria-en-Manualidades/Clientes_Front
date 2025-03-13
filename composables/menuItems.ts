@@ -68,6 +68,13 @@ export const useModulos = () => {
         ruta: "/objetivos/diarios",
         visible: false,
         permission: 'view_objetivos_diarios'
+      },
+      {
+        icono: "pi pi-th-large",
+        nombre: "Unidades programadas",
+        ruta: "/objetivos/unidades",
+        visible: false,
+        permission: "view_objetivos_unidades"
       }
     ]
   },

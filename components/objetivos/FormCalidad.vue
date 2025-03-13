@@ -139,24 +139,33 @@ const submitSol = async () => {
 
   if (noErrors) {
     if (regex.test(calInspSol.value)) {
-      const resultado = await createCalidad(objCalidad);
+      if (calInspSol.value >= 0 && calInspSol.value < 101) {
+        const resultado = await createCalidad(objCalidad);
 
-      if (resultado.success) {
-        dateInspSol.value = "";
-        calInspSol.value = "";
-        removeArchivo();
-        emits("listar");
-        toast.add({
-          severity: "success",
-          summary: "Guardado correctamente.",
-          detail: resultado.data.message,
-          life: 3000,
-        });
+        if (resultado.success) {
+          dateInspSol.value = "";
+          calInspSol.value = "";
+          removeArchivo();
+          emits("listar");
+          toast.add({
+            severity: "success",
+            summary: "Guardado correctamente.",
+            detail: resultado.data.message,
+            life: 3000,
+          });
+        } else {
+          toast.add({
+            severity: "error",
+            summary: "Error al guardar.",
+            detail: resultado.error,
+            life: 3000,
+          });
+        }
       } else {
         toast.add({
-          severity: "error",
-          summary: "Error al guardar.",
-          detail: resultado.error,
+          severity: "warn",
+          summary: "Mala digitación.",
+          detail: "Por favor no digitar un número negativo o mayor a 100.",
           life: 3000,
         });
       }

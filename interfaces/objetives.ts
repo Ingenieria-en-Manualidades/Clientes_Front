@@ -68,3 +68,18 @@ export interface Meta {
     url: string,
     id: number,
   }
+
+  export interface Units {
+    valor: Number | null,
+    fecha_meta: Date | null,
+    cliente_endpoint_id: Number | null,
+    usuario: String | null | undefined,
+  }
+
+  export interface ApiPromiseStandard<T> {
+    success: boolean;
+    title: string,
+    message: string,
+    data?: T | undefined;
+  }
+  

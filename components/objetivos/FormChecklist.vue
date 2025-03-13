@@ -128,16 +128,28 @@ const submitCheck = async () => {
 
   if (noErrors) {
     if (regex.test(calCheck.value)) {
-      const resultado = await createCalidad(objCalidad);
+      if (calCheck.value >= 0 && calCheck.value < 101) {
+        const resultado = await createCalidad(objCalidad);
 
-      if (resultado.success) {
-        dateCheck.value = "";
-        calCheck.value = "";
-        removeArchivo();
-        emits("listar");
-        showAlert("success", "Guardado correctamente.", resultado.data.message);
+        if (resultado.success) {
+          dateCheck.value = "";
+          calCheck.value = "";
+          removeArchivo();
+          emits("listar");
+          showAlert(
+            "success",
+            "Guardado correctamente.",
+            resultado.data.message
+          );
+        } else {
+          showAlert("error", "Error al guardar.", resultado.error);
+        }
       } else {
-        showAlert("error", "Error al guardar.", resultado.error);
+        showAlert(
+          "warn",
+          "Mala digitación.",
+          "Por favor no digitar un número negativo o mayor a 100."
+        );
       }
     } else {
       showAlert(

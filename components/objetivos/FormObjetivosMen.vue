@@ -136,7 +136,7 @@ const errors = ref({
   desperdicioME: false,
   desperdicioPP: false,
 });
-const { getFecha } = datosObjetivos();
+const { getFecha, setCheckMaxMinNumber } = datosObjetivos();
 
 // Método para validar y enviar el formulario
 const submitForm = async () => {
@@ -171,8 +171,6 @@ const submitForm = async () => {
   // const noErrors = false;
   if (noErrors) {
     if (!errorRegex.value) {
-      // Llamar a la API para crear los objetivos
-      const { createMeta } = useObjetivosApi();
       const objetivosData = {
         fecha: getFecha(date.value),
         cumplimiento: Number(cumplimiento.value),
@@ -180,39 +178,51 @@ const submitForm = async () => {
         calidad: Number(calidad.value),
         desperdicioME: Number(desperdicioME.value),
         desperdicioPP: Number(desperdicioPP.value),
-        cliente_endpoint_id: clienteID.value,
+        cliente_endpoint_id: String(clienteID.value),
       };
 
-      const response = await createMeta(objetivosData);
+      const resp = setCheckMaxMinNumber(objetivosData);
+      if (resp) {
+        // Llamar a la API para crear los objetivos
+        const { createMeta } = useObjetivosApi();
+        const response = await createMeta(objetivosData);
 
-      if (response.success) {
-        toast.add({
-          severity: "success",
-          summary: "Meta guardada.",
-          detail: "Exito a la hora de guardar las metas.",
-          life: 3000,
-        });
-        date.value = null;
-        cumplimiento.value = "";
-        eficienciaProductiva.value = "";
-        calidad.value = "";
-        desperdicioME.value = "";
-        desperdicioPP.value = "";
+        if (response.success) {
+          toast.add({
+            severity: "success",
+            summary: "Meta guardada.",
+            detail: "Exito a la hora de guardar las metas.",
+            life: 4000,
+          });
+          date.value = null;
+          cumplimiento.value = "";
+          eficienciaProductiva.value = "";
+          calidad.value = "";
+          desperdicioME.value = "";
+          desperdicioPP.value = "";
+        } else {
+          console.error("Error al crear objetivos:", response.error);
+          toast.add({
+            severity: "error",
+            summary: "Error al guardar.",
+            detail: response.error,
+            life: 4000,
+          });
+        }
       } else {
-        console.error("Error al crear objetivos:", response.error);
         toast.add({
-          severity: "error",
-          summary: "Error al guardar.",
-          detail: response.error,
-          life: 3000,
+          severity: "warn",
+          summary: "Mala digitación.",
+          detail: "Por favor no digitar un número negativo o mayor a 100.",
+          life: 4000,
         });
       }
     } else {
       toast.add({
-        severity: "error",
+        severity: "warn",
         summary: "Error de valores.",
         detail: "Por favor solo ingresar números en los campos.",
-        life: 3000,
+        life: 4000,
       });
     }
   } else {
@@ -220,7 +230,7 @@ const submitForm = async () => {
       severity: "error",
       summary: "Faltan campos",
       detail: "Por favor ingresar los campos faltantes.",
-      life: 3000,
+      life: 4000,
     });
   }
 };

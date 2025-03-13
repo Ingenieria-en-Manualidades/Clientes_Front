@@ -9,3 +9,7 @@ export interface ItemTabPanel {
     label: string,
     icon: string,
 }
+
+export interface OptionsDropdown {
+    label: String,
+}

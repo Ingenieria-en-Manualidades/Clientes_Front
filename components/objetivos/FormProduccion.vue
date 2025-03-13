@@ -15,7 +15,8 @@
       <input
         type="text"
         v-model="prodPlan"
-        class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2 mb-1"
+        maxlength="6"
+        class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
       />
       <p class="text-red-500 text-xs my-1">{{ errorProd }}</p>
       <button
@@ -37,7 +38,8 @@
       <input
         type="text"
         v-model="prodMod"
-        class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2 mb-1"
+        maxlength="6"
+        class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
       />
       <p class="text-red-500 text-xs my-1">{{ errorMod }}</p>
       <button
@@ -72,51 +74,67 @@ const { objObjetivo, getFecha, getFechaMaxMin } = datosObjetivos();
 const { createObjetivos, updateObjetivos } = useObjetivosApi();
 
 const submitPlanificada = async () => {
-  if (prodPlan.value) {
-    limpiarObjeto();
-    objObjetivo.fecha = fechaPlan.value;
-    objObjetivo.cliente_id = Number(idCliente.value);
-    objObjetivo.planificada = Number(prodPlan.value);
-
-    const resultado = await createObjetivos(objObjetivo);
-
-    if (resultado.success) {
-      showMessage("success", "Guardado correctamente.", resultado.data);
-      errorProd.value = null;
-      fechaPlan.value = null;
-      prodPlan.value = "";
+  if (prodPlan.value && fechaPlan.value) {
+    if (prodPlan.value < 0) {
+      showMessage(
+        "warn",
+        "Mala digitación.",
+        "Por favor no agregar números negativos."
+      );
     } else {
-      showMessage("error", "Error al guardar.", resultado.error);
+      limpiarObjeto();
+      objObjetivo.fecha = fechaPlan.value;
+      objObjetivo.cliente_id = Number(idCliente.value);
+      objObjetivo.planificada = Number(prodPlan.value);
+
+      const resultado = await createObjetivos(objObjetivo);
+
+      if (resultado.success) {
+        showMessage("success", "Guardado correctamente.", resultado.data);
+        errorProd.value = null;
+        fechaPlan.value = null;
+        prodPlan.value = "";
+      } else {
+        showMessage("error", "Error al guardar.", resultado.error);
+      }
     }
   } else {
-    errorProd.value = "Este campo es obligatorio.";
+    fechaPlan.value
+      ? (errorProd.value = "El valor de este campo es obligatorio.")
+      : (errorProd.value = "La fecha de este campo es obligatorio.");
     showMessage("error", "Campos vacíos.", "Por favor llenar los campos.");
   }
 };
 
 const submitModificada = async () => {
   if (prodMod.value && fechaMod.value) {
-    limpiarObjeto();
-    objObjetivo.cliente_id = Number(idCliente.value);
-    objObjetivo.fecha = fechaMod.value;
-    objObjetivo.modificada = prodMod.value;
-
-    const resultado = await updateObjetivos(objObjetivo);
-
-    if (resultado.success) {
-      showMessage("success", "Guardado correctamente.", resultado.data);
-      errorMod.value = null;
-      fechaMod.value = null;
-      prodMod.value = "";
+    if (prodMod.value < 0) {
+      showMessage(
+        "warn",
+        "Mala digitación.",
+        "Por favor no agregar números negativos."
+      );
     } else {
-      showMessage("error", "Error al guardar.", resultado.error);
+      limpiarObjeto();
+      objObjetivo.cliente_id = Number(idCliente.value);
+      objObjetivo.fecha = fechaMod.value;
+      objObjetivo.modificada = prodMod.value;
+
+      const resultado = await updateObjetivos(objObjetivo);
+
+      if (resultado.success) {
+        showMessage("success", "Guardado correctamente.", resultado.data);
+        errorMod.value = null;
+        fechaMod.value = null;
+        prodMod.value = "";
+      } else {
+        showMessage("error", "Error al guardar.", resultado.error);
+      }
     }
   } else {
-    if (prodMod.value) {
-      errorMod.value = "El campo de fecha es obligatorio.";
-    } else {
-      errorMod.value = "Este campo de es obligatorio.";
-    }
+    fechaMod.value
+      ? (errorMod.value = "El valor de este campo es obligatorio.")
+      : (errorMod.value = "La fecha de este campo es obligatorio.");
     showMessage("error", "Campos vacíos.", "Por favor llenar los campos.");
   }
 };

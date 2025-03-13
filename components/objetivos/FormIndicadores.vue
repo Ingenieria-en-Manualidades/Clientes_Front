@@ -6,7 +6,7 @@
       <legend class="font-manrope-b">Indicadores</legend>
       <div class="gap-2">
         <p v-if="errors.fecha" class="text-xs text-red-500">
-          Este campo es obligatorio
+          La fecha es obligatoria
         </p>
         <input
           type="date"
@@ -22,6 +22,7 @@
           </p>
           <input
             type="text"
+            maxlength="3"
             v-model="planArmado"
             class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
           />
@@ -33,6 +34,7 @@
           </p>
           <input
             type="text"
+            maxlength="3"
             v-model="calidad"
             class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
           />
@@ -44,6 +46,7 @@
           </p>
           <input
             type="text"
+            maxlength="3"
             v-model="desperfectosME"
             class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
           />
@@ -55,6 +58,7 @@
           </p>
           <input
             type="text"
+            maxlength="3"
             v-model="desperfectosPP"
             class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
           />
@@ -95,7 +99,7 @@ const errors = ref({
   desperfectosPP: false,
 });
 
-const { objObjetivo, getFecha } = datosObjetivos();
+const { objObjetivo, getFecha, setCheckMaxMinNumber } = datosObjetivos();
 const { updateObjetivos } = useObjetivosApi();
 
 const date = new Date();
@@ -124,31 +128,42 @@ const submit = async () => {
   if (noErrors) {
     limpiarObjeto();
     objObjetivo.fecha = fecha.value;
-    objObjetivo.calidad = calidad.value;
-    objObjetivo.plan_armado = planArmado.value;
-    objObjetivo.cliente_id = Number(idCliente.value);
-    objObjetivo.desperfecto_me = desperfectosME.value;
-    objObjetivo.desperfecto_pp = desperfectosPP.value;
+    objObjetivo.calidad = Number(calidad.value);
+    objObjetivo.plan_armado = Number(planArmado.value);
+    objObjetivo.cliente_id = null;
+    objObjetivo.desperfecto_me = Number(desperfectosME.value);
+    objObjetivo.desperfecto_pp = Number(desperfectosPP.value);
 
-    const resultado = await updateObjetivos(objObjetivo);
+    const quest = setCheckMaxMinNumber(objObjetivo);
 
-    if (resultado.success) {
-      //Reiniciar los errores
-      errors.value = {
-        fecha: false,
-        calidad: false,
-        planArmado: false,
-        desperfectosME: false,
-        desperfectosPP: false,
-      };
-      fecha.value = "";
-      calidad.value = "";
-      planArmado.value = "";
-      desperfectosME.value = "";
-      desperfectosPP.value = "";
-      showMessage("success", "Guardado correctamente.", resultado.data);
+    if (quest) {
+      objObjetivo.cliente_id = Number(idCliente.value);
+      const resultado = await updateObjetivos(objObjetivo);
+
+      if (resultado.success) {
+        //Reiniciar los errores
+        errors.value = {
+          fecha: false,
+          calidad: false,
+          planArmado: false,
+          desperfectosME: false,
+          desperfectosPP: false,
+        };
+        fecha.value = "";
+        calidad.value = "";
+        planArmado.value = "";
+        desperfectosME.value = "";
+        desperfectosPP.value = "";
+        showMessage("success", "Guardado correctamente.", resultado.data);
+      } else {
+        showMessage("error", "Error al guardar.", resultado.error);
+      }
     } else {
-      showMessage("error", "Error al guardar.", resultado.error);
+      showMessage(
+        "warn",
+        "Mala digitación.",
+        "No ingresar números negativos o mayores a 100."
+      );
     }
   } else {
     showMessage("error", "Campos vacios", "Por favor llenar los campos.");
