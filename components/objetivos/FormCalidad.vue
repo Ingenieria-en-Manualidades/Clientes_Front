@@ -18,7 +18,7 @@
         inputClass="w-full"
         iconDisplay="input"
       />
-      <p class="font-bold mt-4 mb-1">Calificación</p>
+      <p class="font-bold mt-4 mb-1">Calificación (%)</p>
       <p
         v-if="errorsInsp.calificacionInspSol"
         class="text-red-500 text-sm pb-1"
@@ -83,8 +83,10 @@ import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
-const idCliente = useCookie("idCliente");
+const date = new Date();
 const toast = useToast();
+const idCliente = useCookie("idCliente");
+
 const fileInput = ref<HTMLInputElement | null>(null);
 const { createCalidad } = useObjetivosApi();
 
@@ -132,27 +134,38 @@ const submitSol = async () => {
     inspeccion: Number(calInspSol.value),
     archivo: fileSol.value,
     tipo_formulario: "inspeccion_sol",
+    yearFile: String(date.getFullYear()),
   };
 
   if (noErrors) {
     if (regex.test(calInspSol.value)) {
-      const resultado = await createCalidad(objCalidad);
+      if (calInspSol.value >= 0 && calInspSol.value < 101) {
+        const resultado = await createCalidad(objCalidad);
 
-      if (resultado.success) {
-        calInspSol.value = "";
-        removeArchivo();
-        emits("listar");
-        toast.add({
-          severity: "success",
-          summary: "Guardado correctamente.",
-          detail: resultado.data.message,
-          life: 3000,
-        });
+        if (resultado.success) {
+          dateInspSol.value = "";
+          calInspSol.value = "";
+          removeArchivo();
+          emits("listar");
+          toast.add({
+            severity: "success",
+            summary: "Guardado correctamente.",
+            detail: resultado.data.message,
+            life: 3000,
+          });
+        } else {
+          toast.add({
+            severity: "error",
+            summary: "Error al guardar.",
+            detail: resultado.error,
+            life: 3000,
+          });
+        }
       } else {
         toast.add({
-          severity: "error",
-          summary: "Error al guardar.",
-          detail: resultado.error,
+          severity: "warn",
+          summary: "Mala digitación.",
+          detail: "Por favor no digitar un número negativo o mayor a 100.",
           life: 3000,
         });
       }

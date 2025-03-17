@@ -19,11 +19,12 @@ export const useValidaciones = () => {
       };
     }
   
-    if (!email.includes("@")) {
+    const emailRegex = /^[^@]+@[^@]+$/;
+    if (!emailRegex.test(email)) {
       return {
         status: "warn",
         tittle: "Mala diligenciación.",
-        detail: "El correo debe tener un '@' como minimo.",
+        detail: "El correo debe tener un '@' y caracteres a la izquierda y derecha del mismo.",
       };
     }
   
@@ -43,33 +44,14 @@ export const useValidaciones = () => {
 
     const resultado = await response.json();
     
-    if (!resultado.success) {
-
-      if (resultado.codigo === 404) {
-        return {
-          status: false,
-          tittle: resultado.message,
-          detail: "El link con el cual entro es incorrecto."
-        };
-      }
-
-      if (resultado.codigo === 403) {
-        return {
-          status: false,
-          tittle: resultado.message,
-          detail: "Por favor repita el proceso de recuperar contraseña."
-        };
-      }
-
-      if (resultado.codigo === 500) {
-        return {
-          status: false,
-          tittle: resultado.message,
-          detail: "Error del servidor a la hora de verificar el token."
-        };
-      }
-    } else {
+    if (resultado.success) {
       return { status: true, id_username: resultado.id_username };
+    } else {
+      return {
+        status: false,
+        title: resultado.title,
+        detail: resultado.message
+      };
     }
   }
 

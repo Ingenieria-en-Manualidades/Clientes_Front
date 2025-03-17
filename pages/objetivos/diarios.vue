@@ -4,7 +4,7 @@
     <p class="font-manrope-b text-center text-2xl my-1">PRODUCCIÓN</p>
     <div class="w-full flex justify-center p-1 gap-2">
       <FormProduccion />
-      <FormIndicadores :visible="visible" @setVisible="visible = !visible" />
+      <FormIndicadores />
       <!-- <fieldset class="border-[1px] border-black rounded p-2 font-manrope-r">
         <legend class="font-manrope-b">Meses Anteriores</legend>
         <Calendar

@@ -51,32 +51,34 @@ export const useActualizarPasswordAPI = () => {
    * @returns retorna un mensaje de exito o fracaso explicando la situación.
    */
   const setEnviarEmail = async (valorCorreo: string, valorToken: string) => {
-    const response = await fetch("/api/enviarEmailPassword", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        correo: valorCorreo,
-        token: valorToken,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      return {
-        status: "success",
-        tittle: "Correo enviado",
-        detail: "Por favor revise su correo para continuar con el proceso."
+    try {
+      const response = await fetch(`${url}api/enviarEmailContraseña`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: valorCorreo,
+          token: valorToken
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        if (data.success) {
+          return {status: "success", tittle: "Correo enviado.", detail: data.message};
+        } else {
+          console.error("Error a la hora de enviar el correo: ", data.message);
+          return {status: "error", tittle: "Error al enviar Email", detail: data.message};
+        }
+      } else {
+        console.error("Error a la hora de ejecutar la API: ", data.message);
+        return {status: "error", tittle: "Error al enviar Email", detail: "Error desconocido al tratar de ejecutar."};
       }
-    } else {
-      console.error("Error a la hora de enviar el correo: ", data.error);
-      return {
-        status: "error",
-        tittle: "Error "+ data.error.responseCode,
-        detail: "Error a la hora de enviar el correo."
-      }
+    } catch (error) {
+      console.error("Error a la hora de enviar el Email dentro del catch: ", error.message);
+      return {status: "error", tittle: "Error al enviar Email", detail: "Error desconocido al ejecutar."};
     }
   }
 
@@ -115,9 +117,22 @@ export const useActualizarPasswordAPI = () => {
     }
   }
 
+  const setDeleteToken = async (token: string) => {
+    const response = await fetch(`${url}api/borrarToken/${token}`, {
+      method: 'GET',
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      console.error("Error a la hora de borrar: ", data.message);
+    }
+  }
+
   return {
     setUpdatePassword,
     getTokenPassword,
     setEnviarEmail,
+    setDeleteToken,
   };
 }

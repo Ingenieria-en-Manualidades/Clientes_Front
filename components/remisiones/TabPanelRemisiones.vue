@@ -1,40 +1,36 @@
 <template>
   <div class="w-[100%] text-center">
-    <Tabs>
-      <TabList class="inline-flex mb-[2%]">
-        <Tab v-for="tab in items" :key="tab.label" :value="tab.route">
-          <router-link
-            v-if="tab.route"
-            v-slot="{ href, navigate }"
-            :to="tab.route"
-            custom
+    <ul class="inline-flex mb-[2%]">
+      <li v-for="(tab, tabIndex) in items" v-bind:key="tabIndex">
+        <router-link
+          v-if="tab.route"
+          v-slot="{ href, navigate }"
+          :to="tab.route"
+          custom
+        >
+          <a
+            v-ripple
+            :href="href"
+            @click="navigate"
+            :class="[
+              'flex items-center gap-2 text-inherit p-2 border-b-2',
+              isActive(tab.route) ? 'border-b-azulIENM' : '',
+            ]"
           >
-            <a
-              v-ripple
-              :href="href"
-              @click="navigate"
+            <i
+              :class="[tab.icon, isActive(tab.route) ? 'text-azulIENM' : '']"
+            />
+            <span
               :class="[
-                'flex items-center gap-2 text-inherit p-2 border-b-2',
-                isActive(tab.route) ? 'border-b-azulIENM' : '',
+                'font-manrope-r text-[13px] sm:text-[16px]',
+                isActive(tab.route) ? 'text-azulIENM font-manrope-extrab' : '',
               ]"
+              >{{ tab.label }}</span
             >
-              <i
-                :class="[tab.icon, isActive(tab.route) ? 'text-azulIENM' : '']"
-              />
-              <span
-                :class="[
-                  'font-manrope-r text-[13px] sm:text-[16px]',
-                  isActive(tab.route)
-                    ? 'text-azulIENM font-manrope-extrab'
-                    : '',
-                ]"
-                >{{ tab.label }}</span
-              >
-            </a>
-          </router-link>
-        </Tab>
-      </TabList>
-    </Tabs>
+          </a>
+        </router-link>
+      </li>
+    </ul>
   </div>
 </template>
 

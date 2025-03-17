@@ -28,13 +28,13 @@ export const useModulos = () => {
   //   visible: true,
   // permission: 'view_programacion'
   // },
-  {
-    icono: "pi pi-sliders-h",
-    nombre: "Improductividades",
-    ruta: "/improductividades",
-    visible: false,
-    permission: 'view_improductividades'
-  },
+  // {
+  //   icono: "pi pi-sliders-h",
+  //   nombre: "Improductividades",
+  //   ruta: "/improductividades",
+  //   visible: false,
+  //   permission: 'view_improductividades'
+  // },
   // {
   //   icono: "pi pi-sliders-h",
   //   nombre: "Improductividades 2",
@@ -68,6 +68,13 @@ export const useModulos = () => {
         ruta: "/objetivos/diarios",
         visible: false,
         permission: 'view_objetivos_diarios'
+      },
+      {
+        icono: "pi pi-th-large",
+        nombre: "Unidades programadas",
+        ruta: "/objetivos/unidades",
+        visible: false,
+        permission: "view_objetivos_unidades"
       }
     ]
   },

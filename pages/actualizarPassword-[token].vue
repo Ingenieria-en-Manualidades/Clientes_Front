@@ -38,24 +38,55 @@
             class="w-full text-sm md:text-base"
           />
         </div>
-        <!-- Componente 'botonUpdate' de tailwind ubicada en 'assets/css' -->
-        <button class="botonUpdate w-full py-2 mt-4" @click="actualizar">
+        <button
+          :class="[
+            'w-full py-2 mt-4 rounded font-manrope-r',
+            bloqueo ? 'bg-gray-400' : 'bg-verdeIENM',
+          ]"
+          :disabled="bloqueo"
+          @click="actualizar"
+        >
           Actualizar
         </button>
       </div>
     </div>
+    <Toast position="top-center" group="message" style="width: auto">
+      <template #message="slotProps">
+        <div class="flex flex-col items-center flex-auto font-manrope-r">
+          <div>
+            <i class="pi pi-times-circle text-5xl"></i>
+          </div>
+          <div class="font-bold text-xl my-1">
+            {{ String(slotProps.message.summary).toLocaleUpperCase() }}
+          </div>
+          <div class="text-lg">
+            {{ slotProps.message.detail }}
+          </div>
+          <div>
+            <button
+              type="button"
+              @click="setVolver"
+              class="bg-green-500 text-white rounded px-5 py-1 my-2 font-bold"
+            >
+              Volver al inicio de sesión
+            </button>
+          </div>
+        </div>
+      </template>
+    </Toast>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useToast } from "primevue/usetoast";
 import { navigateTo } from "nuxt/app";
-import { useRoute } from "vue-router";
+import { useToast } from "primevue/usetoast";
+import { useRoute, useRouter } from "vue-router";
 import { useValidaciones } from "../composables/login/validaciones";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { useActualizarPasswordAPI } from "../composables/login/ActualizarPasswordAPI";
 
+const bloqueo = ref(true);
 const contraseña = ref();
 const confirmacion = ref();
 const { verificarToken } = useValidaciones();
@@ -63,13 +94,24 @@ const tokenPassword = useRoute().params.token;
 const password = ref<string | null>(null); // Variable que establece un error en los inputs
 
 const toast = useToast();
-const { setUpdatePassword } = useActualizarPasswordAPI();
+const router = useRouter();
+const { setUpdatePassword, setDeleteToken } = useActualizarPasswordAPI();
 
 let id_username: string;
 const getIDUsername = async () => {
   const resultado = await verificarToken(tokenPassword);
-  id_username = resultado?.id_username;
-  console.log("idUsername: ", id_username);
+
+  if (resultado?.status) {
+    id_username = resultado?.id_username;
+    bloqueo.value = false;
+  } else {
+    toast.add({
+      severity: "error",
+      summary: resultado.title,
+      detail: resultado.detail,
+      group: "message",
+    });
+  }
 };
 getIDUsername();
 
@@ -114,9 +156,12 @@ const actualizar = async () => {
   }
 };
 
+const setVolver = async () => {
+  await setDeleteToken(String(tokenPassword));
+  await router.push("/login");
+};
+
 definePageMeta({
   layout: false,
-  middleware: "mid-actualizar-pass",
-  skipGlobalMiddleware: true,
 });
 </script>

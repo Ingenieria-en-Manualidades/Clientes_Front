@@ -1,6 +1,6 @@
 <template>
   <ScrollPanel style="width: 100%; height: 319px">
-    <table class="text-xs sm:text-sm lg:w-full font-manrope-r">
+    <table class="text-xs sm:text-sm w-full font-manrope-r">
       <caption class="text-base" v-if="titulo">
         {{
           titulo

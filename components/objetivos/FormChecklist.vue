@@ -18,7 +18,7 @@
         inputClass="w-full"
         iconDisplay="input"
       />
-      <p class="font-bold mt-4 mb-1">Calificación</p>
+      <p class="font-bold mt-4 mb-1">Calificación (%)</p>
       <p v-if="errorsCheck.calificacionCheck" class="text-red-500 text-sm pb-1">
         Este campo es obligatorio
       </p>
@@ -82,6 +82,7 @@ import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
 
 const regex = /[0-9]/;
 const calCheck = ref();
+const date = new Date();
 const dateCheck = ref();
 const fileCheck = ref<File | null>(null);
 let errorsCheck = ref({
@@ -93,7 +94,7 @@ const errorFileCheck = ref<string | null>(null);
 const idCliente = useCookie("idCliente");
 const toast = useToast();
 const fileInput = ref<HTMLInputElement | null>(null);
-const { createCalidad } = useObjetivosApi();
+const { createCalidad, verificarValoresCalidad } = useObjetivosApi();
 
 const emits = defineEmits(["listar"]);
 
@@ -106,13 +107,6 @@ const removeArchivo = () => {
 
 // Método para validar y enviar el formulario
 const submitCheck = async () => {
-  //Reiniciar los errores de checkList
-  errorsCheck.value = {
-    dateCheck: false,
-    calificacionCheck: false,
-    fileCheck: false,
-  };
-
   if (!dateCheck.value) errorsCheck.value.dateCheck = true;
   if (!calCheck.value) errorsCheck.value.calificacionCheck = true;
   if (!fileCheck.value) {
@@ -129,37 +123,40 @@ const submitCheck = async () => {
     inspeccion: null,
     archivo: fileCheck.value,
     tipo_formulario: "checklist",
+    yearFile: String(date.getFullYear()),
   };
 
   if (noErrors) {
     if (regex.test(calCheck.value)) {
-      const resultado = await createCalidad(objCalidad);
+      if (calCheck.value >= 0 && calCheck.value < 101) {
+        const resultado = await createCalidad(objCalidad);
 
-      if (resultado.success) {
-        calCheck.value = "";
-        removeArchivo();
-        emits("listar");
-        toast.add({
-          severity: "success",
-          summary: "Guardado correctamente.",
-          detail: resultado.data.message,
-          life: 3000,
-        });
+        if (resultado.success) {
+          dateCheck.value = "";
+          calCheck.value = "";
+          removeArchivo();
+          emits("listar");
+          showAlert(
+            "success",
+            "Guardado correctamente.",
+            resultado.data.message
+          );
+        } else {
+          showAlert("error", "Error al guardar.", resultado.error);
+        }
       } else {
-        toast.add({
-          severity: "error",
-          summary: "Error al guardar.",
-          detail: resultado.error,
-          life: 3000,
-        });
+        showAlert(
+          "warn",
+          "Mala digitación.",
+          "Por favor no digitar un número negativo o mayor a 100."
+        );
       }
     } else {
-      toast.add({
-        severity: "error",
-        summary: "Error de valores.",
-        detail: "Por favor solo ingresar números en los campos.",
-        life: 3000,
-      });
+      showAlert(
+        "error",
+        "Error de valores.",
+        "Por favor solo ingresar números en los campos."
+      );
     }
   }
 };
@@ -186,5 +183,14 @@ const subirArchivoCheck = (event: Event) => {
     errorFileCheck.value = "No hay ningún archivo agregado.";
     fileCheck.value = null;
   }
+};
+
+const showAlert = (sev: string, sum: string, det: string | undefined) => {
+  toast.add({
+    severity: sev,
+    summary: sum,
+    detail: det,
+    life: 5000,
+  });
 };
 </script>

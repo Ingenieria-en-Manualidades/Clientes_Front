@@ -1,49 +1,68 @@
 <template>
-  <div class="w-full flex justify-center p-2 gap-1 sm:gap-3 md:p-5">
+  <div
+    class="w-full min-[950px]:flex min-[950px]:justify-center p-2 gap-1 sm:gap-3 md:p-5"
+  >
     <title>Calidad</title>
-    <FormChecklist @listar="listar" />
-    <FormCalidad @listar="listar" />
-    <div class="ml-[3%] mt-[1%]" v-if="dataArchivos.length !== 0">
-      <Tabla
-        :titulo="'EVIDENCIAS'"
-        :cabezas="colsCalidad"
-        :arrayData="dataArchivos"
-        :atributosDatos="atributosCalidad"
-        :pag="true"
+    <div class="flex justify-center gap-2">
+      <FormChecklist @listar="listar" />
+      <FormCalidad @listar="listar" />
+    </div>
+    <div class="flex justify-center">
+      <div class="w-full ml-[3%] mt-[1%]" v-if="dataArchivos.length !== 0">
+        <Tabla
+          :titulo="'EVIDENCIAS'"
+          :cabezas="colsCalidad"
+          :arrayData="dataArchivos"
+          :atributosDatos="atributosCalidad"
+          :pag="true"
+        >
+          <template #nuevaColumna>
+            <th colspan="2" class="bg-azulIENM text-white py-3 px-5">
+              ACCIONES
+            </th>
+          </template>
+          <template #botones="{ data }">
+            <td>
+              <button
+                type="button"
+                @click="descargarPDF(data.url, data.nombre)"
+                class="bg-[#c86a2b] rounded py-1 px-3 my-1 text-white"
+              >
+                <span>Exportar</span>
+              </button>
+            </td>
+            <td>
+              <ObjetivosModalUpdateFile
+                :nameFile="data.nombre"
+                :idFile="data.id"
+                :tipoFormulario="data.tipo_calidad"
+                :yearFile="data.meta"
+                :url="data.url"
+                :tableroSaeID="data.tablero_sae_id"
+                @listar="listar"
+              />
+            </td>
+          </template>
+        </Tabla>
+      </div>
+      <div class="p-5 rounded-t-lg text-center" v-else-if="isLoading">
+        <ProgressSpinner
+          style="width: 50px; height: 50px"
+          strokeWidth="8"
+          fill="transparent"
+          animationDuration=".5s"
+          aria-label="Custom ProgressSpinner"
+        />
+      </div>
+      <div
+        class="p-10 pt-24 rounded-lg text-center border-[1px] border-gray-300"
+        v-else-if="estadoArchivos"
       >
-        <template #nuevaColumna>
-          <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
-        </template>
-        <template #botones="{ data }">
-          <td>
-            <button
-              type="button"
-              @click="descargarPDF(data.url, data.nombre)"
-              class="bg-[#c86a2b] rounded py-1 px-2 my-1 text-white"
-            >
-              Descargar
-            </button>
-          </td>
-        </template>
-      </Tabla>
-    </div>
-    <div class="p-5 rounded-t-lg text-center" v-else-if="isLoading">
-      <ProgressSpinner
-        style="width: 50px; height: 50px"
-        strokeWidth="8"
-        fill="transparent"
-        animationDuration=".5s"
-        aria-label="Custom ProgressSpinner"
-      />
-    </div>
-    <div
-      class="p-10 pt-24 rounded-lg text-center border-[1px] border-gray-300"
-      v-else-if="estadoArchivos"
-    >
-      <i :class="avisoIcono"></i>
-      <p class="font-manrope-b text-xl mt-3">
-        {{ avisodetalles }}
-      </p>
+        <i :class="avisoIcono"></i>
+        <p class="font-manrope-b text-xl mt-3">
+          {{ avisodetalles }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
