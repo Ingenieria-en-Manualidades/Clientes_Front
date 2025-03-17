@@ -25,7 +25,9 @@ export default defineNuxtConfig({
     },
     importPT: { as: 'Aura', from: '~/presets/aura' }
   },
-
+  nitro: {
+    preset: 'node-server', // <<<< AÑADIR ESTO
+  },
 
   runtimeConfig: {
     //URL del backend del modulo clientes
