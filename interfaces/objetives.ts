@@ -76,6 +76,12 @@ export interface Meta {
     usuario: String | null | undefined,
   }
 
+  export interface UnitsDaily {
+    valor: Number | null,
+    fecha_programacion: Date | null,
+    usuario: String | null | undefined,
+  }
+
   export interface ApiPromiseStandard<T> {
     success: boolean;
     title: string,

@@ -10,6 +10,7 @@
         >{{ label }}:</label
       >
     </div>
+    <p class="text-red-500 text-sm font-manrope-b">{{ info }}</p>
     <input
       type="text"
       :id="`inp${label}`"
@@ -17,7 +18,7 @@
       :maxlength="limitMax"
       class="w-full border-[1px] border-black rounded outline-none p-1"
     />
-    <p class="text-red-500 text-xs font-manrope-b">{{ warning }}</p>
+    <p class="text-red-500 text-sm font-manrope-b">{{ warning }}</p>
   </div>
 </template>
 
@@ -34,6 +35,10 @@ const props = defineProps({
   },
   limitMax: {
     type: Number,
+    required: false,
+  },
+  info: {
+    type: String,
     required: false,
   },
   warning: {
