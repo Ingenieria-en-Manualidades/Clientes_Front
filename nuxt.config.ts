@@ -25,7 +25,9 @@ export default defineNuxtConfig({
     },
     importPT: { as: 'Aura', from: '~/presets/aura' }
   },
-
+  nitro: {
+    preset: 'node-server', // <<<< AÑADIR ESTO
+  },
   ignore: [
     'pages/improductividades/aprobadas.vue',
     'pages/improductividades/index.vue',
