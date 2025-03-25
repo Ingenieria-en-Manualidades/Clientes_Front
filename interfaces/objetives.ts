@@ -79,6 +79,7 @@ export interface Meta {
   export interface UnitsDaily {
     valor: Number | null,
     fecha_programacion: Date | null,
+    cliente_endpoint_id: Number | null,
     usuario: String | null | undefined,
   }
 

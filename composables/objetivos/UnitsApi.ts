@@ -53,19 +53,20 @@ export const useUnitsApi = () => {
     }
   }
 
-  const getMetaUnidades = async (today: Date):Promise<ApiPromiseStandard<any>> => {
+  const getMetaUnidades = async (today: Date, clientID: Number):Promise<ApiPromiseStandard<any>> => {
     try {
-      let meta: String;
-      const month = today.getMonth() + 1;
-      if (month > 0 && month < 10) {
-        meta = today.getFullYear() + '-0' + month;
-      } else {
-        meta = today.getFullYear() + '-' + month;
-      }
-      console.log("meta: ", meta);
+      console.log("today: ", today);
+      console.log("client: ", clientID);
       
-      const response = await fetch(`${url}api/metaUnidadesExists/${meta}`, {
-        method: 'GET',
+      const response = await fetch(`${url}api/metaUnidadesExists`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fecha_meta: today,
+          cliente_endpoint_id: clientID,
+        })
       });
 
       const data = await response.json();
@@ -74,7 +75,7 @@ export const useUnitsApi = () => {
         return {success: true, title: data.title, message: data.message, data: data.exists};
       } else {
         if (data.error) console.error("Error a la hora de consultar las metas unidades.", data.error);
-        return {success: false, title: data.title, message: data.message, data: data.exists};
+        return {success: false, title: data.title, message: data.message};
       }
     } catch (error) {
       console.error("Error dentro del catch a la hora de agregar las unidades diarias: ", error);

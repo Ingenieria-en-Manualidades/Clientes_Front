@@ -19,6 +19,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import { useUnitsApi } from "../../composables/objetivos/UnitsApi";
 
@@ -28,9 +29,10 @@ const { getMetaUnidades } = useUnitsApi();
 const today = ref<Date>(new Date());
 const visible = ref<Boolean>(false);
 const isLoading = ref<Boolean>(true);
+const clientID = useCookie("idCliente");
 
 const list = async () => {
-  const result = await getMetaUnidades(today.value);
+  const result = await getMetaUnidades(today.value, Number(clientID.value));
 
   if (result.success) {
     isLoading.value = false;
@@ -45,6 +47,7 @@ const list = async () => {
       visible.value = true;
     }
   } else {
+    isLoading.value = false;
     toast.add({
       severity: "error",
       summary: result.title,

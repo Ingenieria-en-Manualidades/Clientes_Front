@@ -41,6 +41,7 @@ const { createUnidadesDiarias } = useUnitsApi();
 const user = useCookie("usuario");
 const date = ref<Date | null>(null);
 const units = ref<string | null>(null);
+const clienteID = useCookie("idCliente");
 
 const today = ref<Date>(new Date());
 const tomorrow = ref<Date>(new Date());
@@ -71,6 +72,7 @@ const submitUnits = async () => {
       const objUnitsD: UnitsDaily = {
         valor: Number(units.value),
         fecha_programacion: date.value,
+        cliente_endpoint_id: Number(clienteID.value),
         usuario: user.value,
       };
 
