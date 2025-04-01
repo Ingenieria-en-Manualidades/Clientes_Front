@@ -7,7 +7,10 @@
       :displayFlex="false"
       :dateFormat="'yy/mm'"
       :view="'month'"
-      :disabled="true"
+      :info="'* Solo mes actual y el siguiente.'"
+      :minDate="monthCurrent"
+      :maxDate="monthNext"
+      :warning="dateMonthlyFail"
     />
     <DinamicosInputText
       v-model="unitsMonthly"
@@ -37,16 +40,30 @@ const { createMetaUnidades } = useUnitsApi();
 
 const user = useCookie("usuario");
 const clientID = useCookie("idCliente");
-const dateMonthly = ref<Date>(new Date());
+const dateMonthly = ref<Date | null>(null);
 const unitsMonthly = ref<string | null>(null);
+const monthCurrent = ref<Date>(new Date());
+const monthNext = ref<Date>(new Date());
 
+const fixMonth = () => {
+  const day = monthNext.value.getDate();
+  if (day === 29 || day === 30 || day === 31) {
+    monthNext.value.setDate(monthNext.value.getDate() - 3);
+  }
+  monthNext.value.setMonth(monthNext.value.getMonth() + 1);
+};
+fixMonth();
+
+const dateMonthlyFail = ref();
 const unitsMonthlyFail = ref();
 
 const emits = defineEmits(["list"]);
 
 const submitUnitsMonthly = async () => {
+  dateMonthlyFail.value = "";
   unitsMonthlyFail.value = "";
 
+  if (!dateMonthly.value) dateMonthlyFail.value = "* La fecha es obligatoria.";
   if (unitsMonthly.value) {
     if (!/[0-9]/.test(unitsMonthly.value))
       unitsMonthlyFail.value = "* Solo se puede ingresar números.";
@@ -57,26 +74,28 @@ const submitUnitsMonthly = async () => {
   }
 
   if (!unitsMonthlyFail.value) {
-    const objUnits: Units = {
-      valor: Number(unitsMonthly.value),
-      fecha_meta: dateMonthly.value,
-      cliente_endpoint_id: Number(clientID.value),
-      usuario: user.value,
-    };
+    if (!dateMonthlyFail.value) {
+      const objUnits: Units = {
+        valor: Number(unitsMonthly.value),
+        fecha_meta: dateMonthly.value,
+        cliente_endpoint_id: Number(clientID.value),
+        usuario: user.value,
+      };
 
-    const result = await createMetaUnidades(objUnits);
+      const result = await createMetaUnidades(objUnits);
 
-    if (result.success) {
-      unitsMonthly.value = null;
-      emits("list");
+      if (result.success) {
+        unitsMonthly.value = null;
+        emits("list");
+      }
+
+      toast.add({
+        severity: result.success ? "success" : "error",
+        summary: result.title,
+        detail: result.message,
+        life: 5000,
+      });
     }
-
-    toast.add({
-      severity: result.success ? "success" : "error",
-      summary: result.title,
-      detail: result.message,
-      life: 5000,
-    });
   }
 };
 </script>
