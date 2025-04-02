@@ -33,10 +33,10 @@ import { ref } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import type { UnitsDaily } from "../../interfaces/objetives";
-import { useUnitsApi } from "../../composables/objetivos/UnitsApi";
+import { useUnitsDailyApi } from "../../composables/objetivos/UnitsDailyApi";
 
 const toast = useToast(); // Method for executing messages
-const { createUnidadesDiarias } = useUnitsApi();
+const { createUnidadesDiarias } = useUnitsDailyApi();
 
 const user = useCookie("usuario");
 const date = ref<Date | null>(null);
