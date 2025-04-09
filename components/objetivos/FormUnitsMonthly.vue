@@ -12,7 +12,7 @@
       :maxDate="monthNext"
       :warning="dateMonthlyFail"
     />
-    <DinamicosInputText
+    <DinamicosInputNumber
       v-model="unitsMonthly"
       :label="'Unidades'"
       :displayFlex="false"
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import type { Units } from "../../interfaces/objetives";
@@ -64,19 +64,13 @@ const submitUnitsMonthly = async () => {
   unitsMonthlyFail.value = "";
 
   if (!dateMonthly.value) dateMonthlyFail.value = "* La fecha es obligatoria.";
-  if (unitsMonthly.value) {
-    if (!/[0-9]/.test(unitsMonthly.value))
-      unitsMonthlyFail.value = "* Solo se puede ingresar números.";
-    if (Number(unitsMonthly.value) < 1)
-      unitsMonthlyFail.value = "* No se permiten números menores a 1.";
-  } else {
+  if (!unitsMonthly.value)
     unitsMonthlyFail.value = "* Este campo es obligatorio.";
-  }
 
   if (!unitsMonthlyFail.value) {
     if (!dateMonthlyFail.value) {
       const objUnits: Units = {
-        valor: Number(unitsMonthly.value),
+        valor: Number(unitsMonthly.value?.replace(".", "")),
         fecha_meta: dateMonthly.value,
         cliente_endpoint_id: Number(clientID.value),
         usuario: user.value,
@@ -98,4 +92,18 @@ const submitUnitsMonthly = async () => {
     }
   }
 };
+
+function formatWithThousandSeparator(value: string | null): string {
+  if (value) {
+    const numeric = value.replace(/\./g, "").replace(/\D/g, "");
+    return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+  return "";
+}
+
+watch(unitsMonthly, async (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    unitsMonthly.value = formatWithThousandSeparator(unitsMonthly.value);
+  }
+});
 </script>

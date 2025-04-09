@@ -16,13 +16,19 @@
       :id="`inp${label}`"
       v-model="model"
       :maxlength="limitMax"
-      class="w-full border-[1px] border-black rounded outline-none p-1"
+      :disabled="disabled"
+      :class="[
+        'w-full rounded outline-none p-1',
+        disabled ? 'bg-gray-200 border border-gray-300' : 'border border-black',
+      ]"
     />
     <p class="text-red-500 text-sm font-manrope-b">{{ warning }}</p>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ref, watch } from "vue";
+
 const model = defineModel();
 const props = defineProps({
   label: {
@@ -32,6 +38,10 @@ const props = defineProps({
   displayFlex: {
     type: Boolean,
     required: true,
+  },
+  disabled: {
+    type: Boolean,
+    required: false,
   },
   limitMax: {
     type: Number,

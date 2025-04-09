@@ -142,10 +142,6 @@ const listar = async () => {
 
 listar();
 
-// const visibleCleanExternalFilters = computed(() => {
-//   const
-// });
-
 watch(dates, async (newVal: Date[]) => {
   data.value = dataReemplace.value;
   if (dates.value) {

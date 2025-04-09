@@ -12,7 +12,7 @@
       :minDate="today"
       :maxDate="tomorrow"
     />
-    <DinamicosInputText
+    <DinamicosInputNumber
       v-model="units"
       :label="'Unidades'"
       :displayFlex="false"
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import type { UnitsDaily } from "../../interfaces/objetives";
@@ -63,14 +63,9 @@ const submitUnits = async () => {
   const errors = verifyFields(failedFields.value);
 
   if (!errors.includes(true)) {
-    if (!/[0-9]/.test(units.value))
-      failedFields.value.unitsFail = "* Solo se puede ingresar números.";
-    if (units.value < 1)
-      failedFields.value.unitsFail = "* No se permiten números menores a 1.";
-
     if (!failedFields.value.unitsFail) {
       const objUnitsD: UnitsDaily = {
-        valor: Number(units.value),
+        valor: Number(units.value?.replace(".", "")),
         fecha_programacion: date.value,
         cliente_endpoint_id: Number(clienteID.value),
         usuario: user.value,
@@ -101,4 +96,18 @@ const verifyFields = (obj: any): Boolean[] => {
   }, []);
   return errors;
 };
+
+function formatWithThousandSeparator(value: string | null): string {
+  if (value) {
+    const numeric = value.replace(/\./g, "").replace(/\D/g, "");
+    return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+  return "";
+}
+
+watch(units, async (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    units.value = formatWithThousandSeparator(units.value);
+  }
+});
 </script>

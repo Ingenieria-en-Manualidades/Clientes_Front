@@ -56,7 +56,7 @@ const props = defineProps({
   },
   disabled: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   minDate: {
     type: Date,
