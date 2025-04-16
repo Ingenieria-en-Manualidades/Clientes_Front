@@ -4,6 +4,7 @@ import { Units, ApiPromiseStandard } from "../../interfaces/objetives";
 export const useUnitsApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
+  const urlGroot = config.public.apiGroot;
 
   const createMetaUnidades = async (objUnits: Units):Promise<ApiPromiseStandard<any>> => {
     try {
@@ -96,6 +97,25 @@ export const useUnitsApi = () => {
       return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
     }
   }
+
+  const getAreasImec = async (clienteID: String | null | undefined) => {
+    try {
+      const response = await fetch(`${urlGroot}/api/area/listarCliente/${clienteID}`, {
+        method: 'GET',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {success: true, data: data};
+      } else {
+        return {success: false, message: "No paso el ok."};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de traer las areas: ", error);
+      return {success: false, message: "No paso el catch."};
+    }
+  }
   //no usar
   // const getMetaUnidades = async (today: Date, clientID: Number):Promise<ApiPromiseStandard<any>> => {
   //   try {
@@ -128,6 +148,7 @@ export const useUnitsApi = () => {
   // }
 
   return {
+    getAreasImec,
     getMetaUnidades,
     listMetaUnidades,
     updateMetaUnidades,

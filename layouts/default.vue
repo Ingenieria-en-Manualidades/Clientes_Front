@@ -3,7 +3,7 @@
   <NavBar :usuario="usuario ?? undefined" @extenderMain="isOpen = !isOpen" />
   <div
     :class="[
-      'my-[1%] h-[519px] duration-200',
+      'my-[1%] h-[519px] duration-700',
       isOpen
         ? 'ml-[1%] w-[98%] min-[1300px]:ml-[22%] min-[1300px]:w-[77%]'
         : 'ml-[1%] w-[98%]',

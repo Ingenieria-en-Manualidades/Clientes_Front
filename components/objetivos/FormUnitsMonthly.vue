@@ -20,7 +20,7 @@
     />
     <button
       type="button"
-      class="w-full font-manrope-b text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
+      class="w-full font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3 rounded mt-3"
       @click="submitUnitsMonthly"
     >
       Guardar
@@ -36,7 +36,7 @@ import type { Units } from "../../interfaces/objetives";
 import { useUnitsApi } from "../../composables/objetivos/UnitsApi";
 
 const toast = useToast();
-const { createMetaUnidades } = useUnitsApi();
+const { createMetaUnidades, getAreasImec } = useUnitsApi();
 
 const user = useCookie("usuario");
 const clientID = useCookie("idCliente");
@@ -75,6 +75,8 @@ const submitUnitsMonthly = async () => {
         cliente_endpoint_id: Number(clientID.value),
         usuario: user.value,
       };
+      // const result = await getAreasImec(clientID.value);
+      // console.log("result areas: ", result);
 
       const result = await createMetaUnidades(objUnits);
 

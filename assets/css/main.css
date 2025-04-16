@@ -52,6 +52,6 @@
 
 @layer components{
     .sideBar{
-        @apply fixed h-full w-[270px] max-[760px]:w-full top-0 left-0 min-[1300px]:top-[102px] min-[1300px]:left-3 bg-[#4789c8] rounded-r-lg max-[760px]:rounded-none min-[1300px]:rounded-lg px-3 duration-200 z-10;
+        @apply fixed h-full w-[270px] max-[760px]:w-full top-0 left-0 min-[1300px]:top-[102px] min-[1300px]:left-3 bg-[#4789c8] rounded-r-lg max-[760px]:rounded-none min-[1300px]:rounded-lg px-3 duration-700 z-10;
     }
 }
