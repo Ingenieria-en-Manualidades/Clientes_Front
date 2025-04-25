@@ -3,6 +3,7 @@
     type="button"
     class="bg-rojoIENM px-3 py-[3px] rounded hover:bg-verdeIENM my-1"
     @click="list"
+    v-show="visibleButton"
   >
     <i class="pi pi-pencil text-white"></i>
   </button>
@@ -57,7 +58,11 @@ const toast = useToast();
 const { getMetaUnidades, updateMetaUnidades } = useUnitsApi();
 const props = defineProps({
   metaUnidadesID: {
-    type: String,
+    type: Number,
+    required: true,
+  },
+  visibleButton: {
+    type: Boolean,
     required: true,
   },
 });

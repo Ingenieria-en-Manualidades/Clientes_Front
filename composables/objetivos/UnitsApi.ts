@@ -1,5 +1,5 @@
 import { useRuntimeConfig } from 'nuxt/app';
-import { Units, ApiPromiseStandard } from "../../interfaces/objetives";
+import { Units, ApiPromiseStandard, Area } from "../../interfaces/objetives";
 
 export const useUnitsApi = () => {
   const config = useRuntimeConfig();
@@ -30,10 +30,17 @@ export const useUnitsApi = () => {
     }
   }
 
-  const listMetaUnidades = async (cliente_endpoint_id: String | null | undefined):Promise<ApiPromiseStandard<any>> => {
+  const listMetaUnidades = async (cliente_endpoint_id: Number | null | undefined, areasGroot: Area[]):Promise<ApiPromiseStandard<any>> => {
     try {
-      const response = await fetch(`${url}api/getListUnidadesMeta/${cliente_endpoint_id}`, {
-        method: 'GET',
+      const response = await fetch(`${url}api/getListUnidadesMeta`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          arraysAreas: areasGroot,
+          cliente_endpoint_id: cliente_endpoint_id,
+        })
       });
 
       const data = await response.json();
@@ -50,7 +57,7 @@ export const useUnitsApi = () => {
     }
   }
 
-  const getMetaUnidades = async (meta_unidades_id: String | null | undefined):Promise<ApiPromiseStandard<any>> => {
+  const getMetaUnidades = async (meta_unidades_id: Number | null | undefined):Promise<ApiPromiseStandard<any>> => {
     try {
       const response = await fetch(`${url}api/getMetaUnidades/${meta_unidades_id}`, {
         method: 'GET',
@@ -98,22 +105,23 @@ export const useUnitsApi = () => {
     }
   }
 
-  const getAreasImec = async (clienteID: String | null | undefined) => {
+  const getAreasImec = async (clienteID: String | null | undefined):Promise<ApiPromiseStandard<Area[]>> => {
     try {
       const response = await fetch(`${urlGroot}/api/area/listarCliente/${clienteID}`, {
         method: 'GET',
       });
 
-      const data = await response.json();
+      const data: Area[] = await response.json();
 
       if (response.ok) {
-        return {success: true, data: data};
+        return {success: true, title:"", message: "", data: data};
       } else {
-        return {success: false, message: "No paso el ok."};
+        console.error("Error dentro de la api al traer las areas.");
+        return {success: false, title:"Error al cargar las areas.", message: "Por favor recargar la página.",};
       }
     } catch (error) {
       console.error("Error dentro del catch a la hora de traer las areas: ", error);
-      return {success: false, message: "No paso el catch."};
+      return {success: false, title:"Error al cargar las areas.", message: "Por favor recargar la página.",};
     }
   }
   //no usar

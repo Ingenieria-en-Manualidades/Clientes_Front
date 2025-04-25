@@ -73,6 +73,7 @@ export interface Meta {
     valor: Number | null,
     fecha_meta: Date | null,
     cliente_endpoint_id: Number | null,
+    area_id: Number | null,
     usuario: String | null | undefined,
   }
 
@@ -80,7 +81,19 @@ export interface Meta {
     valor: Number | null,
     fecha_programacion: Date | null,
     cliente_endpoint_id: Number | null,
+    area_id: Number | null,
     usuario: String | null | undefined,
+  }
+
+  export interface Area {
+    activo: string | null,
+    area_id: Number | null,
+    cliente_id: Number | null,
+    created_at: Date | string | null,
+    deleted_at: Date | string | null,
+    nombre_area: string | null,
+    updated_at: Date | string | null,
+    usuario: string | null,
   }
 
   export interface ApiPromiseStandard<T> {

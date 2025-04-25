@@ -3,6 +3,7 @@
     type="button"
     class="bg-rojoIENM px-3 py-[3px] rounded hover:bg-verdeIENM my-1"
     @click="list"
+    v-show="visibleButton"
   >
     <i class="pi pi-pencil text-white"></i>
   </button>
@@ -56,6 +57,10 @@ const emits = defineEmits(["listTable"]);
 const props = defineProps({
   unidadesDiariasID: {
     type: String,
+    required: true,
+  },
+  visibleButton: {
+    type: Boolean,
     required: true,
   },
 });

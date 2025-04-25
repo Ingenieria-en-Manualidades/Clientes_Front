@@ -29,7 +29,7 @@ export const useUnitsDailyApi = () => {
     }
   }
 
-  const listUnidadesDiarias = async (meta_unidades_id: String | null | undefined):Promise<ApiPromiseStandard<any>> => {
+  const listUnidadesDiarias = async (meta_unidades_id: Number | null | undefined):Promise<ApiPromiseStandard<any>> => {
     try {
       const response = await fetch(`${url}api/getListUnidadesDiarias/${meta_unidades_id}`, {
         method: 'GET',

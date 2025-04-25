@@ -19,6 +19,10 @@ export const headers = computed<HeaderWithFilters[]>(() => [
     options: null,
   },
   {
+    label: "area",
+    options: null,
+  },
+  {
     label: "usuario",
     options: null,
   },
@@ -29,6 +33,7 @@ export const attributes = ref([
   "valor",
   "fecha_meta",
   "updated_at",
+  "area_id_groot",
   "usuario",
 ]);
 

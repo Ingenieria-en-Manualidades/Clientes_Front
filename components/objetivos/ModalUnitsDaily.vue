@@ -34,6 +34,7 @@
                 :valor="object.valor"
                 :unidadesDiariasID="object.unidades_diarias_id"
                 @listTable="list"
+                :visibleButton="forms[0].visible"
               />
             </td>
           </template>
@@ -45,6 +46,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from "vue";
+import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import type { WarningTable } from "../../interfaces/filters";
 import { useUnitsDailyApi } from "../../composables/objetivos/UnitsDailyApi";
@@ -58,7 +60,7 @@ const data = ref<any[]>([]);
 const visible = ref<boolean>(false);
 const props = defineProps({
   metaUnidadesID: {
-    type: String,
+    type: Number,
     required: true,
   },
 });
@@ -122,6 +124,26 @@ const list = async () => {
   }
   isLoading.value = false;
 };
+
+const userPermissions = useCookie("permissions");
+
+const forms = ref([
+  {
+    permission: "update_unidades_diarias",
+    visible: false,
+  },
+]);
+
+const checkPermissions = () => {
+  forms.value.forEach((form) => {
+    if (userPermissions.value?.includes(form.permission)) {
+      form.visible = true;
+    } else {
+      form.visible = false;
+    }
+  });
+};
+checkPermissions();
 
 const formatoNumero = (numero: number): string => {
   return new Intl.NumberFormat("es-ES").format(numero);

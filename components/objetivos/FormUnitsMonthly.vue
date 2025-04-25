@@ -12,6 +12,13 @@
       :maxDate="monthNext"
       :warning="dateMonthlyFail"
     />
+    <DinamicosDropDownList
+      :label="'Areas'"
+      :displayFlex="false"
+      :options="options"
+      v-model="areaChoose"
+      :warning="areaMonthlyFail"
+    />
     <DinamicosInputNumber
       v-model="unitsMonthly"
       :label="'Unidades'"
@@ -34,11 +41,14 @@ import { useCookie } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import type { Units } from "../../interfaces/objetives";
 import { useUnitsApi } from "../../composables/objetivos/UnitsApi";
+import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
 
 const toast = useToast();
 const { createMetaUnidades, getAreasImec } = useUnitsApi();
 
+const areaChoose = ref();
 const user = useCookie("usuario");
+const options = ref<OptionDropdown[]>([]);
 const clientID = useCookie("idCliente");
 const dateMonthly = ref<Date | null>(null);
 const unitsMonthly = ref<string | null>(null);
@@ -56,44 +66,68 @@ fixMonth();
 
 const dateMonthlyFail = ref();
 const unitsMonthlyFail = ref();
-
-const emits = defineEmits(["list"]);
+const areaMonthlyFail = ref();
 
 const submitUnitsMonthly = async () => {
   dateMonthlyFail.value = "";
   unitsMonthlyFail.value = "";
+  areaMonthlyFail.value = "";
 
   if (!dateMonthly.value) dateMonthlyFail.value = "* La fecha es obligatoria.";
   if (!unitsMonthly.value)
     unitsMonthlyFail.value = "* Este campo es obligatorio.";
+  if (!areaChoose.value) areaMonthlyFail.value = "* Este campo es obligatorio";
 
   if (!unitsMonthlyFail.value) {
     if (!dateMonthlyFail.value) {
-      const objUnits: Units = {
-        valor: Number(unitsMonthly.value?.replace(".", "")),
-        fecha_meta: dateMonthly.value,
-        cliente_endpoint_id: Number(clientID.value),
-        usuario: user.value,
-      };
-      // const result = await getAreasImec(clientID.value);
-      // console.log("result areas: ", result);
+      if (!areaMonthlyFail.value) {
+        const objUnits: Units = {
+          valor: Number(unitsMonthly.value?.replace(".", "")),
+          fecha_meta: dateMonthly.value,
+          cliente_endpoint_id: Number(clientID.value),
+          area_id: areaChoose.value,
+          usuario: user.value,
+        };
 
-      const result = await createMetaUnidades(objUnits);
+        const result = await createMetaUnidades(objUnits);
 
-      if (result.success) {
-        unitsMonthly.value = null;
-        emits("list");
+        if (result.success) {
+          unitsMonthly.value = null;
+          areaChoose.value = null;
+        }
+
+        toast.add({
+          severity: result.success ? "success" : "error",
+          summary: result.title,
+          detail: result.message,
+          life: 5000,
+        });
       }
-
-      toast.add({
-        severity: result.success ? "success" : "error",
-        summary: result.title,
-        detail: result.message,
-        life: 5000,
-      });
     }
   }
 };
+
+const listAreas = async () => {
+  const result = await getAreasImec(clientID.value);
+
+  if (result.success && result.data) {
+    for (const area of result.data) {
+      const obj: OptionDropdown = {
+        label: area.nombre_area,
+        value: area.area_id,
+      };
+      options.value.push(obj);
+    }
+  } else {
+    toast.add({
+      severity: "error",
+      summary: result.title,
+      detail: result.message,
+      life: 5000,
+    });
+  }
+};
+listAreas();
 
 function formatWithThousandSeparator(value: string | null): string {
   if (value) {

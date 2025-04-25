@@ -10,6 +10,7 @@ export interface ItemTabPanel {
     icon: string,
 }
 
-export interface OptionsDropdown {
-    label: String,
+export interface OptionDropdown {
+    label: string | null,
+    value: string | Number | null,
 }

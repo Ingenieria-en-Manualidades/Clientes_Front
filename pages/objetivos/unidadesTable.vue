@@ -22,6 +22,7 @@
         <td>
           <ObjetivosModalUpdateUnits
             :metaUnidadesID="object.meta_unidades_id"
+            :visibleButton="forms[0].visible"
             @listTable="list"
           />
         </td>
@@ -53,52 +54,63 @@ const warningData = ref<WarningTable>({
 });
 
 const toast = useToast();
-const { listMetaUnidades } = useUnitsApi();
+const { listMetaUnidades, getAreasImec } = useUnitsApi();
 
 const list = async () => {
   isLoading.value = true;
-  const resp = await listMetaUnidades(clientID.value);
+  const result = await getAreasImec(clientID.value);
+  console.log("areas:", result.data);
 
-  if (resp.success) {
-    data.value = resp.data;
-    console.log("data: ", data.value);
+  if (result.success) {
+    const resp = await listMetaUnidades(Number(clientID.value), result.data);
 
-    if (data.value.length === 0) {
-      warningData.value.success = true;
-      warningData.value.label = "Sin ninguna meta registrada.";
-    } else {
-      for (const unit of data.value) {
-        const date = new Date(unit.updated_at);
-        if (date.getMonth() > -1 && date.getMonth() < 9) {
-          if (date.getDate() < 10) {
-            unit.updated_at = `${date.getFullYear()}-0${
-              date.getMonth() + 1
-            }-0${date.getDate()}`;
+    if (resp.success) {
+      data.value = resp.data;
+      if (data.value.length === 0) {
+        warningData.value.success = true;
+        warningData.value.label = "Sin ninguna meta registrada.";
+      } else {
+        for (const unit of data.value) {
+          const date = new Date(unit.updated_at);
+          if (date.getMonth() > -1 && date.getMonth() < 9) {
+            if (date.getDate() < 10) {
+              unit.updated_at = `${date.getFullYear()}-0${
+                date.getMonth() + 1
+              }-0${date.getDate()}`;
+            } else {
+              unit.updated_at = `${date.getFullYear()}-0${
+                date.getMonth() + 1
+              }-${date.getDate()}`;
+            }
           } else {
-            unit.updated_at = `${date.getFullYear()}-0${
-              date.getMonth() + 1
-            }-${date.getDate()}`;
+            if (date.getDate() < 10) {
+              unit.updated_at = `${date.getFullYear()}-${
+                date.getMonth() + 1
+              }-0${date.getDate()}`;
+            } else {
+              unit.updated_at = `${date.getFullYear()}-0${
+                date.getMonth() + 1
+              }-${date.getDate()}`;
+            }
           }
-        } else {
-          if (date.getDate() < 10) {
-            unit.updated_at = `${date.getFullYear()}-${
-              date.getMonth() + 1
-            }-0${date.getDate()}`;
-          } else {
-            unit.updated_at = `${date.getFullYear()}-0${
-              date.getMonth() + 1
-            }-${date.getDate()}`;
-          }
+          unit.valor = formatoNumero(unit.valor);
         }
-        unit.valor = formatoNumero(unit.valor);
       }
+    } else {
+      errorData.value = true;
+      toast.add({
+        severity: "error",
+        summary: resp.title,
+        detail: resp.message,
+        life: 5000,
+      });
     }
   } else {
     errorData.value = true;
     toast.add({
       severity: "error",
-      summary: resp.title,
-      detail: resp.message,
+      summary: result.title,
+      detail: result.message,
       life: 5000,
     });
   }
@@ -109,6 +121,26 @@ list();
 const formatoNumero = (numero: number): string => {
   return new Intl.NumberFormat("es-ES").format(numero);
 };
+
+const userPermissions = useCookie("permissions");
+
+const forms = ref([
+  {
+    permission: "update_unidades_mensuales",
+    visible: false,
+  },
+]);
+
+const checkPermissions = () => {
+  forms.value.forEach((form) => {
+    if (userPermissions.value?.includes(form.permission)) {
+      form.visible = true;
+    } else {
+      form.visible = false;
+    }
+  });
+};
+checkPermissions();
 
 definePageMeta({
   layout: "default",
