@@ -43,7 +43,7 @@ import type { Units } from "../../interfaces/objetives";
 import { useUnitsApi } from "../../composables/objetivos/UnitsApi";
 import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
 
-const toast = useToast();
+const toast = useToast(); // Method for executing messages.
 const { createMetaUnidades, getAreasImec } = useUnitsApi();
 
 const areaChoose = ref();
@@ -52,9 +52,12 @@ const options = ref<OptionDropdown[]>([]);
 const clientID = useCookie("idCliente");
 const dateMonthly = ref<Date | null>(null);
 const unitsMonthly = ref<string | null>(null);
+
+// Creating the month limits for the form.
 const monthCurrent = ref<Date>(new Date());
 const monthNext = ref<Date>(new Date());
 
+// The maximum month can only be the month following today's, this method ensures this.
 const fixMonth = () => {
   const day = monthNext.value.getDate();
   if (day === 29 || day === 30 || day === 31) {
@@ -64,20 +67,25 @@ const fixMonth = () => {
 };
 fixMonth();
 
+// We declare variables to store the errors of each field.
 const dateMonthlyFail = ref();
 const unitsMonthlyFail = ref();
 const areaMonthlyFail = ref();
 
+// Method to save units.
 const submitUnitsMonthly = async () => {
+  // We reset the variables that save the errors.
   dateMonthlyFail.value = "";
   unitsMonthlyFail.value = "";
   areaMonthlyFail.value = "";
 
+  // We verify that the fields are filled out.
   if (!dateMonthly.value) dateMonthlyFail.value = "* La fecha es obligatoria.";
   if (!unitsMonthly.value)
     unitsMonthlyFail.value = "* Este campo es obligatorio.";
   if (!areaChoose.value) areaMonthlyFail.value = "* Este campo es obligatorio";
 
+  // We verify that there are no errors in the variables.
   if (!unitsMonthlyFail.value) {
     if (!dateMonthlyFail.value) {
       if (!areaMonthlyFail.value) {
@@ -91,11 +99,13 @@ const submitUnitsMonthly = async () => {
 
         const result = await createMetaUnidades(objUnits);
 
+        // Clears fields on successful save.
         if (result.success) {
           unitsMonthly.value = null;
           areaChoose.value = null;
         }
 
+        // Success or failure message depending on the 'success' variable of the 'createMetaUnidades' method.
         toast.add({
           severity: result.success ? "success" : "error",
           summary: result.title,
@@ -107,10 +117,12 @@ const submitUnitsMonthly = async () => {
   }
 };
 
+// Method that brings the areas of the client entered for the list.
 const listAreas = async () => {
   const result = await getAreasImec(clientID.value);
 
   if (result.success && result.data) {
+    // The for loop works to create the 'OptionDropdown' array that the DropDownList component requires.
     for (const area of result.data) {
       const obj: OptionDropdown = {
         label: area.nombre_area,
@@ -127,8 +139,9 @@ const listAreas = async () => {
     });
   }
 };
-listAreas();
+listAreas(); // We run it as soon as it starts
 
+// Method that adds the thousand format to a string of numbers.
 function formatWithThousandSeparator(value: string | null): string {
   if (value) {
     const numeric = value.replace(/\./g, "").replace(/\D/g, "");
@@ -137,6 +150,7 @@ function formatWithThousandSeparator(value: string | null): string {
   return "";
 }
 
+// The watch method ensures that when writing the number it will be in the thousand format.
 watch(unitsMonthly, async (newVal, oldVal) => {
   if (newVal !== oldVal) {
     unitsMonthly.value = formatWithThousandSeparator(unitsMonthly.value);

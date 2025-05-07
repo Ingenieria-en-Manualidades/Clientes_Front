@@ -3,10 +3,13 @@
     class="p-[1%] m-[0.5%] rounded-md cursor-pointer hover:bg-gray-200 text-center"
     @click="toggle"
   >
-    <i
-      class="pi pi-user text-azulIENM mt-[8%] text-[1.5rem] lg:text-[1.5rem] lg:mt-0"
-    ></i>
-    <p class="font-manrope-b text-xs md:text-base">{{ usuario }}</p>
+    <div>
+      <p class="text-xs md:text-base">
+        <i class="pi pi-user text-azulIENM text-lg mt-[8%] lg:mt-0 mr-2"></i>
+        <span class="font-manrope-b text-verdeOscIENM">{{ usuario }}</span>
+      </p>
+      <p class="font-manrope-b text-azulIENM">{{ client }}</p>
+    </div>
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true">
       <template #item="{ item, props }">
         <router-link
@@ -21,7 +24,18 @@
           </a>
         </router-link>
         <a
-          v-else-if="item.type"
+          v-else-if="item.type === 'chooseClient'"
+          v-ripple
+          :href="item.url"
+          :target="item.target"
+          v-bind="props.action"
+          @click="goChangeClient"
+        >
+          <span :class="item.icon" />
+          <span class="ml-2">{{ item.label }}</span>
+        </a>
+        <a
+          v-else-if="item.type === 'salir'"
           v-ripple
           :href="item.url"
           :target="item.target"
@@ -46,7 +60,7 @@
   </div>
   <div
     v-if="isLoading"
-    class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20"
+    class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20 z-10"
   >
     <ProgressSpinner
       style="width: 200px; height: 200px"
@@ -60,12 +74,13 @@
 
 <script lang="ts" setup>
 import { defineProps, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 //Importamos variable para utilizar los mensajes 'Toast' de primevue.
 import { useToast } from "primevue/usetoast";
 import { loginApi } from "../composables/loginApi";
 const isLoading = ref(false);
 
+const route = useRoute();
 const toast = useToast();
 const router = useRouter(); //Variable que utilizaremos para viajar entre rutas
 const { logout } = loginApi();
@@ -73,6 +88,11 @@ const { logout } = loginApi();
 const menu = ref(); //Crea la variable ref para el menu
 // Crea un arreglo que contiene los items con su respectivo logo y nombre
 const items = ref([
+  {
+    label: "Cambiar cliente",
+    icon: "pi pi-users",
+    type: "chooseClient",
+  },
   {
     label: "Salir",
     icon: "pi pi-sign-out",
@@ -88,6 +108,7 @@ const toggle = (event: any) => {
 // Función que ayuda a conseguir el nombre de usuario entregado al componente.
 const props = defineProps({
   usuario: String,
+  client: String,
 });
 
 //Función de cerrar sesión para borrar token del usuario y las cookies para retornar al login.
@@ -109,5 +130,12 @@ const cerrarSesion = async () => {
       life: 3000,
     });
   }
+};
+
+const goChangeClient = () => {
+  router.push({
+    path: "/chooseClients",
+    query: { redirect: route.fullPath },
+  });
 };
 </script>

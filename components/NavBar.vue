@@ -22,13 +22,14 @@
           class="absolute bg-red-500 font-manrope-r px-[14%] py-[8%] md:px-[17%] md:py-[10%] rounded-[50%] border-2 border-white text-[10px] md:text-xs right-1 md:right-0 top-0 text-white"
           >{{ nRemisiones }}</span
         >
-        <p
+        <!-- Intento de tooltip -->
+        <!-- <p
           class="fixed font-manrope-r text-sm px-3 pb-1 rounded-lg top-7 right-[70px] bg-[#28b67a] transform translate-y-0 hidden duration-300 group-hover:translate-y-9 group-hover:block after:block after:border-b-[7px] after:border-b-[#28b67a] after:border-l-[7px] after:border-l-transparent after:border-r-[7px] after:border-r-transparent after:absolute after:top-[-7px] after:left-[77px]"
         >
           remisiones pendientes
-        </p>
+        </p> -->
       </button>
-      <MenuItems :usuario="props.usuario" />
+      <MenuItems :usuario="props.usuario" :client="client" />
     </div>
   </nav>
 </template>
@@ -47,6 +48,7 @@ const nRemisiones = useCookie("numRem", {
   secure: true,
 });
 const idCliente = useCookie("idCliente");
+const client = useCookie("nameClient");
 //Metodo emit importado desde el componente
 const emit = defineEmits(["extenderMain"]);
 const { getNumRemisionesPen } = useRemisionesApi();

@@ -1,5 +1,6 @@
 import { useCookie, useRuntimeConfig } from "nuxt/app";
 import { encryptData } from "./login/EncryptedData";
+import { ApiPromiseStandard } from "../interfaces/objetives";
 
 export const loginApi = () => {
 
@@ -50,7 +51,7 @@ export const loginApi = () => {
         },
         body: JSON.stringify({
           token: response.access_token,
-          idCliente: response.clientes_endpoint_ids[0],
+          clients: response.clientes_endpoint_ids,
           usuario: userData.username,
           permissions: permisos
         })
@@ -110,8 +111,80 @@ export const loginApi = () => {
     }
   };
 
+  /**
+   * Método que retorna los clientes en base a sus id' s (hecho para seleccion de clientes).
+   * @param arrayIds Lista de id' s de clientes a consultar.
+   * @returns retorna en caso de error titulo y mensaje del error y en caso de acierto los clientes.
+   */
+  const getClientsByIds = async (arrayIds: Number[]):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/getClientsByIds/${arrayIds}`, {
+        method: 'GET',
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        return {success: true, title: "", message: "", data: result.data};
+      } else {
+        if (result.error) console.error("Error al listar los clientes por ids: ", result.error);
+        return {success: false, title: result.title, message: result.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de listar los clientes por ids: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor recargar la página."}
+    }
+  }
+
+  const chooseClient = async (clientID: Number, nameClient: String | null | undefined) => {
+    try {
+      const response = await fetch('/api/cookieClienteid', {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idCliente: clientID,
+          nameClient: nameClient,
+        })
+      });
+
+      if (response.ok) {
+        return {success: true, title: "", message: ""};
+      } else {
+        return {success: false, title: "Error al elegir el cliente.", message: "Por favor recargar la página."};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de elegir al cliente: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor recargar la página."}
+    }
+  }
+  //NO USAR
+  // const getClientsByUserId = async ():Promise<ApiPromiseStandard<any>> => {
+  //   try {
+  //     const response = await fetch(`${url}api/getClientsByUserId`, {
+  //       method: 'GET',
+  //     });
+
+  //     const result = await response.json();
+
+  //     if (response.ok) {
+  //       return {success: true, title: "", message: "", data: result.data};
+  //     } else {
+  //       if (result.error) console.error("Error al listar los clientes por usuario: ", result.error);
+  //       return {success: false, title: result.title, message: result.message};
+  //     }
+  //   } catch (error) {
+  //     console.error("Error dentro del catch a la hora de listar los clientes por usuario: ", error);
+  //     return {success: false, title: "Error desconocido.", message: "Por favor recargar la página."}
+  //   }
+  // }
+
   return {
     login,
     logout,
+    chooseClient,
+    getClientsByIds,
+    // getClientsByUserId
   };
 };

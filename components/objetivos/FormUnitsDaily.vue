@@ -9,8 +9,8 @@
       :disabled="false"
       :info="'* Solo día actual y mañana.'"
       :warning="failedFields.dateFail"
-      :minDate="today"
-      :maxDate="tomorrow"
+      :minDate="dateplus"
+      :maxDate="dateplus2"
     />
     <DinamicosDropDownList
       :label="'Areas'"
@@ -44,7 +44,7 @@ import { useUnitsApi } from "../../composables/objetivos/UnitsApi";
 import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
 import { useUnitsDailyApi } from "../../composables/objetivos/UnitsDailyApi";
 
-const toast = useToast(); // Method for executing messages
+const toast = useToast(); // Method for executing messages.
 const { createUnidadesDiarias } = useUnitsDailyApi();
 
 const areaChoose = ref();
@@ -58,18 +58,41 @@ const { getAreasImec } = useUnitsApi();
 const today = ref<Date>(new Date());
 const tomorrow = ref<Date>(new Date());
 tomorrow.value.setDate(tomorrow.value.getDate() + 1);
+const dateplus = new Date("2025-04-01");
+const dateplus2 = new Date("2025-05-01");
+const fixDateTomorrow = () => {
+  console.log("tomorrow day: ", tomorrow.value.getDate());
+  if (tomorrow.value.getDate() === 1) {
+    tomorrow.value.setMonth(today.value.getMonth() + 1);
+    tomorrow.value.setDate(2);
+  }
+};
+fixDateTomorrow();
+console.log("tomorrow: ", tomorrow.value);
 
+// function getLastDayOfMonth(date: Date) {
+//   return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+// }
+// console.log(
+//   "Ultimo dia de mayo: ",
+//   getLastDayOfMonth(tomorrow.value).getDate()
+// );
+
+// We declare variables to store the errors of each field.
 const failedFields = ref({
   dateFail: "",
   unitsFail: "",
   areasFail: "",
 });
 
+// Method to save units.
 const submitUnits = async () => {
+  // We reset the variables that save the errors.
   failedFields.value.dateFail = "";
   failedFields.value.unitsFail = "";
   failedFields.value.areasFail = "";
 
+  // We verify that the fields are filled out.
   if (!date.value) failedFields.value.dateFail = "* La fecha es obligatoria.";
   if (!units.value)
     failedFields.value.unitsFail = "* Este campo es obligatorio.";
@@ -90,12 +113,14 @@ const submitUnits = async () => {
 
       const result = await createUnidadesDiarias(objUnitsD);
 
+      // Clears fields on successful save.
       if (result.success) {
         units.value = null;
         date.value = null;
         areaChoose.value = null;
       }
 
+      // Success or failure message depending on the 'success' variable of the 'createUnidadesDiarias' method.
       toast.add({
         severity: result.success ? "success" : "error",
         summary: result.title,
@@ -106,6 +131,7 @@ const submitUnits = async () => {
   }
 };
 
+// Method that brings the areas of the client entered for the list.
 const listAreas = async () => {
   const result = await getAreasImec(clienteID.value);
 

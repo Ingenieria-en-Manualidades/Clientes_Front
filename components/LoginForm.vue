@@ -30,25 +30,22 @@
       />
     </div>
     <modalRecuperarPass />
-    <Button
-      label="Enviar"
-      class="bg-verdeIENM text-black mt-[10%] mb-[2%] w-[75%] ml-[11.5%] font-manrope-r tracking-wide hover:text-white hover:bg-verdeOscIENM"
+    <button
       type="submit"
       :disabled="boolError"
-    />
+      class="bg-verdeIENM mt-[10%] mb-[2%] w-[75%] ml-[11.5%] font-manrope-b tracking-wide text-white hover:bg-verdeOscIENM py-2 rounded items-center"
+    >
+      <span v-if="!isLoading">Enviar</span>
+      <ProgressSpinner
+        v-else
+        style="width: 30px; height: 30px"
+        strokeWidth="8"
+        fill="transparent"
+        animationDuration=".5s"
+        aria-label="Custom ProgressSpinner"
+      />
+    </button>
   </form>
-  <div
-    v-if="isLoading"
-    class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20"
-  >
-    <ProgressSpinner
-      style="width: 200px; height: 200px"
-      strokeWidth="8"
-      fill="transparent"
-      animationDuration=".5s"
-      aria-label="Custom ProgressSpinner"
-    />
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -100,7 +97,7 @@ const handleSubmit = async () => {
 
     //Enviando al usuario al "dashboard" de las remisiones en caso de que el usuario este registrado.
     if (resultado.success) {
-      await router.push("/");
+      await router.push("/chooseClients");
       isLoading.value = false;
     } else {
       isLoading.value = false;
