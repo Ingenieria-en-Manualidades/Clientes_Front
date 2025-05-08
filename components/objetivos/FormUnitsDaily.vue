@@ -7,10 +7,10 @@
       :displayFlex="false"
       :dateFormat="'yy/mm/dd'"
       :disabled="false"
-      :info="'* Solo día actual y mañana.'"
+      :info="'* Solo 3 días anteriores hasta mañana.'"
       :warning="failedFields.dateFail"
-      :minDate="dateplus"
-      :maxDate="dateplus2"
+      :minDate="daysBefore"
+      :maxDate="tomorrow"
     />
     <DinamicosDropDownList
       :label="'Areas'"
@@ -55,28 +55,21 @@ const clienteID = useCookie("idCliente");
 const options = ref<OptionDropdown[]>([]);
 const { getAreasImec } = useUnitsApi();
 
-const today = ref<Date>(new Date());
+// Minimum date to enter the form.
+const daysBefore = ref<Date>(new Date());
+daysBefore.value.setDate(daysBefore.value.getDate() - 3);
+
+// Maximum date to enter the form.
 const tomorrow = ref<Date>(new Date());
 tomorrow.value.setDate(tomorrow.value.getDate() + 1);
-const dateplus = new Date("2025-04-01");
-const dateplus2 = new Date("2025-05-01");
-const fixDateTomorrow = () => {
-  console.log("tomorrow day: ", tomorrow.value.getDate());
-  if (tomorrow.value.getDate() === 1) {
-    tomorrow.value.setMonth(today.value.getMonth() + 1);
-    tomorrow.value.setDate(2);
-  }
-};
-fixDateTomorrow();
-console.log("tomorrow: ", tomorrow.value);
-
-// function getLastDayOfMonth(date: Date) {
-//   return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-// }
-// console.log(
-//   "Ultimo dia de mayo: ",
-//   getLastDayOfMonth(tomorrow.value).getDate()
-// );
+// const fixDateTomorrow = () => {
+//   console.log("tomorrow day: ", tomorrow.value.getDate());
+//   if (tomorrow.value.getDate() === 1) {
+//     tomorrow.value.setMonth(today.value.getMonth() + 1);
+//     tomorrow.value.setDate(2);
+//   }
+// };
+// fixDateTomorrow();
 
 // We declare variables to store the errors of each field.
 const failedFields = ref({

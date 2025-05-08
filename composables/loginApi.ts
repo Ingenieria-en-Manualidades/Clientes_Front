@@ -61,8 +61,12 @@ export const loginApi = () => {
       if (!restCookies) {
         throw "Error a la hora de crear las cookies";
       }
-      
-      return {success: true};
+
+      if (response.clientes_endpoint_ids.length > 1) {
+        return {success: true, skipChooseClient: false};
+      } else {
+        return {success: true, skipChooseClient: true, clientID: response.clientes_endpoint_ids};
+      }
     } catch (error) {
       console.error(error);
       throw "Error desconocido a la hora de iniciar";

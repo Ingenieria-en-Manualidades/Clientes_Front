@@ -61,7 +61,7 @@ const toast = useToast(); //Importamos variable para utilizar los mensajes 'Toas
 const router = useRouter(); //Variable que utilizaremos para viajar entre rutas
 const contrasenia = ref("");
 const boolError = ref(false);
-const { login } = loginApi(); //Importamos el método del login
+const { login, chooseClient, getClientsByIds } = loginApi(); //Importamos el método del login
 const usernameError = ref<string | null>(null); //Variable que establece un error en los inputs
 const isLoading = ref(false);
 
@@ -97,7 +97,14 @@ const handleSubmit = async () => {
 
     //Enviando al usuario al "dashboard" de las remisiones en caso de que el usuario este registrado.
     if (resultado.success) {
-      await router.push("/chooseClients");
+      if (resultado.skipChooseClient) {
+        const success = await createCookieClient(resultado.clientID);
+        if (success) {
+          await router.push("/");
+        }
+      } else {
+        await router.push("/chooseClients");
+      }
       isLoading.value = false;
     } else {
       isLoading.value = false;
@@ -110,6 +117,37 @@ const handleSubmit = async () => {
         life: 4000,
       });
     }
+  }
+};
+
+const createCookieClient = async (clientID: any) => {
+  const resultado = await getClientsByIds([clientID]);
+  console.log("resultado: ", resultado);
+
+  if (resultado.success) {
+    const response = await chooseClient(
+      resultado.data[0].cliente_endpoint_id,
+      resultado.data[0].nombre
+    );
+    if (response.success) {
+      return true;
+    } else {
+      toast.add({
+        severity: "error",
+        summary: response.title,
+        detail: response.message,
+        life: 5000,
+      });
+      return false;
+    }
+  } else {
+    toast.add({
+      severity: "error",
+      summary: resultado.title,
+      detail: resultado.message,
+      life: 5000,
+    });
+    return false;
   }
 };
 </script>
