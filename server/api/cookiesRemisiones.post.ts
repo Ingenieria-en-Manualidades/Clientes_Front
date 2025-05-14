@@ -7,19 +7,20 @@ export default defineEventHandler(async (event) => {
     // Creamos las cookies con el método nuxt 'setCookie'.
     setCookie(event, 'token', token, {
         sameSite: 'none',
-        secure: true
+        secure: true,
+        maxAge: 10800,
     });
     setCookie(event, 'clients', clients, {
         sameSite: 'none',
-        secure: true
+        secure: true,
     });
     setCookie(event, 'usuario', usuario, {
         sameSite: 'none',
-        secure: true
+        secure: true,
     });
     setCookie(event, 'permissions', permissions, {
         sameSite: 'none',
-        secure: true
+        secure: true,
     });
 
     return true;

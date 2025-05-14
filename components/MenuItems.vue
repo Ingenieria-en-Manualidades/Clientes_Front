@@ -3,8 +3,8 @@
     class="p-[1%] m-[0.5%] rounded-md cursor-pointer hover:bg-gray-200 text-center"
     @click="toggle"
   >
-    <div>
-      <p class="text-xs md:text-base">
+    <div class="text-xs md:text-base">
+      <p>
         <i class="pi pi-user text-azulIENM text-lg mt-[8%] lg:mt-0 mr-2"></i>
         <span class="font-manrope-b text-verdeOscIENM">{{ usuario }}</span>
       </p>

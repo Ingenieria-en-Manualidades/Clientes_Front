@@ -21,9 +21,20 @@
           <button
             type="button"
             @click="login"
-            class="w-full font-manrope-b text-center bg-[#4789c8] text-white p-3 rounded mt-5 items-center"
+            :class="[
+              'w-full font-manrope-b text-center text-white p-3 rounded mt-5 items-center',
+              isLoading ? 'bg-slate-300' : 'bg-[#4789c8]',
+            ]"
           >
-            Iniciar sesión
+            <span v-if="!isLoading">Continuar</span>
+            <ProgressSpinner
+              v-else
+              style="width: 30px; height: 30px"
+              strokeWidth="8"
+              fill="transparent"
+              animationDuration=".5s"
+              aria-label="Custom ProgressSpinner"
+            />
           </button>
         </form>
       </div>
@@ -37,10 +48,12 @@ import { useCookie } from "nuxt/app";
 import { useRouter, useRoute } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { loginApi } from "../composables/loginApi";
+import ProgressSpinner from "primevue/progressspinner";
 import type { OptionDropdown } from "../interfaces/componentesDinamicos";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 const clientChoose = ref();
+const isLoading = ref(false);
 const clientsIds = useCookie("clients");
 const options = ref<OptionDropdown[]>([]);
 
@@ -72,6 +85,7 @@ const listClients = async () => {
 listClients();
 
 const login = async () => {
+  isLoading.value = true;
   if (clientChoose.value) {
     const client = options.value.find((c) => c.value === clientChoose.value);
 
@@ -96,6 +110,7 @@ const login = async () => {
       life: 5000,
     });
   }
+  isLoading.value = false;
 };
 
 definePageMeta({

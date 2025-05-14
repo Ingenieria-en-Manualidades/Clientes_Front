@@ -1,6 +1,6 @@
 <template>
   <button
-    class="rounded-[50%] mr-24 min-[450px]:mr-6 mt-3 px-[5%] pt-1 hover:bg-gray-200"
+    class="rounded-[50%] mr-1 min-[450px]:mr-6 mt-3 px-[5%] pt-1 hover:bg-gray-200"
     @click="toggleNavbar"
   >
     <i

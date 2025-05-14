@@ -124,37 +124,7 @@ export const useUnitsApi = () => {
       return {success: false, title:"Error al cargar las areas.", message: "Por favor recargar la página.",};
     }
   }
-  //no usar
-  // const getMetaUnidades = async (today: Date, clientID: Number):Promise<ApiPromiseStandard<any>> => {
-  //   try {
-  //     console.log("today: ", today);
-  //     console.log("client: ", clientID);
-      
-  //     const response = await fetch(`${url}api/metaUnidadesExists`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         fecha_meta: today,
-  //         cliente_endpoint_id: clientID,
-  //       })
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (response.ok) {
-  //       return {success: true, title: data.title, message: data.message, data: data.exists};
-  //     } else {
-  //       if (data.error) console.error("Error a la hora de consultar las metas unidades.", data.error);
-  //       return {success: false, title: data.title, message: data.message};
-  //     }
-  //   } catch (error) {
-  //     console.error("Error dentro del catch a la hora de agregar las unidades diarias: ", error);
-  //     return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
-  //   }
-  // }
-
+  
   return {
     getAreasImec,
     getMetaUnidades,

@@ -1,3 +1,4 @@
+import { RefSymbol } from "@vue/reactivity";
 import { useCookie, useRuntimeConfig } from "nuxt/app";
 
 export const useValidaciones = () => {
@@ -61,6 +62,14 @@ export const useValidaciones = () => {
       
       // Llamamos al token del usuario y verificamos su existencia.
       if (!token.value) {
+        const resultCookie = await fetch('/api/deleteCookiesRem', {
+          method: 'DELETE',
+        });
+        token.value = "undefined";
+
+        if (!resultCookie) {
+          console.error("Error a la hora de eliminar cookies.");
+        }
         return false;
       }else{
         // Llamamos al endpoint "logout" del 'Modulo-Cliente Backend' dandole el token del usuario para borrarlo en la BD.
