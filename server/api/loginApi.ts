@@ -1,6 +1,6 @@
 import { useCookie, useRuntimeConfig } from "nuxt/app";
-import { encryptData } from "./login/EncryptedData";
-import { ApiPromiseStandard } from "../interfaces/objetives";
+import { encryptData } from "../../composables/login/EncryptedData";
+import { ApiPromiseStandard } from "../../interfaces/objetives";
 
 export const loginApi = () => {
 
@@ -44,7 +44,7 @@ export const loginApi = () => {
       }
       
       //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
-      const restCookies = await fetch('/frontend-api/cookiesRemisiones', {
+      const restCookies = await fetch('api/cookiesRemisiones', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export const loginApi = () => {
       const response = await resultado.json();
       
       // Borramos todas las cookies(token, idCliente y usuario) y retornamos mensaje exitoso del endpoint.
-      const resultCookie = await fetch('/frontend-api/deleteCookiesRem', {
+      const resultCookie = await fetch('api/deleteCookiesRem', {
         method: 'DELETE',
       });
 
@@ -142,7 +142,7 @@ export const loginApi = () => {
 
   const chooseClient = async (clientID: Number, nameClient: String | null | undefined) => {
     try {
-      const response = await fetch('/frontend-api/cookieClienteid', {
+      const response = await fetch('api/cookieClienteid', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

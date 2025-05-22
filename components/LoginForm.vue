@@ -52,7 +52,7 @@
 import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { ref } from "vue";
-import { loginApi } from "../composables/loginApi";
+import { loginApi } from "../server/api/loginApi";
 import ProgressSpinner from "primevue/progressspinner";
 
 //Variables 'ref' para recibir la información del usuario
