@@ -141,5 +141,6 @@ listar();
 definePageMeta({
   layout: "default",
   middleware: "auth",
+  requiresAuth: true,
 });
 </script>

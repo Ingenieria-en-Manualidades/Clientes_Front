@@ -1,7 +1,7 @@
 import { computed, ref } from "vue";
 import { HeaderWithFilters } from "../../interfaces/filters";
 
-export const headers = computed<HeaderWithFilters[]>(() => [
+export const headers = ref<HeaderWithFilters[]>([
   {
     label: "id",
     options: null,
@@ -15,11 +15,14 @@ export const headers = computed<HeaderWithFilters[]>(() => [
     options: null,
   },
   {
-    label: "ultima actualización",
-    options: null,
+    label: "area",
+    options: {
+      atribute: "area_id_groot",
+      labels: [],
+    },
   },
   {
-    label: "area",
+    label: "version",
     options: null,
   },
   {
@@ -32,8 +35,8 @@ export const attributes = ref([
   "meta_unidades_id",
   "valor",
   "fecha_meta",
-  "updated_at",
   "area_id_groot",
+  "actualizaciones",
   "usuario",
 ]);
 

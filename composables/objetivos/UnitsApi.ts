@@ -80,7 +80,7 @@ export const useUnitsApi = () => {
   const updateMetaUnidades = async (objUnits: Units, meta_unidades_id: String | null):Promise<ApiPromiseStandard<any>> => {
     try {
       const response = await fetch(`${url}api/updateMetaUnidades`, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -88,6 +88,7 @@ export const useUnitsApi = () => {
           valor: objUnits.valor,
           usuario: objUnits.usuario,
           meta_unidades_id: meta_unidades_id,
+          motivo_actualizacion: objUnits.motivo_actualizacion,
         })
       });
 
@@ -125,7 +126,29 @@ export const useUnitsApi = () => {
     }
   }
   
+  //El método hace que las fechas dadas por el usuario esten con el formato correcto para filtrar.
+  const getFechas = (fecha1: Date, fecha2: Date | null) => {
+    const fechas: String[] = [];
+
+    if (fecha1.getMonth() + 1 > 0 && fecha1.getMonth() + 1 < 10) {
+      fechas.push(`${fecha1.getFullYear()}-0${fecha1.getMonth() + 1}`);
+    }else{
+      fechas.push(`${fecha1.getFullYear()}-${fecha1.getMonth() + 1}`);
+    }
+
+    if (fecha2 !== null) {
+      if (fecha2.getMonth() + 1 > 0 && fecha2.getMonth() + 1 < 10) {
+        fechas.push(`${fecha2.getFullYear()}-0${fecha2.getMonth() + 1}`);
+      }else{
+        fechas.push(`${fecha2.getFullYear()}-${fecha2.getMonth() + 1}`);
+      }
+    }
+
+    return fechas;
+  }
+
   return {
+    getFechas,
     getAreasImec,
     getMetaUnidades,
     listMetaUnidades,

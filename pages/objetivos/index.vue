@@ -13,5 +13,6 @@ import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composab
 definePageMeta({
   layout: "default",
   middleware: "auth",
+  requiresAuth: true,
 });
 </script>

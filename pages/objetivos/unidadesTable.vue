@@ -10,16 +10,31 @@
       :warningData="warningData"
       :errorData="errorData"
       :height="'250px'"
-      :positionFilters="'onTable'"
+      :positionFilters="'inTable'"
     >
+      <template #newFilter>
+        <DinamicosInputCalendar
+          v-model="dateSearch"
+          :label="'Buscar por fecha'"
+          :displayFlex="false"
+          :dateFormat="'yy/mm'"
+          :view="'month'"
+          :range="true"
+        />
+      </template>
       <template #newColumn>
-        <th class="bg-azulIENM text-white py-3 px-5" colspan="2">ACCIONES</th>
+        <th class="bg-azulIENM text-white py-3 px-5" colspan="3">ACCIONES</th>
       </template>
       <template #newCell="{ object }">
         <td>
           <ObjetivosModalUnitsDaily :metaUnidadesID="object.meta_unidades_id" />
         </td>
-        <td>
+        <td v-if="object.motivo_actualizacion">
+          <ObjetivosModalReasonUpdateGoal
+            :reason="object.motivo_actualizacion"
+          />
+        </td>
+        <td v-else>
           <ObjetivosModalUpdateUnits
             :metaUnidadesID="object.meta_unidades_id"
             :visibleButton="forms[0].visible"
@@ -41,59 +56,51 @@ import {
 } from "../../composables/objetivos/UnitsData";
 import { useUnitsApi } from "../../composables/objetivos/UnitsApi";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import type { WarningTable } from "../../interfaces/filters";
 
 const isLoading = ref<boolean>();
 const errorData = ref<boolean>(false);
 const clientID = useCookie("idCliente");
 const data = ref<any[]>([]);
+const cacheData = ref<any[]>([]);
+const dateSearch = ref<Date | null>(null);
 const warningData = ref<WarningTable>({
   success: false,
   label: "",
 });
 
 const toast = useToast();
-const { listMetaUnidades, getAreasImec } = useUnitsApi();
+const { listMetaUnidades, getAreasImec, getFechas } = useUnitsApi();
 
 const list = async () => {
   isLoading.value = true;
   const result = await getAreasImec(clientID.value);
-  console.log("areas:", result.data);
 
   if (result.success) {
     const resp = await listMetaUnidades(Number(clientID.value), result.data);
 
     if (resp.success) {
       data.value = resp.data;
+      cacheData.value = data.value;
+      // Delete the filter list, as the areas accumulate when changing clients.
+      headers.value[3].options?.labels.splice(
+        0,
+        headers.value[3].options?.labels.length
+      );
+
       if (data.value.length === 0) {
         warningData.value.success = true;
         warningData.value.label = "Sin ninguna meta registrada.";
       } else {
         for (const unit of data.value) {
-          const date = new Date(unit.updated_at);
-          if (date.getMonth() > -1 && date.getMonth() < 9) {
-            if (date.getDate() < 10) {
-              unit.updated_at = `${date.getFullYear()}-0${
-                date.getMonth() + 1
-              }-0${date.getDate()}`;
-            } else {
-              unit.updated_at = `${date.getFullYear()}-0${
-                date.getMonth() + 1
-              }-${date.getDate()}`;
-            }
-          } else {
-            if (date.getDate() < 10) {
-              unit.updated_at = `${date.getFullYear()}-${
-                date.getMonth() + 1
-              }-0${date.getDate()}`;
-            } else {
-              unit.updated_at = `${date.getFullYear()}-0${
-                date.getMonth() + 1
-              }-${date.getDate()}`;
-            }
-          }
+          // Change to thousand format for each goal value.
           unit.valor = formatoNumero(unit.valor);
+
+          // Check that if there is no area in the filter list, it adds it.
+          if (!headers.value[3].options?.labels.includes(unit.area_id_groot)) {
+            headers.value[3].options?.labels.push(unit.area_id_groot);
+          }
         }
       }
     } else {
@@ -142,8 +149,30 @@ const checkPermissions = () => {
 };
 checkPermissions();
 
+watch(dateSearch, async (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    if (dateSearch.value) {
+      const fechas = getFechas(dateSearch.value[0], dateSearch.value[1]);
+      if (!fechas[1]) {
+        data.value = cacheData.value.filter(
+          (goal) => goal.fecha_meta === fechas[0]
+        );
+      } else {
+        data.value = cacheData.value.filter(
+          (goal) => goal.fecha_meta >= fechas[0] && goal.fecha_meta <= fechas[1]
+        );
+      }
+    }
+
+    if (newVal === null) {
+      data.value = cacheData.value;
+    }
+  }
+});
+
 definePageMeta({
   layout: "default",
   middleware: "auth",
+  requiresAuth: true,
 });
 </script>

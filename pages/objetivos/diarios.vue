@@ -115,5 +115,6 @@ const getMeses = (fechas: Date[]): String[] => {
 definePageMeta({
   layout: "default",
   middleware: "auth",
+  requiresAuth: true,
 });
 </script>

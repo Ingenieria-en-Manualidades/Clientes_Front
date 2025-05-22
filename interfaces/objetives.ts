@@ -75,6 +75,7 @@ export interface Meta {
     cliente_endpoint_id: Number | null,
     area_id: Number | null,
     usuario: String | null | undefined,
+    motivo_actualizacion: String | null | undefined,
   }
 
   export interface UnitsDaily {

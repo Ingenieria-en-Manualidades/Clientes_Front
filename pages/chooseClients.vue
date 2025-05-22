@@ -116,5 +116,6 @@ const login = async () => {
 definePageMeta({
   layout: false,
   middleware: "auth",
+  requiresAuth: true,
 });
 </script>

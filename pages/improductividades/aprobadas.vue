@@ -269,7 +269,8 @@ const recargarTabla = () => {
 listar();
 
 definePageMeta({
-    layout: 'default',
-    middleware: "auth",
-  })
+  layout: "default",
+  middleware: "auth",
+  requiresAuth: true,
+});
 </script>

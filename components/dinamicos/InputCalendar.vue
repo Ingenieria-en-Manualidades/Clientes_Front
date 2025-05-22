@@ -22,6 +22,7 @@
       inputClass="w-full"
       iconDisplay="input"
       showButtonBar
+      :selectionMode="range ? 'range' : undefined"
     />
     <p class="text-red-500 text-sm font-manrope-b">{{ warning }}</p>
   </div>
@@ -64,6 +65,10 @@ const props = defineProps({
   },
   maxDate: {
     type: Date,
+    required: false,
+  },
+  range: {
+    type: Boolean,
     required: false,
   },
 });

@@ -5,7 +5,7 @@
   >
     <div
       @click="visible = !visible"
-      class="flex items-center border-[1px] border-black p-[2px] rounded bg-white cursor-pointer"
+      class="flex items-center border-[1px] border-black p-[2px] rounded bg-white text-black cursor-pointer ml-1"
     >
       <p v-if="placeholder" class="w-[90%] mx-1">{{ placeholder }}</p>
       <i class="pi pi-angle-down"></i>
@@ -46,7 +46,7 @@
               ]"
             ></i>
           </p>
-          <p>{{ option.replace(" ", "_") }}</p>
+          <p class="text-black">{{ option.replace(" ", "_") }}</p>
         </li>
       </label>
     </ul>
