@@ -1,6 +1,6 @@
 import { useCookie, useRuntimeConfig } from "nuxt/app";
-import { encryptData } from "../../composables/login/EncryptedData";
-import { ApiPromiseStandard } from "../../interfaces/objetives";
+import { encryptData } from "./login/EncryptedData";
+import { ApiPromiseStandard } from "../interfaces/objetives";
 
 export const loginApi = () => {
 
