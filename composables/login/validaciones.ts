@@ -62,7 +62,7 @@ export const useValidaciones = () => {
       
       // Llamamos al token del usuario y verificamos su existencia.
       if (!token.value) {
-        const resultCookie = await fetch('api/deleteCookiesRem', {
+        const resultCookie = await fetch('api/front/deleteCookiesRem', {
           method: 'DELETE',
         });
         token.value = "undefined";
