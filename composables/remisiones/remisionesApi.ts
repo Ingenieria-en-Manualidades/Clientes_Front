@@ -41,7 +41,7 @@ export const useRemisionesApi = () => {
       const response = await fetch(`${url}/api/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
         method: 'GET',
         headers: {
-          'CLIENT_PASS': `${token}`        },
+          'Authorization': `${token}`        },
       });
       
       //Guardamos los resultados de la API en una variable con la interfaz de las remisiones 'Remision[]'.
@@ -66,7 +66,7 @@ export const useRemisionesApi = () => {
     try{
       const response = await fetch(`${url}/api/RemisionOnline/saveGestionRemisionClienteAPI`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'CLIENT_PASS': `${token}` },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `${token}` },
         body: JSON.stringify(remision),
       });
       const data = await response.json();
@@ -106,7 +106,7 @@ export const useRemisionesApi = () => {
       const response = await fetch(`${url}/api/RemisionOnline/ListarRemisionesAPI/${cliente}`, {
         method: 'GET',
         headers: {
-          'CLIENT_PASS': `${token}`,
+          'Authorization': `${token}`,
         },
       });
 

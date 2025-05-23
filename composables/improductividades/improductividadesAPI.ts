@@ -15,7 +15,7 @@ export const useImproductividadesAPI = () => {
       const response = await fetch(`${url}/api/MaquilaOnline/getListImprodAPI/${idCliente}`, {
         method: 'GET',
         headers: {
-          'CLIENT_PASS': `${token}`,
+          'Authorization': `${token}`,
         }
       });
 
@@ -39,7 +39,7 @@ export const useImproductividadesAPI = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'CLIENT_PASS': `${token}`
+          'Authorization': `${token}`
         },
         body: JSON.stringify(improductividad),
       });
