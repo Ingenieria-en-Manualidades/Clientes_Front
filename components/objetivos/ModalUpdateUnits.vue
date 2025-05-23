@@ -14,7 +14,7 @@
       :header="'Actualizar meta de unidades'"
       :style="{ width: '30%' }"
     >
-      <div class="border border-black rounded px-20 py-5">
+      <div class="border border-black rounded px-14 py-5">
         <form>
           <DinamicosInputText
             v-model="date"
@@ -27,6 +27,11 @@
             :label="'Unidades'"
             :displayFlex="false"
             :warning="unitsFail"
+          />
+          <DinamicosTextArea
+            v-model="reasonUpdate"
+            :label="'Motivo de actualización'"
+            :warning="reasonUpdateFail"
           />
           <button
             type="button"
@@ -53,6 +58,8 @@ const visible = ref<boolean>(false);
 const date = ref<String | null>(null);
 const units = ref<string | null>(null);
 const unitsFail = ref<String | null>(null);
+const reasonUpdate = ref<String | null>(null);
+const reasonUpdateFail = ref<String | null>(null);
 
 const toast = useToast();
 const { getMetaUnidades, updateMetaUnidades } = useUnitsApi();
@@ -87,15 +94,22 @@ const list = async () => {
 
 const update = async () => {
   unitsFail.value = "";
-  if (!units.value) unitsFail.value = "* Este campo es obligatorio.";
+  reasonUpdateFail.value = "";
 
-  if (!unitsFail.value) {
+  if (!units.value) unitsFail.value = "* Este campo es obligatorio.";
+  if (!reasonUpdate.value)
+    reasonUpdateFail.value = "* Este campo es obligatorio.";
+
+  if (!unitsFail.value && !reasonUpdateFail.value) {
     const objUnits: Units = {
       valor: Number(units.value?.replace(".", "")),
       fecha_meta: null,
       cliente_endpoint_id: null,
       usuario: user.value,
+      area_id: null,
+      motivo_actualizacion: reasonUpdate.value,
     };
+
     const resp = await updateMetaUnidades(
       objUnits,
       String(props.metaUnidadesID)

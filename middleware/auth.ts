@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
    
        const resultado = await verificarLogin();
    
-       if (!resultado) {
+       if (!resultado && to.meta.requiresAuth) {
            return navigateTo("/login");
        }
 })

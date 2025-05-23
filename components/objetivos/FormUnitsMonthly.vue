@@ -95,6 +95,7 @@ const submitUnitsMonthly = async () => {
           cliente_endpoint_id: Number(clientID.value),
           area_id: areaChoose.value,
           usuario: user.value,
+          motivo_actualizacion: null,
         };
 
         const result = await createMetaUnidades(objUnits);
