@@ -7,6 +7,7 @@ export const loginApi = () => {
   const config = useRuntimeConfig();
 
   const url = config.public.apiBackendCliente;
+  
     /**
    * Verifica dentro de la BD si el usuario existe y si es el caso crea tres cookies (idCliente, token y nombredDeUsuario) para que la página funcione y duran lo que dure la sesión.
    * Metodo importado en el componente 'LoginForm'.
@@ -44,7 +45,7 @@ export const loginApi = () => {
       }
       
       //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
-      const restCookies = await fetch('/api/cookiesRemisiones', {
+      const restCookies = await fetch('api/front/cookiesRemisiones', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ export const loginApi = () => {
       const response = await resultado.json();
       
       // Borramos todas las cookies(token, idCliente y usuario) y retornamos mensaje exitoso del endpoint.
-      const resultCookie = await fetch('/api/deleteCookiesRem', {
+      const resultCookie = await fetch('api/front/deleteCookiesRem', {
         method: 'DELETE',
       });
 
@@ -142,7 +143,7 @@ export const loginApi = () => {
 
   const chooseClient = async (clientID: Number, nameClient: String | null | undefined) => {
     try {
-      const response = await fetch('/api/cookieClienteid', {
+      const response = await fetch('api/front/cookieClienteid', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
