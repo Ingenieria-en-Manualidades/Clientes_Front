@@ -41,7 +41,8 @@ export const useRemisionesApi = () => {
       const response = await fetch(`${url}/api/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
         method: 'GET',
         headers: {
-          'Authorization': `${token}`,
+          'CLIENT_APP': `${token}`,
+          'CLIENT_PASS':"Authorization"
         },
       });
       
