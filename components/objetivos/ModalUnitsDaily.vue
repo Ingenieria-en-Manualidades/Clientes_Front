@@ -21,7 +21,7 @@
           :loading="isLoading"
           :warningData="warningData"
           :errorData="errorData"
-          :height="'200px'"
+          :height="'230px'"
           :positionFilters="'onTable'"
         >
           <template #newColumn>
@@ -30,8 +30,7 @@
           <template #newCell="{ object }">
             <td>
               <ObjetivosModalUpdateUnitsDaily
-                :fecha="object.fecha_programacion"
-                :valor="object.valor"
+                v-if="checkDeadlines(object.fecha_programacion)"
                 :unidadesDiariasID="object.unidades_diarias_id"
                 @listTable="list"
                 :visibleButton="forms[0].visible"
@@ -144,6 +143,22 @@ const checkPermissions = () => {
   });
 };
 checkPermissions();
+
+const checkDeadlines = (schedulingDate: string) => {
+  const today = new Date();
+  const minDate = new Date(today);
+  const maxDate = new Date(today);
+  const unitsDate = new Date(schedulingDate);
+
+  minDate.setDate(minDate.getDate() - 4);
+  maxDate.setDate(maxDate.getDate() + 1);
+
+  if (unitsDate >= minDate && unitsDate <= maxDate) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const formatoNumero = (numero: number): string => {
   return new Intl.NumberFormat("es-ES").format(numero);

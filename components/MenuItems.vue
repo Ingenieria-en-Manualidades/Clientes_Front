@@ -3,12 +3,21 @@
     class="p-[1%] m-[0.5%] rounded-md cursor-pointer hover:bg-gray-200 text-center"
     @click="toggle"
   >
-    <div class="text-xs md:text-base">
+    <div v-if="!isLoading" class="text-xs md:text-base">
       <p>
         <i class="pi pi-user text-azulIENM text-lg mt-[8%] lg:mt-0 mr-2"></i>
         <span class="font-manrope-b text-verdeOscIENM">{{ usuario }}</span>
       </p>
       <p class="font-manrope-b text-azulIENM">{{ client }}</p>
+    </div>
+    <div v-else>
+      <ProgressSpinner
+        style="width: 50px; height: 50px"
+        strokeWidth="8"
+        fill="transparent"
+        animationDuration=".10s"
+        aria-label="Custom ProgressSpinner"
+      />
     </div>
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true">
       <template #item="{ item, props }">
@@ -57,18 +66,6 @@
         </a>
       </template>
     </Menu>
-  </div>
-  <div
-    v-if="isLoading"
-    class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-20 z-10"
-  >
-    <ProgressSpinner
-      style="width: 200px; height: 200px"
-      strokeWidth="8"
-      fill="transparent"
-      animationDuration=".10s"
-      aria-label="Custom ProgressSpinner"
-    />
   </div>
 </template>
 

@@ -1,7 +1,9 @@
 <template>
   <title>Bienvenido a IENM</title>
   <div class="flex justify-center items-center mt-20">
-    <div class="border-2 rounded-lg shadow w-[70%] md:w-[65%] lg:inline-flex">
+    <div
+      class="border-2 rounded-lg shadow min-w-[250px] max-w-[400px] md:w-[65%] lg:max-w-screen-lg lg:inline-flex"
+    >
       <div class="w-1/2 bg-cover pt-4 pb-4">
         <img
           src="/assets/img/im-policromia-vert.png"

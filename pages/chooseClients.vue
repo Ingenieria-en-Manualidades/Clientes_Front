@@ -2,12 +2,14 @@
   <div
     class="flex justify-center p-24 min-h-screen bg-gradient-to-t from-blue-100 to-blue-400"
   >
-    <div class="w-[30%] shadow-2xl rounded-lg py-10 max-h-[350px] bg-white">
+    <div
+      class="w-[30%] shadow-2xl rounded-lg py-10 min-w-[300px] max-w-[380px] max-h-[350px] bg-white"
+    >
       <div class="flex justify-center pb-7">
         <img
           src="/assets/img/ienmLogito.png"
           alt="Logito IENM"
-          class="w-[100%] md:w-[70%]"
+          class="w-[70%]"
         />
       </div>
       <div class="px-14">

@@ -73,7 +73,7 @@ export const loginApi = () => {
       throw "Error desconocido a la hora de iniciar";
     }
   };
-
+  
   /**
    * Verifica aun la existencia del token como cookie y si es el caso lo borra en la BD y borra las tres cookies para luego retornar el resultado del procedimiento.
    * Método importado en el componente 'MenuItems'.
