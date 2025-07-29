@@ -14,3 +14,8 @@ export interface OptionDropdown {
     label: string | null,
     value: string | Number | null,
 }
+
+export interface Regex {
+    regex: string,
+    check: boolean,
+}

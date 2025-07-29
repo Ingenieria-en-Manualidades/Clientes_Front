@@ -1,5 +1,5 @@
 import { useRuntimeConfig } from 'nuxt/app';
-import { Units, ApiPromiseStandard, Area } from "../../interfaces/objetives";
+import type { Units, ApiPromiseStandard, Area } from "../../interfaces/objetives";
 
 export const useUnitsApi = () => {
   const config = useRuntimeConfig();

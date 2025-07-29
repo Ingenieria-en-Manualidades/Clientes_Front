@@ -1,6 +1,6 @@
 import { useCookie, useRuntimeConfig } from "nuxt/app";
-import { encryptData } from "./login/EncryptedData";
-import { ApiPromiseStandard } from "../interfaces/objetives";
+import { encryptData, encryptPassword } from "./login/EncryptedData";
+import type { ApiPromiseStandard } from "../interfaces/objetives";
 
 export const loginApi = () => {
 
@@ -28,7 +28,6 @@ export const loginApi = () => {
       
       if (!resultado.ok) {
         const response = await resultado.json();
-        console.log("RESPONSE: ", response);
         return {
           success: false,
           status: 'error',
@@ -38,6 +37,7 @@ export const loginApi = () => {
       }
 
       const response = await resultado.json();
+      
       let permisos = [];
 
       for (const p of response.permissions) {
@@ -63,10 +63,14 @@ export const loginApi = () => {
         throw "Error a la hora de crear las cookies";
       }
 
+      if (new Date(response.reset_password) <= new Date()) {
+        return {success: true, resetPassword: true};
+      }
+
       if (response.clientes_endpoint_ids.length > 1) {
-        return {success: true, skipChooseClient: false};
+        return {success: true, skipChooseClient: false, resetPassword: false};
       } else {
-        return {success: true, skipChooseClient: true, clientID: response.clientes_endpoint_ids};
+        return {success: true, skipChooseClient: true,  resetPassword: false, clientID: response.clientes_endpoint_ids};
       }
     } catch (error) {
       console.error(error);
@@ -164,6 +168,40 @@ export const loginApi = () => {
       return {success: false, title: "Error desconocido.", message: "Por favor recargar la página."}
     }
   }
+
+  /**
+   * Method that updates the user's password upon expiration.
+   * @param newPassword New user password verified.
+   * @returns If successful, it returns an object with the success message, and if not, an object with the error message.
+   */
+  const setUpdatePassword = async (newPassword: string):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const token = useCookie("token");
+      const encryptedPassword = encryptPassword(newPassword); // Encrypt the new password.
+      const response = await fetch(`${url}api/updatePasswordExpiration`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token.value}`
+        },
+        body: JSON.stringify({
+          encrypted_password: encryptedPassword,
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        return {success: true, title: result.title, message: result.message};
+      } else {
+        if (result.error) console.error("Error al actualizar la contraseña por expiración: ", result.error);
+        return {success: false, title: result.title, message: result.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de actualizar la contraseña por expiración: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor recargar la página."}
+    }
+  }
   //NO USAR
   // const getClientsByUserId = async ():Promise<ApiPromiseStandard<any>> => {
   //   try {
@@ -190,6 +228,7 @@ export const loginApi = () => {
     logout,
     chooseClient,
     getClientsByIds,
+    setUpdatePassword,
     // getClientsByUserId
   };
 };

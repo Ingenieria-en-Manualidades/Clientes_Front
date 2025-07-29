@@ -1,4 +1,4 @@
-import { RefSymbol } from "@vue/reactivity";
+// import { RefSymbol } from "@vue/reactivity";
 import { useCookie, useRuntimeConfig } from "nuxt/app";
 
 export const useValidaciones = () => {
