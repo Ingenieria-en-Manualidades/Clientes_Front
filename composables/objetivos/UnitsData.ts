@@ -1,5 +1,5 @@
 import { computed, ref } from "vue";
-import { HeaderWithFilters } from "../../interfaces/filters";
+import type { HeaderWithFilters } from "../../interfaces/filters";
 
 export const headers = ref<HeaderWithFilters[]>([
   {

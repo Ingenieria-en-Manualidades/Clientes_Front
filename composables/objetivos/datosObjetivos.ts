@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { Objetivos, Meta } from "../../interfaces/objetives";
+import type { Objetivos, Meta } from "../../interfaces/objetives";
 
 export const datosObjetivos = () => { 
 
