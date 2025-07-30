@@ -130,7 +130,7 @@ const setResetPassword = async () => {
       if (arrayClients.length > 1) {
         await router.push("/chooseClients");
       } else {
-        // If there is only one client, get their data, create the client cookies and redirect them to the main client.
+        // If there is only one client, get their data, create the client cookies and redirect them to the main client .
         const dataClient = await getClientsByIds(arrayClients);
         if (dataClient.success) {
           const response = await chooseClient(dataClient.data[0].cliente_endpoint_id,dataClient.data[0].nombre);
