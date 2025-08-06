@@ -152,7 +152,7 @@ const setResetPassword = async () => {
 
 definePageMeta({
   layout: false,
-  middleware: "auth",
+  middleware: "auth-reset-password",
   requiresAuth: true,
 });
 </script>

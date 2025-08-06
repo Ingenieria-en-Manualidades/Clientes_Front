@@ -1,5 +1,6 @@
 // import { RefSymbol } from "@vue/reactivity";
 import { useCookie, useRuntimeConfig } from "nuxt/app";
+import type { ApiPromiseStandard } from "../../interfaces/objetives";
 
 export const useValidaciones = () => {
   /**
@@ -56,7 +57,7 @@ export const useValidaciones = () => {
     }
   }
 
-  const verificarLogin = async () => {
+  const verificarLogin = async ():Promise<ApiPromiseStandard<any>> => {
     try {
       const token = useCookie("token");
       
@@ -70,7 +71,7 @@ export const useValidaciones = () => {
         if (!resultCookie) {
           console.error("Error a la hora de eliminar cookies.");
         }
-        return false;
+        return {success: false, title: "Token inexistente.", message: 'Fallo en la existencia del token.'};
       }else{
         // Llamamos al endpoint "logout" del 'Modulo-Cliente Backend' dandole el token del usuario para borrarlo en la BD.
         const response = await fetch(`${url}api/verificarTokenLogin`, {
@@ -81,23 +82,22 @@ export const useValidaciones = () => {
             },
         });
         
-        
+        const resultado = await response.json();
         if (!response.ok) {
-          console.error(`Error en la respuesta del servidor: ${response.status}`);
-          return false;
+          if (resultado.error) console.error("Error en la respuesta del servidor: ", resultado.error);
+          return {success: false, title: resultado.title, message: resultado.message};
         }
 
         const contentType = response.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
-          const resultado = await response.json();
-          return resultado.success;
+          return {success: true, title: "", message: "", data: resultado};
         } else {
-          return false;
+          return {success: false, title: "Error de tipo de contenido.", message: 'El servidor no devolvió JSON como se esperaba.'};
         }
       }
     } catch (error) {
-      console.error("Error a la hora de verificar el login: ", error);
-      return false
+      console.error("Error a la hora de verificar el login dentro del catch: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor recargar la página."};
     }
   }
 
