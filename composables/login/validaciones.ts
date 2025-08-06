@@ -57,11 +57,15 @@ export const useValidaciones = () => {
     }
   }
 
+  /**
+   * Method that verifies whether the user is logged in or not.
+   * @returns If not verified, it returns false, and if not, it returns an error message.
+   */
   const verificarLogin = async ():Promise<ApiPromiseStandard<any>> => {
     try {
       const token = useCookie("token");
       
-      // Llamamos al token del usuario y verificamos su existencia.
+      // We call the user token and verify its existence.
       if (!token.value) {
         const resultCookie = await fetch('api/front/deleteCookiesRem', {
           method: 'DELETE',
@@ -73,7 +77,7 @@ export const useValidaciones = () => {
         }
         return {success: false, title: "Token inexistente.", message: 'Fallo en la existencia del token.'};
       }else{
-        // Llamamos al endpoint "logout" del 'Modulo-Cliente Backend' dandole el token del usuario para borrarlo en la BD.
+        // We call the 'Backend Client Module' endpoint "logout" giving it the user token to delete it from the DB.
         const response = await fetch(`${url}api/verificarTokenLogin`, {
           method: 'POST',
           headers: {

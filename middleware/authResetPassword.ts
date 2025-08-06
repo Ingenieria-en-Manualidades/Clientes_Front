@@ -9,11 +9,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         if (!resultado.data.success) {
             return navigateTo("/login");
         }
-        // Obtener solo la parte de fecha de today (sin hora)
+        // Get the current date with zero hours.
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        // Convertir reset_password a Date para comparar correctamente solo la fecha
+        // Convert reset_password to Date to correctly compare only the date.
         const resetPasswordDate = new Date(resultado.data.reset_password + "T00:00:00");
 
         if (resetPasswordDate > today) {
