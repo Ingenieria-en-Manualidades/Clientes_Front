@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'w-full font-manrope-r relative py-1',
+      'w-full font-manrope-r relative py-1 ',
       displayFlex ? 'flex gap-1' : 'block',
     ]"
   >
@@ -19,7 +19,7 @@
       :maxDate="maxDate"
       showIcon
       fluid
-      inputClass="w-full"
+      inputClass="w-full "
       iconDisplay="input"
       showButtonBar
       :selectionMode="range ? 'range' : undefined"

@@ -33,9 +33,9 @@ export default {
 
             // Shape
             'appearance-none',
-            { 'rounded-md': !props.showIcon || props.iconDisplay == 'input' },
-            { 'rounded-l-md  flex-1 pr-9': props.showIcon && props.iconDisplay !== 'input' },
-            { 'rounded-md flex-1 pr-9': props.showIcon && props.iconDisplay === 'input' },
+            { 'rounded-3xl  shadow-2xl': !props.showIcon || props.iconDisplay == 'input' },
+            { 'rounded-3xl  shadow-2xl  flex-1 pr-9': props.showIcon && props.iconDisplay !== 'input' },
+            { 'rounded-3xl  shadow-2xl flex-1 pr-9': props.showIcon && props.iconDisplay === 'input' },
 
             // Transitions
             'transition-colors',

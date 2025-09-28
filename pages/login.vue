@@ -1,6 +1,6 @@
 <template>
   <title>Bienvenido a IENM</title>
-  <div class="flex justify-center items-center mt-20">
+  <!-- <div class="flex justify-center items-center mt-20">
     <div
       class="border-2 rounded-lg shadow min-w-[250px] max-w-[400px] md:w-[65%] lg:max-w-screen-lg lg:inline-flex"
     >
@@ -27,6 +27,10 @@
         <LoginForm />
       </div>
     </div>
+  </div> -->
+
+<div class="w-full flex flex-col items-start justify-center">
+    <LoginForm />
   </div>
 </template>
 

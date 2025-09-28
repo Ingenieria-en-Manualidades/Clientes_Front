@@ -29,7 +29,7 @@
         type="text"
         v-model="calInspSol"
         maxlength="3"
-        class="border-[1px] border-gray-500 rounded-md p-2 outline-none w-full"
+        class="border-[1px] border-gray-500 rounded-3xl p-2 outline-none w-full"
       />
       <div class="mt-5">
         <input
@@ -41,7 +41,7 @@
         />
         <label
           for="fileSol"
-          class="flex justify-center mt-3 py-2 bg-[#c86a2b] font-bold text-white cursor-pointer rounded-lg"
+          class="flex justify-center mt-3 py-2 bg-[#c86a2b] font-bold text-white cursor-pointer rounded-3xl"
         >
           <i class="pi pi-upload pr-3 pt-1"></i> Cargar evidencia</label
         >
@@ -67,7 +67,7 @@
       <div class="flex justify-center font-bold mt-5">
         <button
           type="button"
-          class="bg-[#4789c8] w-full py-2 rounded-lg text-white"
+          class="bg-[#4789c8] w-full py-2 rounded-3xl text-white"
           @click="submitSol()"
         >
           Guardar

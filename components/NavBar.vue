@@ -1,9 +1,22 @@
 <template>
-  <nav class="w-full inline-flex border-gray-300 border-b-[1px]">
-    <div class="w-[23%] p-[2%] md:py-[1.5%] lg:py-[1%] flex">
-      <MenuLateral @extenderMain="extenderMain" />
+  <header class="fixed inset-x-0 top-0 z-50 flex items-center justify-between
+           bg-white backdrop-blur border-b border-ink-200 shadow-sm
+           px-2 md:px-3 py-1">
+    <div class="flex items-center gap-2">
+      <NavBarButton
+        @click="$emit('toggleMenu')"
+        :isOpen="isOpen"
+        class="lg:hidden grid h-11 w-11 place-items-center rounded-xl
+               text-brand-500 hover:text-brand-600
+               hover:bg-brand-500/10 focus:outline-none
+               focus-visible:ring-2 focus-visible:ring-brand-500/60
+               transition z-50"
+        :aria-expanded="String(isOpen)"
+        aria-controls="app-sidebar"
+        aria-label="Abrir menú"
+      />
       <img
-        src="/assets/img/ienmLogito.png"
+        src="/assets/img/svg/favicon2.png" 
         alt="Logo IENM"
         class="min-w-[115px] w-[160px]"
       />
@@ -31,7 +44,7 @@
       </button>
       <MenuItems :usuario="props.usuario" :client="client" />
     </div>
-  </nav>
+  </header>
 </template>
 
 <script lang="ts" setup>
@@ -42,6 +55,18 @@ import { useRouter } from "vue-router";
 import { defineProps, defineEmits, ref } from "vue";
 import { useRemisionesApi } from "../composables/remisiones/remisionesApi";
 
+const props = defineProps<{
+  usuario: string | null;
+  isOpen: boolean;
+}>();
+
+
+// Definición del evento emitido
+const emit = defineEmits<{
+  (e: "toggleMenu"): void;
+  (e: "extenderMain"): void;
+}>();
+
 const route = useRouter(); //Variable que se utiliza para cambiar la ruta.
 const nRemisiones = useCookie("numRem", {
   sameSite: "none",
@@ -49,13 +74,9 @@ const nRemisiones = useCookie("numRem", {
 });
 const idCliente = useCookie("idCliente");
 const client = useCookie("nameClient");
-//Metodo emit importado desde el componente
-const emit = defineEmits(["extenderMain"]);
 const { getNumRemisionesPen } = useRemisionesApi();
 
-const props = defineProps({
-  usuario: String || null,
-});
+
 //Método importado para cambiar el tamaño del main al mismo tiempo que el menú desplegable
 const extenderMain = () => {
   emit("extenderMain");
