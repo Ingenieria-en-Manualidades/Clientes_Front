@@ -4,17 +4,17 @@
   >
   <title>Elegir cliente</title>
     <div
-      class="w-[30%] shadow-2xl rounded-lg py-10 min-w-[300px] max-w-[380px] max-h-[350px] bg-white"
+      class="w-[30%] shadow-2xl rounded-2xl py-1 min-w-[300px] max-w-[380px] max-h-[350px] bg-white"
     >
-      <div class="flex justify-center pb-7">
+      <div class="flex justify-center">
         <img
-          src="/assets/img/ienmLogito.png"
+          src="/assets/img/IM INGENIERIA CENTRADO-slogan.png"
           alt="Logito IENM"
-          class="w-[70%]"
+          class="w-[60%]"
         />
       </div>
       <div class="px-14">
-        <form>
+        <form class="">
           <DinamicosDropDownList
             v-model="clientChoose"
             :label="'Seleccionar cliente'"
@@ -25,7 +25,9 @@
             type="button"
             @click="login"
             :class="[
-              'w-full font-manrope-b text-center text-white p-3 rounded mt-5 items-center',
+              'w-1/2 mx-auto',
+              'flex items-center justify-center gap-2',
+              'font-manrope-b text-white p-1 rounded-3xl mt-5',
               isLoading ? 'bg-slate-300' : 'bg-[#4789c8]',
             ]"
           >

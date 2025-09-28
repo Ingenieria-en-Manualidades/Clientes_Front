@@ -15,6 +15,13 @@ export const useModulos = () => {
     permission: 'view'
   },
   {
+    nombre:"Encuesta",
+    icono: "pi pi-file",
+    ruta:"/encuesta/",
+    visible:"false",
+    permission:"view_encuesta"
+  },
+  {
     icono: "pi pi-bell",
     nombre: "Remisiones",
     ruta: "/remisiones",

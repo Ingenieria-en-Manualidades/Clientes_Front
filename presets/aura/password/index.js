@@ -15,7 +15,7 @@ export default {
 
             // Shape
             'border-0 dark:border',
-            'shadow-md rounded-md',
+            'shadow-md rounded-3xl',
 
             // Colors
             'bg-surface-0 dark:bg-surface-900',
@@ -81,7 +81,7 @@ export default {
                 'w-full',
 
                 // Shape
-                { 'rounded-md': parent.instance.$name !== 'InputGroup' },
+                { 'rounded-3xl': parent.instance.$name !== 'InputGroup' },
                 { 'first:rounded-l-md rounded-none last:rounded-r-md': parent.instance.$name == 'InputGroup' },
                 { 'border-0 border-y border-l last:border-r': parent.instance.$name == 'InputGroup' },
                 { 'first:ml-0 -ml-px': parent.instance.$name == 'InputGroup' && !props.showButtons },

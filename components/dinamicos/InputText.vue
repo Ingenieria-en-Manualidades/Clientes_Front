@@ -18,8 +18,8 @@
       :maxlength="limitMax"
       :disabled="disabled"
       :class="[
-        'w-full rounded outline-none p-1',
-        disabled ? 'bg-gray-200 border border-gray-300' : 'border border-black',
+        'w-full rounded-3xl outline-none p-1 shadow-2xl',
+        disabled ? 'bg-gray-200 border border-gray-400' : 'border border-gray-300',
       ]"
     />
     <p class="text-red-500 text-sm font-manrope-b">{{ warning }}</p>

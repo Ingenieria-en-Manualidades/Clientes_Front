@@ -13,7 +13,7 @@
       header="MOTIVO DE ACTUALIZACIÓN"
       class="dialog"
     >
-      <p class="border-[1px] border-red-500 rounded-lg p-2">
+      <p class="border-[1px] border-red-500 rounded-3xl p-2">
         {{ props.reason }}
       </p>
     </Dialog>

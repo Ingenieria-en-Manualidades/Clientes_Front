@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="bg-azulClaroIENM px-3 py-[3px] rounded hover:bg-azulIENM my-1"
+    class="bg-azulClaroIENM px-3 py-[3px] rounded-3xl hover:bg-azulIENM my-1"
     @click="list"
   >
     <i class="pi pi-box text-white"></i>
@@ -13,7 +13,7 @@
       :header="''"
       :style="{ width: '80%' }"
     >
-      <div class="border border-black rounded px-5 py-3 mt-2">
+      <div class="border border-black rounded-3xl px-5 py-3 mt-2">
         <DinamicosTableFilters
           :headers="headersUnitsDaily"
           :atributes="attributesUnitsDaily"

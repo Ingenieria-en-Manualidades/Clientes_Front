@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+
 /* Para navegadores basados en WebKit (como Chrome, Safari) */
 .webkit-scrollbar {
     display: none; /* Oculta la barra de desplazamiento */
