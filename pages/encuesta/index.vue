@@ -1,26 +1,24 @@
 <template>
-  <div class="relative h-full rounded-3xl flex">
+<div class="relative h-full rounded-3xl flex flex-col lg:flex-row">
     <!-- Columna izquierda: 20% -->
-    <aside
-      class="w-full lg:w-[20%] flex flex-col items-center justify-center p-4"
-    >
+    <aside class="w-full md:w-full sm:w-full sm:h-[30%] lg:w-[20%] flex flex-col items-center justify-center p-4">
+
       <header class="text-center w-full">
         <img
           src="/assets/img/IM INGENIERIA CENTRADO-slogan.png"
           alt="IM Ingeniería"
-          class="w-full h-auto mb-6"
+          class="w-2/3 max-w-[200px] mb-4 mx-auto"
         />
         <img
           src="/assets/img/LOGOS-IM.png"
           alt="Certificaciones"
-          class="w-full h-auto"
+          class="w-2/3 max-w-[200px] mb-4 mx-auto"
         />
       </header>
     </aside>
 
-    <section
-      class="w-full h-full rounded-r-3xl overflow-auto lg:w-[80%] flex flex-col items-center bg-gradient-to-br from-azulIENM/10 via-white to-azulClaroIENM/20"
-    >
+    <section class="w-full h-auto lg:h-full rounded-none lg:rounded-r-3xl overflow-auto flex flex-col items-center bg-gradient-to-br from-azulIENM/10 via-white to-azulClaroIENM/20">
+
       <h1
         class="mx-auto mt-4 p-4 text-center inline-block text-azulIENM text-xl md:text-2xl font-manrope-b border-b-4 border-amarilloIENM"
       >
