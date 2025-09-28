@@ -279,15 +279,19 @@ const handleSubmit = async () => {
 
     //Enviando al usuario al "dashboard" de las remisiones en caso de que el usuario este registrado.
     if (resultado.success) {
-      if (resultado.skipChooseClient) {
-        const success = await createCookieClient(resultado.clientID);
-        if (success) {
-          await router.push("/");
-        }
+      if (resultado.resetPassword) {
+        await router.push("/resetPasswordExpiration");
       } else {
-        await router.push("/chooseClients");
+        if (resultado.skipChooseClient) {
+          const success = await createCookieClient(resultado.clientID);
+          if (success) {
+            await router.push("/");
+          }
+        } else {
+          await router.push("/chooseClients");
+        }
+        isLoading.value = false;
       }
-      isLoading.value = false;
     } else {
       isLoading.value = false;
 
@@ -304,7 +308,6 @@ const handleSubmit = async () => {
 
 const createCookieClient = async (clientID: any) => {
   const resultado = await getClientsByIds([clientID]);
-  console.log("resultado: ", resultado);
 
   if (resultado.success) {
     const response = await chooseClient(

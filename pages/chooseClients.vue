@@ -2,6 +2,7 @@
   <div
     class="flex justify-center p-24 min-h-screen bg-gradient-to-t from-blue-100 to-blue-400"
   >
+  <title>Elegir cliente</title>
     <div
       class="w-[30%] shadow-2xl rounded-2xl py-1 min-w-[300px] max-w-[380px] max-h-[350px] bg-white"
     >
@@ -119,7 +120,7 @@ const login = async () => {
 
 definePageMeta({
   layout: false,
-  middleware: "auth",
+  middleware: "auth-choose-clients",
   requiresAuth: true,
 });
 </script>

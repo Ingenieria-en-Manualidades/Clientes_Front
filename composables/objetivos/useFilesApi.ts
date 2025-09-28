@@ -1,5 +1,5 @@
 import { useRuntimeConfig } from 'nuxt/app';
-import { ApiPromise, UpdateArchivo, Archivo} from '../../interfaces/objetives';
+import type { ApiPromise, UpdateArchivo, Archivo} from '../../interfaces/objetives';
 
 export const useFilesApi = () => {
   const config = useRuntimeConfig();
