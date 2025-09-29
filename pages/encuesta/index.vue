@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-full rounded-3xl flex">
+<div class="relative h-full rounded-3xl flex flex-col lg:flex-row">
     <!-- Columna izquierda: 20% -->
     <aside
       class="w-full lg:w-[20%] flex flex-col items-center justify-center p-4"
@@ -8,12 +8,12 @@
         <img
           src="/assets/img/IM INGENIERIA CENTRADO-slogan.png"
           alt="IM Ingeniería"
-          class="w-full h-auto mb-6"
+          class="w-full h-auto mx-auto  mb-4 max-w-[120px] sm:max-w-[160px] md:max-w-[220px]"
         />
         <img
           src="/assets/img/LOGOS-IM.png"
           alt="Certificaciones"
-          class="w-full h-auto"
+          class="w-full h-auto mx-auto  mb-4 max-w-[120px] sm:max-w-[160px] md:max-w-[220px]"
         />
       </header>
     </aside>
