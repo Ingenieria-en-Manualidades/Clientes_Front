@@ -1,5 +1,6 @@
 import { useRuntimeConfig } from 'nuxt/app';
 import type { ApiPromiseStandard } from "../../interfaces/objetives";
+import type { Survey, AnswerSurvey } from "../../interfaces/survey";
 import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
 
 export const useSurveyApis = () => {
@@ -67,8 +68,59 @@ export const useSurveyApis = () => {
     }
   }
 
+  const getInfoUser = async (username: string):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/getInformationUser/${username}`, {
+        method: 'get',
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return {success: true, title: "", message: "", data: data.data};
+      } else {
+        if (data.error) console.error("Error a la hora de retornar los clientes: ", data.error);
+        return {success: false, title: data.title, message: data.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de retornar los clientes: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
+    }
+  }
+
+  const setSaveSurvey = async (survey: Survey, answer: AnswerSurvey[]):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/saveSurvey`, {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          start_time: survey.start_time,
+          fullname: survey.fullname,
+          charge_id: survey.charge_id,
+          clients_id: survey.clients_id,
+          username: survey.username,
+          answers: answer,
+        })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return {success: true, title: data.title, message: data.message};
+      } else {
+        if (data.error) console.error("Error a la hora de enviar la encuesta: ", data.error);
+        return {success: false, title: data.title, message: data.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de enviar la encuesta: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
+    }
+  }
+
   return {
     getListCharges,
-    getListClients
+    getListClients,
+    setSaveSurvey,
+    getInfoUser
   }
 }
