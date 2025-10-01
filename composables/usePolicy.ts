@@ -1,57 +1,77 @@
-// ~/composables/usePolicy.ts
-import { useRuntimeConfig } from 'nuxt/app'
+import { useCookie, useRuntimeConfig } from 'nuxt/app'
+import { useState } from 'nuxt/app';
 
-type PolicyStatusResp = { version: string; accepted: boolean }
-type PolicyResp = { version: string; format: 'markdown' | 'html'; content: string }
-type AcceptResp = { ok: boolean; version: string }
+type PolicyStatus = { version: string; accepted: boolean }
+type PolicyPayload = { version: string; format: 'markdown' | 'html'; content: string }
 
 export const usePolicy = () => {
   const config = useRuntimeConfig()
-  const base = config.public.apiBackendCliente // e.g. https://api.tu-backend/  (sin olvidar trailing slash)
+  const base = config.public.apiBackendCliente // ej: http://127.0.0.1:8000/
+  const token = useCookie<string | null>('token')
 
-  // Estado global (persistente en app)
+  // estado compartido en la app
   const accepted = useState<boolean | null>('policyAccepted', () => null)
   const version  = useState<string | null>('policyVersion',  () => null)
   const content  = useState<string>('policyContent',         () => '')
 
-  const common: RequestInit = {
-    // Si usas Sanctum por cookies:
-    credentials: 'include',
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'Accept': 'application/json'
-    }
-  }
+  // headers con Bearer si hay token
+  const authHeaders = () => ({
+    'Accept': 'application/json',
+    ...(token.value ? { 'Authorization': `Bearer ${token.value}` } : {}),
+  })
 
-  // 1) Estado de aceptación
+  /** 1) Estado de aceptación */
   const fetchStatus = async () => {
-    const res = await fetch(`${base}api/policy/status`, { method: 'GET', ...common })
-    if (!res.ok) {
-      // Si 401, deja accepted en null para no bloquear
-      accepted.value = accepted.value ?? null
-      return
+    try {
+      const res = await fetch(`${base}api/policy/status`, { method: 'GET', headers: authHeaders() })
+      const data: any = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        accepted.value = null
+        return { success: false, title: 'No autenticado', message: data?.message ?? 'Sin sesión' }
+      }
+      const parsed: PolicyStatus = { version: data.version, accepted: !!data.accepted }
+      accepted.value = parsed.accepted
+      version.value  = parsed.version
+      return { success: true, title: '', message: '', data: parsed }
+    } catch (e) {
+      return { success: false, title: 'Error', message: 'Fallo al consultar estado de política' }
     }
-    const data: PolicyStatusResp = await res.json()
-    accepted.value = !!data.accepted
-    version.value  = data.version ?? null
   }
 
-  // 2) Contenido de la política
+  /** 2) Contenido de la política */
   const fetchPolicy = async () => {
-    const res = await fetch(`${base}api/policy`, { method: 'GET', ...common })
-    if (!res.ok) return
-    const data: PolicyResp = await res.json()
-    version.value = data.version ?? version.value
-    content.value = data.content ?? ''
+    try {
+      const res = await fetch(`${base}api/policy`, { method: 'GET', headers: authHeaders() })
+      const data: any = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        return { success: false, title: 'Error', message: data?.message ?? 'No fue posible obtener la política' }
+      }
+      version.value = data.version ?? version.value
+      content.value = data.content ?? ''
+      return { success: true, title: '', message: '', data: data as PolicyPayload }
+    } catch {
+      return { success: false, title: 'Error', message: 'Fallo al obtener la política' }
+    }
   }
 
-  // 3) Registrar aceptación
+  /** 3) Registrar aceptación */
   const accept = async () => {
-    const res = await fetch(`${base}api/policy/accept`, { method: 'POST', ...common })
-    if (!res.ok) throw new Error('No se pudo registrar la aceptación')
-    const data: AcceptResp = await res.json()
-    accepted.value = true
-    version.value  = data.version ?? version.value
+    try {
+      const res = await fetch(`${base}api/policy/accept`, {
+        method: 'POST',
+        headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+        body: '{}' // body vacío, por si tu backend espera JSON
+      })
+      const data: any = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        return { success: false, title: 'Error', message: data?.message ?? 'No se pudo registrar la aceptación' }
+      }
+      accepted.value = true
+      version.value  = data.version ?? version.value
+      return { success: true, title: '', message: '' }
+    } catch {
+      return { success: false, title: 'Error', message: 'Fallo al registrar aceptación' }
+    }
   }
 
   return { accepted, version, content, fetchStatus, fetchPolicy, accept }
