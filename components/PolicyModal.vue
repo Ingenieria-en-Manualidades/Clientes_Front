@@ -1,10 +1,10 @@
 <template>
   <teleport to="body">
-    <div v-if="open" class="fixed inset-0 z-[1000]">
+    <div v-if="open" class="fixed inset-0 z-[9999]">
       <!-- Backdrop -->
-      <div class="absolute inset-0 bg-black/50" @click="onClose"></div>
+      <div class="absolute inset-0 bg-black/50" @click="emit('close')"></div>
 
-      <!-- Card -->
+      <!-- Modal -->
       <div
         class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
                w-[min(920px,95vw)] max-h-[85vh] bg-white rounded-2xl shadow-2xl
@@ -16,7 +16,6 @@
         </header>
 
         <section class="px-5 py-4 flex-1 overflow-auto">
-          <!-- Si viene HTML, lo renderizamos; si no, lo mostramos como texto -->
           <div v-if="format === 'html'" class="prose max-w-none prose-sm" v-html="content"></div>
           <pre v-else class="whitespace-pre-wrap font-sans text-sm leading-6">{{ content }}</pre>
         </section>
@@ -26,18 +25,11 @@
             <input type="checkbox" v-model="checked" class="w-4 h-4" />
             <span>He leído y acepto la Política de Tratamiento de Datos.</span>
           </label>
-
           <div class="flex gap-2">
-            <button
-              type="button"
-              class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300"
-              @click="onClose"
-            >
+            <button class="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300" @click="emit('close')">
               Cancelar
             </button>
-
             <button
-              type="button"
               class="px-4 py-2 rounded-full text-white transition-opacity"
               :class="checked ? 'bg-azulClaroIENM hover:opacity-90' : 'bg-gray-400 cursor-not-allowed'"
               :disabled="!checked || loading"
@@ -64,17 +56,12 @@ const props = withDefaults(defineProps<{
   format: 'markdown'
 })
 
-const emit = defineEmits<{
-  (e: 'close'): void
-  (e: 'accept'): void
-}>()
+const emit = defineEmits<{ (e: 'close'): void; (e: 'accept'): void }>()
 
 const checked = ref(false)
 const loading = ref(false)
 
 watch(() => props.open, (o) => { if (o) { checked.value = false; loading.value = false } })
-
-const onClose = () => emit('close')
 
 const onAccept = async () => {
   if (!checked.value || loading.value) return
