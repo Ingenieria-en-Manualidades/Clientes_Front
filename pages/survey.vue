@@ -7,14 +7,7 @@
         </div>
         <div>
           <p class="text-left p-2 font-bold bg-gray-300">Tratamiento de datos</p>
-          <div class="my-3 mx-10">
-            <p class="font-manrope-b">1. Acepta nuestra Política de Tratamiento de datos personales.</p>
-            <p>
-              Consúlta en <a class="text-blue-500 underline" href="https://ienmlogistica.ienm.com.co/">https://ienmlogistica.ienm.com.co/</a>
-            </p>
-            <input type="checkbox" name="" id="dataProcessing" class="mr-1" v-model="dataProcessing" />
-            <label for="dataProcessing">Acepto la política del tratamiento de mis datos.</label>
-          </div>
+          
           <div v-if="dataProcessing">
             <p class="text-left p-2 font-bold bg-gray-300">Información basica</p>
             <div class="mx-10">
@@ -316,5 +309,6 @@ loadLists();
 
 definePageMeta({
   layout: false,
+   requiresAuth: true
 });
 </script>

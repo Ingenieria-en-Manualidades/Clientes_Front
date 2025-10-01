@@ -1,74 +1,128 @@
 import { useRuntimeConfig } from 'nuxt/app';
-import type { ApiPromiseStandard } from "../../interfaces/objetives";
-import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
+import type { ApiPromiseStandard } from '../../interfaces/objetives';
 
-export const useSurveyApis = () => {
-  
+type PolicyStatus = {
+  version: string;
+  accepted: boolean;
+};
+
+type PolicyPayload = {
+  version: string;
+  format: 'markdown' | 'html';
+  content: string;
+};
+
+type PolicyAccepted = {
+  ok: boolean;
+  version: string;
+};
+
+export const usePolicy = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
 
   /**
-   * Method to obtain the list of charges.
-   * @returns arrays of charges.
+   * Obtiene el estado de aceptación de la política para el usuario autenticado.
+   * @returns {ApiPromiseStandard<PolicyStatus>}
    */
-  const getListCharges = async ():Promise<ApiPromiseStandard<any>> => {
+  const getPolicyStatus = async (): Promise<ApiPromiseStandard<PolicyStatus>> => {
     try {
-      const response = await fetch(`${url}api/listCharges`, {
-        method: 'get',
-      });
-
+      const response = await fetch(`${url}api/policy/status`, { method: 'get' });
       const data = await response.json();
-      
+
       if (response.ok) {
-        const charges: Array<OptionDropdown> = [];
-
-        data.data.forEach((element: { charge_id: number; description: string; }) => {
-          charges.push({label: element.description, value: element.charge_id});
-        });
-
-        return {success: true, title: "", message: "", data: charges};
+        const parsed: PolicyStatus = {
+          version: data.version,
+          accepted: !!data.accepted,
+        };
+        return { success: true, title: '', message: '', data: parsed };
       } else {
-        if (data.error) console.error("Error a la hora de retornar los cargos: ", data.error);
-        return {success: false, title: data.title, message: data.message};
+        if (data?.error) console.error('Error al obtener estado de política: ', data.error);
+        return { success: false, title: data?.title, message: data?.message };
       }
     } catch (error) {
-      console.error("Error dentro del catch a la hora de retornar los cargos: ", error);
-      return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
+      console.error('Catch: error al obtener estado de política: ', error);
+      return { success: false, title: 'Error desconocido.', message: 'Por favor verificar la consola del navegador.' };
     }
-  }
+  };
 
   /**
-   * Method to obtain the list of clients.
-   * @returns arrays of clients.
+   * Obtiene el contenido de la política (markdown o html) y su versión.
+   * @returns {ApiPromiseStandard<PolicyPayload>}
    */
-  const getListClients = async ():Promise<ApiPromiseStandard<any>> => {
+  const getPolicy = async (): Promise<ApiPromiseStandard<PolicyPayload>> => {
     try {
-      const response = await fetch(`${url}api/listClients`, {
-        method: 'get',
-      });
-
+      const response = await fetch(`${url}api/policy`, { method: 'get' });
       const data = await response.json();
-      
+
       if (response.ok) {
-        const clients: Array<OptionDropdown> = [];
-
-        data.data.forEach((element: { clients_id: number; name: string; }) => {
-          clients.push({label: element.name, value: element.clients_id});
-        });
-
-        return {success: true, title: "", message: "", data: clients};
+        const parsed: PolicyPayload = {
+          version: data.version,
+          format: data.format,
+          content: data.content,
+        };
+        return { success: true, title: '', message: '', data: parsed };
       } else {
-        if (data.error) console.error("Error a la hora de retornar los clientes: ", data.error);
-        return {success: false, title: data.title, message: data.message};
+        if (data?.error) console.error('Error al obtener política: ', data.error);
+        return { success: false, title: data?.title, message: data?.message };
       }
     } catch (error) {
-      console.error("Error dentro del catch a la hora de retornar los clientes: ", error);
-      return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
+      console.error('Catch: error al obtener política: ', error);
+      return { success: false, title: 'Error desconocido.', message: 'Por favor verificar la consola del navegador.' };
     }
-  }
+  };
+
+  /**
+   * Registra la aceptación de la política para el usuario autenticado.
+   * @returns {ApiPromiseStandard<PolicyAccepted>}
+   */
+  const acceptPolicy = async (): Promise<ApiPromiseStandard<PolicyAccepted>> => {
+    try {
+      const response = await fetch(`${url}api/policy/accept`, { method: 'post' });
+      const data = await response.json();
+
+      if (response.ok) {
+        const parsed: PolicyAccepted = {
+          ok: !!data.ok,
+          version: data.version,
+        };
+        return { success: true, title: '', message: '', data: parsed };
+      } else {
+        if (data?.error) console.error('Error al aceptar política: ', data.error);
+        return { success: false, title: data?.title, message: data?.message };
+      }
+    } catch (error) {
+      console.error('Catch: error al aceptar política: ', error);
+      return { success: false, title: 'Error desconocido.', message: 'Por favor verificar la consola del navegador.' };
+    }
+  };
+
+  /**
+   * Helper: consulta el estado y, si no está aceptada, trae la política.
+   * Útil para flujos de “post-login”.
+   * @returns {ApiPromiseStandard<{ status: PolicyStatus; policy?: PolicyPayload }>}
+   */
+  const checkPolicyAndFetch = async (): Promise<
+    ApiPromiseStandard<{ status: PolicyStatus; policy?: PolicyPayload }>
+  > => {
+    const st = await getPolicyStatus();
+    if (!st.success || !st.data) return st as any;
+
+    if (!st.data.accepted) {
+      const pol = await getPolicy();
+      if (!pol.success || !pol.data) {
+        return { success: false, title: pol.title, message: pol.message };
+      }
+      return { success: true, title: '', message: '', data: { status: st.data, policy: pol.data } };
+    }
+
+    return { success: true, title: '', message: '', data: { status: st.data } };
+  };
 
   return {
-    getListCharges,
-    getListClients
-  }
-}
+    getPolicyStatus,
+    getPolicy,
+    acceptPolicy,
+    checkPolicyAndFetch,
+  };
+};
