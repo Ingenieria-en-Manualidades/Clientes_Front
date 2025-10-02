@@ -21,7 +21,7 @@
     overflow: auto; /* Mantener funcionalidad de scroll */
   }
 
-
+/* Font Manrope */
 @font-face {
     font-family: "Manrope-Bold";
     src: url(../fonts/Manrope/Manrope-Bold.ttf);
@@ -50,6 +50,62 @@
 @font-face {
     font-family: "Manrope-Regular";
     src: url(../fonts/Manrope/Manrope-Regular.ttf);
+    font-style: normal;
+}
+
+/* Font Verdana */
+@font-face {
+    font-family: "Verdana-Regular";
+    src: url(../fonts/Verdana/Verdana.ttf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Verdana-Bold";
+    src: url(../fonts/Verdana/Verdana-Bold.ttf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Verdana-Italic";
+    src: url(../fonts/Verdana/Verdana-Italic.ttf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Verdana-Bold-Italic";
+    src: url(../fonts/Verdana/Verdana-BoldItalic.ttf);
+    font-style: normal;
+}
+
+/* FONT FUTURA */
+@font-face {
+    font-family: "Futura-Medium";
+    src: url(../fonts/Futura/FuturaStd-Medium.otf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Futura-Light";
+    src: url(../fonts/Futura/FuturaStd-Light.otf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Futura-Light-Oblique";
+    src: url(../fonts/Futura/FuturaStd-LightOblique.otf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Futura-Bold";
+    src: url(../fonts/Futura/FuturaStd-Bold.otf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Futura-Bold-Oblique";
+    src: url(../fonts/Futura/FuturaStd-BoldOblique.otf);
     font-style: normal;
 }
 
