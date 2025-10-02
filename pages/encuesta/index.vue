@@ -46,19 +46,19 @@
           <div class="mt-4 grid gap-4 max-w-3xl mx-auto text-left">
             <DinamicosInputText
               v-model="survey.fullname"
-              :label="'2. Ingrese su nombre completo'"
+              :label="'1. Ingrese su nombre completo'"
               :displayFlex="false"
               :warning="errorsSurvey.fullname"
             />
             <DinamicosDropDownList
-              :label="'3. Ingrese su cargo'"
+              :label="'2. Ingrese su cargo'"
               :displayFlex="false"
               :options="charges"
               v-model="survey.charge_id"
               :warning="errorsSurvey.charge_id"
             />
             <DinamicosDropDownList
-              :label="'4. Ingrese el nombre de su empresa, CEDI y su ciudad'"
+              :label="'3. Ingrese el nombre de su empresa, CEDI y su ciudad'"
               :displayFlex="false"
               :options="clients"
               v-model="survey.clients_id"
@@ -66,13 +66,13 @@
             />
             <DinamicosInputNumber
               v-model="survey.cellphone"
-              :label="'5. Ingrese su número de contacto'"
+              :label="'4. Ingrese su número de contacto'"
               :displayFlex="false"
               :disabled="true"
             />
             <DinamicosInputText
               v-model="survey.email"
-              :label="'6. Ingrese su correo electrónico'"
+              :label="'5. Ingrese su correo electrónico'"
               :displayFlex="false"
               :disabled="true"
             />
@@ -98,7 +98,7 @@
           <div class="mt-4 space-y-4 max-w-3xl mx-auto text-left">
             <DinamicosInputRadio
               v-model="answers[0].answer"
-              :label="'7. ¿Qué tan satisfecho/a está con el cumplimiento del servicio prestado en cuenta a: programa de producción o plan de armado, cargues y descargues de productos, envíos o despachos de mercancías?'"
+              :label="'6. ¿Qué tan satisfecho/a está con el cumplimiento del servicio prestado en cuenta a: programa de producción o plan de armado, cargues y descargues de productos, envíos o despachos de mercancías?'"
               :displayFlex="true"
               :options="optionsSatisfaction"
               :info="'(según aplique en su sector).'"
@@ -106,46 +106,46 @@
             />
             <DinamicosInputTextArea
               v-model="answers[0].observation"
-              :label="'8. Observación'"
+              :label="'7. Observación'"
               :displayFlex="false"
               :warning="answers[0].errorObservation"
             />
             <DinamicosInputRadio
               v-model="answers[1].answer"
-              :label="'9. ¿Qué tan satisfecho/a se encuentra usted con el acompañamiento y gestión de solicitudes o sugerencias al servicio prestado?'"
+              :label="'8. ¿Qué tan satisfecho/a se encuentra usted con el acompañamiento y gestión de solicitudes o sugerencias al servicio prestado?'"
               :displayFlex="true"
               :options="optionsSatisfaction"
               :warning="answers[1].errorAnswer"
             />
             <DinamicosInputTextArea
               v-model="answers[1].observation"
-              :label="'10. Observación'"
+              :label="'9. Observación'"
               :displayFlex="false"
               :warning="answers[1].errorObservation"
             />
             <DinamicosInputRadio
               v-model="answers[2].answer"
-              :label="'11. ¿Qué tan satisfecho/a está con el cumplimiento del requerimiento de personal en cuanto a: tiempo de respuesta de solicitudes e idoneidad del mismo?'"
+              :label="'10. ¿Qué tan satisfecho/a está con el cumplimiento del requerimiento de personal en cuanto a: tiempo de respuesta de solicitudes e idoneidad del mismo?'"
               :displayFlex="true"
               :options="optionsSatisfaction"
               :warning="answers[2].errorAnswer"
             />
             <DinamicosInputTextArea
               v-model="answers[2].observation"
-              :label="'12. Observación'"
+              :label="'11. Observación'"
               :displayFlex="false"
               :warning="answers[2].errorObservation"
             />
             <DinamicosInputRadio
               v-model="answers[3].answer"
-              :label="'13. ¿Qué tan satisfecho/a está en la respuesta oportuna a reclamos y novedades internas presentadas en el servicio?'"
+              :label="'12. ¿Qué tan satisfecho/a está en la respuesta oportuna a reclamos y novedades internas presentadas en el servicio?'"
               :displayFlex="true"
               :options="optionsSatisfaction"
               :warning="answers[3].errorAnswer"
             />
             <DinamicosInputTextArea
               v-model="answers[3].observation"
-              :label="'14. Observación'"
+              :label="'13. Observación'"
               :displayFlex="false"
               :warning="answers[3].errorObservation"
             />
@@ -166,26 +166,26 @@
           <div class="mt-4 space-y-4 max-w-3xl mx-auto text-left">
             <DinamicosInputRadio
               v-model="answers[4].answer"
-              :label="'15. ¿Usted tendría en cuenta a IM Ingeniería SAS, como su aliado estratégico en sus planes de expansión y crecimiento dentro de la compañía?'"
+              :label="'14. ¿Usted tendría en cuenta a IM Ingeniería SAS, como su aliado estratégico en sus planes de expansión y crecimiento dentro de la compañía?'"
               :displayFlex="false"
               :options="optionsNeeds"
               :warning="answers[4].errorAnswer"
             />
             <DinamicosInputTextArea
               v-model="answers[4].observation"
-              :label="'16. ¿Por qué?'"
+              :label="'15. ¿Por qué?'"
               :displayFlex="false"
               :warning="answers[4].errorObservation"
             />
             <DinamicosInputText
               v-model="answers[5].answer"
-              :label="'17. De acuerdo a los resultados mensuales de la operación, ¿Qué tipo de información está interesado en recibir?'"
+              :label="'16. De acuerdo a los resultados mensuales de la operación, ¿Qué tipo de información está interesado en recibir?'"
               :displayFlex="false"
               :warning="answers[5].errorAnswer"
             />
             <DinamicosInputText
               v-model="answers[6].answer"
-              :label="'18. Describa las necesidades y expectativas del servicio.'"
+              :label="'17. Describa las necesidades y expectativas del servicio.'"
               :displayFlex="false"
               :warning="answers[6].errorAnswer"
             />
