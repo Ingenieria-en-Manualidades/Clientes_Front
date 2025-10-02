@@ -222,9 +222,14 @@ import { useSurveyApis } from "../../composables/survey/surveyApis";
 import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
 import PolicyGate from "../../components/PolicyGate.vue";
 import { usePolicy } from "../../composables/usePolicy";
+import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
-// definePageMeta({ requiresAuth: true })
 
+definePageMeta({
+  layout: "default",
+  middleware: "auth",
+  requiresAuth: true,
+});
 /* ---------- Política de datos ---------- */
 const { accepted, version, content, fetchStatus, fetchPolicy } = usePolicy()
 // dataProcessing = solo si YA aceptó
