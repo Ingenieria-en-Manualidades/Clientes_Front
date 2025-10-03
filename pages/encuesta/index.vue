@@ -61,7 +61,7 @@
               v-model="survey.another_charge"
               :label="'Por favor ingrese el otro cargo'"
               :displayFlex="false"
-              :visible="survey.charge_id === 11 ? true : false"
+              :visible="survey.charge_id === charges[charges?.length - 1].value ? true : false"
               :warning="errorsSurvey.another_charge"
             />
             <DinamicosDropDownList
@@ -335,7 +335,7 @@ const submit = async () => {
   if (!survey.value.fullname)              { errorsSurvey.value.fullname   = "Esta campo es obligatorio."; missing.push(true) }
   if (survey.value.charge_id === null)     { errorsSurvey.value.charge_id  = "Esta campo es obligatorio."; missing.push(true) }
   if (survey.value.clients_id === null)    { errorsSurvey.value.clients_id = "Esta campo es obligatorio."; missing.push(true) }
-  if (survey.value.charge_id === 11) { 
+  if (survey.value.charge_id === charges.value[charges.value?.length - 1].value) { 
     if (!survey.value.another_charge) { errorsSurvey.value.another_charge = "Este campo es obligatorio."; missing.push(true) }
   }
 
