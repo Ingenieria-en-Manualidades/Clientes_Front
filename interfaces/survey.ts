@@ -6,6 +6,7 @@ export interface Survey {
     cellphone: string;
     email: string;
     username: string;
+    another_charge: string | null;
 }
 export interface AnswerSurvey {
     question_id: number;

@@ -57,6 +57,13 @@
               v-model="survey.charge_id"
               :warning="errorsSurvey.charge_id"
             />
+            <DinamicosInputText
+              v-model="survey.another_charge"
+              :label="'Por favor ingrese el otro cargo'"
+              :displayFlex="false"
+              :visible="survey.charge_id === 11 ? true : false"
+              :warning="errorsSurvey.another_charge"
+            />
             <DinamicosDropDownList
               :label="'3. Ingrese el nombre de su empresa, CEDI y su ciudad'"
               :displayFlex="false"
@@ -257,10 +264,11 @@ const survey = ref<Survey>({
   clients_id: null,
   cellphone: "",
   email: "",
-  username: String(username.value)
+  username: String(username.value),
+  another_charge: null
 });
 
-const errorsSurvey = ref({ fullname: "", charge_id: "", clients_id: "" });
+const errorsSurvey = ref({ fullname: "", charge_id: "", clients_id: "", another_charge: "" });
 
 const answers = ref<AnswerSurvey[]>([
   { question_id: 1, type: "input_radio_answer", answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null },
@@ -322,10 +330,14 @@ const submit = async () => {
   errorsSurvey.value.fullname = ""
   errorsSurvey.value.charge_id = ""
   errorsSurvey.value.clients_id = ""
+  errorsSurvey.value.another_charge = ""
 
   if (!survey.value.fullname)              { errorsSurvey.value.fullname   = "Esta campo es obligatorio."; missing.push(true) }
   if (survey.value.charge_id === null)     { errorsSurvey.value.charge_id  = "Esta campo es obligatorio."; missing.push(true) }
   if (survey.value.clients_id === null)    { errorsSurvey.value.clients_id = "Esta campo es obligatorio."; missing.push(true) }
+  if (survey.value.charge_id === 11) { 
+    if (!survey.value.another_charge) { errorsSurvey.value.another_charge = "Este campo es obligatorio."; missing.push(true) }
+  }
 
   answers.value.forEach(a => {
     a.errorAnswer = (!a.answer && a.answer !== 0) ? "Este campo es obligatorio." : null

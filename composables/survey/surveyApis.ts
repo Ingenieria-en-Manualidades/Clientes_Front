@@ -21,11 +21,15 @@ export const useSurveyApis = () => {
       const data = await response.json();
       
       if (response.ok) {
-        const charges: Array<OptionDropdown> = [];
+        var charges: Array<OptionDropdown> = [];
 
         data.data.forEach((element: { charge_id: number; description: string; }) => {
           charges.push({label: element.description, value: element.charge_id});
         });
+
+        const anotherIndex = charges.findIndex(charge => charge.label === "Otro...");
+        const another = charges.splice(anotherIndex, 1);
+        charges.push(another[0]);
 
         return {success: true, title: "", message: "", data: charges};
       } else {
@@ -99,6 +103,7 @@ export const useSurveyApis = () => {
           charge_id: survey.charge_id,
           clients_id: survey.clients_id,
           username: survey.username,
+          another_charge: survey.another_charge,
           answers: answer,
         })
       });

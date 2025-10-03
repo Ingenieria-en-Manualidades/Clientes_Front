@@ -3,7 +3,7 @@
     :class="[
       'w-full font-manrope-r relative py-1',
       displayFlex ? 'flex gap-1' : 'block',
-    ]"
+    ]" v-show="visible"
   >
     <div>
       <label :for="`inp${label}`" class="cursor-pointer font-manrope-b"
@@ -54,6 +54,10 @@ const props = defineProps({
   warning: {
     type: String,
     required: false,
+  },
+  visible: { 
+    type: Boolean, 
+    default: true
   },
 });
 </script>
