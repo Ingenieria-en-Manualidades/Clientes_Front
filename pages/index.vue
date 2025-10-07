@@ -43,13 +43,13 @@ definePageMeta({
 
   <div class="flex rounded-3xl flex-col w-full h-full bg-white overflow-y-auto">
     <!-- Header -->
-    <header class="flex items-center justify-center w-full p-4">
+    <!-- <header class="flex items-center justify-center w-full p-4">
       <img
         src="/assets/img/svg/favicon3.png"
         alt="Logo IENM"
         class="max-h-24 w-auto object-contain"
       />
-    </header>
+    </header> -->
 
     <main class="pb-16">
       <!-- Bienvenida -->

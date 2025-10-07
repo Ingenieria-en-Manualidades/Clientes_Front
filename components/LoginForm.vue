@@ -74,7 +74,7 @@
 
         <!-- Panel azul con formulario centrado -->
         <div
-          class="flex-1 min-h-0 bg-gradient-to-br from-azulIENM to-azulClaroIENM"
+          class="flex-1 min-h-0 bg-gradient-to-br from-azulClaroIENM  to-azulIENM"
         >
           <div class="h-full w-full flex items-center justify-center px-8">
             <div class="w-full max-w-xl">
