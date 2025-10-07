@@ -4,7 +4,7 @@
     <p class="text-red-500 text-sm font-manrope-b">{{ info }}</p>
     <div :class="['w-full font-manrope-r relative py-1', displayFlex ? 'flex gap-8' : 'block',]">
       <div v-for="(option, index) in options" v-bind:key="index">
-        <input type="radio" name="" :id="`option-${option.label}`" :value="`${option.value}`" v-model="model" class="mr-2" />
+        <input type="radio" name="" :disabled="disabled" :id="`option-${option.label}`" :value="`${option.value}`" v-model="model" class="mr-2" />
         <label>{{ option.label }}</label>
       </div>
     </div>
@@ -37,6 +37,10 @@ const props = defineProps({
   },
   warning: {
     type: String,
+    required: false,
+  },
+  disabled: {
+    type: Boolean,
     required: false,
   },
 });

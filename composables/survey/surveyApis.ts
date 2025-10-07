@@ -81,7 +81,7 @@ export const useSurveyApis = () => {
       const data = await response.json();
       
       if (response.ok) {
-        return {success: true, title: "", message: "", data: data.data};
+        return {success: true, title: "", message: "", data: data};
       } else {
         if (data.error) console.error("Error a la hora de retornar los clientes: ", data.error);
         return {success: false, title: data.title, message: data.message};

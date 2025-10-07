@@ -18,9 +18,10 @@
       <select
         ref="selectEl"
         v-model="model"
-        class="flex-1 min-w-0 bg-white appearance-none px-3 py-2 cursor-pointer  rounded-none"
+        :class="['flex-1 min-w-0 appearance-none px-3 py-2 cursor-pointer rounded-none', disabled ? 'bg-gray-200' : 'bg-white',]"
         :aria-label="`Seleccionar ${label}`"
         @click.stop
+        :disabled="disabled"
       >
         <option disabled value="">
           {{ placeholder ?? 'Selecciona una opción' }}
@@ -63,6 +64,7 @@ const props = defineProps({
   options: { type: Array as () => OptionDropdown[], required: true },
   info: { type: String, required: false },
   warning: { type: String, required: false },
+  disabled: {type: Boolean, required: false},
 })
 
 const selectEl = ref<HTMLSelectElement | null>(null)

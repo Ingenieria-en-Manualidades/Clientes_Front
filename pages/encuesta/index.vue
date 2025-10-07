@@ -49,6 +49,7 @@
               :label="'1. Ingrese su nombre completo'"
               :displayFlex="false"
               :warning="errorsSurvey.fullname"
+              :disabled="true"
             />
             <DinamicosDropDownList
               :label="'2. Ingrese su cargo'"
@@ -56,13 +57,15 @@
               :options="charges"
               v-model="survey.charge_id"
               :warning="errorsSurvey.charge_id"
+              :disabled="surveyDisabled.charge_id"
             />
             <DinamicosInputText
               v-model="survey.another_charge"
               :label="'Por favor ingrese el otro cargo'"
               :displayFlex="false"
-              :visible="survey.charge_id === charges[charges?.length - 1].value ? true : false"
+              :visible="survey.charge_id === charges?.at(-1)?.value ? true : false"
               :warning="errorsSurvey.another_charge"
+              :disabled="surveyDisabled.another_charge"
             />
             <DinamicosDropDownList
               :label="'3. Ingrese el nombre de su empresa, CEDI y su ciudad'"
@@ -70,6 +73,7 @@
               :options="clients"
               v-model="survey.clients_id"
               :warning="errorsSurvey.clients_id"
+              :disabled="surveyDisabled.clients_id"
             />
             <DinamicosInputNumber
               v-model="survey.cellphone"
@@ -110,12 +114,14 @@
               :options="optionsSatisfaction"
               :info="'(según aplique en su sector).'"
               :warning="answers[0].errorAnswer"
+              :disabled="answers[0].disabled"
             />
             <DinamicosInputTextArea
               v-model="answers[0].observation"
               :label="'7. Observación'"
               :displayFlex="false"
               :warning="answers[0].errorObservation"
+              :disabled="answers[0].disabled"
             />
             <DinamicosInputRadio
               v-model="answers[1].answer"
@@ -123,12 +129,14 @@
               :displayFlex="true"
               :options="optionsSatisfaction"
               :warning="answers[1].errorAnswer"
+              :disabled="answers[1].disabled"
             />
             <DinamicosInputTextArea
               v-model="answers[1].observation"
               :label="'9. Observación'"
               :displayFlex="false"
               :warning="answers[1].errorObservation"
+              :disabled="answers[1].disabled"
             />
             <DinamicosInputRadio
               v-model="answers[2].answer"
@@ -136,12 +144,14 @@
               :displayFlex="true"
               :options="optionsSatisfaction"
               :warning="answers[2].errorAnswer"
+              :disabled="answers[2].disabled"
             />
             <DinamicosInputTextArea
               v-model="answers[2].observation"
               :label="'11. Observación'"
               :displayFlex="false"
               :warning="answers[2].errorObservation"
+              :disabled="answers[2].disabled"
             />
             <DinamicosInputRadio
               v-model="answers[3].answer"
@@ -149,12 +159,14 @@
               :displayFlex="true"
               :options="optionsSatisfaction"
               :warning="answers[3].errorAnswer"
+              :disabled="answers[3].disabled"
             />
             <DinamicosInputTextArea
               v-model="answers[3].observation"
               :label="'13. Observación'"
               :displayFlex="false"
               :warning="answers[3].errorObservation"
+              :disabled="answers[3].disabled"
             />
           </div>
         </section>
@@ -177,24 +189,28 @@
               :displayFlex="false"
               :options="optionsNeeds"
               :warning="answers[4].errorAnswer"
+              :disabled="answers[4].disabled"
             />
             <DinamicosInputTextArea
               v-model="answers[4].observation"
               :label="'15. ¿Por qué?'"
               :displayFlex="false"
               :warning="answers[4].errorObservation"
+              :disabled="answers[4].disabled"
             />
             <DinamicosInputText
               v-model="answers[5].answer"
               :label="'16. De acuerdo a los resultados mensuales de la operación, ¿Qué tipo de información está interesado en recibir?'"
               :displayFlex="false"
               :warning="answers[5].errorAnswer"
+              :disabled="answers[5].disabled"
             />
             <DinamicosInputText
               v-model="answers[6].answer"
               :label="'17. Describa las necesidades y expectativas del servicio.'"
               :displayFlex="false"
               :warning="answers[6].errorAnswer"
+              :disabled="answers[6].disabled"
             />
           </div>
 
@@ -205,7 +221,7 @@
               @click="submit"
               class="w-full flex items-center justify-center gap-2 rounded-2xl text-white font-manrope-b py-3 shadow-lg active:scale-[0.99] transition disabled:cursor-not-allowed"
               :class="dataProcessing ? 'bg-gradient-to-r from-verdeIENM to-verdeOscIENM hover:opacity-95' : 'bg-gray-400'"
-              :disabled="!dataProcessing"
+              :disabled="answers[6].disabled"
             >
               ENVIAR
             </button>
@@ -268,16 +284,22 @@ const survey = ref<Survey>({
   another_charge: null
 });
 
+const surveyDisabled = ref({
+  charge_id: false,
+  clients_id: false,
+  another_charge: false,
+});
+
 const errorsSurvey = ref({ fullname: "", charge_id: "", clients_id: "", another_charge: "" });
 
 const answers = ref<AnswerSurvey[]>([
-  { question_id: 1, type: "input_radio_answer", answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null },
-  { question_id: 2, type: "input_radio_answer", answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null },
-  { question_id: 3, type: "input_radio_answer", answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null },
-  { question_id: 4, type: "input_radio_answer", answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null },
-  { question_id: 5, type: "boolean_answer",     answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null },
-  { question_id: 6, type: "simple_answer",      answer: null, observation: null, errorAnswer: null, observationRequired: false, errorObservation: null },
-  { question_id: 7, type: "simple_answer",      answer: null, observation: null, errorAnswer: null, observationRequired: false, errorObservation: null },
+  { question_id: 1, type: "input_radio_answer", answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null, disabled: false },
+  { question_id: 2, type: "input_radio_answer", answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null, disabled: false },
+  { question_id: 3, type: "input_radio_answer", answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null, disabled: false },
+  { question_id: 4, type: "input_radio_answer", answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null, disabled: false },
+  { question_id: 5, type: "boolean_answer",     answer: null, observation: null, errorAnswer: null, observationRequired: true,  errorObservation: null, disabled: false },
+  { question_id: 6, type: "simple_answer",      answer: null, observation: null, errorAnswer: null, observationRequired: false, errorObservation: null, disabled: false },
+  { question_id: 7, type: "simple_answer",      answer: null, observation: null, errorAnswer: null, observationRequired: false, errorObservation: null, disabled: false },
 ]);
 
 const toast = useToast();
@@ -296,8 +318,47 @@ const loadLists = async () => {
   else toast.add({ severity: "error", summary: responseClients.title, detail: responseClients.message, life: 5000 })
 
   if (responseInfoUser.success) {
-    survey.value.cellphone = responseInfoUser.data.cellphone
-    survey.value.email = responseInfoUser.data.email
+    survey.value.fullname = responseInfoUser.data.customer.fullname;
+    survey.value.cellphone = responseInfoUser.data.customer.cellphone;
+    survey.value.email = responseInfoUser.data.customer.email;
+
+    // En caso de que el cliente ya haya respondido la encuesta en el año actual, la encuesta se inhabilitara y llenara sola.
+    if (responseInfoUser.data.survey) {
+      const surveyComplete = responseInfoUser.data.survey;
+      for (const k in surveyDisabled.value) {
+        surveyDisabled.value[k] = true;
+      }
+
+      survey.value.fullname = surveyComplete.survey.fullname;
+      survey.value.clients_id = surveyComplete.survey.clients_id;
+      survey.value.charge_id = surveyComplete.survey.charge_id;
+      survey.value.another_charge = surveyComplete.survey.another_charge;
+      
+      answers.value.map(ans => {
+        ans.disabled = true;
+        switch (ans.type) {
+          case "input_radio_answer":
+            const answerRadio = surveyComplete.answersInputRadio.filter(a => a.question_id === ans.question_id);
+            ans.answer = answerRadio[0].value_option;
+            ans.observation = answerRadio[0].observation;
+            break;
+
+          case "boolean_answer":
+            const answerBool = surveyComplete.answersBooleans.filter(a => a.question_id === ans.question_id);
+            ans.answer = answerBool[0].answer;
+            ans.observation = answerBool[0].observation;
+            break;
+
+          case "simple_answer":
+            const answerSimple = surveyComplete.answersSimples.filter(a => a.question_id === ans.question_id);
+            ans.answer = answerSimple[0].description;
+            break;
+          default:
+            console.error("Tipo de pregunta no existente.");
+            break;
+        }
+      });
+    }
   } else {
     toast.add({ severity: "error", summary: responseInfoUser.title, detail: responseInfoUser.message, life: 5000 })
   }
@@ -360,6 +421,11 @@ const submit = async () => {
   }
 
   const response = await setSaveSurvey(survey.value, answers.value)
+  if (response.success) {
+    for (const k in surveyDisabled.value) {surveyDisabled.value[k] = true;}
+    answers.value.map(ans => {ans.disabled = true;});
+  }
+  
   toast.add({
     severity: response.success ? "success" : "error",
     summary: response.title,

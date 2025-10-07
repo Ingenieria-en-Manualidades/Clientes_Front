@@ -16,4 +16,5 @@ export interface AnswerSurvey {
     errorAnswer: string | null;
     observationRequired: boolean;
     errorObservation: string | null;
+    disabled: boolean;
 }
