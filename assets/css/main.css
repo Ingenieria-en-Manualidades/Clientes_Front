@@ -6,7 +6,7 @@
 
 
 @layer base {
-  html, body { @apply font-sans; }  /* <- fuerza Verdana global */
+  html, body { @apply font-sans; }  
 }
 
 @layer base {
