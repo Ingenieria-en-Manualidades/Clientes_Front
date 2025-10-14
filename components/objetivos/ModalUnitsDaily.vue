@@ -6,7 +6,7 @@
   >
     <i class="pi pi-box text-white"></i>
   </button>
-  <div class="font-manrope-r">
+  <div class="">
     <Dialog
       v-model:visible="visible"
       modal

@@ -1,7 +1,7 @@
 <template>
   <header class="fixed inset-x-0 top-0 z-50 flex items-center justify-between
-           bg-white backdrop-blur border-b border-ink-200 shadow-sm
-           px-2 md:px-3 py-1">
+  bg-white backdrop-blur border-b border-ink-200 shadow-sm
+  px-2 md:px-3 sm:h-16 md:h-16 lg:h-[72px]">
     <div class="flex items-center gap-2">
       <NavBarButton
         @click="$emit('toggleMenu')"
@@ -32,12 +32,12 @@
         ></i>
         <span
           v-if="nRemisiones"
-          class="absolute bg-red-500 font-manrope-r px-[14%] py-[8%] md:px-[17%] md:py-[10%] rounded-[50%] border-2 border-white text-[10px] md:text-xs right-1 md:right-0 top-0 text-white"
+          class="absolute bg-red-500  px-[14%] py-[8%] md:px-[17%] md:py-[10%] rounded-[50%] border-2 border-white text-[10px] md:text-xs right-1 md:right-0 top-0 text-white"
           >{{ nRemisiones }}</span
         >
         <!-- Intento de tooltip -->
         <!-- <p
-          class="fixed font-manrope-r text-sm px-3 pb-1 rounded-lg top-7 right-[70px] bg-[#28b67a] transform translate-y-0 hidden duration-300 group-hover:translate-y-9 group-hover:block after:block after:border-b-[7px] after:border-b-[#28b67a] after:border-l-[7px] after:border-l-transparent after:border-r-[7px] after:border-r-transparent after:absolute after:top-[-7px] after:left-[77px]"
+          class="fixed  text-sm px-3 pb-1 rounded-lg top-7 right-[70px] bg-[#28b67a] transform translate-y-0 hidden duration-300 group-hover:translate-y-9 group-hover:block after:block after:border-b-[7px] after:border-b-[#28b67a] after:border-l-[7px] after:border-l-transparent after:border-r-[7px] after:border-r-transparent after:absolute after:top-[-7px] after:left-[77px]"
         >
           remisiones pendientes
         </p> -->

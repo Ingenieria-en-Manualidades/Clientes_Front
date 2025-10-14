@@ -27,7 +27,7 @@
     />
     <button
       type="button"
-      class="w-full rounded-3xl  font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3  mt-3"
+      class="w-full rounded-3xl   text-center bg-[#4789c8] text-white py-2 px-3  mt-3"
       @click="submitUnitsMonthly"
     >
       Guardar

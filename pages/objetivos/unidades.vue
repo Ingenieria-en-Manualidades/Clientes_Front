@@ -1,5 +1,5 @@
 <template>
-  <div class="font-manrope-r px-1 py-3">
+  <div class=" px-1 py-3">
     <title>Unidades programadas</title>
     <RemisionesTabPanelRemisiones :items="items" />
     <form class="sm:flex gap-2">

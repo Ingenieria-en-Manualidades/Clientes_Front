@@ -3,7 +3,7 @@
     <div class="grid gap-2 w-3/4 ml-[12%] mt-[7%]">
       <label
         for="username"
-        class="text-base md:text-lg lg:text-lg text-amarilloIENM font-manrope-r"
+        class="text-base md:text-lg lg:text-lg text-amarilloIENM "
         >Usuario</label
       >
       <p class="text-sm text-white">
@@ -19,7 +19,7 @@
     </div>
     <div class="grid gap-2 w-3/4 ml-[12%] mt-[7%]">
       <label
-        class="text-base md:text-lg lg:text-lg text-amarilloIENM font-manrope-r"
+        class="text-base md:text-lg lg:text-lg text-amarilloIENM "
         >Contraseña</label
       >
       <Password
@@ -33,7 +33,7 @@
     <button
       type="submit"
       :disabled="boolError"
-      class="bg-verdeIENM mt-[10%] mb-[2%] w-[75%] ml-[11.5%] font-manrope-b tracking-wide text-white hover:bg-verdeOscIENM py-2 rounded items-center"
+      class="bg-verdeIENM mt-[10%] mb-[2%] w-[75%] ml-[11.5%]  tracking-wide text-white hover:bg-verdeOscIENM py-2 rounded items-center"
     >
       <span v-if="!isLoading">Enviar</span>
       <ProgressSpinner

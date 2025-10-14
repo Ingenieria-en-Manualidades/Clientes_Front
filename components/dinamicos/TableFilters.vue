@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full font-manrope-r">
+  <div class="w-full ">
     <p class="w-full text-lg text-center font-bold">{{ caption }}</p>
     <div class="w-full flex justify-start items-center mb-1">
       <slot name="newFilter"></slot>

@@ -22,7 +22,7 @@
     <section
       class="w-full h-full rounded-r-3xl overflow-auto lg:w-[80%] flex flex-col items-center bg-gradient-to-br from-azulIENM/10 via-white to-azulClaroIENM/20"
     >
-      <h1 class="mx-auto mt-4 p-4 text-center inline-block text-azulIENM text-xl md:text-2xl font-manrope-b border-b-4 border-amarilloIENM">
+      <h1 class="mx-auto mt-4 p-4 text-center inline-block text-azulIENM text-xl md:text-2xl  border-b-4 border-amarilloIENM">
         Encuesta de Satisfacción
       </h1>
 
@@ -39,7 +39,7 @@
       <section class="h-full">
         <!-- Información básica -->
         <section v-if="dataProcessing" class="mt-10 text-center">
-          <h2 class="mx-auto inline-block text-azulIENM text-lg md:text-xl font-manrope-b border-b-[3px] border-amarilloIENM pb-1">
+          <h2 class="mx-auto inline-block text-azulIENM text-lg md:text-xl  border-b-[3px] border-amarilloIENM pb-1">
             Información básica
           </h2>
 
@@ -92,12 +92,12 @@
 
         <!-- Satisfacción -->
         <section v-if="dataProcessing" class="mt-10 text-center">
-          <h2 class="mx-auto inline-block text-azulIENM text-lg md:text-xl font-manrope-b border-b-[3px] border-amarilloIENM pb-1">
+          <h2 class="mx-auto inline-block text-azulIENM text-lg md:text-xl  border-b-[3px] border-amarilloIENM pb-1">
             Satisfacción
           </h2>
 
           <div class="mt-4 max-w-3xl mx-auto rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-left">
-            <p class="text-lg font-manrope-b">Instrucciones</p>
+            <p class="text-lg ">Instrucciones</p>
             <p class="text-sm text-slate-700">Califica los enunciados según los siguientes criterios:</p>
             <ul class="mt-2 flex flex-wrap gap-3 text-sm">
               <li class="chip">3 = Satisfecho/a</li>
@@ -173,12 +173,12 @@
 
         <!-- Necesidades -->
         <section v-if="dataProcessing" class="mt-10 text-center">
-          <h2 class="mx-auto inline-block text-azulIENM text-lg md:text-xl font-manrope-b border-b-[3px] border-amarilloIENM pb-1">
+          <h2 class="mx-auto inline-block text-azulIENM text-lg md:text-xl  border-b-[3px] border-amarilloIENM pb-1">
             Necesidades
           </h2>
 
           <div class="mt-4 max-w-3xl mx-auto rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-4 text-left">
-            <p class="text-lg font-manrope-b">¡Gracias por tu participación!</p>
+            <p class="text-lg ">¡Gracias por tu participación!</p>
             <p class="text-sm text-slate-700">Tu feedback nos ayuda a mejorar. Por favor, continúa con la encuesta.</p>
           </div>
 
@@ -219,7 +219,7 @@
             <button
               type="button"
               @click="submit"
-              class="w-full flex items-center justify-center gap-2 rounded-2xl text-white font-manrope-b py-3 shadow-lg active:scale-[0.99] transition disabled:cursor-not-allowed"
+              class="w-full flex items-center justify-center gap-2 rounded-2xl text-white  py-3 shadow-lg active:scale-[0.99] transition disabled:cursor-not-allowed"
               :class="dataProcessing ? 'bg-gradient-to-r from-verdeIENM to-verdeOscIENM hover:opacity-95' : 'bg-gray-400'"
               :disabled="answers[6].disabled"
             >
@@ -227,7 +227,7 @@
             </button>
           </div>
 
-          <p class="mt-6 text-2xl text-azulIENM/90 font-manrope-b">
+          <p class="mt-6 text-2xl text-azulIENM/90 ">
             ¡Gracias por tu tiempo y valiosa opinión!
           </p>
         </section>

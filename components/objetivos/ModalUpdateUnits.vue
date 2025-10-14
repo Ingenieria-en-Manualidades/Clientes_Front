@@ -35,7 +35,7 @@
           />
           <button
             type="button"
-            class="w-full font-manrope-b text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
+            class="w-full  text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
             @click="update"
           >
             Actualizar

@@ -5,7 +5,7 @@
     @click="visible = true"
   >
     <i class="pi pi-clipboard text-black"></i>
-    <span class="text-black font-manrope-r ml-2 hidden sm:inline-flex"
+    <span class="text-black  ml-2 hidden sm:inline-flex"
       >Gestionar remisión</span
     >
   </button>
@@ -16,12 +16,12 @@
       :header="'Aceptar o Rechazar.'"
       :style="{ width: '25rem' }"
     >
-      <p class="font-manrope-r">N° Remision: {{ props.numRemision }}.</p>
-      <small class="text-red-500 font-manrope-r"
+      <p class="">N° Remision: {{ props.numRemision }}.</p>
+      <small class="text-red-500 "
         >Por favor llenar el campo 'motivo' en caso de rechazar.</small
       >
       <div class="border-2 px-[9%] py-[3%] rounded-md">
-        <p class="font-manrope-b pb-1">Acción:</p>
+        <p class=" pb-1">Acción:</p>
         <select
           v-model="opcion"
           required
@@ -35,7 +35,7 @@
             Rechazar Remisión
           </option>
         </select>
-        <p class="font-manrope-b pb-1 py-2">
+        <p class=" pb-1 py-2">
           Motivo<i
             :class="
               disable ? 'pi pi-lock float-right' : 'pi pi-lock-open float-right'
@@ -52,14 +52,14 @@
       <div class="flex justify-end gap-2 mt-2">
         <button
           type="button"
-          class="py-1 px-4 font-manrope-b text-white rounded-lg bg-red-500 hover:bg-red-600"
+          class="py-1 px-4  text-white rounded-lg bg-red-500 hover:bg-red-600"
           @click="visible = false"
         >
           Cancelar
         </button>
         <button
           type="button"
-          class="py-1 px-4 font-manrope-b text-white rounded-lg bg-verdeOscIENM hover:bg-[#c37428]"
+          class="py-1 px-4  text-white rounded-lg bg-verdeOscIENM hover:bg-[#c37428]"
           @click="saveRemision()"
         >
           Guardar

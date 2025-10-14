@@ -1,9 +1,9 @@
 <template>
-  <form class="font-manrope-r w-1/2 max-w-[250px] text-sm sm:text-base">
+  <form class=" w-1/2 max-w-[250px] text-sm sm:text-base">
     <fieldset
-      class="border-[1px] border-black px-2 py-[11px] min-[444px]:py-[31px] min-[640px]:py-[37px] md:py-3 font-manrope-r rounded"
+      class="border-[1px] border-black px-2 py-[11px] min-[444px]:py-[31px] min-[640px]:py-[37px] md:py-3  rounded"
     >
-      <legend class="font-manrope-b">Producción</legend>
+      <legend class="">Producción</legend>
       <p>Producción Planificada:</p>
       <input
         v-model="fechaPlan"
@@ -22,7 +22,7 @@
       <button
         type="button"
         @click="submitPlanificada"
-        class="w-full py-1 rounded-md border-[1px] bg-azulClaroIENM border-azulClaroIENM text-white font-manrope-b mb-5"
+        class="w-full py-1 rounded-md border-[1px] bg-azulClaroIENM border-azulClaroIENM text-white  mb-5"
       >
         INGRESAR
       </button>
@@ -45,7 +45,7 @@
       <button
         type="button"
         @click="submitModificada()"
-        class="w-full bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base"
+        class="w-full bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white  text-sm sm:text-base"
       >
         INGRESAR
       </button>

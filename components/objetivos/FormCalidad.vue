@@ -1,9 +1,9 @@
 <template>
   <form class="w-[50%] max-w-[200px] sm:max-w-[230px] text-xs sm:text-base">
     <fieldset
-      class="border-[1px] border-black font-manrope-r rounded-lg p-2 sm:p-3"
+      class="border-[1px] border-black  rounded-lg p-2 sm:p-3"
     >
-      <legend class="px-1 font-manrope-l">Inspección sol</legend>
+      <legend class="px-1 ">Inspección sol</legend>
       <p class="font-bold mb-1">Mes</p>
       <p v-if="errorsInsp.dateInspSol" class="text-red-500 text-sm pb-1">
         Este campo es obligatorio

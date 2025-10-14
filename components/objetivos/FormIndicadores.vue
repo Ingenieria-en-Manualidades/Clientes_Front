@@ -1,9 +1,9 @@
 <template>
-  <form class="font-manrope-r w-1/2 max-w-[260px] text-sm sm:text-base">
+  <form class=" w-1/2 max-w-[260px] text-sm sm:text-base">
     <fieldset
-      class="w-full border-[1px] border-black p-2 font-manrope-r rounded"
+      class="w-full border-[1px] border-black p-2  rounded"
     >
-      <legend class="font-manrope-b">Indicadores</legend>
+      <legend class="">Indicadores</legend>
       <div class="gap-2">
         <p v-if="errors.fecha" class="text-xs text-red-500">
           La fecha es obligatoria
@@ -68,7 +68,7 @@
         <button
           type="button"
           @click="submit()"
-          class="bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base w-full"
+          class="bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white  text-sm sm:text-base w-full"
         >
           INGRESAR
         </button>

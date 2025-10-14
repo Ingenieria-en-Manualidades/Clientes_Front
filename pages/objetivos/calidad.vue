@@ -59,7 +59,7 @@
         v-else-if="estadoArchivos"
       >
         <i :class="avisoIcono"></i>
-        <p class="font-manrope-b text-xl mt-3">
+        <p class=" text-xl mt-3">
           {{ avisodetalles }}
         </p>
       </div>

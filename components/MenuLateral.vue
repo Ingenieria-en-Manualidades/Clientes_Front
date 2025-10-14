@@ -14,7 +14,7 @@
         class="py-2 px-3 hover:bg-gray-200 rounded-[50%] text-white hover:text-black"
         @click="toggleNavbar"
       >
-        <i class="pi pi-times mt-1 text-base"></i>
+        <i class="pi pi-times mt-1 "></i>
       </button>
     </div> -->
     <!-- <div
@@ -57,7 +57,7 @@
                     class="flex py-3 px-3 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-full"
                   >
                     <i :class="submodulo.icono"
-                      ><span class="ml-3 font-manrope-l text-base">{{
+                      ><span class="ml-3 ">{{
                         submodulo.nombre
                       }}</span></i
                     >
@@ -75,7 +75,7 @@
                 class="flex py-3 px-4 mb-2 hover:bg-white rounded-lg text-white hover:text-black w-full"
               >
                 <i v-if="modulo.icono" :class="modulo.icono"
-                  ><span class="ml-3 font-manrope-l text-base">{{
+                  ><span class="ml-3 ">{{
                     modulo.nombre
                   }}</span></i
                 >
@@ -120,7 +120,7 @@ const ariaHidden = computed(() => (!isSmall.value && !isMedium.value) ? false : 
 
 const sizeClass = computed(() => {
   if (isSmall.value)  return "w-full left-0 top-[70px] bottom-0";
-  if (isMedium.value) return "w-[40%] left-0 top-[95px] bottom-0 z-30";
+  if (isMedium.value) return "w-[40%] left-0 top-[75px] bottom-0 z-30";
   return "w-[15%] top-[95px] bottom-1 left-2 z-10";
 });
 

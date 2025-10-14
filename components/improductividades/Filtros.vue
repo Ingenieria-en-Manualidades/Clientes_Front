@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:flex font-manrope-r gap-2 mb-2">
+  <div class="lg:flex  gap-2 mb-2">
     <div class="lg:w-1/6 mb-2">
       <div>
         <label for="op">Filtrar por operación</label>
@@ -73,7 +73,7 @@
         @click="recargarTabla"
       >
         <i class="pi pi-refresh text-white"
-          ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
+          ><span class="ml-2 ">Recargar tabla</span></i
         >
       </button>
     </div>

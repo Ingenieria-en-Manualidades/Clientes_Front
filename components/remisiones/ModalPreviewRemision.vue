@@ -6,7 +6,7 @@
   >
     <i class="pi pi-eye text-white"></i>
     <p
-      class="absolute w-[110px] bg-[#28b67a] px-3 font-manrope-r rounded-lg left-[-35px] top-2 hidden transform group-hover:-translate-y-8 group-hover:block duration-200 after:block after:border-t-[5px] after:border-t-[#28b67a] after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent after:absolute after:left-12"
+      class="absolute w-[110px] bg-[#28b67a] px-3  rounded-lg left-[-35px] top-2 hidden transform group-hover:-translate-y-8 group-hover:block duration-200 after:block after:border-t-[5px] after:border-t-[#28b67a] after:border-l-[5px] after:border-l-transparent after:border-r-[5px] after:border-r-transparent after:absolute after:left-12"
     >
       ver remisión
     </p>
@@ -29,12 +29,12 @@
             alt="IENM Logo"
             class="w-[90px] sm:w-[130px]"
           />
-          <p class="text-center font-manrope-b text-black text-xs sm:text-base">
+          <p class="text-center  text-black text-xs sm:text-base">
             INGENIERÍA EN MANUALIDADES SAS <br />
             NIT 800.187.547-1 <br />
             TV 29 #16-57
           </p>
-          <p class="text-center font-manrope-b text-black text-xs sm:text-base">
+          <p class="text-center  text-black text-xs sm:text-base">
             REMISIÓN N° {{ numRemision }}<br />{{ fecha }}
           </p>
         </div>
@@ -44,7 +44,7 @@
             <thead>
               <tr>
                 <th
-                  class="py-[6px] font-manrope-b text-black text-sm sm:text-base bg-gray-300 border-b-[1px] border-b-black"
+                  class="py-[6px]  text-black text-sm sm:text-base bg-gray-300 border-b-[1px] border-b-black"
                   colspan="3"
                 >
                   {{ cliente }}
@@ -53,7 +53,7 @@
             </thead>
             <tbody>
               <tr
-                class="font-manrope-b text-center text-black text-sm sm:text-base"
+                class=" text-center text-black text-sm sm:text-base"
               >
                 <th class="bg-gray-200 py-1 px-8 text-xs sm:text-base">
                   Orden de compra
@@ -66,7 +66,7 @@
                 </th>
               </tr>
               <tr
-                class="font-manrope-r text-center text-black text-sm sm:text-base"
+                class=" text-center text-black text-sm sm:text-base"
               >
                 <td
                   class="py-1 px-8 text-xs sm:text-base hover:bg-gray-100 cursor-pointer"
@@ -92,7 +92,7 @@
           <table class="w-full">
             <thead>
               <tr
-                class="font-manrope-b border-b-2 border-b-black text-black text-xs sm:text-[15px]"
+                class=" border-b-2 border-b-black text-black text-xs sm:text-[15px]"
               >
                 <th class="py-2">OP</th>
                 <th class="py-2">SKU</th>
@@ -106,7 +106,7 @@
               <tr
                 v-for="dato in datos"
                 v-bind:key="dato.nombre"
-                class="text-center font-manrope-r border-b-[1px] border-b-gray-300 text-xs sm:text-[14px] cursor-pointer hover:bg-gray-300 text-black"
+                class="text-center  border-b-[1px] border-b-gray-300 text-xs sm:text-[14px] cursor-pointer hover:bg-gray-300 text-black"
               >
                 <td class="py-2">{{ dato.programacion_id }}</td>
                 <td class="py-2">{{ dato.codigo_cobro }}</td>
@@ -124,7 +124,7 @@
             </tbody>
             <tfoot>
               <tr
-                class="bg-gray-200 border-t-2 border-t-black font-manrope-r text-black text-xs sm:text-[14px]"
+                class="bg-gray-200 border-t-2 border-t-black  text-black text-xs sm:text-[14px]"
               >
                 <td class="text-right lg:pr-5 py-1" colspan="7">
                   <span class="font-bold mr-10">TOTAL</span>
@@ -133,7 +133,7 @@
                 </td>
               </tr>
               <tr
-                class="bg-gray-200 font-manrope-r text-black text-xs sm:text-[14px]"
+                class="bg-gray-200  text-black text-xs sm:text-[14px]"
               >
                 <td class="text-right lg:pr-5 py-1" colspan="7">
                   <span class="font-bold mr-10">IVA</span>
@@ -141,7 +141,7 @@
                 </td>
               </tr>
               <tr
-                class="bg-gray-200 font-manrope-r text-black text-xs sm:text-[14px]"
+                class="bg-gray-200  text-black text-xs sm:text-[14px]"
               >
                 <td class="text-right lg:pr-5 py-1" colspan="7">
                   <span class="font-bold mr-7">TOTAL GENERAL</span>
@@ -154,7 +154,7 @@
         </div>
         <!-- Ultimos detalles como la observación y la firma -->
         <div class="mt-3">
-          <div class="font-manrope-b mb-2 text-black text-xs sm:text-base">
+          <div class=" mb-2 text-black text-xs sm:text-base">
             <label for="observacion">Observaciones:</label>
           </div>
           <Textarea
@@ -162,23 +162,23 @@
             v-model="observaciones"
             rows="3"
             readonly
-            class="w-full bg-[#e9ecef] border-[1px] border-gray-400 text-black font-manrope-r"
+            class="w-full bg-[#e9ecef] border-[1px] border-gray-400 text-black "
           />
           <div class="w-full inline-flex mt-12">
             <p
-              class="text-center w-2/4 text-black font-manrope-b text-xs sm:text-base"
+              class="text-center w-2/4 text-black  text-xs sm:text-base"
             >
               ELABORADO POR:<br />{{ usuario }}
             </p>
             <p class="text-center w-2/4 hidden sm:block">
               _____________________________________________<br />
-              <span class="font-manrope-b text-black text-xs sm:text-base"
+              <span class=" text-black text-xs sm:text-base"
                 >FIRMA</span
               >
             </p>
             <p class="text-center w-2/4 block sm:hidden">
               ___________________________<br />
-              <span class="font-manrope-b text-black text-xs sm:text-base"
+              <span class=" text-black text-xs sm:text-base"
                 >FIRMA</span
               >
             </p>
@@ -191,20 +191,20 @@
         v-if="estado === 'Aprobado'"
       >
         <div
-          class="bg-verdeOscIENM py-2 px-1 sm:px-5 rounded-lg font-manrope-b text-white mt-1 mr-[11.5%] text-center block sm:inline-flex"
+          class="bg-verdeOscIENM py-2 px-1 sm:px-5 rounded-lg  text-white mt-1 mr-[11.5%] text-center block sm:inline-flex"
         >
           <i class="pi pi-check text-xs sm:text-base pt-1"></i>
           <p class="ml-0 sm:ml-3 text-xs sm:text-base">{{ estado }}</p>
         </div>
         <div class="w-3/4 text-right mt-2">
           <button
-            class="py-1 px-4 font-manrope-b text-white rounded-lg bg-red-500 mr-3"
+            class="py-1 px-4  text-white rounded-lg bg-red-500 mr-3"
             @click="visible = false"
           >
             Cerrar
           </button>
           <button
-            class="py-1 px-4 font-manrope-b text-white rounded-lg bg-verdeOscIENM"
+            class="py-1 px-4  text-white rounded-lg bg-verdeOscIENM"
             @click="generarPDF"
           >
             <i class="pi pi-file-pdf"></i>

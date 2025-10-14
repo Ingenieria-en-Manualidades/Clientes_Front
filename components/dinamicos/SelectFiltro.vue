@@ -23,7 +23,7 @@
       >
         <div
           :class="[
-            'py-1 px-3 bg-white hover:bg-[#fdb740] flex cursor-pointer font-manrope-r text-black text-left',
+            'py-1 px-3 bg-white hover:bg-[#fdb740] flex cursor-pointer  text-black text-left',
             index === 0
               ? 'rounded-t border-b-[1px] border-b-black'
               : index + 1 === opciones?.length

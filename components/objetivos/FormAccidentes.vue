@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form class="font-manrope-r" @submit.prevent="submit">
+    <form class="" @submit.prevent="submit">
       <p>¿Hubo algun accidente?</p>
       <div class="flex justify-center gap-1 mb-3">
         <label for="opcionUno">Si</label>
@@ -39,7 +39,7 @@
             <p>Tipo</p>
             <select
               v-model="accidente"
-              class="bg-white text-lg border-[1px] border-black py-1 px-2 rounded-md font-manrope-r mb-5"
+              class="bg-white text-lg border-[1px] border-black py-1 px-2 rounded-md  mb-5"
             >
               <option
                 v-for="(accidente, index) in accidentes"

@@ -1,5 +1,5 @@
 <template>
-  <table class="text-xs sm:text-sm w-[95%] mx-[2.5%] lg:w-full font-manrope-r">
+  <table class="text-xs sm:text-sm w-[95%] mx-[2.5%] lg:w-full ">
     <thead>
       <tr class="sm:text-base">
         <th class="bg-azulIENM text-white py-4 rounded-tl-md">N°</th>
@@ -73,7 +73,7 @@
     >
       <i class="pi pi-angle-left"></i>
     </button>
-    <span class="font-manrope-b mt-[6px]"
+    <span class=" mt-[6px]"
       >Página {{ paginaActual }} de {{ totalPaginas }}</span
     >
     <button
