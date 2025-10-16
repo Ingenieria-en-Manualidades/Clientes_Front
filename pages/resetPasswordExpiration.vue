@@ -4,7 +4,7 @@
     <div class="w-[30%] h-full shadow-2xl rounded-lg py-5 min-w-[300px] max-w-[350px] bg-white">
       <div class="flex justify-center pb-5">
         <img
-          src="/assets/img/ienmLogito.png"
+          src="/assets/img/svg/favicon2.png"
           alt="Logito IENM"
           class="w-[55%]"
         />
