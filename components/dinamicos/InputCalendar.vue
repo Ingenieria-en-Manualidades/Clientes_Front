@@ -1,14 +1,14 @@
 <template>
   <div
     :class="[
-      'w-full font-manrope-r relative py-1 ',
+      'w-full  relative py-1 ',
       displayFlex ? 'flex gap-1' : 'block',
     ]"
   >
     <div>
-      <label class="cursor-pointer font-manrope-b">{{ label }}:</label>
+      <label class="cursor-pointer ">{{ label }}:</label>
     </div>
-    <p class="text-red-500 text-sm font-manrope-b">{{ info }}</p>
+    <p class="text-red-500 text-sm ">{{ info }}</p>
     <Calendar
       id="dailyCalendar"
       v-model="model"
@@ -25,7 +25,7 @@
       showButtonBar
       :selectionMode="range ? 'range' : undefined"
     />
-    <p class="text-red-500 text-sm font-manrope-b">{{ warning }}</p>
+    <p class="text-red-500 text-sm ">{{ warning }}</p>
   </div>
 </template>
 

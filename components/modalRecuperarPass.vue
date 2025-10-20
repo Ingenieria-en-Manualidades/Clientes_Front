@@ -1,6 +1,6 @@
 <template>
   <p
-    class="ml-[12%] mt-1 text-xs cursor-pointer md:text-sm lg:text-sm text-white font-manrope-r hover:text-amarilloIENM"
+    class="ml-[12%] mt-1 text-xs cursor-pointer md:text-sm lg:text-sm text-white  hover:text-amarilloIENM"
     @click="visible = true"
   >
     ¿Olvidaste tu contraseña?
@@ -12,7 +12,7 @@
     :style="{ width: '23rem' }"
   >
     <div class="block justify-center items-center mb-5">
-      <p class="font-manrope-r mb-3 ml-1">Correo electrónico</p>
+      <p class=" mb-3 ml-1">Correo electrónico</p>
       <IconField>
         <InputIcon class="pi pi-envelope" />
         <InputText v-model="correo" @input="validarEmail" />
@@ -20,13 +20,13 @@
     </div>
     <div class="flex justify-end gap-2">
       <button
-        class="bg-red-500 rounded-lg py-1 px-3 font-manrope-r text-white"
+        class="bg-red-500 rounded-lg py-1 px-3  text-white"
         @click="visible = false"
       >
         Regresar
       </button>
       <button
-        class="bg-verdeOscIENM rounded-lg py-1 px-3 font-manrope-r text-white"
+        class="bg-verdeOscIENM rounded-lg py-1 px-3  text-white"
         @click="enviar"
       >
         Enviar

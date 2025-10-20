@@ -31,7 +31,7 @@
         v-else
       >
         <i class="pi pi-refresh text-white"
-          ><span class="ml-2 font-manrope-r">Recargar tabla</span></i
+          ><span class="ml-2 ">Recargar tabla</span></i
         >
       </button>
       <TablaRemisiones
@@ -53,12 +53,12 @@
     <!-- Información que sale en caso de no aparecer ninguna información -->
     <div class="p-10 text-center" v-else-if="estadoRemisiones">
       <i :class="avisoIcono"></i>
-      <p class="font-manrope-b text-xl mt-3">
+      <p class=" text-xl mt-3">
         {{ avisodetalles }}
       </p>
       <button
         v-if="botonRecargar"
-        class="bg-azulClaroIENM px-3 py-1 rounded mt-3 font-manrope-b text-white"
+        class="bg-azulClaroIENM px-3 py-1 rounded mt-3  text-white"
         @click="recargarTabla"
       >
         Recargar tabla

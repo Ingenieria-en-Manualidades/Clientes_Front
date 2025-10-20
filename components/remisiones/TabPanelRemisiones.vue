@@ -23,8 +23,8 @@
             />
             <span
               :class="[
-                'font-manrope-r text-[13px] sm:text-[16px]',
-                isActive(tab.route) ? 'text-azulIENM font-manrope-extrab' : '',
+                ' text-[13px] sm:text-[16px]',
+                isActive(tab.route) ? 'text-azulIENM ' : '',
               ]"
               >{{ tab.label }}</span
             >

@@ -1,6 +1,6 @@
 <template>
   <div class="my-3">
-    <form class="font-manrope-r flex justify-center">
+    <form class=" flex justify-center">
       <div>
         <p><b>Elegir mes:</b></p>
         <Calendar
@@ -98,7 +98,7 @@
           <div class="flex justify-center mt-8">
             <button
               type="button"
-              class="bg-[#0063a6] px-10 py-2 rounded-lg text-white font-manrope-b"
+              class="bg-[#0063a6] px-10 py-2 rounded-lg text-white "
               @click="submitForm"
             >
               Guardar

@@ -1,16 +1,16 @@
 <template>
   <div
     :class="[
-      'w-full font-manrope-r relative py-1',
+      'w-full  relative py-1',
       displayFlex ? 'flex gap-1' : 'block',
     ]" v-show="visible"
   >
     <div>
-      <label :for="`inp${label}`" class="cursor-pointer font-manrope-b"
+      <label :for="`inp${label}`" class="cursor-pointer "
         >{{ label }}:</label
       >
     </div>
-    <p class="text-red-500 text-sm font-manrope-b">{{ info }}</p>
+    <p class="text-red-500 text-sm ">{{ info }}</p>
     <input
       type="text"
       :id="`inp${label}`"
@@ -22,7 +22,7 @@
         disabled ? 'bg-gray-200 border border-gray-400' : 'border border-gray-300',
       ]"
     />
-    <p class="text-red-500 text-sm font-manrope-b">{{ warning }}</p>
+    <p class="text-red-500 text-sm ">{{ warning }}</p>
   </div>
 </template>
 

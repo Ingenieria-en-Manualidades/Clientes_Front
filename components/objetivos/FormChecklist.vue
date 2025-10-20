@@ -1,9 +1,9 @@
 <template>
   <form id="formChecklist" class="w-[50%] max-w-[200px] sm:max-w-[230px] text-xs sm:text-base">
     <fieldset
-      class="border-[1px] border-black rounded-lg p-2 sm:p-3 font-manrope-r"
+      class="border-[1px] border-black rounded-lg p-2 sm:p-3 "
     >
-      <legend class="px-1 font-manrope-l">CheckList</legend>
+      <legend class="px-1 ">CheckList</legend>
       <p class="font-bold mb-1">Mes</p>
       <p v-if="errorsCheck.dateCheck" class="text-red-500 text-sm pb-1">
         Este campo es obligatorio

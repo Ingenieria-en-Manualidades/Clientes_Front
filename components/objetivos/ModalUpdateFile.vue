@@ -2,11 +2,11 @@
   <button id="btnModalUpdateFile"
     type="button"
     @click="visible = !visible"
-    class="bg-green-400 rounded m-1 py-1 px-3 text-white text-center font-manrope-r relative group"
+    class="bg-green-400 rounded m-1 py-1 px-3 text-white text-center  relative group"
   >
     <span>Actualizar</span>
   </button>
-  <div class="font-manrope-r">
+  <div class="">
     <Dialog
       v-model:visible="visible"
       modal

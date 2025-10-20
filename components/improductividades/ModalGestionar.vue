@@ -14,8 +14,8 @@
       :header="'Aceptar o Rechazar'"
       :style="{ width: '25rem' }"
     >
-      <p class="font-manrope-b">Actividad y Descripción:</p>
-      <p class="font-manrope-r">{{ actividad }}</p>
+      <p class="">Actividad y Descripción:</p>
+      <p class="">{{ actividad }}</p>
       <Textarea
         v-model="descripcion"
         autoResize
@@ -25,7 +25,7 @@
         class="mt-2"
       />
       <div class="border-2 px-[9%] py-[3%] rounded-md mt-4">
-        <p class="font-manrope-b pb-1">Acción:</p>
+        <p class=" pb-1">Acción:</p>
         <select
           v-model="opcion"
           required
@@ -36,7 +36,7 @@
           <option value="Aprobado">Aceptar Improductividad</option>
           <option value="Rechazado">Rechazar Improductividad</option>
         </select>
-        <p class="font-manrope-b pb-1 py-2">
+        <p class=" pb-1 py-2">
           Motivo
           <i
             :class="disable ? 'pi pi-lock float-right' : 'pi pi-lock-open float-right'"
@@ -52,14 +52,14 @@
       <div class="flex justify-end gap-2 mt-4">
         <button
           type="button"
-          class="py-1 px-4 font-manrope-b text-white rounded-lg bg-red-500 hover:bg-red-600"
+          class="py-1 px-4  text-white rounded-lg bg-red-500 hover:bg-red-600"
           @click="cancelar"
         >
           Cancelar
         </button>
         <button
           type="button"
-          class="py-1 px-4 font-manrope-b text-white rounded-lg bg-verdeOscIENM hover:bg-[#c37428]"
+          class="py-1 px-4  text-white rounded-lg bg-verdeOscIENM hover:bg-[#c37428]"
           @click="guardar"
         >
           Guardar

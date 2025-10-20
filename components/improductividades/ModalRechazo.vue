@@ -2,7 +2,7 @@
   <button
     type="button"
     @click="visible = !visible"
-    class="bg-red-400 rounded m-1 py-1 px-4 text-white font-manrope-r"
+    class="bg-red-400 rounded m-1 py-1 px-4 text-white "
   >
     <i class="pi pi-eye mr-1"></i>
     <span>Ver</span>
@@ -14,7 +14,7 @@
       header="MOTIVO DE RECHAZO"
       class="dialog"
     >
-      <p class="border-[1px] border-red-500 p-2 rounded-md font-manrope-r">
+      <p class="border-[1px] border-red-500 p-2 rounded-md ">
         {{ motivo }}
       </p>
     </Dialog>

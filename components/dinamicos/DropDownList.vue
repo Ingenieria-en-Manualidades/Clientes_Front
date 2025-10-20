@@ -1,14 +1,14 @@
 <template>
   <div id="dailyDropDown"
     :class="[
-      'w-full font-manrope-r relative py-1 ',
+      'w-full  relative py-1 ',
       displayFlex ? 'flex gap-1 items-start' : 'block',
       'cursor-pointer'
     ]"
     @click="openSelect"
   >
-    <p class="font-manrope-b text-sm">{{ label }}:</p>
-    <p class="text-red-500 text-sm font-manrope-b" v-if="info">{{ info }}</p>
+    <p class=" text-sm">{{ label }}:</p>
+    <p class="text-red-500 text-sm " v-if="info">{{ info }}</p>
 
     <!-- Contenedor del control (match de alturas y bordes) -->
     <label
@@ -46,7 +46,7 @@
       </button>
     </label>
 
-    <p class="text-red-500 text-sm font-manrope-b" v-if="warning">{{ warning }}</p>
+    <p class="text-red-500 text-sm " v-if="warning">{{ warning }}</p>
   </div>
 </template>
 

@@ -67,12 +67,12 @@
       v-else-if="estadoImproductividades"
     >
       <i :class="avisoIcono"></i>
-      <p class="font-manrope-b text-xl mt-3">
+      <p class=" text-xl mt-3">
         {{ avisodetalles }}
       </p>
       <button
         v-if="botonRecargar"
-        class="bg-azulClaroIENM px-3 py-1 rounded mt-3 font-manrope-b text-white"
+        class="bg-azulClaroIENM px-3 py-1 rounded mt-3  text-white"
         @click="recargarTabla"
       >
         Recargar tabla

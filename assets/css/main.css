@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+
+@layer base {
+  html, body { @apply font-sans; }  
+}
+
+@layer base {
+  :where(*):not(i, .pi) { font-family: Verdana, Geneva, Tahoma, sans-serif !important; }
+}
 
 
 
@@ -22,7 +32,7 @@
   }
 
 /* Font Manrope */
-@font-face {
+/* @font-face {
     font-family: "Manrope-Bold";
     src: url(../fonts/Manrope/Manrope-Bold.ttf);
     font-weight: bold;
@@ -51,10 +61,10 @@
     font-family: "Manrope-Regular";
     src: url(../fonts/Manrope/Manrope-Regular.ttf);
     font-style: normal;
-}
+} */
 
 /* Font Verdana */
-@font-face {
+/* @font-face {
     font-family: "Verdana-Regular";
     src: url(../fonts/Verdana/Verdana.ttf);
     font-style: normal;
@@ -76,10 +86,10 @@
     font-family: "Verdana-Bold-Italic";
     src: url(../fonts/Verdana/Verdana-BoldItalic.ttf);
     font-style: normal;
-}
+} */
 
 /* FONT FUTURA */
-@font-face {
+/* @font-face {
     font-family: "Futura-Medium";
     src: url(../fonts/Futura/FuturaStd-Medium.otf);
     font-style: normal;
@@ -107,10 +117,11 @@
     font-family: "Futura-Bold-Oblique";
     src: url(../fonts/Futura/FuturaStd-BoldOblique.otf);
     font-style: normal;
-}
+} */
 
 @layer components{
     .sideBar{
         @apply fixed h-full w-[270px] max-[760px]:w-full top-0 left-0 min-[1300px]:top-[102px] min-[1300px]:left-3 bg-[#4789c8] rounded-r-lg max-[760px]:rounded-none min-[1300px]:rounded-lg px-3 duration-700 z-10;
     }
 }
+

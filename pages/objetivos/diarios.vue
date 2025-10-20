@@ -1,12 +1,12 @@
 <template>
   <div id="pageDiarios" class="w-full">
     <title>Producción diaria</title>
-    <p class="font-manrope-b text-center text-2xl my-1">PRODUCCIÓN</p>
+    <p class=" text-center text-2xl my-1">PRODUCCIÓN</p>
     <div class="w-full flex justify-center p-1 gap-2">
       <FormProduccion />
       <FormIndicadores />
-      <!-- <fieldset class="border-[1px] border-black rounded p-2 font-manrope-r">
-        <legend class="font-manrope-b">Meses Anteriores</legend>
+      <!-- <fieldset class="border-[1px] border-black rounded p-2 ">
+        <legend class="">Meses Anteriores</legend>
         <Calendar
           v-model="dates"
           selectionMode="range"

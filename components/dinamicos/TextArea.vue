@@ -1,11 +1,11 @@
 <template>
-  <div class="w-full font-manrope-r relative py-1">
+  <div class="w-full  relative py-1">
     <div>
-      <label :for="`inp${label}`" class="cursor-pointer font-manrope-b"
+      <label :for="`inp${label}`" class="cursor-pointer "
         >{{ label }}:</label
       >
     </div>
-    <p class="text-blue-500 text-sm font-manrope-b">{{ info }}</p>
+    <p class="text-blue-500 text-sm ">{{ info }}</p>
     <textarea
       v-model="model"
       :id="`inp${label}`"
@@ -16,7 +16,7 @@
         disabled ? 'bg-gray-200 border border-gray-300' : 'border border-black',
       ]"
     ></textarea>
-    <p class="text-red-500 text-sm font-manrope-b">{{ warning }}</p>
+    <p class="text-red-500 text-sm ">{{ warning }}</p>
   </div>
 </template>
 

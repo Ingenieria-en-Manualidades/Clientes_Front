@@ -12,12 +12,12 @@
       <div
         class="bg-gradient-to-r from-azulIENM to-azulClaroIENM px-[15%] py-[5%] place-items-center rounded-b-lg"
       >
-        <p class="font-manrope-extrab text-white text-[20px] md:text-[26px]">
+        <p class=" text-white text-[20px] md:text-[26px]">
           Actualizar contraseña
         </p>
         <div class="mt-5">
-          <span class="text-white font-manrope-l">{{ password }}</span>
-          <p class="font-manrope-r text-amarilloIENM mb-2 text-base md:text-lg">
+          <span class="text-white ">{{ password }}</span>
+          <p class=" text-amarilloIENM mb-2 text-base md:text-lg">
             Contraseña nueva
           </p>
           <Password
@@ -28,7 +28,7 @@
           />
         </div>
         <div class="mt-5 mb-7">
-          <p class="font-manrope-r text-amarilloIENM mb-2 text-base md:text-lg">
+          <p class=" text-amarilloIENM mb-2 text-base md:text-lg">
             Vuelve a escribir la contraseña
           </p>
           <Password
@@ -40,7 +40,7 @@
         </div>
         <button
           :class="[
-            'w-full py-2 mt-4 rounded font-manrope-r',
+            'w-full py-2 mt-4 rounded ',
             bloqueo ? 'bg-gray-400' : 'bg-verdeIENM',
           ]"
           :disabled="bloqueo"
@@ -52,7 +52,7 @@
     </div>
     <Toast position="top-center" group="message" style="width: auto">
       <template #message="slotProps">
-        <div class="flex flex-col items-center flex-auto font-manrope-r">
+        <div class="flex flex-col items-center flex-auto ">
           <div>
             <i class="pi pi-times-circle text-5xl"></i>
           </div>

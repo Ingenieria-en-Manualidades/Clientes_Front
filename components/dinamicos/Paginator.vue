@@ -22,7 +22,7 @@
     >
       <i class="pi pi-angle-left"></i>
     </button>
-    <span class="font-manrope-b"
+    <span class=""
       >Página {{ currentPage }} de {{ totalPages }}</span
     >
     <button

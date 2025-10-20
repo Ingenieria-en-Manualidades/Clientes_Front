@@ -8,7 +8,7 @@
   >
     <i class="pi pi-pencil text-white"></i>
   </button>
-  <div class="font-manrope-r">
+  <div class="">
     <Dialog
       v-model:visible="visible"
       modal
@@ -33,7 +33,7 @@
             <button
               id="btnUpdateUnitsDaily"
               type="button"
-              class="w-full font-manrope-b text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
+              class="w-full  text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
               @click="update"
             >
               Actualizar

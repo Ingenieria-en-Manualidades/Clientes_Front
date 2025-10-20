@@ -1,6 +1,6 @@
 <template>
   <ScrollPanel style="width: 100%; height: 319px">
-    <table class="text-xs sm:text-sm w-full font-manrope-r">
+    <table class="text-xs sm:text-sm w-full ">
       <caption class="text-base" v-if="titulo">
         {{
           titulo
@@ -62,7 +62,7 @@
     >
       <i class="pi pi-angle-left"></i>
     </button>
-    <span class="font-manrope-b mt-[6px]"
+    <span class=" mt-[6px]"
       >Página {{ paginaActual }} de {{ totalPaginas }}</span
     >
     <button

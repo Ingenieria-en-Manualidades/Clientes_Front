@@ -27,7 +27,7 @@
             :class="[
               'w-1/2 mx-auto',
               'flex items-center justify-center gap-2',
-              'font-manrope-b text-white p-1 rounded-3xl mt-5',
+              ' text-white p-1 rounded-3xl mt-5',
               isLoading ? 'bg-slate-300' : 'bg-[#4789c8]',
             ]"
           >

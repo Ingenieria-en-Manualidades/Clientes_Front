@@ -1,9 +1,9 @@
 <template>
-  <form id="formProduccion" class="font-manrope-r w-1/2 max-w-[250px] text-sm sm:text-base">
+  <form id="formProduccion" class=" w-1/2 max-w-[250px] text-sm sm:text-base">
     <fieldset
-      class="border-[1px] border-black px-2 py-[11px] min-[444px]:py-[31px] min-[640px]:py-[37px] md:py-3 font-manrope-r rounded"
+      class="border-[1px] border-black px-2 py-[11px] min-[444px]:py-[31px] min-[640px]:py-[37px] md:py-3  rounded"
     >
-      <legend class="font-manrope-b">Producción</legend>
+      <legend class="">Producción</legend>
       <p>Producción Planificada:</p>
       <input
         id="fechaPlan"

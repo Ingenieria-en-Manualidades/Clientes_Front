@@ -10,8 +10,8 @@
         />
       </div>
       <div class="px-10">
-        <p v-show="!testCheck" class="font-manrope-b text-sm">La contraseña debe contener:</p>
-        <ul v-show="!testCheck" class="list-disc ml-5 font-manrope-r text-sm">
+        <p v-show="!testCheck" class=" text-sm">La contraseña debe contener:</p>
+        <ul v-show="!testCheck" class="list-disc ml-5  text-sm">
           <li>Ser diferente a la anterior contraseña.</li>
           <li v-show="!listRegex[0].check">Al menos 2 letras mayúsculas.</li>
           <li v-show="!listRegex[1].check">Al menos 2 letras minusculas.</li>
@@ -34,13 +34,13 @@
           :showIcon="true"
           v-model:showPassword="showPasswordDos"
         />
-        <p class="text-red-500 font-manrope-b text-sm">{{ warning }}</p>
+        <p class="text-red-500  text-sm">{{ warning }}</p>
         <button
           type="button"
           @click="setResetPassword"
           :disabled="warning !== null"
           :class="[
-            'w-full font-manrope-b text-center text-white p-3 rounded mt-5 items-center',
+            'w-full  text-center text-white p-3 rounded mt-5 items-center',
             warning ? 'bg-slate-300' : 'bg-[#4789c8]',
           ]"
         >

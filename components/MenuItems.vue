@@ -6,9 +6,9 @@
     <div v-if="!isLoading" class="text-xs md:text-base">
       <p>
         <i class="pi pi-user text-azulIENM text-lg mt-[8%] lg:mt-0 mr-2"></i>
-        <span class="font-manrope-b text-verdeOscIENM">{{ usuario }}</span>
+        <span class=" text-verdeOscIENM">{{ usuario }}</span>
       </p>
-      <p class="font-manrope-b text-azulIENM">{{ client }}</p> 
+      <p class=" text-azulIENM">{{ client }}</p> 
     </div>
     <div v-else>
       <ProgressSpinner
@@ -52,7 +52,7 @@
           @click="cerrarSesion"
         >
           <span :class="item.icon" />
-          <span class="ml-2 font-manrope-b">{{ item.label }}</span>
+          <span class="ml-2 ">{{ item.label }}</span>
         </a>
         <a
           v-else
@@ -62,7 +62,7 @@
           v-bind="props.action"
         >
           <span :class="item.icon" />
-          <span class="ml-2 font-manrope-b">{{ item.label }}</span>
+          <span class="ml-2 ">{{ item.label }}</span>
         </a>
       </template>
     </Menu>
