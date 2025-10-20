@@ -174,10 +174,13 @@ watch(dateSearch, async (newVal, oldVal) => {
   }
 });
 
+// Run step-by-step tour if URL hash matches
 const runStepByStep = async () => {
   if (process.server) return;
-  const h = route.hash || '';
-  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  const h = route.hash || ''; // Default to empty string
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return; // Only proceed if hash matches
+
+  // Get and run the driver for unidades table
   if (data.value.length === 0){
     toast.add({ severity: "warn", summary: "No hay unidades segun la capacidad ingresadas", detail: "No se puede iniciar el asistente paso a paso, asegurate de tener remisiones pendientes.", life: 6000,});
   } else {
@@ -187,7 +190,7 @@ const runStepByStep = async () => {
   }
 };
 
-watch(() => route.hash,() => {runStepByStep();});
+watch(() => route.hash,() => {runStepByStep();}); // Watch for changes in the route hash
 
 definePageMeta({
   layout: "default",

@@ -14,17 +14,20 @@ import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composab
 
 const route = useRoute();
 
+// Run step-by-step tour if URL hash matches
 const runStepByStep = async () => {
   if (process.server) return;
-  const h = route.hash || '';
-  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  const h = route.hash || ''; // Default to empty string
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return; // Only proceed if hash matches
+
+  // Get and run the driver for goals
   const { getDriverGoals } = await useDriver();
   const stepByStep = await getDriverGoals();
   if (stepByStep) stepByStep.drive();
 };
 onMounted(runStepByStep);
 
-watch(() => route.hash,() => {runStepByStep();});
+watch(() => route.hash,() => {runStepByStep();}); // Watch for changes in the route hash
 
 definePageMeta({
   layout: "default",

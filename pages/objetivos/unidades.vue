@@ -42,17 +42,20 @@ const checkPermissions = () => {
 };
 checkPermissions();
 
+// Run step-by-step tour if URL hash matches
 const runStepByStep = async () => {
   if (process.server) return;
-  const h = route.hash || '';
-  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  const h = route.hash || ''; // Default to empty string
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return; // Only proceed if hash matches
+
+  // Get and run the driver for unidades table
   const { getDriverUnidadesIndex } = await useDriver();
   const stepByStep = await getDriverUnidadesIndex();
   if (stepByStep) stepByStep.drive();
 };
 onMounted(runStepByStep);
 
-watch(() => route.hash,() => {runStepByStep();});
+watch(() => route.hash,() => {runStepByStep();}); // Watch for changes in the route hash
 
 definePageMeta({
   layout: "default",

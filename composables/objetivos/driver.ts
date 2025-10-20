@@ -3,6 +3,7 @@ import { navigateTo } from "nuxt/app";
 export const useDriver = async () => {
   const { driver } = await import('driver.js');
 
+  // Create the step-by-step tour of goals module.
   const getDriverGoals = async () => {
     if (process.server) return null;
     const stepByStep = driver({
@@ -22,6 +23,7 @@ export const useDriver = async () => {
     return stepByStep;
   };
 
+  // Create the step-by-step tour of monthly compliance module.
   const getDriverMonthlyCompliance = async () => {
     if (process.server) return null;
     const stepByStep = driver({
@@ -83,6 +85,7 @@ export const useDriver = async () => {
     return stepByStep;
   };
 
+  // Create the step-by-step tour of daily compliance (9 steps).
   const getDriverDiarios = async () => {
     if (process.server) return null;
     const stepByStep = driver({
@@ -116,7 +119,7 @@ export const useDriver = async () => {
     return stepByStep;
   };
 
-  // Nuevo: driver para la página index de "unidades" (10 pasos)
+  // Create the step-by-step tour form for scheduled units (10 steps).
   const getDriverUnidadesIndex = async () => {
     if (process.server) return null;
     const stepByStep = driver({
@@ -148,6 +151,7 @@ export const useDriver = async () => {
     return stepByStep;
   };
 
+  // Create the step-by-step tour of unidades table (11 steps).
   const getDriverUnidadesTable = async () => {
     if (process.server) return null;
     const stepByStep = driver({
@@ -157,15 +161,15 @@ export const useDriver = async () => {
       doneBtnText: 'Finalizar',
       progressText: '{{current}} de {{total}}',
       steps: [
-        // 1 - señalar pestaña "Consultar"
+        // 1 - select the "Consultar" tab
         { element: '#pageUnidadesTable #tabPanel a[data-tab-label="Consultar"]', popover: { title: 'Consultar unidades', description: 'Selecciona la pestaña Consultar para ver metas y unidades diarias.' } },
-        // 2 - DinamicosInputCalendar (filtro fecha)
+        // 2 - DinamicosInputCalendar (date filter)
         { element: '#pageUnidadesTable #dailyCalendar', popover: { title: 'Filtrar por fecha', description: 'Elige un mes o rango para filtrar las metas por fecha.' } },
-        // 3 - DinamicosChecklistFilter (filtro por área)
+        // 3 - DinamicosChecklistFilter (filter by area)
         { element: '#pageUnidadesTable #dinamicChecklistFilter', popover: { title: 'Filtrar por área', description: 'Filtra las filas por área usando este filtro.' } },
-        // 4 - primera fila de la tabla
+        // 4 - first row of the table
         { element: '#pageUnidadesTable table tbody tr:nth-child(1)', popover: { title: 'Fila de datos', description: 'Aquí verás la meta mensual segun la capacidad y sus acciones asociadas.' } },
-        // 5 - botón ObjetivosModalUnitsDaily (abrir modal)
+        // 5 - button ObjetivosModalUnitsDaily (open modal)
         { element: '#pageUnidadesTable #btnOpenUnitsDaily', 
           popover: { title: 'Ver unidades diarias', description: 'Abre el listado de unidades diarias relacionadas a esta meta.',
             onNextClick: async () => {
@@ -186,7 +190,7 @@ export const useDriver = async () => {
             }
           } 
         },
-        // 7 - botón ObjetivosModalUpdateUnitsDaily (abrir modal update diaria)
+        // 7 - button ObjetivosModalUpdateUnitsDaily (open modal update diaria)
         { element: '#btnOpenUpdateUnitsDaily',
           popover: { title: 'Actualizar unidad diaria', description: 'Abre la modal para actualizar una unidad diaria.', 
             onNextClick: async () => {
@@ -197,13 +201,13 @@ export const useDriver = async () => {
             }
           },
         },
-        // 8 - input number + actualizar del modal update diaria (clic y cerrar ambas modales)
+        // 8 - input number + update from the modal update diaria (click and close both modals)
         { element: '#modalUpdateUnitsDailyGroup',
           popover: { title: 'Actualizar unidades', description: 'Introduce el nuevo valor y guarda para actualizar la unidad diaria.',
             onNextClick: async () => {
               const btnCloseUpdateUnitsDaily = document.querySelector('#modalUnitsDaily #btnOpenUpdateUnitsDaily') as HTMLButtonElement;
               btnCloseUpdateUnitsDaily.click();
-              // Intentar cerrar cualquier dialog abierto (parent modal)
+              // Attempt to close any open dialogs (parent modal)
               const btnCloseUnitsDaily = document.querySelector('#pageUnidadesTable #btnOpenUnitsDaily') as HTMLButtonElement;
               btnCloseUnitsDaily.click();
               stepByStep.moveNext();
@@ -215,7 +219,7 @@ export const useDriver = async () => {
             }
           },
         },
-        // 9 - botón ObjetivosModalUpdateUnits (abrir modal update mensual)
+        // 9 - button ObjetivosModalUpdateUnits (open modal update mensual)
         { element: '#pageUnidadesTable #btnOpenUpdateUnits',
           popover: { title: 'Actualizar meta mensual', description: 'Abre la modal para actualizar la meta mensual, ten en cuenta que a la hora de actualizar la meta estaras creando una nueva, esto con la intención de guardar la trazavilidad.',
             onNextClick: async () => {
@@ -235,7 +239,7 @@ export const useDriver = async () => {
             }
           },
         },
-        // 10 - div groupUpdateUnits y cerrar modal mediante botón actualizar
+        // 10 - div groupUpdateUnits and close modal via update button
         { element: '#groupUpdateUnits',
           popover: { title: 'Actualizar meta', description: 'Introduce el nuevo valor, el motivo de la actualización y guarda para actualizar la meta mensual.',
             onNextClick: async () => {
@@ -250,7 +254,7 @@ export const useDriver = async () => {
             }
           },
         },
-        // 11 - felicitaciones
+        // 11 - congratulations
         { popover: { title: '¡Felicidades!', description: 'Has terminado el recorrido del módulo de unidades.' ,
             onPrevClick: async () => {
               const btnCloseUpdateUnits = document.querySelector('#pageUnidadesTable #btnOpenUpdateUnits') as HTMLButtonElement;

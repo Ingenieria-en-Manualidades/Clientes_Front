@@ -141,17 +141,20 @@ const descargarPDF = async (urlArchivo: string, nombreArchivo: string) => {
 
 listar();
 
+// Run step-by-step tour if URL hash matches
 const runStepByStep = async () => {
   if (process.server) return;
   const h = route.hash || '';
   if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+
+  // Get and run the driver for monthly compliance
   const { getDriverMonthlyCompliance } = await useDriver();
   const stepByStep = await getDriverMonthlyCompliance();
   if (stepByStep) stepByStep.drive();
 };
 onMounted(runStepByStep);
 
-watch(() => route.hash,() => {runStepByStep();});
+watch(() => route.hash,() => {runStepByStep();}); // Watch for changes in the route hash
 
 definePageMeta({
   layout: "default",

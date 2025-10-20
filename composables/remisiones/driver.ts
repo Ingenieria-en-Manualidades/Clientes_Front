@@ -4,6 +4,7 @@ export const useDriver = async () => {
 
   const { driver } = await import('driver.js');
   
+  // Create the step-by-step tour of pending referrals.
   const getDriver = async () => {
     if (process.server) return null;
     const stepByStep = driver({
@@ -83,6 +84,7 @@ export const useDriver = async () => {
     return stepByStep;
   };
 
+  // Create the step-by-step tour of approved referrals.
   const getDriverApprovedReferrals = async () => {
     if (process.server) return null;
     const stepByStep = driver({
@@ -124,6 +126,7 @@ export const useDriver = async () => {
     return stepByStep;
   }
 
+  // Create the step-by-step tour of rejected referrals.
   const getDriverRejectedReferrals = async () => {
     if (process.server) return null;
     const stepByStep = driver({

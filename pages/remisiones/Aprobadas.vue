@@ -148,10 +148,13 @@ const recargarTabla = () => {
 
 listar();
 
+// Run step-by-step tour if URL hash matches
 const runStepByStep = async () => {
   if (process.server) return;
-  const h = route.hash || '';
-  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  const h = route.hash || ''; // Default to empty string
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return; // Only proceed if hash matches
+
+  // Get and run the driver for approved referrals
   if (remisiones.value.length === 0){
     toast.add({ severity: "warn", summary: "No hay remisiones aprobadas", detail: "No se puede iniciar el asistente paso a paso, asegurate de tener remisiones aprobadas.", life: 6000,});
   } else {
