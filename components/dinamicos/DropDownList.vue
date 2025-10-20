@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div id="dailyDropDown"
     :class="[
       'w-full font-manrope-r relative py-1 ',
       displayFlex ? 'flex gap-1 items-start' : 'block',

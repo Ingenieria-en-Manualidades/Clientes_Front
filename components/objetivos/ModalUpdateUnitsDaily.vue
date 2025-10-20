@@ -1,5 +1,6 @@
 <template>
   <button
+    id="btnOpenUpdateUnitsDaily"
     type="button"
     class="bg-rojoIENM px-3 py-[3px] rounded hover:bg-verdeIENM my-1"
     @click="list"
@@ -22,19 +23,22 @@
             :displayFlex="false"
             :disabled="true"
           />
-          <DinamicosInputNumber
-            v-model="units"
-            :label="'Unidades'"
-            :displayFlex="false"
-            :warning="unitsFail"
-          />
-          <button
-            type="button"
-            class="w-full font-manrope-b text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
-            @click="update"
-          >
-            Actualizar
-          </button>
+          <div id="modalUpdateUnitsDailyGroup">
+            <DinamicosInputNumber
+              v-model="units"
+              :label="'Unidades'"
+              :displayFlex="false"
+              :warning="unitsFail"
+            />
+            <button
+              id="btnUpdateUnitsDaily"
+              type="button"
+              class="w-full font-manrope-b text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
+              @click="update"
+            >
+              Actualizar
+            </button>
+          </div>
         </form>
       </div>
     </Dialog>
@@ -70,7 +74,7 @@ const units = ref<string | null>(null);
 const unitsFail = ref<String | null>(null);
 
 const list = async () => {
-  visible.value = true;
+  visible.value = !visible.value;
   const resp = await getUnidadesDiariasID(props.unidadesDiariasID);
 
   if (resp.success) {

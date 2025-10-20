@@ -14,8 +14,10 @@
           showIcon
           fluid
           iconDisplay="input"
+          id="filterDate"
         />
-        <button
+        <button 
+          id="buttonFilterDate"
           @click="consultarRemisiones"
           class="bg-azulClaroIENM ml-2 p-[11px] rounded"
         >
@@ -66,10 +68,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { useCookie } from "nuxt/app";
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
-import { useCookie } from "nuxt/app";
+import { useDriver } from "../../composables/remisiones/driver";
 import type { Remision } from "../../interfaces/remisiones";
 import { items } from "../../composables/remisiones/datosRemisiones";
 import TablaRemisiones from "../../components/remisiones/TablaRemisiones.vue";
@@ -82,6 +86,7 @@ const dates = ref();
 let avisoIcono = ref();
 const toast = useToast();
 let avisodetalles = ref();
+const route = useRoute();
 const isLoading = ref(false);
 const calendario = ref(true);
 const botonRecargar = ref(false);
@@ -104,6 +109,7 @@ const listar = async () => {
       avisoIcono.value = "pi pi-check-circle text-5xl";
       avisodetalles.value = "Sin remisiones pendientes";
     }
+    await runStepByStep();
   } else {
     estadoRemisiones.value = true;
     avisoIcono.value = "pi pi-times-circle text-5xl";
@@ -140,6 +146,21 @@ const recargarTabla = () => {
 };
 
 listar();
+
+const runStepByStep = async () => {
+  if (process.server) return;
+  const h = route.hash || '';
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  if (remisiones.value.length === 0){
+    toast.add({ severity: "warn", summary: "No hay remisiones pendientes", detail: "No se puede iniciar el asistente paso a paso, asegurate de tener remisiones pendientes.", life: 6000,});
+  } else {
+    const { getDriver } = await useDriver();
+    const stepByStep = await getDriver();
+    if (stepByStep) stepByStep.drive();
+  }
+};
+
+watch(() => route.hash,() => {runStepByStep();});
 
 definePageMeta({
   layout: "default",

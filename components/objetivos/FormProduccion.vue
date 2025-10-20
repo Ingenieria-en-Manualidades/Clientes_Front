@@ -1,54 +1,64 @@
 <template>
-  <form class="font-manrope-r w-1/2 max-w-[250px] text-sm sm:text-base">
+  <form id="formProduccion" class="font-manrope-r w-1/2 max-w-[250px] text-sm sm:text-base">
     <fieldset
       class="border-[1px] border-black px-2 py-[11px] min-[444px]:py-[31px] min-[640px]:py-[37px] md:py-3 font-manrope-r rounded"
     >
       <legend class="font-manrope-b">Producción</legend>
       <p>Producción Planificada:</p>
       <input
+        id="fechaPlan"
         v-model="fechaPlan"
         type="date"
         class="w-full border-[1px] border-black outline-none rounded mb-1"
         :min="getFechaMaxMin(false)"
         :max="getFecha(date)"
       />
-      <input
-        type="text"
-        v-model="prodPlan"
-        maxlength="6"
-        class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
-      />
-      <p class="text-red-500 text-xs my-1">{{ errorProd }}</p>
-      <button
-        type="button"
-        @click="submitPlanificada"
-        class="w-full py-1 rounded-md border-[1px] bg-azulClaroIENM border-azulClaroIENM text-white font-manrope-b mb-5"
-      >
-        INGRESAR
-      </button>
+      <div id="grupoPlan">
+        <input
+          id="prodPlan"
+          type="text"
+          v-model="prodPlan"
+          maxlength="6"
+          class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+        />
+        <p class="text-red-500 text-xs my-1">{{ errorProd }}</p>
+        <button
+          id="btnSubmitPlan"
+          type="button"
+          @click="submitPlanificada"
+          class="w-full py-1 rounded-md border-[1px] bg-azulClaroIENM border-azulClaroIENM text-white font-manrope-b mb-5"
+        >
+          INGRESAR
+        </button>
+      </div>
       <p>Producción Modificada:</p>
       <p class="mb-1 text-xs">* Elegir una fecha anterior</p>
       <input
+        id="fechaMod"
         type="date"
         v-model="fechaMod"
         :max="getFechaMaxMin(true)"
         :min="getFechaMaxMin(false)"
         class="w-full border-[1px] border-black outline-none rounded mb-1"
       />
-      <input
-        type="text"
-        v-model="prodMod"
-        maxlength="6"
-        class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
-      />
-      <p class="text-red-500 text-xs my-1">{{ errorMod }}</p>
-      <button
-        type="button"
-        @click="submitModificada()"
-        class="w-full bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base"
-      >
-        INGRESAR
-      </button>
+      <div id="grupoMod">
+        <input
+          id="prodMod"
+          type="text"
+          v-model="prodMod"
+          maxlength="6"
+          class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+        />
+        <p class="text-red-500 text-xs my-1">{{ errorMod }}</p>
+        <button
+          id="btnSubmitMod"
+          type="button"
+          @click="submitModificada()"
+          class="w-full bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base"
+        >
+          INGRESAR
+        </button>
+      </div>
     </fieldset>
   </form>
 </template>

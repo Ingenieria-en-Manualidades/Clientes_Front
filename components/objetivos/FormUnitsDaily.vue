@@ -1,5 +1,5 @@
 <template>
-  <fieldset class="w-full border border-black py-3 px-5 rounded">
+  <fieldset id="formUnitsDaily" class="w-full border border-black py-3 px-5 rounded">
     <legend class="px-1">Diarias</legend>
     <DinamicosInputCalendar
       v-model="date"
@@ -12,26 +12,28 @@
       :minDate="daysBefore"
       :maxDate="tomorrow"
     />
-    <DinamicosDropDownList
-      :label="'Areas'"
-      :displayFlex="false"
-      :options="options"
-      v-model="areaChoose"
-      :warning="failedFields.areasFail"
-    />
-    <DinamicosInputNumber
-      v-model="units"
-      :label="'Unidades'"
-      :displayFlex="false"
-      :warning="failedFields.unitsFail"
-    />
-    <button
-      type="button"
-      class="w-full font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3 rounded-3xl mt-3"
-      @click="submitUnits"
-    >
-      Guardar
-    </button>
+    <div id="groupUnitsDaily">
+      <DinamicosDropDownList
+        :label="'Areas'"
+        :displayFlex="false"
+        :options="options"
+        v-model="areaChoose"
+        :warning="failedFields.areasFail"
+      />
+      <DinamicosInputNumber
+        v-model="units"
+        :label="'Unidades'"
+        :displayFlex="false"
+        :warning="failedFields.unitsFail"
+      />
+      <button
+        type="button"
+        class="w-full font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3 rounded-3xl mt-3"
+        @click="submitUnits"
+      >
+        Guardar
+      </button>
+    </div>
   </fieldset>
 </template>
 

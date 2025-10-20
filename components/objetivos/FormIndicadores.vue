@@ -1,5 +1,5 @@
 <template>
-  <form class="font-manrope-r w-1/2 max-w-[260px] text-sm sm:text-base">
+  <form id="formIndicadores" class="font-manrope-r w-1/2 max-w-[260px] text-sm sm:text-base">
     <fieldset
       class="w-full border-[1px] border-black p-2 font-manrope-r rounded"
     >
@@ -9,63 +9,67 @@
           La fecha es obligatoria
         </p>
         <input
+          id="fechaIndicador"
           type="date"
           v-model="fecha"
           :max="getFecha(date)"
           :min="getFecha(ayer)"
           class="w-full border-[1px] border-black outline-none rounded mb-1"
         />
-        <div class="mb-2">
-          <p>Cumplimiento plan armado (%):</p>
-          <p v-if="errors.planArmado" class="text-xs text-red-500">
-            Este campo es obligatorio
-          </p>
-          <input
-            type="text"
-            maxlength="3"
-            v-model="planArmado"
-            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
-          />
-        </div>
-        <div class="mb-2">
-          <p>Calidad (%):</p>
-          <p v-if="errors.calidad" class="text-xs text-red-500">
-            Este campo es obligatorio
-          </p>
-          <input
-            type="text"
-            maxlength="3"
-            v-model="calidad"
-            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
-          />
-        </div>
-        <div class="mb-2">
-          <p>Desperfecto M.E (%):</p>
-          <p v-if="errors.desperfectosME" class="text-xs text-red-500">
-            Este campo es obligatorio
-          </p>
-          <input
-            type="text"
-            maxlength="3"
-            v-model="desperfectosME"
-            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
-          />
-        </div>
-        <div class="mb-2">
-          <p>Desperfecto P.P (%):</p>
-          <p v-if="errors.desperfectosPP" class="text-xs text-red-500">
-            Este campo es obligatorio
-          </p>
-          <input
-            type="text"
-            maxlength="3"
-            v-model="desperfectosPP"
-            class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
-          />
+        <div id="divInputsIndicadores">
+          <div class="mb-2">
+            <p>Cumplimiento plan armado (%):</p>
+            <p v-if="errors.planArmado" class="text-xs text-red-500">
+              Este campo es obligatorio
+            </p>
+            <input
+              type="text"
+              maxlength="3"
+              v-model="planArmado"
+              class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+            />
+          </div>
+          <div class="mb-2">
+            <p>Calidad (%):</p>
+            <p v-if="errors.calidad" class="text-xs text-red-500">
+              Este campo es obligatorio
+            </p>
+            <input
+              type="text"
+              maxlength="3"
+              v-model="calidad"
+              class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+            />
+          </div>
+          <div class="mb-2">
+            <p>Desperfecto M.E (%):</p>
+            <p v-if="errors.desperfectosME" class="text-xs text-red-500">
+              Este campo es obligatorio
+            </p>
+            <input
+              type="text"
+              maxlength="3"
+              v-model="desperfectosME"
+              class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+            />
+          </div>
+          <div class="mb-2">
+            <p>Desperfecto P.P (%):</p>
+            <p v-if="errors.desperfectosPP" class="text-xs text-red-500">
+              Este campo es obligatorio
+            </p>
+            <input
+              type="text"
+              maxlength="3"
+              v-model="desperfectosPP"
+              class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+            />
+          </div>
         </div>
       </div>
       <div class="flex justify-center">
         <button
+          id="btnSubmitIndicadores"
           type="button"
           @click="submit()"
           class="bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base w-full"

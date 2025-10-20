@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div id="pageDiarios" class="w-full">
     <title>Producción diaria</title>
     <p class="font-manrope-b text-center text-2xl my-1">PRODUCCIÓN</p>
     <div class="w-full flex justify-center p-1 gap-2">
@@ -36,9 +36,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { useRoute } from "vue-router";
+import { ref, onMounted, watch } from "vue";
 import { useToast } from "primevue/usetoast";
 import Tabla from "../../components/dinamicos/Tabla.vue";
+import { useDriver } from "../../composables/objetivos/driver";
 import FormProduccion from "../../components/objetivos/FormProduccion.vue";
 import FormIndicadores from "../../components/objetivos/FormIndicadores.vue";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
@@ -49,6 +51,7 @@ import {
 
 const dates = ref();
 const toast = useToast();
+const route = useRoute();
 const { meses } = datosObjetivos();
 const { cabezasProd, atribProd, dataProd } = datosTablaProd();
 
@@ -111,6 +114,18 @@ const getMeses = (fechas: Date[]): String[] => {
   }
   return arrayMeses;
 };
+
+const runStepByStep = async () => {
+  if (process.server) return;
+  const h = route.hash || '';
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  const { getDriverDiarios } = await useDriver();
+  const stepByStep = await getDriverDiarios();
+  if (stepByStep) stepByStep.drive();
+};
+onMounted(runStepByStep);
+
+watch(() => route.hash,() => {runStepByStep();});
 
 definePageMeta({
   layout: "default",

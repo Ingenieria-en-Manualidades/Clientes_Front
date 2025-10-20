@@ -8,7 +8,7 @@
         <th class="bg-azulIENM text-white py-4 rounded-tr-md">ACCIÓN</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="bodyTableReferrals">
       <tr
         v-for="remision in remisionesData"
         v-bind:key="remision.no_remision"
@@ -24,7 +24,8 @@
           {{ remision.fecha }}
         </td>
         <td class="text-center sm:flex justify-center gap-1 py-2">
-          <ModalPreviewRemision
+          <ClientOnly >
+            <ModalPreviewRemision 
             v-if="modales === 'Aprobados' || modales === 'Pendientes'"
             :numRemision="remision.no_remision"
             :fecha="remision.fecha"
@@ -33,7 +34,8 @@
             :hojaEntrada="remision.numero_pedido"
             :contacto="remision.nombre + ' ' + remision.apellido"
             :estado="modales === 'Pendientes' ? 'Pendiente' : 'Aprobado'"
-          />
+            />
+          </ClientOnly>
           <ModalRemisiones
             v-if="modales === 'Pendientes'"
             :numRemision="remision.no_remision"
@@ -42,6 +44,7 @@
             @actualizarCampana="actuCampana"
           />
           <ModalRechazo
+            id="buttonRejectedReferrals"
             v-if="modales === 'Rechazados'"
             :numRemision="remision.no_remision"
             :motivo="remision.motivo"

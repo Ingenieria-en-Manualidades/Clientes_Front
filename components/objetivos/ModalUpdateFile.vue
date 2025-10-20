@@ -1,7 +1,7 @@
 <template>
-  <button
+  <button id="btnModalUpdateFile"
     type="button"
-    @click="visible = true"
+    @click="visible = !visible"
     class="bg-green-400 rounded m-1 py-1 px-3 text-white text-center font-manrope-r relative group"
   >
     <span>Actualizar</span>
@@ -13,6 +13,7 @@
       header="ACTUALIZAR EVIDENCIA"
       class="dialog"
       :style="{ width: '30rem' }"
+      id="dialogUpdateFile"
     >
       <div class="border-[1px] border-black py-3 px-5 text-center rounded">
         <i class="pi pi-info-circle text-3xl text-red-500"></i>
@@ -21,7 +22,7 @@
           archivo:
         </p>
         <p>{{ nameFile }}</p>
-        <div class="mt-5 mb-1">
+        <div id="divUpdateFile" class="mt-5 mb-1">
           <input
             type="file"
             ref="fileInput"
@@ -53,7 +54,8 @@
           </button>
         </div>
         <div class="flex justify-center font-bold mt-5">
-          <button
+          <button 
+            id="btnUpdateFileModal"
             type="button"
             @click="update"
             class="bg-[#4789c8] w-full py-2 rounded-lg text-white"

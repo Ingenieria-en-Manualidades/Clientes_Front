@@ -21,14 +21,15 @@
         class="min-w-[115px] w-[160px]"
       />
     </div>
-    <div class="w-[75%] inline-flex justify-end">
+    <div class="w-[75%] inline-flex items-center justify-end md:gap-1">
+      <ModalStepByStepGuide />
       <button
         type="button"
-        class="relative h-11 mt-[13px] md:mt-[16px] pr-[6px] cursor-pointer group"
+        class="relative cursor-pointer group"
         @click="viajarRemisiones"
       >
         <i
-          class="pi pi-bell hover:bg-gray-200 rounded-lg mt-1 md:mt-2 p-2 text-lg md:text-2xl"
+          class="pi pi-bell hover:bg-gray-200 rounded-lg p-2 text-lg md:text-2xl"
         ></i>
         <span
           v-if="nRemisiones"
@@ -42,7 +43,7 @@
           remisiones pendientes
         </p> -->
       </button>
-      <MenuItems :usuario="props.usuario" :client="client" />
+      <MenuItems id="menuItems" :usuario="props.usuario" :client="client" />
     </div>
   </header>
 </template>

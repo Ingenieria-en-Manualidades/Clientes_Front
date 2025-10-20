@@ -1,5 +1,6 @@
 <template>
   <button
+    id="btnOpenUpdateUnits"
     type="button"
     class="bg-rojoIENM px-3 py-[3px] rounded hover:bg-verdeIENM my-1"
     @click="list"
@@ -22,24 +23,26 @@
             :displayFlex="false"
             :disabled="true"
           />
-          <DinamicosInputNumber
-            v-model="units"
-            :label="'Unidades'"
-            :displayFlex="false"
-            :warning="unitsFail"
-          />
-          <DinamicosTextArea
-            v-model="reasonUpdate"
-            :label="'Motivo de actualización'"
-            :warning="reasonUpdateFail"
-          />
-          <button
-            type="button"
-            class="w-full font-manrope-b text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
-            @click="update"
-          >
-            Actualizar
-          </button>
+          <div id="groupUpdateUnits">
+            <DinamicosInputNumber
+              v-model="units"
+              :label="'Unidades'"
+              :displayFlex="false"
+              :warning="unitsFail"
+            />
+            <DinamicosTextArea
+              v-model="reasonUpdate"
+              :label="'Motivo de actualización'"
+              :warning="reasonUpdateFail"
+            />
+            <button
+              type="button"
+              class="w-full font-manrope-b text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
+              @click="update"
+            >
+              Actualizar
+            </button>
+          </div>
         </form>
       </div>
     </Dialog>
@@ -76,7 +79,7 @@ const props = defineProps({
 const emits = defineEmits(["listTable"]);
 
 const list = async () => {
-  visible.value = true;
+  visible.value = !visible.value;
   const resp = await getMetaUnidades(props.metaUnidadesID);
 
   if (resp.success) {

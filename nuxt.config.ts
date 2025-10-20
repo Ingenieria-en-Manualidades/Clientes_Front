@@ -2,7 +2,7 @@ import {defineNuxtConfig} from 'nuxt/config';
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', 'driver.js/dist/driver.css'],
 
   plugins: [
     '~/plugins/vueuse.ts'

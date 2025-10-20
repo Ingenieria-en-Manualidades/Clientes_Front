@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div id="moduleCalidad"
     class="w-full min-[950px]:flex min-[950px]:justify-center p-2 gap-1 sm:gap-3 md:p-5"
   >
     <title>Calidad</title>
@@ -68,10 +68,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { useCookie } from "nuxt/app";
+import { useRoute } from "vue-router";
+import { ref, onMounted, watch } from "vue";
 import { useToast } from "primevue/usetoast";
 import Tabla from "~/components/dinamicos/Tabla.vue";
+import { useDriver } from "../../composables/objetivos/driver";
 import FormCalidad from "../../components/objetivos/FormCalidad.vue";
 import FormChecklist from "../../components/objetivos/FormChecklist.vue";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
@@ -80,6 +82,7 @@ import type { DataArchivos } from "../../interfaces/objetives";
 
 let avisoIcono = ref();
 const toast = useToast();
+const route = useRoute();
 let avisodetalles = ref();
 const isLoading = ref(false);
 const estadoArchivos = ref(false);
@@ -137,6 +140,18 @@ const descargarPDF = async (urlArchivo: string, nombreArchivo: string) => {
 };
 
 listar();
+
+const runStepByStep = async () => {
+  if (process.server) return;
+  const h = route.hash || '';
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  const { getDriverMonthlyCompliance } = await useDriver();
+  const stepByStep = await getDriverMonthlyCompliance();
+  if (stepByStep) stepByStep.drive();
+};
+onMounted(runStepByStep);
+
+watch(() => route.hash,() => {runStepByStep();});
 
 definePageMeta({
   layout: "default",

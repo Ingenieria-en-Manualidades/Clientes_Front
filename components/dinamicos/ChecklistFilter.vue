@@ -1,7 +1,7 @@
 <template>
   <div
     :class="['relative', placeholder ? 'max-w-40' : 'max-w-7']"
-    ref="dropdown"
+    ref="dropdown" id="dinamicChecklistFilter"
   >
     <div
       @click="visible = !visible"

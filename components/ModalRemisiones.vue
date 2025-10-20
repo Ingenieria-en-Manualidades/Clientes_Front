@@ -2,7 +2,7 @@
   <button
     type="button"
     class="bg-amarilloIENM px-3 py-[6px] rounded hover:bg-[#e1c600]"
-    @click="visible = true"
+    @click="visible = !visible"
   >
     <i class="pi pi-clipboard text-black"></i>
     <span class="text-black font-manrope-r ml-2 hidden sm:inline-flex"
@@ -13,6 +13,7 @@
     <Dialog
       v-model:visible="visible"
       modal
+      id="modalReferrals"
       :header="'Aceptar o Rechazar.'"
       :style="{ width: '25rem' }"
     >

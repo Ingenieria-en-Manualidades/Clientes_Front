@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full md:w-[70%] p-1">
+  <div id="pageUnidadesTable" class="w-full md:w-[70%] p-1">
     <title>Ver unidades</title>
     <RemisionesTabPanelRemisiones :items="items" />
     <DinamicosTableFilters
@@ -48,6 +48,7 @@
 
 <script lang="ts" setup>
 import { useCookie } from "nuxt/app";
+import { useRoute } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import {
   items,
@@ -57,8 +58,10 @@ import {
 import { useUnitsApi } from "../../composables/objetivos/UnitsApi";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { ref, watch } from "vue";
+import { useDriver } from "../../composables/objetivos/driver";
 import type { WarningTable } from "../../interfaces/filters";
 
+const route = useRoute();
 const isLoading = ref<boolean>();
 const errorData = ref<boolean>(false);
 const clientID = useCookie("idCliente");
@@ -103,6 +106,7 @@ const list = async () => {
           }
         }
       }
+      await runStepByStep();
     } else {
       errorData.value = true;
       toast.add({
@@ -169,6 +173,21 @@ watch(dateSearch, async (newVal, oldVal) => {
     }
   }
 });
+
+const runStepByStep = async () => {
+  if (process.server) return;
+  const h = route.hash || '';
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  if (data.value.length === 0){
+    toast.add({ severity: "warn", summary: "No hay unidades segun la capacidad ingresadas", detail: "No se puede iniciar el asistente paso a paso, asegurate de tener remisiones pendientes.", life: 6000,});
+  } else {
+    const { getDriverUnidadesTable } = await useDriver();
+    const stepByStep = await getDriverUnidadesTable();
+    if (stepByStep) stepByStep.drive();
+  }
+};
+
+watch(() => route.hash,() => {runStepByStep();});
 
 definePageMeta({
   layout: "default",

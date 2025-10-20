@@ -18,7 +18,7 @@
           <slot name="nuevaColumna"></slot>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="tableBodyDynamic">
         <tr
           class="border-x-[1px] border-b-[1px] border-gray-400 text-center"
           v-for="(data, index) in arrayData"

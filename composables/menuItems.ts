@@ -12,21 +12,24 @@ export const useModulos = () => {
     nombre: "Inicio",
     ruta: "/",
     visible: true,
-    permission: 'view'
+    permission: 'view',
+    stepByStep: false,
   },
   {
     nombre:"Encuesta",
     icono: "pi pi-file",
     ruta:"/encuesta/",
     visible:"false",
-    permission:"view_encuesta"
+    permission:"view_encuesta",
+    stepByStep: false,
   },
   {
     icono: "pi pi-bell",
     nombre: "Remisiones",
     ruta: "/remisiones",
     visible: false,
-    permission: 'view_remisiones'
+    permission: 'view_remisiones',
+    stepByStep: true,
   },
   // {
   //   icono: "pi pi-user",
@@ -54,34 +57,39 @@ export const useModulos = () => {
     nombre: "Tablero Sae",
     visible: false,
     permission: 'view_objetivos',
+    stepByStep: true,
     submodulos: [
       {
         icono: "pi pi-bullseye",
         nombre: "Metas",
         ruta: "/objetivos",
         visible: false,
-        permission: 'view_objetivos_mensuales'
+        permission: 'view_objetivos_mensuales',
+        stepByStep: true,
       },
       {
         icono: "pi pi-check-square",
         nombre: "Cumplimiento Mensual",
         ruta: "/objetivos/calidad",
         visible: false,
-        permission: 'view_objetivos_calidad'
+        permission: 'view_objetivos_calidad',
+        stepByStep: true,
       },
       {
         icono: "pi pi-list-check",
         nombre: "Cumplimiento Diarios",
         ruta: "/objetivos/diarios",
         visible: false,
-        permission: 'view_objetivos_diarios'
+        permission: 'view_objetivos_diarios',
+        stepByStep: true,
       },
       {
         icono: "pi pi-th-large",
         nombre: "Unidades programadas",
         ruta: "/objetivos/unidades",
         visible: false,
-        permission: "view_objetivos_unidades"
+        permission: "view_objetivos_unidades",
+        stepByStep: true,
       }
     ]
   },

@@ -2,7 +2,7 @@
   <button
     type="button"
     class="relative bg-rojoIENM px-3 py-[6px] rounded hover:bg-verdeIENM mb-1 sm:mb-0 group"
-    @click="visible = true"
+    @click="visible = !visible"
   >
     <i class="pi pi-eye text-white"></i>
     <p
@@ -12,7 +12,8 @@
     </p>
   </button>
   <div>
-    <Dialog
+    <Dialog 
+      id="modalPreviewRemision"
       v-model:visible="visible"
       modal
       :header="`Detalle de la Remision N° ${numRemision}`"
@@ -203,7 +204,8 @@
           >
             Cerrar
           </button>
-          <button
+          <button 
+            id="btnPDF"
             class="py-1 px-4 font-manrope-b text-white rounded-lg bg-verdeOscIENM"
             @click="generarPDF"
           >

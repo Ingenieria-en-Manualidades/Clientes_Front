@@ -10,11 +10,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { useCookie } from "nuxt/app";
+import { useRoute } from "vue-router";
+import { ref, onMounted, watch } from "vue";
 import { items } from "../../composables/objetivos/UnitsData";
+import { useDriver } from "../../composables/objetivos/driver";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
+const route = useRoute();
 const userPermissions = useCookie("permissions");
 
 const forms = ref([
@@ -38,6 +41,18 @@ const checkPermissions = () => {
   });
 };
 checkPermissions();
+
+const runStepByStep = async () => {
+  if (process.server) return;
+  const h = route.hash || '';
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  const { getDriverUnidadesIndex } = await useDriver();
+  const stepByStep = await getDriverUnidadesIndex();
+  if (stepByStep) stepByStep.drive();
+};
+onMounted(runStepByStep);
+
+watch(() => route.hash,() => {runStepByStep();});
 
 definePageMeta({
   layout: "default",

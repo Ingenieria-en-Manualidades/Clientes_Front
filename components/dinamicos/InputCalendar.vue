@@ -10,6 +10,7 @@
     </div>
     <p class="text-red-500 text-sm font-manrope-b">{{ info }}</p>
     <Calendar
+      id="dailyCalendar"
       v-model="model"
       :manualInput="false"
       :dateFormat="dateFormat"

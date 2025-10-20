@@ -66,11 +66,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
+import { useRoute } from "vue-router";
 import Calendar from "primevue/calendar";
 import { useToast } from "primevue/usetoast";
 import { useCookie, navigateTo } from "nuxt/app";
 import type { Remision } from "../../interfaces/remisiones";
+import { useDriver } from "../../composables/remisiones/driver";
 import { items } from "../../composables/remisiones/datosRemisiones";
 import { useRemisionesApi } from "../../composables/remisiones/remisionesApi";
 import TablaRemisiones from "../../components/remisiones/TablaRemisiones.vue";
@@ -81,6 +83,7 @@ import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composab
 const dates = ref();
 let avisoIcono = ref();
 const toast = useToast();
+const route = useRoute();
 let avisodetalles = ref();
 const isLoading = ref(false);
 const calendario = ref(true);
@@ -106,6 +109,7 @@ const listar = async () => {
       avisoIcono.value = "pi pi-check-circle text-5xl";
       avisodetalles.value = "Sin remisiones aprobadas";
     }
+    await runStepByStep();
   } else {
     estadoRemisiones.value = true;
     avisoIcono.value = "pi pi-times-circle text-5xl";
@@ -129,6 +133,8 @@ const consultarRemisiones = async () => {
       avisoIcono.value = "pi pi-exclamation-triangle text-5xl";
       avisodetalles.value = "No se encontro ninguna remisión entre esas fechas";
       botonRecargar.value = true;
+    } else {
+      runStepByStep();
     }
     calendario.value = false;
   }
@@ -141,6 +147,21 @@ const recargarTabla = () => {
 };
 
 listar();
+
+const runStepByStep = async () => {
+  if (process.server) return;
+  const h = route.hash || '';
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return;
+  if (remisiones.value.length === 0){
+    toast.add({ severity: "warn", summary: "No hay remisiones aprobadas", detail: "No se puede iniciar el asistente paso a paso, asegurate de tener remisiones aprobadas.", life: 6000,});
+  } else {
+    const { getDriverApprovedReferrals } = await useDriver();
+    const stepByStep = await getDriverApprovedReferrals();
+    if (stepByStep) stepByStep.drive();
+  }
+};
+
+watch(() => route.hash,() => {runStepByStep();});
 
 definePageMeta({
   layout: "default",

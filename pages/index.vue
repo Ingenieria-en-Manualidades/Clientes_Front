@@ -249,6 +249,7 @@ definePageMeta({
 
 <script lang="ts" setup>
 import { useCookie } from "nuxt/app";
+import { onMounted } from "vue";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 // Configuración de la página

@@ -1,6 +1,6 @@
 <template>
   <div class="w-[100%] text-center">
-    <ul class="inline-flex mb-[2%]">
+    <ul id="tabPanel" class="inline-flex mb-[2%]">
       <li v-for="(tab, tabIndex) in items" v-bind:key="tabIndex">
         <router-link
           v-if="tab.route"
@@ -12,6 +12,7 @@
             v-ripple
             :href="href"
             @click="navigate"
+            :data-tab-label="tab.label"
             :class="[
               'flex items-center gap-2 text-inherit p-2 border-b-2',
               isActive(tab.route) ? 'border-b-azulIENM' : '',

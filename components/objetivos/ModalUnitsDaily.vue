@@ -1,5 +1,6 @@
 <template>
   <button
+    id="btnOpenUnitsDaily"
     type="button"
     class="bg-azulClaroIENM px-3 py-[3px] rounded-3xl hover:bg-azulIENM my-1"
     @click="list"
@@ -13,7 +14,10 @@
       :header="''"
       :style="{ width: '80%' }"
     >
-      <div class="border border-black rounded-3xl px-5 py-3 mt-2">
+      <div
+        id="modalUnitsDaily"
+        class="border border-black rounded-3xl px-5 py-3 mt-2"
+      >
         <DinamicosTableFilters
           :headers="headersUnitsDaily"
           :atributes="attributesUnitsDaily"
@@ -74,7 +78,7 @@ const warningData = ref<WarningTable>({
 const { listUnidadesDiarias } = useUnitsDailyApi();
 
 const list = async () => {
-  visible.value = true;
+  visible.value = !visible.value;
   isLoading.value = true;
   const resp = await listUnidadesDiarias(props.metaUnidadesID);
 

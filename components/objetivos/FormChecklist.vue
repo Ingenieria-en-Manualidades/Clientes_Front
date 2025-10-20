@@ -1,5 +1,5 @@
 <template>
-  <form class="w-[50%] max-w-[200px] sm:max-w-[230px] text-xs sm:text-base">
+  <form id="formChecklist" class="w-[50%] max-w-[200px] sm:max-w-[230px] text-xs sm:text-base">
     <fieldset
       class="border-[1px] border-black rounded-lg p-2 sm:p-3 font-manrope-r"
     >
@@ -28,7 +28,7 @@
         maxlength="3"
         class="border-[1px] border-gray-500 rounded-3xl p-2 outline-none w-full"
       />
-      <div class="mt-5">
+      <div id="divFileCheck" class="mt-5">
         <input
           type="file"
           ref="fileInput"
@@ -63,6 +63,7 @@
       </p>
       <div class="flex justify-center font-bold mt-5">
         <button
+          id="btnSaveChecklist"
           type="button"
           class="bg-[#4789c8] w-full py-2 rounded-3xl text-white"
           @click="submitCheck()"

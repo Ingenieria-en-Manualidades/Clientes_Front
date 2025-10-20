@@ -12,11 +12,13 @@
           fluid
           inputClass="w-full"
           iconDisplay="input"
+          id="calendarFilterGoals"
         />
         <p v-if="errors.fecha" class="text-red-500 text-sm font-bold">
           Este campo es obligatorio
         </p>
         <fieldset
+          id="fieldsetGoals"
           class="border-[1px] border-black rounded p-5 max-w-[850px] mt-3"
         >
           <div class="flex justify-center flex-wrap gap-6">
@@ -110,7 +112,7 @@
 
 <script setup lang="ts">
 import { useCookie } from "nuxt/app";
-import { defineExpose, ref } from "vue";
+import { ref } from "vue";
 import { useToast } from "primevue/usetoast";
 import { datosObjetivos } from "../../composables/objetivos/datosObjetivos";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi"; // Asegúrate de que esta ruta sea correcta

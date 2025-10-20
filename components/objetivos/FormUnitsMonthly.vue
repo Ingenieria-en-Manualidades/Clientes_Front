@@ -1,5 +1,5 @@
 <template>
-  <fieldset class="w-full border border-black py-3 px-5 rounded">
+  <fieldset id="formUnitsMonthly" class="w-full border border-black py-3 px-5 rounded">
     <legend class="px-1">Mensuales</legend>
     <DinamicosInputCalendar
       v-model="dateMonthly"
@@ -19,19 +19,21 @@
       v-model="areaChoose"
       :warning="areaMonthlyFail"
     />
-    <DinamicosInputNumber
-      v-model="unitsMonthly"
-      :label="'Unidades'"
-      :displayFlex="false"
-      :warning="unitsMonthlyFail"
-    />
-    <button
-      type="button"
-      class="w-full rounded-3xl  font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3  mt-3"
-      @click="submitUnitsMonthly"
-    >
-      Guardar
-    </button>
+    <div id="groupInputNumber">
+      <DinamicosInputNumber
+        v-model="unitsMonthly"
+        :label="'Unidades'"
+        :displayFlex="false"
+        :warning="unitsMonthlyFail"
+      />
+      <button
+        type="button"
+        class="w-full rounded-3xl  font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3  mt-3"
+        @click="submitUnitsMonthly"
+      >
+        Guardar
+      </button>
+    </div>
   </fieldset>
 </template>
 

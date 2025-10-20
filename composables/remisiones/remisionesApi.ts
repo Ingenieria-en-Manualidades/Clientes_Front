@@ -41,7 +41,8 @@ export const useRemisionesApi = () => {
       const response = await fetch(`${url}/api/RemisionOnline/ListarRemisionesAPI/${idCliente}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`        },
+          'Authorization': `Bearer ${token}`
+        },
       });
       
       //Guardamos los resultados de la API en una variable con la interfaz de las remisiones 'Remision[]'.

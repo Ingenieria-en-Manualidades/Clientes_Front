@@ -1,5 +1,5 @@
 <template>
-  <div
+  <div id="dailyInputNumber"
     :class="[
       'w-full font-manrope-r relative py-1',
       displayFlex ? 'flex gap-1' : 'block',
