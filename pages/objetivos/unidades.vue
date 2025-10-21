@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 import { useCookie } from "nuxt/app";
 import { useRoute } from "vue-router";
-import { ref, onMounted, watch } from "vue";
+import { ref, watch } from "vue";
 import { items } from "../../composables/objetivos/UnitsData";
 import { useDriver } from "../../composables/objetivos/driver";
 import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
@@ -31,7 +31,19 @@ const forms = ref([
   },
 ]);
 
-const checkPermissions = () => {
+// Run step-by-step tour if URL hash matches
+const runStepByStep = async (showFormMonthly: boolean) => {
+  if (process.server) return;
+  const h = route.hash || ''; // Default to empty string
+  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return; // Only proceed if hash matches
+
+  // Get and run the driver for unidades table
+  const { getDriverUnidadesIndex } = await useDriver();
+  const stepByStep = await getDriverUnidadesIndex(showFormMonthly);
+  if (stepByStep) stepByStep.drive();
+};
+
+const checkPermissions = async () => {
   forms.value.forEach((form) => {
     if (userPermissions.value?.includes(form.permission)) {
       form.visible = true;
@@ -39,23 +51,11 @@ const checkPermissions = () => {
       form.visible = false;
     }
   });
+  await runStepByStep(forms.value[0].visible);
 };
 checkPermissions();
 
-// Run step-by-step tour if URL hash matches
-const runStepByStep = async () => {
-  if (process.server) return;
-  const h = route.hash || ''; // Default to empty string
-  if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return; // Only proceed if hash matches
-
-  // Get and run the driver for unidades table
-  const { getDriverUnidadesIndex } = await useDriver();
-  const stepByStep = await getDriverUnidadesIndex();
-  if (stepByStep) stepByStep.drive();
-};
-onMounted(runStepByStep);
-
-watch(() => route.hash,() => {runStepByStep();}); // Watch for changes in the route hash
+watch(() => route.hash,() => {runStepByStep(forms.value[0].visible);}); // Watch for changes in the route hash
 
 definePageMeta({
   layout: "default",

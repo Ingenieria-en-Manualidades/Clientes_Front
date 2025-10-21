@@ -96,6 +96,7 @@ const list = async () => {
         warningData.value.success = true;
         warningData.value.label = "Sin ninguna meta registrada.";
       } else {
+        checkPermissions();
         for (const unit of data.value) {
           // Change to thousand format for each goal value.
           unit.valor = formatoNumero(unit.valor);
@@ -106,7 +107,9 @@ const list = async () => {
           }
         }
       }
-      await runStepByStep();
+      console.log("forms: ", forms.value);
+      
+      await runStepByStep(forms.value[0].visible);
     } else {
       errorData.value = true;
       toast.add({
@@ -151,7 +154,6 @@ const checkPermissions = () => {
     }
   });
 };
-checkPermissions();
 
 watch(dateSearch, async (newVal, oldVal) => {
   if (newVal !== oldVal) {
@@ -175,7 +177,7 @@ watch(dateSearch, async (newVal, oldVal) => {
 });
 
 // Run step-by-step tour if URL hash matches
-const runStepByStep = async () => {
+const runStepByStep = async (showUpdateMonthly: boolean) => {
   if (process.server) return;
   const h = route.hash || ''; // Default to empty string
   if (!/^#stepByStep(?:$|[=/?&])/i.test(h)) return; // Only proceed if hash matches
@@ -185,12 +187,12 @@ const runStepByStep = async () => {
     toast.add({ severity: "warn", summary: "No hay unidades segun la capacidad ingresadas", detail: "No se puede iniciar el asistente paso a paso, asegurate de tener remisiones pendientes.", life: 6000,});
   } else {
     const { getDriverUnidadesTable } = await useDriver();
-    const stepByStep = await getDriverUnidadesTable();
+    const stepByStep = await getDriverUnidadesTable(showUpdateMonthly);
     if (stepByStep) stepByStep.drive();
   }
 };
 
-watch(() => route.hash,() => {runStepByStep();}); // Watch for changes in the route hash
+watch(() => route.hash,() => {runStepByStep(forms.value[0].visible);}); // Watch for changes in the route hash
 
 definePageMeta({
   layout: "default",

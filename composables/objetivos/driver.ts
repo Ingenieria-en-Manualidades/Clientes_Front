@@ -120,7 +120,7 @@ export const useDriver = async () => {
   };
 
   // Create the step-by-step tour form for scheduled units (10 steps).
-  const getDriverUnidadesIndex = async () => {
+  const getDriverUnidadesIndex = async (showFormMonthly: boolean) => {
     if (process.server) return null;
     const stepByStep = driver({
       showProgress: true,
@@ -131,12 +131,24 @@ export const useDriver = async () => {
       steps: [
         { popover: { title: 'Bienvenido al módulo de unidades', description: 'Aquí podrás gestionar la capacidad mensual y las unidades programadas diarias.' } },
         { element: '#tabPanel', popover: { title: 'Pestañas', description: 'Navega entre las pestañas para ingresar y ver registros.' } },
-        { element: '#tabPanel a[data-tab-label="Ingresar"]', popover: { title: 'Pestaña Ingresar', description: 'Selecciona la pestaña Ingresar para añadir registros mensuales o diarios.' } },
+        { element: '#tabPanel a[data-tab-label="Ingresar"]', 
+          popover: { title: 'Pestaña Ingresar', description: 'Selecciona la pestaña Ingresar para añadir registros mensuales o diarios.',
+            onNextClick: () => {
+              showFormMonthly ? stepByStep.moveNext() : stepByStep.moveTo(7);
+            }
+          } 
+        },
         { element: '#formUnitsMonthly', popover: { title: 'Formulario Mensual', description: 'Formulario para ingresar la capacidad mensual por fecha y area.' } },
         { element: '#formUnitsMonthly #dailyCalendar', popover: { title: 'Seleccionar fecha (mensual)', description: 'Elige el mes al cual quieres ingresar capacidad mensual.' } },
         { element: '#formUnitsMonthly #dailyDropDown', popover: { title: 'Seleccionar área (mensual)', description: 'Selecciona el área para la capacidad mensual.' } },
         { element: '#formUnitsMonthly #groupInputNumber', popover: { title: 'Unidades y guardar (mensual)', description: 'Introduce el valor y guarda la capacidad mensual.' } },
-        { element: '#formUnitsDaily', popover: { title: 'Formulario Diario', description: 'Formulario para ingresar las unidades programadas diarias relacionadas con la mensual.' } },
+        { element: '#formUnitsDaily', 
+          popover: { title: 'Formulario Diario', description: 'Formulario para ingresar las unidades programadas diarias relacionadas con la mensual.',
+            onPrevClick: () => {
+              showFormMonthly ? stepByStep.movePrevious() : stepByStep.moveTo(2);
+            }
+          } 
+        },
         { element: '#formUnitsDaily #dailyCalendar', popover: { title: 'Seleccionar fecha (diaria)', description: 'Elige la fecha para la programación diaria (en caso de no haber un ingreso del mes de la fecha seleccionada no podras ingresar las unidades).' } },
         { element: '#formUnitsDaily #groupUnitsDaily', 
           popover: { title: 'Área, unidades y guardar (diario)', description: 'Selecciona área, ingresa las unidades y guarda. Si ya existe un registro con la misma fecha y area no se permitirá insertar.', 
@@ -152,7 +164,7 @@ export const useDriver = async () => {
   };
 
   // Create the step-by-step tour of unidades table (11 steps).
-  const getDriverUnidadesTable = async () => {
+  const getDriverUnidadesTable = async (showUpdateMonthly: boolean) => {
     if (process.server) return null;
     const stepByStep = driver({
       showProgress: true,
@@ -173,7 +185,7 @@ export const useDriver = async () => {
         { element: '#pageUnidadesTable #btnOpenUnitsDaily', 
           popover: { title: 'Ver unidades diarias', description: 'Abre el listado de unidades diarias relacionadas a esta meta.',
             onNextClick: async () => {
-              const btn = document.querySelector('#pageUnidadesTable #btnOpenUnitsDaily') as HTMLButtonElement;
+              const btn = stepByStep.getActiveElement() as HTMLButtonElement;
               if (btn) btn.click();
               await new Promise(res => setTimeout(res, 300));
               stepByStep.moveNext();
@@ -209,8 +221,10 @@ export const useDriver = async () => {
               btnCloseUpdateUnitsDaily.click();
               // Attempt to close any open dialogs (parent modal)
               const btnCloseUnitsDaily = document.querySelector('#pageUnidadesTable #btnOpenUnitsDaily') as HTMLButtonElement;
+              console.log("showUpdateMonthly:", showUpdateMonthly);
+              
               btnCloseUnitsDaily.click();
-              stepByStep.moveNext();
+              showUpdateMonthly ? stepByStep.moveNext() : stepByStep.moveTo(10);
             },
             onPrevClick: () => {
               const btnCloseUpdateUnitsDaily = document.querySelector('#modalUnitsDaily #btnOpenUpdateUnitsDaily') as HTMLButtonElement;
@@ -257,10 +271,20 @@ export const useDriver = async () => {
         // 11 - congratulations
         { popover: { title: '¡Felicidades!', description: 'Has terminado el recorrido del módulo de unidades.' ,
             onPrevClick: async () => {
-              const btnCloseUpdateUnits = document.querySelector('#pageUnidadesTable #btnOpenUpdateUnits') as HTMLButtonElement;
-              btnCloseUpdateUnits.click();
-              await new Promise(res => setTimeout(res, 100));
-              stepByStep.movePrevious();
+              if (showUpdateMonthly) {
+                const btnOpenUpdateUnits = document.querySelector('#pageUnidadesTable #btnOpenUpdateUnits') as HTMLButtonElement;
+                btnOpenUpdateUnits.click();
+                await new Promise(res => setTimeout(res, 100));
+                stepByStep.movePrevious();
+              } else {
+                const btnOpenUnitsDaily = document.querySelector('#pageUnidadesTable #btnOpenUnitsDaily') as HTMLButtonElement;
+                btnOpenUnitsDaily.click();
+                await new Promise(res => setTimeout(res, 1000));
+                const btnCloseUpdateUnitsDaily = document.querySelector('#modalUnitsDaily #btnOpenUpdateUnitsDaily') as HTMLButtonElement;
+                btnCloseUpdateUnitsDaily.click();
+                await new Promise(res => setTimeout(res, 100));
+                stepByStep.moveTo(7);
+              }
             }
           } 
         }
