@@ -149,12 +149,12 @@ const runStepByStep = async () => {
 
   // Get and run the driver for monthly compliance
   const { getDriverMonthlyCompliance } = await useDriver();
-  const stepByStep = await getDriverMonthlyCompliance();
+  const stepByStep = await getDriverMonthlyCompliance(dataArchivos.value);
   if (stepByStep) stepByStep.drive();
 };
-onMounted(runStepByStep);
+runStepByStep();
 
-watch(() => route.hash,() => {runStepByStep();}); // Watch for changes in the route hash
+watch(() => route.hash,async () => { await runStepByStep();}); // Watch for changes in the route hash
 
 definePageMeta({
   layout: "default",

@@ -1,4 +1,5 @@
 import { navigateTo } from "nuxt/app";
+import type { DataArchivos } from "../../interfaces/objetives";
 
 export const useDriver = async () => {
   const { driver } = await import('driver.js');
@@ -24,7 +25,7 @@ export const useDriver = async () => {
   };
 
   // Create the step-by-step tour of monthly compliance module.
-  const getDriverMonthlyCompliance = async () => {
+  const getDriverMonthlyCompliance = async (dataFiles: DataArchivos[]) => {
     if (process.server) return null;
     const stepByStep = driver({
       showProgress: true,
@@ -41,7 +42,13 @@ export const useDriver = async () => {
         { element: '#btnSaveChecklist', popover: { title: 'Guardar.', description: 'Después de llenar los campos podras guardar el porcentaje junto a la evidencia.' } },
         { element: 'form:nth-child(2)', popover: { title: 'Formulario de Inspección sol.', description: 'El formulario de calidad de Inspección sol funciona de la misma manera que el de checklist.' } },
         { element: '#moduleCalidad div:nth-child(2)', popover: { title: 'Independencia de formularios.', description: 'Los dos formularios funcionan de manera independiente lo que significa que .' } }, 
-        { element: '#moduleCalidad div:nth-child(1)', popover: { title: 'Tabla de evidencias.', description: 'Todas las evidencias que subas se guardaran en esta tabla.' } }, 
+        { element: '#moduleCalidad div:nth-child(1)', 
+          popover: { title: 'Tabla de evidencias.', description: 'Todas las evidencias que subas se guardaran en esta tabla.',
+            onNextClick: () => {
+              dataFiles.length > 0 ? stepByStep.moveNext() : stepByStep.moveTo(13);
+            }
+          } 
+        }, 
         { element: '#tableBodyDynamic button:nth-child(1)', popover: { title: 'Exportar.', description: 'Por medio de este botón podras descargar los archivos pdfs subidos con anterioridad.' } }, 
         { element: '#btnModalUpdateFile', 
           popover: { title: 'Actualizar.', description: 'Por medio de este botón podras actualizar el archivo pdf por otro.', 
