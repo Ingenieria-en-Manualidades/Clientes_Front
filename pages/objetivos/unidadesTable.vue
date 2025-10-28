@@ -107,7 +107,6 @@ const list = async () => {
           }
         }
       }
-      console.log("forms: ", forms.value);
       
       await runStepByStep(forms.value[0].visible);
     } else {

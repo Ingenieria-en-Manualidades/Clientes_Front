@@ -1,6 +1,6 @@
 <template>
   <title>Remisiones aprobadas</title>
-  <div class="card w-[100%] md:w-[760px] float-right">
+  <div class="w-[100%] md:w-[850px]">
     <TabPanelRemisiones :items="items" />
     <div v-if="remisiones.length !== 0">
       <div v-if="calendario" class="ml-[2.5%]">

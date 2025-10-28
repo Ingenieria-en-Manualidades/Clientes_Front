@@ -228,7 +228,6 @@ export const useDriver = async () => {
               btnCloseUpdateUnitsDaily.click();
               // Attempt to close any open dialogs (parent modal)
               const btnCloseUnitsDaily = document.querySelector('#pageUnidadesTable #btnOpenUnitsDaily') as HTMLButtonElement;
-              console.log("showUpdateMonthly:", showUpdateMonthly);
               
               btnCloseUnitsDaily.click();
               showUpdateMonthly ? stepByStep.moveNext() : stepByStep.moveTo(10);
