@@ -183,7 +183,7 @@ const runStepByStep = async (showUpdateMonthly: boolean) => {
 
   // Get and run the driver for unidades table
   if (data.value.length === 0){
-    toast.add({ severity: "warn", summary: "No hay unidades segun la capacidad ingresadas", detail: "No se puede iniciar el asistente paso a paso, asegurate de tener remisiones pendientes.", life: 6000,});
+    toast.add({ severity: "warn", summary: "No hay unidades segun la capacidad ingresadas", detail: "No se puede iniciar el asistente paso a paso, asegurate de tener unidades programadas.", life: 6000,});
   } else {
     const { getDriverUnidadesTable } = await useDriver();
     const stepByStep = await getDriverUnidadesTable(showUpdateMonthly);
