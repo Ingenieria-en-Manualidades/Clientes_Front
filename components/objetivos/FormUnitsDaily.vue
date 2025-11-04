@@ -7,7 +7,7 @@
       :displayFlex="false"
       :dateFormat="'yy/mm/dd'"
       :disabled="false"
-      :info="'* Solo 3 días anteriores hasta mañana.'"
+      :info="warnDate"
       :warning="failedFields.dateFail"
       :minDate="daysBefore"
       :maxDate="tomorrow"
@@ -56,22 +56,27 @@ const units = ref<string | null>(null);
 const clienteID = useCookie("idCliente");
 const options = ref<OptionDropdown[]>([]);
 const { getAreasImec } = useUnitsApi();
+const userPermissions = useCookie("permissions");
 
 // Minimum date to enter the form.
-const daysBefore = ref<Date>(new Date());
-daysBefore.value.setDate(daysBefore.value.getDate() - 3);
-
+const daysBefore = ref<Date | undefined>(new Date());
 // Maximum date to enter the form.
-const tomorrow = ref<Date>(new Date());
-tomorrow.value.setDate(tomorrow.value.getDate() + 1);
-// const fixDateTomorrow = () => {
-//   console.log("tomorrow day: ", tomorrow.value.getDate());
-//   if (tomorrow.value.getDate() === 1) {
-//     tomorrow.value.setMonth(today.value.getMonth() + 1);
-//     tomorrow.value.setDate(2);
-//   }
-// };
-// fixDateTomorrow();
+const tomorrow = ref<Date | undefined>(new Date());
+const warnDate = ref<string>('');
+
+const checkPermission = () => {
+  if (userPermissions.value?.includes("insert_all_daily units")) {
+    daysBefore.value = undefined;
+    tomorrow.value = undefined;
+  } else {
+    if (daysBefore.value !== undefined && tomorrow.value !== undefined) {
+      daysBefore.value.setDate(daysBefore.value.getDate() - 3);
+      tomorrow.value.setDate(tomorrow.value.getDate() + 1);
+      warnDate.value = '* Solo 3 días anteriores hasta mañana.';
+    }
+  }
+};
+checkPermission();
 
 // We declare variables to store the errors of each field.
 const failedFields = ref({

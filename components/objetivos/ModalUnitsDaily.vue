@@ -149,6 +149,11 @@ const checkPermissions = () => {
 checkPermissions();
 
 const checkDeadlines = (schedulingDate: string) => {
+
+  if (userPermissions.value?.includes("update_all_daily units")) {
+    return true;
+  }
+
   const today = new Date();
   const minDate = new Date(today);
   const maxDate = new Date(today);
