@@ -1,5 +1,6 @@
 <template>
   <div class="relative h-full rounded-3xl flex flex-col lg:flex-row">
+    <title>Encuesta</title>
     <!-- El Gate puede cerrarse, pero el envío queda bloqueado hasta aceptar -->
     <PolicyGate :blockApp="false" :autoCheck="true" />
 
@@ -273,6 +274,7 @@ const optionsNeeds = ref<OptionDropdown[]>([
   { label: "No", value: "false" }
 ]);
 
+const isSubmitting = ref(false);
 const survey = ref<Survey>({
   start_time: new Date(),
   fullname: null,
@@ -377,6 +379,8 @@ watch(accepted, async (val) => {
 
 /* ---------- Guardar encuesta ---------- */
 const submit = async () => {
+  if (isSubmitting.value) return
+
   if (!dataProcessing.value) {
     toast.add({
       severity: "warn",
@@ -420,6 +424,7 @@ const submit = async () => {
     return
   }
 
+  isSubmitting.value = true;
   const response = await setSaveSurvey(survey.value, answers.value)
   if (response.success) {
     for (const k in surveyDisabled.value) {surveyDisabled.value[k] = true;}
@@ -432,6 +437,7 @@ const submit = async () => {
     detail: response.message,
     life: 5000,
   })
+  isSubmitting.value = false;
 }
 </script>
 
