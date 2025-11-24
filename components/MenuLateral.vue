@@ -29,18 +29,18 @@
           <div v-if="modulo.submodulos && modulo.visible" class="list-none">
             <div
               class="py-3 pl-4 hover:bg-white rounded-lg text-white hover:text-black cursor-pointer"
-              @click="visible = !visible"
+              @click="modulo.deploy = !modulo.deploy"
             >
               <i :class="modulo.icono"></i>
               <span class="ml-3">{{ modulo.nombre }}</span>
               <i
                 :class="[
                   'pi pi-angle-right pl-2 transition origin-center duration-300 float-right pt-1 mr-2',
-                  visible ? 'rotate-90' : 'rotate-0',
+                  modulo.deploy ? 'rotate-90' : 'rotate-0',
                 ]"
               ></i>
             </div>
-            <ul :class="['ml-3 pl-3 text-white', visible ? 'block' : 'hidden']">
+            <ul :class="['ml-3 pl-3 text-white', modulo.deploy ? 'block' : 'hidden']">
               <li @click="toggleNavBarMovil">
                 <router-link
                   v-for="(submodulo, index) in modulo.submodulos"
@@ -121,7 +121,7 @@ const ariaHidden = computed(() => (!isSmall.value && !isMedium.value) ? false : 
 const sizeClass = computed(() => {
   if (isSmall.value)  return "w-full left-0 top-[70px] bottom-0";
   if (isMedium.value) return "w-[40%] left-0 top-[75px] bottom-0 z-30";
-  return "w-[15%] top-[95px] bottom-1 left-2 z-10";
+  return "w-[16%] top-[95px] bottom-1 left-2 z-10";
 });
 
 //Método que cambia estado del menú desplegable, ayudando a cuando ocultar y no al menú

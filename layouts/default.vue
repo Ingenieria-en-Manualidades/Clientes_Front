@@ -59,7 +59,7 @@ const isOpen = ref(true);
 const usuario = useCookie("usuario"); 
 
 const contentWidthClass = computed(() => {
-  if (sidebarPinned.value) return 'w-[83%]'
+  if (sidebarPinned.value) return 'w-[82%]'
   return 'w-[98%]'
 })
 

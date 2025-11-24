@@ -58,6 +58,7 @@ export const useModulos = () => {
     visible: false,
     permission: 'view_objetivos',
     stepByStep: true,
+    deploy: false,
     submodulos: [
       {
         icono: "pi pi-bullseye",
@@ -91,6 +92,24 @@ export const useModulos = () => {
         permission: "view_objetivos_unidades",
         stepByStep: true,
       }
+    ]
+  },
+  {
+    icono: "pi pi-cog",
+    nombre: "Administración",
+    visible: false,
+    permission: 'view_administration',
+    stepByStep: false,
+    deploy: false,
+    submodulos: [
+      {
+        icono: "pi pi-user",
+        nombre: "Usuarios",
+        ruta: "/administration/users",
+        visible: false,
+        permission: 'view_users',
+        stepByStep: false,
+      },
     ]
   },
   // {

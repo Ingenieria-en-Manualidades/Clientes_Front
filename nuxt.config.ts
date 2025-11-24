@@ -47,6 +47,7 @@ export default defineNuxtConfig({
       apiFrontCliente: process.env.GLOBAL_URL_FRONT,
       apiGroot: process.env.GLOBAL_URL_SERVER_GROOT,
       tokenRemisiones: process.env.KEY_REFERRALS_URL_SERVER,
+      apiKeyBackend: process.env.API_KEY_CLIENTS_BACKEND,
       cookieOptions: {
         sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production',

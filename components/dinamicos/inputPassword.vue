@@ -11,7 +11,9 @@
       >
     </div>
     <p class="text-red-500 text-sm ">{{ info }}</p>
-    <div class="flex items-center gap-2 border border-black pr-2 rounded">
+    <div :class="['w-full rounded-3xl outline-none p-1 shadow-2xl flex items-center gap-2',
+        disabled ? 'bg-gray-200 border border-gray-400' : 'border border-gray-300',
+      ]">
       <input
         :type="showPassword ? 'text' : 'password'"
         :id="`inp${label}`"

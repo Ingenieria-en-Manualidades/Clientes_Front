@@ -1,6 +1,7 @@
 import { useCookie, useRuntimeConfig } from "nuxt/app";
 import { encryptData, encryptPassword } from "./login/EncryptedData";
 import type { ApiPromiseStandard } from "../interfaces/objetives";
+import type { OptionDropdown } from "../interfaces/componentesDinamicos";
 
 export const loginApi = () => {
 
@@ -202,6 +203,36 @@ export const loginApi = () => {
       return {success: false, title: "Error desconocido.", message: "Por favor recargar la página."}
     }
   }
+
+  /**
+   * Method to obtain the list of clients.
+   * @returns arrays of clients.
+   */
+  const getClients = async ():Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/getClients`, {
+        method: 'get',
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        const clients: Array<OptionDropdown> = [];
+        
+        data.data.forEach((element: { id: number; nombre: string; }) => {
+          clients.push({label: element.nombre, value: element.id});
+        });
+
+        return {success: true, title: "", message: "", data: clients};
+      } else {
+        if (data.error) console.error("Error a la hora de retornar los clientes: ", data.error);
+        return {success: false, title: data.title, message: data.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de retornar los clientes: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
+    }
+  }
   //NO USAR
   // const getClientsByUserId = async ():Promise<ApiPromiseStandard<any>> => {
   //   try {
@@ -226,6 +257,7 @@ export const loginApi = () => {
   return {
     login,
     logout,
+    getClients,
     chooseClient,
     getClientsByIds,
     setUpdatePassword,
