@@ -26,4 +26,18 @@
     <slot/>
   </div>
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useHead } from "#app"
+
+useHead({
+  script: [
+    {
+      hid: "tawkto",
+      src: "https://embed.tawk.to/692471badcbda419607f2dd5/1jar5ogc3",
+      async: true,
+      charset: "UTF-8",
+      crossorigin: "anonymous"
+    }
+  ]
+})
+</script>
