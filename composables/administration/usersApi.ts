@@ -105,10 +105,31 @@ export const useUsersApi = () => {
     }
   }
 
+  const setResetUser = async (user_id: string):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/resetUser/${user_id}`, {
+        method: 'get',
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return {success: true, title: data.title, message: data.message};
+      } else {
+        if (data.error) console.error("Error a la hora de resetear el usuario: ", data.error);
+        return {success: false, title: data.title, message: data.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de resetear el usuario: ", error);
+      return {success: false, title: "Error desconocido.", message: error.message}
+    }
+  }
+
   return {
     getListPermissions,
     getListEmployees,
     setCreateUser,
-    getListUsers
+    getListUsers,
+    setResetUser,
   };
 }

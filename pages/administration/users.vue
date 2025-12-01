@@ -25,9 +25,9 @@
       <template #newColumn>
         <th class="bg-azulIENM text-white py-3 px-5" colspan="3">ACCIONES</th>
       </template>
-      <template #newCell>
+      <template #newCell="{ object }">
         <td>
-          <UsersModalResetUser />
+          <UsersModalResetUser :id="object.id" :username="object.username" />
         </td>
       </template>
     </DinamicosTableFilters>
