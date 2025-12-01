@@ -88,4 +88,18 @@ const toggleMenu = () => {
   sidebarOpen.value = !sidebarOpen.value
 }
 
+import { useHead } from "#app"
+
+useHead({
+  script: [
+    {
+      hid: "tawkto",
+      src: "https://embed.tawk.to/6924841527ad1319611fc94c/1jara7stu",
+      async: true,
+      charset: "UTF-8",
+      crossorigin: "anonymous"
+    }
+  ]
+})
+
 </script>
