@@ -8,18 +8,18 @@ import type { optionsDropDownLists, optionsDropDownListsUserType } from "../../i
 export const useDataUsers = () => {
   const toast = useToast();
   const { getListClients } = useSurveyApis();
-  const { getListPermissions, getListEmployees } = useUsersApi();
+  const { getListPermissions, getListEmployees, getListRoles } = useUsersApi();
 
   // Carga las listas que importan 
   const loadList = async (visible: Boolean): Promise<optionsDropDownLists> => {
-    let options: optionsDropDownLists = {clients: [], permissions: []};
+    let options: optionsDropDownLists = {clients: [], permissions: [], roles: []};
 
     // If the dialogue is closed, clear everything
     if (!visible) {
       return options;
     }
 
-    const [responseClients, responsePermissions] = await Promise.all([getListClients(), getListPermissions()]);
+    const [responseClients, responsePermissions, responseRoles] = await Promise.all([getListClients(), getListPermissions(), getListRoles()]);
 
     if (responseClients.success) {
       options.clients = responseClients.data
@@ -30,7 +30,10 @@ export const useDataUsers = () => {
 
     if (responsePermissions.success) options.permissions = responsePermissions.data
     else toast.add({ severity: "error", summary: responsePermissions.title, detail: responsePermissions.message, life: 5000 })
-    
+
+    if (responseRoles.success) options.roles = responseRoles.data
+    else toast.add({ severity: "error", summary: responseRoles.title, detail: responseRoles.message, life: 5000 })
+
     return options;
   };
 
@@ -96,7 +99,7 @@ export const useDataUsers = () => {
   }
 
   const setReviewFields = (user: User) => {
-    const errors: boolean[] = [false,false,false,false,false,false,false,false];
+    const errors: boolean[] = [false,false,false,false,false,false,false,false,false];
 
     if (!user.fullname) errors[0] = true;
     if (!user.username) errors[1] = true;
@@ -108,10 +111,10 @@ export const useDataUsers = () => {
     else errors[6] = true;
     if (user.permissions) errors[7] = user.permissions.length === 0 ? true : false;
     else errors[7] = true;
+    if (!user.rol) errors[8] = true;
 
     if (user.userType === "employee") {
-      if (!user.employee_id) errors[8] = true;
-    } else {
+      if (!user.employee_id) errors[9] = true;
     }
 
     if (errors.includes(true)) {

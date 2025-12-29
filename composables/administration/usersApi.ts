@@ -2,6 +2,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 import type { User } from "../../interfaces/users";
 import type { ApiPromiseStandard } from "../../interfaces/objetives";
 import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
+import { get } from '@vueuse/core';
 
 export const useUsersApi = () => {
 
@@ -105,6 +106,31 @@ export const useUsersApi = () => {
     }
   }
 
+  const getListRoles = async () => {
+    try {
+      const response = await fetch(`${url}api/getRoles`, {
+        method: 'get',
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        var roles: Array<OptionDropdown> = [];
+
+        data.data.forEach((element: { id: number; name: string; }) => {
+          roles.push({label: element.name, value: element.id});
+        });
+        return {success: true, title: "", message: "", data: roles};
+      } else {
+        if (data.error) console.error("Error a la hora de retornar los roles: ", data.error);
+        return {success: false, title: data.title, message: data.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de retornar los roles: ", error);
+      return {success: false, title: "Error desconocido.", message: error.message}
+    }
+  }
+
   const setResetUser = async (user_id: string):Promise<ApiPromiseStandard<any>> => {
     try {
       const response = await fetch(`${url}api/resetUser/${user_id}`, {
@@ -131,5 +157,6 @@ export const useUsersApi = () => {
     setCreateUser,
     getListUsers,
     setResetUser,
+    getListRoles
   };
 }

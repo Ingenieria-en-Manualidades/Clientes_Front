@@ -10,6 +10,7 @@ export interface User {
     password: string | null;
     password_confirmation: string | null;
     clients: number[] | null;
+    rol: number | null;
     permissions: number[] | null;
     creator_user: string | null;
 }
@@ -17,6 +18,7 @@ export interface User {
 export interface optionsDropDownLists {
     clients: OptionDropdown[] | null;
     permissions: OptionDropdown[] | null;
+    roles: OptionDropdown[] | null;
 }
 
 export interface optionsDropDownListsUserType {

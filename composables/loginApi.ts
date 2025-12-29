@@ -105,7 +105,7 @@ export const loginApi = () => {
       const response = await resultado.json();
       
       // Borramos todas las cookies(token, idCliente y usuario) y retornamos mensaje exitoso del endpoint.
-      const resultCookie = await fetch('api/front/deleteCookiesRem', {
+      const resultCookie = await fetch('/api/front/deleteCookiesRem', {
         method: 'DELETE',
       });
 

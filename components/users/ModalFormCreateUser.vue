@@ -78,6 +78,14 @@
           searchPlaceholder="Escribe para buscar los clientes..."
           :warning="errors[6] ? 'Este campo es obligatorio.' : ''"
         />
+        <DinamicosInputDropDownList
+          v-model="user.rol"
+          :label="'Rol del usuario'"
+          :displayFlex="false"
+          :options="optionsLists.roles"
+          :multiple="false"
+          :warning="errors[8] ? 'Este campo es obligatorio.' : ''"
+        />
         <DinamicosInputSearchList
           :options="optionsLists.permissions"
           v-model="user.permissions"
@@ -160,6 +168,7 @@ const user = ref<User>({
   password: "Temporal01*",
   password_confirmation: "Temporal01*",
   clients: null,
+  rol: null,
   permissions: null,
   creator_user: null,
 });
@@ -169,7 +178,7 @@ const reasonErrorPassword = ref("Este campo es obligatorio.");
 
 // Options for the drop-down lists and search lists.
 const optionsListsEmployees = ref<OptionDropdown[]>([]);
-const optionsLists = ref<optionsDropDownLists>({clients: [], permissions: []});
+const optionsLists = ref<optionsDropDownLists>({clients: [], permissions: [], roles: []});
 const optionsListsUserType = ref<optionsDropDownListsUserType>({charges: [], employees: []});
 // Options for the input radio.
 const optionsUserType = [{ label: 'Cliente', value: 'client' }, { label: 'Empleado', value: 'employee' }];
@@ -250,6 +259,8 @@ const submit = async () => {
   user.value.username = username.value;
   user.value.creator_user = String(creatorUser.value);
   errors.value = setReviewFields(user.value); // Checks if there are any incomplete inputs.
+  console.log("user: ", user.value);
+  console.log("errors: ", errors.value);
 
   if (!errors.value[4] && !errors.value[5]) {
     if (user.value.password !== user.value.password_confirmation) {
@@ -274,6 +285,7 @@ const submit = async () => {
       user.value.password = "Temporal01*";
       user.value.password_confirmation = "Temporal01*";
       user.value.clients = null;
+      user.value.rol = null;
       user.value.permissions = null;
       user.value.creator_user = null;
       emits("list");
