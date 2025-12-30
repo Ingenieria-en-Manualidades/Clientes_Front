@@ -84,7 +84,7 @@
           :displayFlex="false"
           :options="optionsLists.roles"
           :multiple="false"
-          :warning="errors[8] ? 'Este campo es obligatorio.' : ''"
+          :warning="errors[7] ? 'Este campo es obligatorio.' : ''"
         />
         <DinamicosInputSearchList
           :options="optionsLists.permissions"
@@ -93,7 +93,6 @@
           label="Permisos"
           placeholder="Selecciona los permisos que tendra..."
           searchPlaceholder="Escribe para buscar permisos..."
-          :warning="errors[7] ? 'Este campo es obligatorio.' : ''"
         />
         <fieldset class="flex gap-3">
           <DinamicosInputPassword
@@ -259,8 +258,6 @@ const submit = async () => {
   user.value.username = username.value;
   user.value.creator_user = String(creatorUser.value);
   errors.value = setReviewFields(user.value); // Checks if there are any incomplete inputs.
-  console.log("user: ", user.value);
-  console.log("errors: ", errors.value);
 
   if (!errors.value[4] && !errors.value[5]) {
     if (user.value.password !== user.value.password_confirmation) {

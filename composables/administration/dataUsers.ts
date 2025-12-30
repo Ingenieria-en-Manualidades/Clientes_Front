@@ -99,7 +99,7 @@ export const useDataUsers = () => {
   }
 
   const setReviewFields = (user: User) => {
-    const errors: boolean[] = [false,false,false,false,false,false,false,false,false];
+    const errors: boolean[] = [false,false,false,false,false,false,false,false];
 
     if (!user.fullname) errors[0] = true;
     if (!user.username) errors[1] = true;
@@ -109,12 +109,10 @@ export const useDataUsers = () => {
     if (!user.password_confirmation) errors[5] = true;
     if (user.clients) errors[6] = user.clients.length === 0 ? true : false;
     else errors[6] = true;
-    if (user.permissions) errors[7] = user.permissions.length === 0 ? true : false;
-    else errors[7] = true;
-    if (!user.rol) errors[8] = true;
+    if (!user.rol) errors[7] = true;
 
     if (user.userType === "employee") {
-      if (!user.employee_id) errors[9] = true;
+      if (!user.employee_id) errors[8] = true;
     }
 
     if (errors.includes(true)) {
