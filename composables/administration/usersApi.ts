@@ -90,6 +90,10 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getUsers`, {
         method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${tokenBackend}`
+        }
       });
 
       const data = await response.json();
@@ -151,12 +155,62 @@ export const useUsersApi = () => {
     }
   }
 
+  const getDataUserId = async (userId: string):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/getDataUserId/${userId}`, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${tokenBackend}`
+        }
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return {success: true, title: "", message: "", data: data.data};
+      } else {
+        if (data.error) console.error("Error a la hora de retornar la información de usuario: ", data.error);
+        return {success: false, title: data.title, message: data.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de retornar la información de usuario: ", error);
+      return {success: false, title: "Error desconocido.", message: error.message}
+    }
+  }
+
+  /**
+   * Method to obtain the list of clients.
+   * @returns arrays of clients.
+   */
+  const getClients = async ():Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/getClients`, {
+        method: 'get',
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return {success: true, title: "", message: "", data: data.data};
+      } else {
+        if (data.error) console.error("Error a la hora de retornar los clientes: ", data.error);
+        return {success: false, title: data.title, message: data.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de retornar los clientes: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
+    }
+  }
+  
   return {
     getListPermissions,
     getListEmployees,
     setCreateUser,
     getListUsers,
     setResetUser,
-    getListRoles
+    getListRoles,
+    getDataUserId,
+    getClients
   };
 }

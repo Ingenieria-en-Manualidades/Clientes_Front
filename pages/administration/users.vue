@@ -23,11 +23,12 @@
         </div>
       </template>
       <template #newColumn>
-        <th class="bg-azulIENM text-white py-3 px-5" colspan="3">ACCIONES</th>
+        <th class="bg-azulIENM text-white py-3 px-5">ACCIONES</th>
       </template>
       <template #newCell="{ object }">
-        <td>
+        <td class="flex p-1">
           <UsersModalResetUser :id="object.id" :username="object.username" />
+          <!-- <UsersModalFormUpdateUser :userID="object.id" /> -->
         </td>
       </template>
     </DinamicosTableFilters>

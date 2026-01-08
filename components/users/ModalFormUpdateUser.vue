@@ -1,25 +1,18 @@
 <template>
   <button
     type="button"
-    class="bg-red-500 px-3 py-1 m-1 rounded hover:bg-red-600"
+    class="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
     @click="visible = true"
   >
-    <i class="pi pi-user-plus text-white"></i>
-    <span class="text-white ml-2">Agregar usuario</span>
+    <i class="pi pi-user-edit text-white"></i>
   </button>
   <div class="w-4">
     <Dialog
       v-model:visible="visible"
       modal
-      header="Crear nuevo usuario"
+      header="Actualizar usuario"
       class="dialog"
     >
-      <DinamicosInputRadio
-        v-model="userType"
-        :label="'El usuario a crear es un'"
-        :displayFlex="false"
-        :options="optionsUserType"
-      />
       <section v-if="userType === 'employee'">
         <DinamicosDropDownList
           :label="'Planta'"
@@ -47,7 +40,7 @@
             :disabled="disableInputs.fullname"
           />
           <DinamicosInputText
-            v-model="username"
+            v-model="user.username"
             :label="'Nombre de usuario'"
             :warning="errors[1] ? 'Este campo es obligatorio.' : ''"
             :displayFlex="false"
@@ -69,30 +62,6 @@
             :disabled="disableInputs.cellphone"
           />
         </fieldset>
-        <DinamicosInputSearchList
-          :options="optionsLists.clients"
-          v-model="user.clients"
-          :multiple="true"
-          label="Clientes"
-          placeholder="Selecciona los clientes que podra gestionar..."
-          searchPlaceholder="Escribe para buscar los clientes..."
-          :warning="errors[6] ? 'Este campo es obligatorio.' : ''"
-        />
-        <DinamicosDropDownList
-          v-model="user.rol"
-          :label="'Rol del usuario'"
-          :displayFlex="false"
-          :options="optionsLists.roles"
-          :warning="errors[7] ? 'Este campo es obligatorio.' : ''"
-        />
-        <DinamicosInputSearchList
-          :options="optionsLists.permissions"
-          v-model="user.permissions"
-          :multiple="true"
-          label="Permisos"
-          placeholder="Selecciona los permisos que tendra..."
-          searchPlaceholder="Escribe para buscar permisos..."
-        />
         <fieldset class="flex gap-3">
           <DinamicosInputPassword
             v-model:model="user.password"
@@ -113,6 +82,32 @@
         </fieldset>
         <input type="checkbox" id="showPassword" v-model="showPassword" class="mx-1" />
         <label for="showPassword">Mostrar contraseña.</label>
+        <DinamicosDropDownList
+          v-model="user.rol"
+          :label="'Rol del usuario'"
+          :displayFlex="false"
+          :options="optionsLists.roles"
+          :warning="errors[7] ? 'Este campo es obligatorio.' : ''"
+        />
+        <fieldset class="flex gap-3">
+          <DinamicosInputSearchList
+            :options="optionsLists.permissions"
+            v-model="user.permissions"
+            :multiple="true"
+            label="Permisos"
+            placeholder="Permisos asignados..."
+            searchPlaceholder="Escribe para buscar permisos..."
+          />
+          <DinamicosInputSearchList
+            :options="optionsLists.clients"
+            v-model="user.clients"
+            :multiple="true"
+            label="Clientes"
+            placeholder="Clientes asignados..."
+            searchPlaceholder="Escribe para buscar los clientes..."
+            :warning="errors[6] ? 'Este campo es obligatorio.' : ''"
+          />
+        </fieldset>
         <button
           type="button"
           @click="submit"
@@ -155,7 +150,6 @@ const disableInputs = ref({fullname: false, email: false, cellphone: false});
 // Variables for the user creation form.
 const plant = ref(0);
 const userType = ref('client');
-const username = ref("");
 const user = ref<User>({
   userType: null,
   employee_id: null,
@@ -163,14 +157,15 @@ const user = ref<User>({
   username: null,
   cellphone: "",
   email: "",
-  password: "Temporal01*",
-  password_confirmation: "Temporal01*",
+  password: null,
+  password_confirmation: null,
   clients: null,
   rol: null,
   permissions: null,
   creator_user: null,
 });
 
+const props = defineProps({userID: { type: String, required: true}});
 const errors = ref<boolean[]>([]);
 const reasonErrorPassword = ref("Este campo es obligatorio.");
 
@@ -178,16 +173,21 @@ const reasonErrorPassword = ref("Este campo es obligatorio.");
 const optionsListsEmployees = ref<OptionDropdown[]>([]);
 const optionsLists = ref<optionsDropDownLists>({clients: [], permissions: [], roles: []});
 const optionsListsUserType = ref<optionsDropDownListsUserType>({charges: [], employees: []});
-// Options for the input radio.
-const optionsUserType = [{ label: 'Cliente', value: 'client' }, { label: 'Empleado', value: 'employee' }];
 
 const toast = useToast();
-const { setCreateUser } = useUsersApi();
-const { loadList, loadListByType, createUsername, setReviewFields } = useDataUsers();
+const { setCreateUser, getDataUserId } = useUsersApi();
+const { loadList, loadListByType, setReviewFields } = useDataUsers();
 
 // It loads the lists when the modal opens and empties them when it closes.
 watch([visible], async () => {
   optionsLists.value = await loadList(visible.value);
+  const response = await getDataUserId(props.userID);
+  if (response.success) {
+    user.value = response.data;
+    userType.value = user.value.userType || 'client';
+    user.value.rol = response.data.roles[0];
+  }
+  else toast.add({ severity: "error", summary: response.title, detail: response.message, life: 5000 })
 });
 
 // It reacts to opening/closing the dialog and to changing the user type.
@@ -195,7 +195,6 @@ watch([visible, userType], async () => {
   optionsListsUserType.value = await loadListByType(visible.value, userType.value, plant.value); // Load the lists that matter when changing the user type.
   setFillOptionsListsEmployees(optionsListsUserType.value.employees || []);
   userType.value === 'employee' ? setAllDisableInputs(true) : setAllDisableInputs(false);
-  cleanChangingUserType();
 });
 
 // When changing plants, it burdens the employees of that plant.
@@ -220,7 +219,6 @@ watch([user.value], async () => {
       user.value.cellphone = "";
     }
   }
-  username.value = createUsername(user.value.fullname || "");
 });
 
 const emits = defineEmits(["list"]);
@@ -240,55 +238,9 @@ const setAllDisableInputs = (value: Boolean) => {
   });
 }
 
-// Clear inputs when changing user type.
-const cleanChangingUserType = () => {
-  user.value.employee_id = null;
-  user.value.fullname = null;
-  user.value.username = null;
-  user.value.cellphone = "";
-  user.value.email = "";
-  plant.value = 0;
-};
-
 const submit = async () => {
-  if (isLoading.value) return;
-
-  user.value.userType = userType.value;
-  user.value.username = username.value;
-  user.value.creator_user = String(creatorUser.value);
-  errors.value = setReviewFields(user.value); // Checks if there are any incomplete inputs.
-
-  if (!errors.value[4] && !errors.value[5]) {
-    if (user.value.password !== user.value.password_confirmation) {
-      errors.value[5] = true;
-      reasonErrorPassword.value = "Contraseña diferentes.";
-    }
-  }
-
-  if (!errors.value.includes(true)) {
-    isLoading.value = true;
-    const response = await setCreateUser(user.value);
-    
-    toast.add({severity: response.success ? 'success' : 'error', summary: response.title, detail: response.message, life: 5000,});
-
-    if (response.success) {
-      user.value.userType = null;
-      user.value.employee_id = null;
-      user.value.fullname = null;
-      user.value.username = null;
-      user.value.cellphone = "";
-      user.value.email = "";
-      user.value.password = "Temporal01*";
-      user.value.password_confirmation = "Temporal01*";
-      user.value.clients = null;
-      user.value.rol = null;
-      user.value.permissions = null;
-      user.value.creator_user = null;
-      emits("list");
-    }
-  }
-  isLoading.value = false;
-}
+  console.log("user: ", user);
+};
 </script>
 
 <style>

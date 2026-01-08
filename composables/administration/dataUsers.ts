@@ -4,11 +4,13 @@ import type { HeaderWithFilters } from "../../interfaces/filters";
 import { useSurveyApis } from "../../composables/survey/surveyApis";
 import { useUsersApi } from "../../composables/administration/usersApi";
 import type { optionsDropDownLists, optionsDropDownListsUserType } from "../../interfaces/users";
+import { get } from "@vueuse/core";
 
 export const useDataUsers = () => {
   const toast = useToast();
-  const { getListClients } = useSurveyApis();
-  const { getListPermissions, getListEmployees, getListRoles } = useUsersApi();
+  const { getClients } = useUsersApi();
+  // const { getListClients } = useSurveyApis();
+  const { getListPermissions, getListEmployees, getListRoles, getDataUserId } = useUsersApi();
 
   // Carga las listas que importan 
   const loadList = async (visible: Boolean): Promise<optionsDropDownLists> => {
@@ -19,11 +21,13 @@ export const useDataUsers = () => {
       return options;
     }
 
-    const [responseClients, responsePermissions, responseRoles] = await Promise.all([getListClients(), getListPermissions(), getListRoles()]);
+    const [responseClients, responsePermissions, responseRoles] = await Promise.all([getClients(), getListPermissions(), getListRoles()]);
 
     if (responseClients.success) {
-      options.clients = responseClients.data
       if (options.clients) options.clients.unshift({label: "TODAS", value: 0});
+      responseClients.data.forEach((element: { cliente_endpoint_id: number; nombre: string; }) => {
+        options.clients.push({label: element.nombre, value: element.cliente_endpoint_id});
+      });
     } else {
       toast.add({ severity: "error", summary: responseClients.title, detail: responseClients.message, life: 5000 })
     }

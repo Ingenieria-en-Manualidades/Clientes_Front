@@ -9,9 +9,9 @@ export interface User {
     email: string;
     password: string | null;
     password_confirmation: string | null;
-    clients: number[] | null;
+    clients: string[] | null;
     rol: number | null;
-    permissions: number[] | null;
+    permissions: string[] | null;
     creator_user: string | null;
 }
 

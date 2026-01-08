@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="bg-red-500 px-3 py-1 rounded hover:bg-red-600 m-1"
+    class="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
     @click="openDialog"
   >
     <i class="pi pi-replay text-white"></i>
