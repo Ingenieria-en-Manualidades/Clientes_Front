@@ -28,7 +28,13 @@
       <template #newCell="{ object }">
         <td class="flex p-1">
           <UsersModalResetUser :id="object.id" :username="object.username" />
-          <!-- <UsersModalFormUpdateUser :userID="object.id" /> -->
+          <UsersModalFormUpdateUser :userID="object.id" @list="list" />
+          <UsersModalDisableEnableUser 
+            :id="object.id" 
+            :username="object.username" 
+            :status="object.status" 
+            @list="list"
+          />
         </td>
       </template>
     </DinamicosTableFilters>

@@ -1,7 +1,7 @@
 <template>
   <button
     type="button"
-    class="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
+    class="bg-azulClaroIENM px-3 py-1 rounded hover:bg-azulIENM"
     @click="visible = true"
   >
     <i class="pi pi-user-edit text-white"></i>
@@ -13,7 +13,15 @@
       header="Actualizar usuario"
       class="dialog"
     >
-      <section v-if="userType === 'employee'">
+      <ProgressSpinner
+        v-if="isLoadingForm"
+        style="width: 50px; height: 50px; display: flex; justify-content: center;;"
+        strokeWidth="8"
+        fill="transparent"
+        animationDuration=".5s"
+        aria-label="Cargando"
+      />
+      <section v-if="user.userType === 'employee' && !isLoadingForm">
         <DinamicosDropDownList
           :label="'Planta'"
           :displayFlex="false"
@@ -30,8 +38,8 @@
           :warning="errors[8] ? 'Este campo es obligatorio.' : ''"
         />
       </section>
-      <form>
-        <fieldset class="flex gap-3">
+      <form v-if="!isLoadingForm">
+        <fieldset class="sm:flex gap-3">
           <DinamicosInputText
             v-model="user.fullname"
             :label="'Nombre completo'"
@@ -46,7 +54,7 @@
             :displayFlex="false"
           />
         </fieldset>
-        <fieldset class="flex gap-3">
+        <fieldset class="sm:flex gap-3">
           <DinamicosInputText
             v-model="user.email"
             :label="'Correo electrónico'"
@@ -62,7 +70,7 @@
             :disabled="disableInputs.cellphone"
           />
         </fieldset>
-        <fieldset class="flex gap-3">
+        <!-- <fieldset class="flex gap-3">
           <DinamicosInputPassword
             v-model:model="user.password"
             label="Contraseña"
@@ -79,9 +87,9 @@
             v-model:showPassword="showPassword"
             :warning="errors[5] ? reasonErrorPassword : ''"
           />
-        </fieldset>
-        <input type="checkbox" id="showPassword" v-model="showPassword" class="mx-1" />
-        <label for="showPassword">Mostrar contraseña.</label>
+        </fieldset> -->
+        <!-- <input type="checkbox" id="showPassword" v-model="showPassword" class="mx-1" />
+        <label for="showPassword">Mostrar contraseña.</label> -->
         <DinamicosDropDownList
           v-model="user.rol"
           :label="'Rol del usuario'"
@@ -89,7 +97,7 @@
           :options="optionsLists.roles"
           :warning="errors[7] ? 'Este campo es obligatorio.' : ''"
         />
-        <fieldset class="flex gap-3">
+        <fieldset class="sm:flex gap-3">
           <DinamicosInputSearchList
             :options="optionsLists.permissions"
             v-model="user.permissions"
@@ -110,7 +118,7 @@
         </fieldset>
         <button
           type="button"
-          @click="submit"
+          @click="update"
           :disabled="isLoading"
           class="w-full flex items-center justify-center gap-2 rounded-2xl text-white  py-3 shadow-lg active:scale-[0.99] transition disabled:cursor-not-allowed bg-gradient-to-r from-verdeIENM to-verdeOscIENM hover:opacity-95 mt-3"
         >
@@ -145,13 +153,13 @@ const visible = ref(false);
 const showPassword = ref(false);
 const isLoading = ref<boolean>(false);
 const creatorUser = useCookie("usuario");
+const isLoadingForm = ref<boolean>(false);
 const disableInputs = ref({fullname: false, email: false, cellphone: false});
 
 // Variables for the user creation form.
 const plant = ref(0);
-const userType = ref('client');
 const user = ref<User>({
-  userType: null,
+  userType: 'client',
   employee_id: null,
   fullname: null,
   username: null,
@@ -175,51 +183,51 @@ const optionsLists = ref<optionsDropDownLists>({clients: [], permissions: [], ro
 const optionsListsUserType = ref<optionsDropDownListsUserType>({charges: [], employees: []});
 
 const toast = useToast();
-const { setCreateUser, getDataUserId } = useUsersApi();
-const { loadList, loadListByType, setReviewFields } = useDataUsers();
+const { getDataUserId, setUpdateUser } = useUsersApi();
+const { loadList, loadListByType, createUsername, setReviewFields, setAllNullUser } = useDataUsers();
 
 // It loads the lists when the modal opens and empties them when it closes.
 watch([visible], async () => {
-  optionsLists.value = await loadList(visible.value);
+  isLoadingForm.value = true;
   const response = await getDataUserId(props.userID);
   if (response.success) {
     user.value = response.data;
-    userType.value = user.value.userType || 'client';
+    user.value.userType = user.value.userType || 'client';
     user.value.rol = response.data.roles[0];
   }
   else toast.add({ severity: "error", summary: response.title, detail: response.message, life: 5000 })
-});
 
-// It reacts to opening/closing the dialog and to changing the user type.
-watch([visible, userType], async () => {
-  optionsListsUserType.value = await loadListByType(visible.value, userType.value, plant.value); // Load the lists that matter when changing the user type.
-  setFillOptionsListsEmployees(optionsListsUserType.value.employees || []);
-  userType.value === 'employee' ? setAllDisableInputs(true) : setAllDisableInputs(false);
+  optionsLists.value = await loadList(visible.value);
+  if (user.value.userType === 'employee') {
+    optionsListsUserType.value = await loadListByType(visible.value, user.value.userType, plant.value);
+    setFillOptionsListsEmployees(optionsListsUserType.value.employees || []);
+    setAllDisableInputs(true);
+  } else {
+    setAllDisableInputs(false);
+  }
+  isLoadingForm.value = false;
 });
 
 // When changing plants, it burdens the employees of that plant.
 watch([plant], async (newVal: number[], oldVal: number[]) => {
   if (newVal !== oldVal) {
-    optionsListsUserType.value = await loadListByType(visible.value, userType.value, plant.value);
+    if (user.value.userType) optionsListsUserType.value = await loadListByType(visible.value, user.value.userType, plant.value);
     setFillOptionsListsEmployees(optionsListsUserType.value.employees || []);
   }
 });
 
 // When changing the user information, complete the inputs.
-watch([user.value], async () => {
-  if (userType.value === 'employee' && user.value.employee_id) {
-    const employeeSelected = optionsListsUserType.value.employees?.find(element => element.empleado_id === Number(user.value.employee_id));
-    if (employeeSelected) {
-      user.value.fullname = employeeSelected.nombre;
-      user.value.email = employeeSelected.email;
-      user.value.cellphone = employeeSelected.celular;
-    } else {
-      user.value.fullname = "";
-      user.value.email = "";
-      user.value.cellphone = "";
-    }
+watch(() => user.value.employee_id, async () => {
+  const employeeSelected = optionsListsUserType.value.employees?.find(element => element.empleado_id === Number(user.value.employee_id));
+  if (employeeSelected) {
+    user.value.fullname = employeeSelected.nombre;
+    user.value.email = employeeSelected.email;
+    user.value.cellphone = employeeSelected.celular;
   }
 });
+
+// When changing the full name, create the username.
+watch(() => user.value.fullname,async (newFullname) => user.value.username = createUsername(newFullname || ""));
 
 const emits = defineEmits(["list"]);
 
@@ -238,8 +246,42 @@ const setAllDisableInputs = (value: Boolean) => {
   });
 }
 
-const submit = async () => {
-  console.log("user: ", user);
+const update = async () => {
+  if (isLoading.value) return;
+
+  user.value.password = "*";
+  user.value.password_confirmation = "*";
+  user.value.employee_id = String(user.value.employee_id);
+  user.value.creator_user = String(creatorUser.value);
+  errors.value = setReviewFields(user.value);
+  // if (user.value.password || user.value.password_confirmation) {
+  //   if (user.value.password !== user.value.password_confirmation) {
+  //     errors.value[4] = true;
+  //     errors.value[5] = true;
+  //     reasonErrorPassword.value = "Contraseña diferentes.";
+  //   } else {
+  //     errors.value = setReviewFields(user.value);
+  //   }
+  // } else {
+  //   user.value.password = "*";
+  //   user.value.password_confirmation = "*";
+  //   errors.value = setReviewFields(user.value);
+  //   user.value.password = null;
+  //   user.value.password_confirmation = null;
+  // }
+  
+  if (!errors.value.includes(true)) {
+    isLoading.value = true;
+    const response = await setUpdateUser(props.userID, user.value);
+    
+    toast.add({severity: response.success ? 'success' : 'error', summary: response.title, detail: response.message, life: 5000,});
+
+    if (response.success) {
+      setAllNullUser(user.value);
+      emits("list");
+    }
+  }
+  isLoading.value = false;
 };
 </script>
 

@@ -32,4 +32,5 @@ export interface UserTable {
     fullname: string | null;
     username: string | null;
     user_type: string | null;
+    status: boolean | null;
 }

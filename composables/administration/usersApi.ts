@@ -2,7 +2,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 import type { User } from "../../interfaces/users";
 import type { ApiPromiseStandard } from "../../interfaces/objetives";
 import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
-import { get } from '@vueuse/core';
+import { get, set } from '@vueuse/core';
 
 export const useUsersApi = () => {
 
@@ -86,6 +86,32 @@ export const useUsersApi = () => {
     }
   }
 
+  const setUpdateUser = async (user_id: string, user: User):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/updateUser/${user_id}`, {
+        method: 'put',
+        headers: { 
+          'Content-Type': 'application/json', 
+          Authorization: `Bearer ${tokenBackend}`
+        },
+        body: JSON.stringify(user)
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return {success: true, title: data.title, message: data.message};
+      } else {
+        if (data.error) console.error("Error a la hora de actualizar el usuario: ", data.error);
+        return {success: false, title: data.title, message: data.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de actualizar el usuario: ", error);
+      return {success: false, title: "Error desconocido.", message: error.message}
+    }
+  }
+
+  // Method to obtain the list of users.
   const getListUsers = async () => {
     try {
       const response = await fetch(`${url}api/getUsers`, {
@@ -110,6 +136,7 @@ export const useUsersApi = () => {
     }
   }
 
+  // Method to obtain the list of roles.
   const getListRoles = async () => {
     try {
       const response = await fetch(`${url}api/getRoles`, {
@@ -203,6 +230,36 @@ export const useUsersApi = () => {
     }
   }
   
+
+  /**
+   * Method to enable/disable a user.
+   * @param user_id User ID to enable/disable.
+   * @returns Request status message.
+   */
+  const setEnableDisabledUser = async (user_id: string):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/setStatusUser/${user_id}`, {
+        method: 'put',
+        headers: { 
+          'Content-Type': 'application/json', 
+          Authorization: `Bearer ${tokenBackend}`
+        },
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return {success: true, title: data.title, message: data.message};
+      } else {
+        if (data.error) console.error("Error a la hora de actualizar el usuario: ", data.error);
+        return {success: false, title: data.title, message: data.message};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de actualizar el usuario: ", error);
+      return {success: false, title: "Error desconocido.", message: error.message}
+    }
+  }
+
   return {
     getListPermissions,
     getListEmployees,
@@ -211,6 +268,8 @@ export const useUsersApi = () => {
     setResetUser,
     getListRoles,
     getDataUserId,
-    getClients
+    getClients,
+    setUpdateUser,
+    setEnableDisabledUser
   };
 }

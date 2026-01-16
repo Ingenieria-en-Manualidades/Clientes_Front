@@ -183,7 +183,7 @@ const optionsUserType = [{ label: 'Cliente', value: 'client' }, { label: 'Emplea
 
 const toast = useToast();
 const { setCreateUser } = useUsersApi();
-const { loadList, loadListByType, createUsername, setReviewFields } = useDataUsers();
+const { loadList, loadListByType, createUsername, setReviewFields, setAllNullUser } = useDataUsers();
 
 // It loads the lists when the modal opens and empties them when it closes.
 watch([visible], async () => {
@@ -207,7 +207,7 @@ watch([plant], async (newVal: number[], oldVal: number[]) => {
 });
 
 // When changing the user information, complete the inputs.
-watch([user.value], async () => {
+watch(() => user.value.employee_id, async () => {
   if (userType.value === 'employee' && user.value.employee_id) {
     const employeeSelected = optionsListsUserType.value.employees?.find(element => element.empleado_id === Number(user.value.employee_id));
     if (employeeSelected) {
@@ -220,8 +220,10 @@ watch([user.value], async () => {
       user.value.cellphone = "";
     }
   }
-  username.value = createUsername(user.value.fullname || "");
 });
+
+// When changing the full name, create the username.
+watch(() => user.value.fullname,async (newFullname) => username.value = createUsername(newFullname || ""));
 
 const emits = defineEmits(["list"]);
 
@@ -272,18 +274,9 @@ const submit = async () => {
     toast.add({severity: response.success ? 'success' : 'error', summary: response.title, detail: response.message, life: 5000,});
 
     if (response.success) {
-      user.value.userType = null;
-      user.value.employee_id = null;
-      user.value.fullname = null;
-      user.value.username = null;
-      user.value.cellphone = "";
-      user.value.email = "";
+      setAllNullUser(user.value);
       user.value.password = "Temporal01*";
       user.value.password_confirmation = "Temporal01*";
-      user.value.clients = null;
-      user.value.rol = null;
-      user.value.permissions = null;
-      user.value.creator_user = null;
       emits("list");
     }
   }

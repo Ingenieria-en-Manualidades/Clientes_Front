@@ -152,6 +152,7 @@ export const useDataUsers = () => {
         fullname: null,
         username: element.name,
         user_type: null,
+        status: element.deleted_at === null ? true : false,
       }
 
       if (element.empleado_id !== null) {
@@ -167,6 +168,12 @@ export const useDataUsers = () => {
     return users;
   }
 
+  function setAllNullUser<T extends Record<string, any>>(target: T) {
+    (Object.keys(target) as (keyof T)[]).forEach((k) => {
+      target[k] = null;
+    });
+  }
+
   return {
     loadList,
     loadListByType,
@@ -175,5 +182,6 @@ export const useDataUsers = () => {
     headers,
     attributes,
     setFixDataUsers,
+    setAllNullUser,
   };
 }
