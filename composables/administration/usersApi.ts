@@ -68,7 +68,10 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/createUser`, {
         method: 'post',
-        headers: { 'Content-Type': 'application/json'},
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${tokenBackend}`
+        },
         body: JSON.stringify(user)
       });
 
