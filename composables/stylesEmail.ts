@@ -1,4 +1,8 @@
 export const useStylesEmail = () => {
+
+  const config = useRuntimeConfig();
+  const url = config.public.apiBackendCliente;
+
   const styleDivHeader = "padding-top: 4%; text-align: center; background-color: white; border: 1px solid black; border-top-left-radius: 10px; border-top-right-radius: 10px;";
 
   const stylePTittle = "font-family: Arial, Helvetica, sans-serif; color: #007cbb; font-size: 20px;"
@@ -20,7 +24,7 @@ export const useStylesEmail = () => {
   const arrayURLs = [
       "https://ienmlogistica.ienm.com.co/wp-content/uploads/2019/12/cropped-logo.png",
       "https://cdn-icons-png.flaticon.com/512/5503/5503036.png",
-      "http://localhost:3000/actualizarPassword-"
+      `${url}actualizarPassword-`
   ];
 
   return {

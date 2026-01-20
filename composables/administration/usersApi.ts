@@ -2,7 +2,6 @@ import { useRuntimeConfig } from 'nuxt/app';
 import type { User } from "../../interfaces/users";
 import type { ApiPromiseStandard } from "../../interfaces/objetives";
 import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
-import { get, set } from '@vueuse/core';
 
 export const useUsersApi = () => {
 
