@@ -2,9 +2,9 @@
   <div class="flex justify-center items-center min-h-screen bg-gray-100">
     <title>Actualizar constraseña</title>
     <div class="border-2 rounded-lg shadow w-80 md:w-[430px] bg-white">
-      <div class="p-5 flex justify-center">
+      <div class="p-1 flex justify-center">
         <img
-          src="/assets/img/ienmLogito.png"
+          src="/assets/img/IM INGENIERIA CENTRADO.png"
           alt="Logo IENM"
           class="min-w-[100px] w-[175px] md:w-[210px]"
         />
