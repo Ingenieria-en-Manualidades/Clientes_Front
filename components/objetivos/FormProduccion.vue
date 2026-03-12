@@ -5,13 +5,19 @@
     >
       <legend class="">Producción</legend>
       <p>Producción Planificada:</p>
-      <input
+      <!-- <input
         id="fechaPlan"
         v-model="fechaPlan"
         type="date"
         class="w-full border-[1px] border-black outline-none rounded mb-1"
         :min="getFechaMaxMin(false)"
         :max="getFecha(date)"
+      /> -->
+      <input
+        id="fechaPlan"
+        v-model="fechaPlan"
+        type="date"
+        class="w-full border-[1px] border-black outline-none rounded mb-1"
       />
       <div id="grupoPlan">
         <input
@@ -33,12 +39,18 @@
       </div>
       <p>Producción Modificada:</p>
       <p class="mb-1 text-xs">* Elegir una fecha anterior</p>
-      <input
+      <!-- <input
         id="fechaMod"
         type="date"
         v-model="fechaMod"
         :max="getFechaMaxMin(true)"
         :min="getFechaMaxMin(false)"
+        class="w-full border-[1px] border-black outline-none rounded mb-1"
+      /> -->
+      <input
+        id="fechaMod"
+        type="date"
+        v-model="fechaMod"
         class="w-full border-[1px] border-black outline-none rounded mb-1"
       />
       <div id="grupoMod">

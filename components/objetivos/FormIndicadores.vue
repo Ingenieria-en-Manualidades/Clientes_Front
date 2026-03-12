@@ -8,12 +8,18 @@
         <p v-if="errors.fecha" class="text-xs text-red-500">
           La fecha es obligatoria
         </p>
-        <input
+        <!-- <input
           id="fechaIndicador"
           type="date"
           v-model="fecha"
           :max="getFecha(date)"
           :min="getFecha(ayer)"
+          class="w-full border-[1px] border-black outline-none rounded mb-1"
+        /> -->
+        <input
+          id="fechaIndicador"
+          type="date"
+          v-model="fecha"
           class="w-full border-[1px] border-black outline-none rounded mb-1"
         />
         <div id="divInputsIndicadores">
