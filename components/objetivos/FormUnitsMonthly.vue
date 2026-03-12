@@ -7,7 +7,7 @@
       :displayFlex="false"
       :dateFormat="'yy/mm'"
       :view="'month'"
-      :info="'* Solo mes actual y el siguiente.'"
+      :info="dateInfo"
       :minDate="monthCurrent"
       :maxDate="monthNext"
       :warning="dateMonthlyFail"
@@ -55,19 +55,26 @@ const clientID = useCookie("idCliente");
 const dateMonthly = ref<Date | null>(null);
 const unitsMonthly = ref<string | null>(null);
 
-// Creating the month limits for the form.
-const monthCurrent = ref<Date>(new Date());
-const monthNext = ref<Date>(new Date());
+// Creating the month limits for the form. undefined = no restriction (e.g. DEVUSER)
+const monthCurrent = ref<Date | undefined>(new Date());
+const monthNext = ref<Date | undefined>(new Date());
+const dateInfo = ref<string>("* Solo mes actual y el siguiente.");
 
-// The maximum month can only be the month following today's, this method ensures this.
-const fixMonth = () => {
-  const day = monthNext.value.getDate();
-  if (day === 29 || day === 30 || day === 31) {
-    monthNext.value.setDate(monthNext.value.getDate() - 3);
+// DEVUSER has no date restrictions; others are limited to current and next month.
+const initMonthLimits = () => {
+  if (user.value === "DEVUSER") {
+    monthCurrent.value = undefined;
+    monthNext.value = undefined;
+    dateInfo.value = "";
+  } else {
+    const day = monthNext.value!.getDate();
+    if (day === 29 || day === 30 || day === 31) {
+      monthNext.value!.setDate(monthNext.value!.getDate() - 3);
+    }
+    monthNext.value!.setMonth(monthNext.value!.getMonth() + 1);
   }
-  monthNext.value.setMonth(monthNext.value.getMonth() + 1);
 };
-fixMonth();
+initMonthLimits();
 
 // We declare variables to store the errors of each field.
 const dateMonthlyFail = ref();

@@ -129,6 +129,7 @@ const list = async () => {
 };
 
 const userPermissions = useCookie("permissions");
+const user = useCookie("usuario");
 
 const forms = ref([
   {
@@ -149,8 +150,9 @@ const checkPermissions = () => {
 checkPermissions();
 
 const checkDeadlines = (schedulingDate: string) => {
-
-  if (userPermissions.value?.includes("update_all_daily units")) {
+  const isDevUser = user.value === "DEVUSER";
+  const hasUpdateAllPermission = userPermissions.value?.includes("update_all_daily units");
+  if (isDevUser || hasUpdateAllPermission) {
     return true;
   }
 
