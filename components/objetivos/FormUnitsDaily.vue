@@ -65,7 +65,9 @@ const tomorrow = ref<Date | undefined>(new Date());
 const warnDate = ref<string>('');
 
 const checkPermission = () => {
-  if (userPermissions.value?.includes("insert_all_daily units")) {
+  const isDevUser = user.value === "DEVUSER";
+  const hasInsertAllPermission = userPermissions.value?.includes("insert_all_daily units");
+  if (isDevUser || hasInsertAllPermission) {
     daysBefore.value = undefined;
     tomorrow.value = undefined;
   } else {
