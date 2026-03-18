@@ -13,8 +13,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         }
 
         // Verify that the user has a client selected.
-        if (!clientID.value || !clientName.value) {
-            return navigateTo("/chooseClients");
+        if (!clientID.value || !clientName.value || clientID.value === "null" || clientName.value === "null") {
+            return navigateTo("/login");
         }
     } else {
         return navigateTo("/login");
