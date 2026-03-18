@@ -39,6 +39,6 @@ import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composab
 
 definePageMeta({
   layout: "login",
-  middleware: "guest",
+  // middleware: null,
 });
 </script>
