@@ -52,10 +52,11 @@
           </div>
           <div>
             <button
-              class="border-[1px] border-green-400 py-1 px-5 mt-6 rounded-lg bg-green-400"
+              class="border-[1px] border-green-400 py-1 px-5 mt-6 rounded-lg bg-green-400 disabled:cursor-not-allowed disabled:opacity-70"
               type="submit"
+              :disabled="isSubmitting"
             >
-              Agregar
+              {{ isSubmitting ? "Agregando..." : "Agregar" }}
             </button>
           </div>
         </div>
@@ -76,6 +77,7 @@ const date = new Date();
 const toast = useToast();
 const accidentes = ref(["accidente 1", "accidente 2", "accidente 3"]);
 const { createAccidente } = useObjetivosApi();
+const isSubmitting = ref(false);
 
 let errors = ref({
   cantidad: false,
@@ -83,6 +85,8 @@ let errors = ref({
 });
 
 const submit = async () => {
+  if (isSubmitting.value) return;
+
   errors.value = {
     cantidad: false,
     accidente: false,
@@ -97,25 +101,31 @@ const submit = async () => {
     objetivos_id: 3,
   };
 
-  const resultado = await createAccidente(objAccidente);
+  isSubmitting.value = true;
 
-  if (resultado.success) {
-    accidente.value = "";
-    cantidad.value = "";
+  try {
+    const resultado = await createAccidente(objAccidente);
 
-    toast.add({
-      severity: "success",
-      summary: "Guardado correctamente.",
-      detail: "Objetivos y calidad del mes guardado correctamente.",
-      life: 3000,
-    });
-  } else {
-    toast.add({
-      severity: "error",
-      summary: "Error a la hora de guardar calidad.",
-      detail: "Por favor revisar el error a resolver.",
-      life: 3000,
-    });
+    if (resultado.success) {
+      accidente.value = "";
+      cantidad.value = "";
+
+      toast.add({
+        severity: "success",
+        summary: "Guardado correctamente.",
+        detail: "Objetivos y calidad del mes guardado correctamente.",
+        life: 3000,
+      });
+    } else {
+      toast.add({
+        severity: "error",
+        summary: "Error a la hora de guardar calidad.",
+        detail: "Por favor revisar el error a resolver.",
+        life: 3000,
+      });
+    }
+  } finally {
+    isSubmitting.value = false;
   }
 };
 </script>

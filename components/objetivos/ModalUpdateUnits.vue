@@ -37,10 +37,11 @@
             />
             <button
               type="button"
-              class="w-full  text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
+              class="w-full  text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3 disabled:cursor-not-allowed disabled:opacity-70"
               @click="update"
+              :disabled="isSubmitting"
             >
-              Actualizar
+              {{ isSubmitting ? "Actualizando..." : "Actualizar" }}
             </button>
           </div>
         </form>
@@ -63,6 +64,7 @@ const units = ref<string | null>(null);
 const unitsFail = ref<String | null>(null);
 const reasonUpdate = ref<String | null>(null);
 const reasonUpdateFail = ref<String | null>(null);
+const isSubmitting = ref(false);
 
 const toast = useToast();
 const { getMetaUnidades, updateMetaUnidades } = useUnitsApi();
@@ -96,6 +98,8 @@ const list = async () => {
 };
 
 const update = async () => {
+  if (isSubmitting.value) return;
+
   unitsFail.value = "";
   reasonUpdateFail.value = "";
 
@@ -113,28 +117,34 @@ const update = async () => {
       motivo_actualizacion: reasonUpdate.value,
     };
 
-    const resp = await updateMetaUnidades(
-      objUnits,
-      String(props.metaUnidadesID)
-    );
+    isSubmitting.value = true;
 
-    if (resp.success) {
-      units.value = "";
-      toast.add({
-        severity: "success",
-        summary: resp.title,
-        detail: resp.message,
-        life: 5000,
-      });
-      visible.value = false;
-      emits("listTable");
-    } else {
-      toast.add({
-        severity: "error",
-        summary: resp.title,
-        detail: resp.message,
-        life: 5000,
-      });
+    try {
+      const resp = await updateMetaUnidades(
+        objUnits,
+        String(props.metaUnidadesID)
+      );
+
+      if (resp.success) {
+        units.value = "";
+        toast.add({
+          severity: "success",
+          summary: resp.title,
+          detail: resp.message,
+          life: 5000,
+        });
+        visible.value = false;
+        emits("listTable");
+      } else {
+        toast.add({
+          severity: "error",
+          summary: resp.title,
+          detail: resp.message,
+          life: 5000,
+        });
+      }
+    } finally {
+      isSubmitting.value = false;
     }
   }
 };

@@ -67,10 +67,11 @@
       <div class="flex justify-center font-bold mt-5">
         <button
           type="button"
-          class="bg-[#4789c8] w-full py-2 rounded-3xl text-white"
+          class="bg-[#4789c8] w-full py-2 rounded-3xl text-white disabled:cursor-not-allowed disabled:opacity-70"
           @click="submitSol()"
+          :disabled="isSubmitting"
         >
-          Guardar
+          {{ isSubmitting ? "Guardando..." : "Guardar" }}
         </button>
       </div>
     </fieldset>
@@ -95,6 +96,7 @@ const calInspSol = ref();
 const dateInspSol = ref();
 const fileSol = ref<File | null>(null);
 const errorFileSol = ref<string | null>(null);
+const isSubmitting = ref(false);
 
 const emits = defineEmits(["listar"]);
 
@@ -112,6 +114,8 @@ let errorsInsp = ref({
 });
 
 const submitSol = async () => {
+  if (isSubmitting.value) return;
+
   errorsInsp.value = {
     dateInspSol: false,
     calificacionInspSol: false,
@@ -140,26 +144,32 @@ const submitSol = async () => {
   if (noErrors) {
     if (regex.test(calInspSol.value)) {
       if (calInspSol.value >= 0 && calInspSol.value < 101) {
-        const resultado = await createCalidad(objCalidad);
+        isSubmitting.value = true;
 
-        if (resultado.success) {
-          dateInspSol.value = "";
-          calInspSol.value = "";
-          removeArchivo();
-          emits("listar");
-          toast.add({
-            severity: "success",
-            summary: "Guardado correctamente.",
-            detail: resultado.data.message,
-            life: 3000,
-          });
-        } else {
-          toast.add({
-            severity: "error",
-            summary: "Error al guardar.",
-            detail: resultado.error,
-            life: 3000,
-          });
+        try {
+          const resultado = await createCalidad(objCalidad);
+
+          if (resultado.success) {
+            dateInspSol.value = "";
+            calInspSol.value = "";
+            removeArchivo();
+            emits("listar");
+            toast.add({
+              severity: "success",
+              summary: "Guardado correctamente.",
+              detail: resultado.data.message,
+              life: 3000,
+            });
+          } else {
+            toast.add({
+              severity: "error",
+              summary: "Error al guardar.",
+              detail: resultado.error,
+              life: 3000,
+            });
+          }
+        } finally {
+          isSubmitting.value = false;
         }
       } else {
         toast.add({

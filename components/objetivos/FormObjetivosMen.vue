@@ -98,10 +98,11 @@
           <div class="flex justify-center mt-8">
             <button
               type="button"
-              class="bg-[#0063a6] px-10 py-2 rounded-lg text-white "
+              class="bg-[#0063a6] px-10 py-2 rounded-lg text-white disabled:cursor-not-allowed disabled:opacity-70"
               @click="submitForm"
+              :disabled="isSubmitting"
             >
-              Guardar
+              {{ isSubmitting ? "Guardando..." : "Guardar" }}
             </button>
           </div>
         </fieldset>
@@ -128,6 +129,7 @@ const desperdicioME = ref("");
 const desperdicioPP = ref("");
 const errorRegex = ref(false);
 const eficienciaProductiva = ref("");
+const isSubmitting = ref(false);
 
 // Variables de errores para la validación
 const errors = ref({
@@ -142,6 +144,8 @@ const { getFecha, setCheckMaxMinNumber } = datosObjetivos();
 
 // Método para validar y enviar el formulario
 const submitForm = async () => {
+  if (isSubmitting.value) return;
+
   //Reiniciar los errores
   errors.value = {
     fecha: false,
@@ -185,31 +189,37 @@ const submitForm = async () => {
 
       const resp = setCheckMaxMinNumber(objetivosData);
       if (resp) {
-        // Llamar a la API para crear los objetivos
-        const { createMeta } = useObjetivosApi();
-        const response = await createMeta(objetivosData);
+        isSubmitting.value = true;
 
-        if (response.success) {
-          toast.add({
-            severity: "success",
-            summary: "Meta guardada.",
-            detail: "Exito a la hora de guardar las metas.",
-            life: 4000,
-          });
-          date.value = null;
-          cumplimiento.value = "";
-          eficienciaProductiva.value = "";
-          calidad.value = "";
-          desperdicioME.value = "";
-          desperdicioPP.value = "";
-        } else {
-          console.error("Error al crear objetivos:", response.error);
-          toast.add({
-            severity: "error",
-            summary: "Error al guardar.",
-            detail: response.error,
-            life: 4000,
-          });
+        try {
+          // Llamar a la API para crear los objetivos
+          const { createMeta } = useObjetivosApi();
+          const response = await createMeta(objetivosData);
+
+          if (response.success) {
+            toast.add({
+              severity: "success",
+              summary: "Meta guardada.",
+              detail: "Exito a la hora de guardar las metas.",
+              life: 4000,
+            });
+            date.value = null;
+            cumplimiento.value = "";
+            eficienciaProductiva.value = "";
+            calidad.value = "";
+            desperdicioME.value = "";
+            desperdicioPP.value = "";
+          } else {
+            console.error("Error al crear objetivos:", response.error);
+            toast.add({
+              severity: "error",
+              summary: "Error al guardar.",
+              detail: response.error,
+              life: 4000,
+            });
+          }
+        } finally {
+          isSubmitting.value = false;
         }
       } else {
         toast.add({

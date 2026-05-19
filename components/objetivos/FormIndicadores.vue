@@ -78,9 +78,10 @@
           id="btnSubmitIndicadores"
           type="button"
           @click="submit()"
-          class="bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white  text-sm sm:text-base w-full"
+          class="bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white  text-sm sm:text-base w-full disabled:cursor-not-allowed disabled:opacity-70"
+          :disabled="isSubmitting"
         >
-          INGRESAR
+          {{ isSubmitting ? "INGRESANDO..." : "INGRESAR" }}
         </button>
       </div>
     </fieldset>
@@ -101,6 +102,7 @@ const toast = useToast();
 const desperfectosME = ref();
 const desperfectosPP = ref();
 const idCliente = useCookie("idCliente");
+const isSubmitting = ref(false);
 const errors = ref({
   fecha: false,
   calidad: false,
@@ -118,6 +120,8 @@ const ayer = new Date(
 );
 
 const submit = async () => {
+  if (isSubmitting.value) return;
+
   //Reiniciar los errores
   errors.value = {
     fecha: false,
@@ -148,25 +152,31 @@ const submit = async () => {
 
     if (quest) {
       objObjetivo.cliente_id = Number(idCliente.value);
-      const resultado = await updateObjetivos(objObjetivo);
+      isSubmitting.value = true;
 
-      if (resultado.success) {
-        //Reiniciar los errores
-        errors.value = {
-          fecha: false,
-          calidad: false,
-          planArmado: false,
-          desperfectosME: false,
-          desperfectosPP: false,
-        };
-        fecha.value = "";
-        calidad.value = "";
-        planArmado.value = "";
-        desperfectosME.value = "";
-        desperfectosPP.value = "";
-        showMessage("success", "Guardado correctamente.", resultado.data);
-      } else {
-        showMessage("error", "Error al guardar.", resultado.error);
+      try {
+        const resultado = await updateObjetivos(objObjetivo);
+
+        if (resultado.success) {
+          //Reiniciar los errores
+          errors.value = {
+            fecha: false,
+            calidad: false,
+            planArmado: false,
+            desperfectosME: false,
+            desperfectosPP: false,
+          };
+          fecha.value = "";
+          calidad.value = "";
+          planArmado.value = "";
+          desperfectosME.value = "";
+          desperfectosPP.value = "";
+          showMessage("success", "Guardado correctamente.", resultado.data);
+        } else {
+          showMessage("error", "Error al guardar.", resultado.error);
+        }
+      } finally {
+        isSubmitting.value = false;
       }
     } else {
       showMessage(

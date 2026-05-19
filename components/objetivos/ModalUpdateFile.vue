@@ -58,9 +58,10 @@
             id="btnUpdateFileModal"
             type="button"
             @click="update"
-            class="bg-[#4789c8] w-full py-2 rounded-lg text-white"
+            class="bg-[#4789c8] w-full py-2 rounded-lg text-white disabled:cursor-not-allowed disabled:opacity-70"
+            :disabled="isSubmitting"
           >
-            Actualizar
+            {{ isSubmitting ? "Actualizando..." : "Actualizar" }}
           </button>
         </div>
       </div>
@@ -109,6 +110,7 @@ const file = ref<File | null>(null);
 const idCliente = useCookie("idCliente");
 const errorFile = ref<string | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
+const isSubmitting = ref(false);
 
 const { updateFile } = useFilesApi();
 
@@ -144,6 +146,8 @@ const removeArchivo = () => {
 };
 
 const update = async () => {
+  if (isSubmitting.value) return;
+
   if (file.value) {
     const year = new Date(props.yearFile);
     const objeto = ref<UpdateArchivo>({
@@ -159,28 +163,34 @@ const update = async () => {
       id: props.idFile,
     });
 
-    const response = await updateFile(objeto.value);
+    isSubmitting.value = true;
 
-    if (response.success) {
-      removeArchivo();
-      emits("listar");
-      visible.value = false;
-      toast.add({
-        severity: "success",
-        summary: "Actualización exitosa.",
-        detail: "Se han guardado de la calidad.",
-        life: 4000,
-      });
-    } else {
-      toast.add({
-        severity: "error",
-        summary: "Error al actualizar.",
-        detail: response.error,
-        life: 4000,
-      });
+    try {
+      const response = await updateFile(objeto.value);
+
+      if (response.success) {
+        removeArchivo();
+        emits("listar");
+        visible.value = false;
+        toast.add({
+          severity: "success",
+          summary: "Actualización exitosa.",
+          detail: "Se han guardado de la calidad.",
+          life: 4000,
+        });
+      } else {
+        toast.add({
+          severity: "error",
+          summary: "Error al actualizar.",
+          detail: response.error,
+          life: 4000,
+        });
+      }
+
+      console.log("SUCCESS RESPONSE: ", response.success);
+    } finally {
+      isSubmitting.value = false;
     }
-
-    console.log("SUCCESS RESPONSE: ", response.success);
   } else {
     errorFile.value = "* No hay ningún archivo agregado.";
   }
