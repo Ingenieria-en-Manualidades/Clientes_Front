@@ -28,10 +28,11 @@
       />
       <button
         type="button"
-        class="w-full rounded-3xl  font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3  mt-3"
+        class="w-full rounded-3xl  font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3  mt-3 disabled:cursor-not-allowed disabled:opacity-70"
         @click="submitUnitsMonthly"
+        :disabled="isSubmitting"
       >
-        Guardar
+        {{ isSubmitting ? "Guardando..." : "Guardar" }}
       </button>
     </div>
   </fieldset>
@@ -54,6 +55,7 @@ const options = ref<OptionDropdown[]>([]);
 const clientID = useCookie("idCliente");
 const dateMonthly = ref<Date | null>(null);
 const unitsMonthly = ref<string | null>(null);
+const isSubmitting = ref(false);
 
 // Creating the month limits for the form. undefined = no restriction (e.g. DEVUSER)
 const monthCurrent = ref<Date | undefined>(new Date());
@@ -83,6 +85,8 @@ const areaMonthlyFail = ref();
 
 // Method to save units.
 const submitUnitsMonthly = async () => {
+  if (isSubmitting.value) return;
+
   // We reset the variables that save the errors.
   dateMonthlyFail.value = "";
   unitsMonthlyFail.value = "";
@@ -107,21 +111,27 @@ const submitUnitsMonthly = async () => {
           motivo_actualizacion: null,
         };
 
-        const result = await createMetaUnidades(objUnits);
+        isSubmitting.value = true;
 
-        // Clears fields on successful save.
-        if (result.success) {
-          unitsMonthly.value = null;
-          areaChoose.value = null;
+        try {
+          const result = await createMetaUnidades(objUnits);
+
+          // Clears fields on successful save.
+          if (result.success) {
+            unitsMonthly.value = null;
+            areaChoose.value = null;
+          }
+
+          // Success or failure message depending on the 'success' variable of the 'createMetaUnidades' method.
+          toast.add({
+            severity: result.success ? "success" : "error",
+            summary: result.title,
+            detail: result.message,
+            life: 5000,
+          });
+        } finally {
+          isSubmitting.value = false;
         }
-
-        // Success or failure message depending on the 'success' variable of the 'createMetaUnidades' method.
-        toast.add({
-          severity: result.success ? "success" : "error",
-          summary: result.title,
-          detail: result.message,
-          life: 5000,
-        });
       }
     }
   }

@@ -28,10 +28,11 @@
       />
       <button
         type="button"
-        class="w-full font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3 rounded-3xl mt-3"
+        class="w-full font-manrope-b text-center bg-[#4789c8] text-white py-2 px-3 rounded-3xl mt-3 disabled:cursor-not-allowed disabled:opacity-70"
         @click="submitUnits"
+        :disabled="isSubmitting"
       >
-        Guardar
+        {{ isSubmitting ? "Guardando..." : "Guardar" }}
       </button>
     </div>
   </fieldset>
@@ -57,6 +58,7 @@ const clienteID = useCookie("idCliente");
 const options = ref<OptionDropdown[]>([]);
 const { getAreasImec } = useUnitsApi();
 const userPermissions = useCookie("permissions");
+const isSubmitting = ref(false);
 
 // Minimum date to enter the form.
 const daysBefore = ref<Date | undefined>(new Date());
@@ -89,6 +91,8 @@ const failedFields = ref({
 
 // Method to save units.
 const submitUnits = async () => {
+  if (isSubmitting.value) return;
+
   // We reset the variables that save the errors.
   failedFields.value.dateFail = "";
   failedFields.value.unitsFail = "";
@@ -113,22 +117,28 @@ const submitUnits = async () => {
         usuario: user.value,
       };
 
-      const result = await createUnidadesDiarias(objUnitsD);
+      isSubmitting.value = true;
 
-      // Clears fields on successful save.
-      if (result.success) {
-        units.value = null;
-        date.value = null;
-        areaChoose.value = null;
+      try {
+        const result = await createUnidadesDiarias(objUnitsD);
+
+        // Clears fields on successful save.
+        if (result.success) {
+          units.value = null;
+          date.value = null;
+          areaChoose.value = null;
+        }
+
+        // Success or failure message depending on the 'success' variable of the 'createUnidadesDiarias' method.
+        toast.add({
+          severity: result.success ? "success" : "error",
+          summary: result.title,
+          detail: result.message,
+          life: 5000,
+        });
+      } finally {
+        isSubmitting.value = false;
       }
-
-      // Success or failure message depending on the 'success' variable of the 'createUnidadesDiarias' method.
-      toast.add({
-        severity: result.success ? "success" : "error",
-        summary: result.title,
-        detail: result.message,
-        life: 5000,
-      });
     }
   }
 };
