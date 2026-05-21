@@ -8,6 +8,20 @@ export const loginApi = () => {
   const config = useRuntimeConfig();
 
   const url = config.public.apiBackendCliente;
+
+  const fetchWithTimeout = async (input: RequestInfo | URL, init: RequestInit = {}, timeout = 15000) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      return await fetch(input, {
+        ...init,
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  };
   
     /**
    * Verifica dentro de la BD si el usuario existe y si es el caso crea tres cookies (idCliente, token y nombredDeUsuario) para que la página funcione y duran lo que dure la sesión.
@@ -19,7 +33,7 @@ export const loginApi = () => {
     const encryptedData = encryptData([userData['username'], userData['password']]);
     try {
       //llamando al endpoint que verificara al usuario y nos devolvera el token.
-      const resultado = await fetch(`${url}api/login`, {
+      const resultado = await fetchWithTimeout(`${url}api/login`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +54,7 @@ export const loginApi = () => {
       const response = await resultado.json();
       
       //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
-      const restCookies = await fetch('api/front/cookiesRemisiones', {
+      const restCookies = await fetchWithTimeout('/api/front/cookiesRemisiones', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -54,8 +68,8 @@ export const loginApi = () => {
       });
       
       // Verificamos si hay un error con las cookies
-      if (!restCookies) {
-        throw "Error a la hora de crear las cookies";
+      if (!restCookies.ok) {
+        throw new Error("Error a la hora de crear las cookies");
       }
 
       if (new Date(response.reset_password) <= new Date()) {
@@ -69,7 +83,12 @@ export const loginApi = () => {
       }
     } catch (error) {
       console.error(error);
-      throw "Error desconocido a la hora de iniciar";
+      return {
+        success: false,
+        status: 'error',
+        tittle: 'No pudimos iniciar sesion',
+        detail: 'Intentalo nuevamente en unos minutos.',
+      };
     }
   };
   
@@ -88,7 +107,7 @@ export const loginApi = () => {
       }
 
       // Llamamos al endpoint "logout" del 'Modulo-Cliente Backend' dandole el token del usuario para borrarlo en la BD.
-      const resultado = await fetch(`${url}api/logout`, {
+      const resultado = await fetchWithTimeout(`${url}api/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +118,7 @@ export const loginApi = () => {
       const response = await resultado.json();
       
       // Borramos todas las cookies(token, idCliente y usuario) y retornamos mensaje exitoso del endpoint.
-      const resultCookie = await fetch('/api/front/deleteCookiesRem', {
+      const resultCookie = await fetchWithTimeout('/api/front/deleteCookiesRem', {
         method: 'DELETE',
       });
 
@@ -122,7 +141,7 @@ export const loginApi = () => {
    */
   const getClientsByIds = async (arrayIds: Number[]):Promise<ApiPromiseStandard<any>> => {
     try {
-      const response = await fetch(`${url}api/getClientsByIds/${arrayIds}`, {
+      const response = await fetchWithTimeout(`${url}api/getClientsByIds/${arrayIds}`, {
         method: 'GET',
       });
 
@@ -142,7 +161,7 @@ export const loginApi = () => {
 
   const chooseClient = async (clientID: Number, nameClient: String | null | undefined) => {
     try {
-      const response = await fetch('api/front/cookieClienteid', {
+      const response = await fetchWithTimeout('/api/front/cookieClienteid', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +192,7 @@ export const loginApi = () => {
     try {
       const token = useCookie("token");
       const encryptedPassword = encryptPassword(newPassword); // Encrypt the new password.
-      const response = await fetch(`${url}api/updatePasswordExpiration`, {
+      const response = await fetchWithTimeout(`${url}api/updatePasswordExpiration`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -204,7 +223,7 @@ export const loginApi = () => {
    */
   const getClients = async ():Promise<ApiPromiseStandard<any>> => {
     try {
-      const response = await fetch(`${url}api/getClients`, {
+      const response = await fetchWithTimeout(`${url}api/getClients`, {
         method: 'get',
       });
 

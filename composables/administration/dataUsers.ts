@@ -102,15 +102,15 @@ export const useDataUsers = () => {
     return username;
   }
 
-  const setReviewFields = (user: User) => {
+  const setReviewFields = (user: User, requirePassword = true) => {
     const errors: boolean[] = [false,false,false,false,false,false,false,false];
 
     if (!user.fullname) errors[0] = true;
     if (!user.username) errors[1] = true;
     if (!user.cellphone) errors[2] = true;
     if (!user.email) errors[3] = true;
-    if (!user.password) errors[4] = true;
-    if (!user.password_confirmation) errors[5] = true;
+    if (requirePassword && !user.password) errors[4] = true;
+    if (requirePassword && !user.password_confirmation) errors[5] = true;
     if (user.clients) errors[6] = user.clients.length === 0 ? true : false;
     else errors[6] = true;
     if (!user.rol) errors[7] = true;

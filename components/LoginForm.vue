@@ -272,6 +272,7 @@ const handleSubmit = async () => {
     });
   } else {
     //llamando al endpoint y guardando el token y la id del cliente como una cookie dentro del método 'login'.
+    try {
     const resultado = await login({
       username: usuario.value,
       password: contrasenia.value,
@@ -281,6 +282,7 @@ const handleSubmit = async () => {
     if (resultado.success) {
       if (resultado.resetPassword) {
         await router.push("/resetPasswordExpiration");
+        isLoading.value = false;
       } else {
         if (resultado.skipChooseClient) {
           const success = await createCookieClient(resultado.clientID);
@@ -302,6 +304,17 @@ const handleSubmit = async () => {
         detail: resultado.detail,
         life: 4000,
       });
+    }
+    } catch (error) {
+      console.error(error);
+      toast.add({
+        severity: "error",
+        summary: "No pudimos iniciar sesion",
+        detail: "Intentalo nuevamente en unos minutos.",
+        life: 4000,
+      });
+    } finally {
+      isLoading.value = false;
     }
   }
 };
