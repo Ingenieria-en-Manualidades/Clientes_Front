@@ -54,3 +54,32 @@ Archivos afectados:
 Cambios realizados:
 - El formulario de actualizacion envia `password` y `password_confirmation` como `null` cuando no se modifica la contrasena.
 - La validacion de usuarios ahora permite omitir contrasena en modo actualizacion sin afectar la validacion de creacion.
+
+## 2026-05-21
+
+### Mejora visual de selecciones en usuarios
+
+Motivo:
+- Evitar que las listas de permisos y clientes seleccionados se extiendan demasiado dentro de los formularios de usuarios.
+
+Archivos afectados:
+- `components/dinamicos/InputSearchList.vue`
+
+Cambios realizados:
+- Se agrego un contenedor con altura maxima y scroll interno para las selecciones.
+- Se mejoro el estilo de los chips seleccionados, incluyendo truncado de textos largos y boton de quitar mas compacto.
+
+## 2026-05-21
+
+### Correccion de cookies en login local con build
+
+Motivo:
+- Evitar que el login falle cuando se prueba un build local por HTTP y las cookies se marcan como seguras.
+
+Archivos afectados:
+- `server/api/front/cookiesRemisiones.post.ts`
+- `server/api/front/cookieClienteid.post.ts`
+
+Cambios realizados:
+- Las cookies ahora usan `secure` y `sameSite: none` solo cuando la peticion llega por HTTPS.
+- En HTTP local se usan cookies compatibles con desarrollo para que el navegador pueda guardarlas.
