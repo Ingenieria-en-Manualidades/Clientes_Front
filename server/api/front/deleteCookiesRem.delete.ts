@@ -1,10 +1,12 @@
 export default defineEventHandler(async (event) => {
-  deleteCookie(event, "token");
-  deleteCookie(event, "numRem");
-  deleteCookie(event, 'usuario');
-  deleteCookie(event, 'clients');
-  deleteCookie(event, "idCliente");
-  deleteCookie(event, 'nameClient');
-  deleteCookie(event, "permissions");
+  const cookieOptions = { path: '/' } as const;
+
+  deleteCookie(event, "token", cookieOptions);
+  deleteCookie(event, "numRem", cookieOptions);
+  deleteCookie(event, 'usuario', cookieOptions);
+  deleteCookie(event, 'clients', cookieOptions);
+  deleteCookie(event, "idCliente", cookieOptions);
+  deleteCookie(event, 'nameClient', cookieOptions);
+  deleteCookie(event, "permissions", cookieOptions);
   return true;
 })

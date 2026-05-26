@@ -65,10 +65,11 @@
         <button
           id="btnSaveChecklist"
           type="button"
-          class="bg-[#4789c8] w-full py-2 rounded-3xl text-white"
+          class="bg-[#4789c8] w-full py-2 rounded-3xl text-white disabled:cursor-not-allowed disabled:opacity-70"
           @click="submitCheck()"
+          :disabled="isSubmitting"
         >
-          Guardar
+          {{ isSubmitting ? "Guardando..." : "Guardar" }}
         </button>
       </div>
     </fieldset>
@@ -96,6 +97,7 @@ const idCliente = useCookie("idCliente");
 const toast = useToast();
 const fileInput = ref<HTMLInputElement | null>(null);
 const { createCalidad, verificarValoresCalidad } = useObjetivosApi();
+const isSubmitting = ref(false);
 
 const emits = defineEmits(["listar"]);
 
@@ -108,6 +110,8 @@ const removeArchivo = () => {
 
 // Método para validar y enviar el formulario
 const submitCheck = async () => {
+  if (isSubmitting.value) return;
+
   if (!dateCheck.value) errorsCheck.value.dateCheck = true;
   if (!calCheck.value) errorsCheck.value.calificacionCheck = true;
   if (!fileCheck.value) {
@@ -130,20 +134,26 @@ const submitCheck = async () => {
   if (noErrors) {
     if (regex.test(calCheck.value)) {
       if (calCheck.value >= 0 && calCheck.value < 101) {
-        const resultado = await createCalidad(objCalidad);
+        isSubmitting.value = true;
 
-        if (resultado.success) {
-          dateCheck.value = "";
-          calCheck.value = "";
-          removeArchivo();
-          emits("listar");
-          showAlert(
-            "success",
-            "Guardado correctamente.",
-            resultado.data.message
-          );
-        } else {
-          showAlert("error", "Error al guardar.", resultado.error);
+        try {
+          const resultado = await createCalidad(objCalidad);
+
+          if (resultado.success) {
+            dateCheck.value = "";
+            calCheck.value = "";
+            removeArchivo();
+            emits("listar");
+            showAlert(
+              "success",
+              "Guardado correctamente.",
+              resultado.data.message
+            );
+          } else {
+            showAlert("error", "Error al guardar.", resultado.error);
+          }
+        } finally {
+          isSubmitting.value = false;
         }
       } else {
         showAlert(

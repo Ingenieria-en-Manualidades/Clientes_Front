@@ -249,11 +249,11 @@ const setAllDisableInputs = (value: Boolean) => {
 const update = async () => {
   if (isLoading.value) return;
 
-  user.value.password = "*";
-  user.value.password_confirmation = "*";
+  user.value.password = null;
+  user.value.password_confirmation = null;
   user.value.employee_id = String(user.value.employee_id);
   user.value.creator_user = String(creatorUser.value);
-  errors.value = setReviewFields(user.value);
+  errors.value = setReviewFields(user.value, false);
   // if (user.value.password || user.value.password_confirmation) {
   //   if (user.value.password !== user.value.password_confirmation) {
   //     errors.value[4] = true;

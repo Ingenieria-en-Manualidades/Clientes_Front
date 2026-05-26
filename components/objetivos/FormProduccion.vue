@@ -32,9 +32,10 @@
           id="btnSubmitPlan"
           type="button"
           @click="submitPlanificada"
-          class="w-full py-1 rounded-md border-[1px] bg-azulClaroIENM border-azulClaroIENM text-white font-manrope-b mb-5"
+          class="w-full py-1 rounded-md border-[1px] bg-azulClaroIENM border-azulClaroIENM text-white font-manrope-b mb-5 disabled:cursor-not-allowed disabled:opacity-70"
+          :disabled="isSubmittingPlanificada"
         >
-          INGRESAR
+          {{ isSubmittingPlanificada ? "INGRESANDO..." : "INGRESAR" }}
         </button>
       </div>
       <p>Producción Modificada:</p>
@@ -66,9 +67,10 @@
           id="btnSubmitMod"
           type="button"
           @click="submitModificada()"
-          class="w-full bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base"
+          class="w-full bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base disabled:cursor-not-allowed disabled:opacity-70"
+          :disabled="isSubmittingModificada"
         >
-          INGRESAR
+          {{ isSubmittingModificada ? "INGRESANDO..." : "INGRESAR" }}
         </button>
       </div>
     </fieldset>
@@ -90,12 +92,16 @@ const fechaPlan = ref<Date | null>();
 const errorMod = ref<null | string>();
 const errorProd = ref<null | string>();
 const idCliente = useCookie("idCliente");
+const isSubmittingPlanificada = ref(false);
+const isSubmittingModificada = ref(false);
 
 const toast = useToast();
 const { objObjetivo, getFecha, getFechaMaxMin } = datosObjetivos();
 const { createObjetivos, updateObjetivos } = useObjetivosApi();
 
 const submitPlanificada = async () => {
+  if (isSubmittingPlanificada.value) return;
+
   if (prodPlan.value && fechaPlan.value) {
     if (prodPlan.value < 0) {
       showMessage(
@@ -109,15 +115,21 @@ const submitPlanificada = async () => {
       objObjetivo.cliente_id = Number(idCliente.value);
       objObjetivo.planificada = Number(prodPlan.value);
 
-      const resultado = await createObjetivos(objObjetivo);
+      isSubmittingPlanificada.value = true;
 
-      if (resultado.success) {
-        showMessage("success", "Guardado correctamente.", resultado.data);
-        errorProd.value = null;
-        fechaPlan.value = null;
-        prodPlan.value = "";
-      } else {
-        showMessage("error", "Error al guardar.", resultado.error);
+      try {
+        const resultado = await createObjetivos(objObjetivo);
+
+        if (resultado.success) {
+          showMessage("success", "Guardado correctamente.", resultado.data);
+          errorProd.value = null;
+          fechaPlan.value = null;
+          prodPlan.value = "";
+        } else {
+          showMessage("error", "Error al guardar.", resultado.error);
+        }
+      } finally {
+        isSubmittingPlanificada.value = false;
       }
     }
   } else {
@@ -129,6 +141,8 @@ const submitPlanificada = async () => {
 };
 
 const submitModificada = async () => {
+  if (isSubmittingModificada.value) return;
+
   if (prodMod.value && fechaMod.value) {
     if (prodMod.value < 0) {
       showMessage(
@@ -142,15 +156,21 @@ const submitModificada = async () => {
       objObjetivo.fecha = fechaMod.value;
       objObjetivo.modificada = prodMod.value;
 
-      const resultado = await updateObjetivos(objObjetivo);
+      isSubmittingModificada.value = true;
 
-      if (resultado.success) {
-        showMessage("success", "Guardado correctamente.", resultado.data);
-        errorMod.value = null;
-        fechaMod.value = null;
-        prodMod.value = "";
-      } else {
-        showMessage("error", "Error al guardar.", resultado.error);
+      try {
+        const resultado = await updateObjetivos(objObjetivo);
+
+        if (resultado.success) {
+          showMessage("success", "Guardado correctamente.", resultado.data);
+          errorMod.value = null;
+          fechaMod.value = null;
+          prodMod.value = "";
+        } else {
+          showMessage("error", "Error al guardar.", resultado.error);
+        }
+      } finally {
+        isSubmittingModificada.value = false;
       }
     }
   } else {

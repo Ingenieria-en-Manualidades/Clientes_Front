@@ -102,7 +102,7 @@ definePageMeta({
           <div class="w-16 h-[3px] bg-amarilloIENM mt-1"></div>
           <p class="mt-3 text-slate-700">
             Ser la empresa líder en el desarrollo de soluciones circulares de
-            impacto sostenible dentro del ecosistema logístico y productivo en
+            impacto sostenible dentro del ecosistema logistico y productivo en
             el continente americano.
           </p>
         </div>

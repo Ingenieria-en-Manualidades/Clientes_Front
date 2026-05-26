@@ -65,14 +65,24 @@
     </div>
 
     <!-- chips -->
-    <div class="mt-2 flex flex-wrap gap-2" v-if="selectedLabels.length > 0">
+    <div
+      class="mt-2 flex max-h-32 flex-wrap gap-2 overflow-y-auto rounded-lg border border-blue-100 bg-blue-50/50 p-2 pr-1"
+      v-if="selectedLabels.length > 0"
+    >
       <span
         v-for="(lab, i) in selectedLabels"
         :key="`chip-${i}`"
-        class="flex items-center gap-1 bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm"
+        class="flex max-w-full items-center gap-1 rounded-full bg-blue-100 px-2 py-1 text-sm text-blue-800 sm:max-w-[18rem]"
       >
-        {{ lab }}
-        <button class="hover:text-blue-600" @click.prevent="removeAt(i)">×</button>
+        <span class="min-w-0 break-words leading-tight">{{ lab }}</span>
+        <button
+          class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full hover:bg-blue-200 hover:text-blue-900"
+          type="button"
+          aria-label="Quitar seleccion"
+          @click.prevent="removeAt(i)"
+        >
+          <i class="pi pi-times text-[10px]"></i>
+        </button>
       </span>
     </div>
   </div>

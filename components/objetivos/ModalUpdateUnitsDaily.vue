@@ -33,10 +33,11 @@
             <button
               id="btnUpdateUnitsDaily"
               type="button"
-              class="w-full  text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3"
+              class="w-full  text-center bg-[#c86a2b] text-white py-2 px-3 rounded mt-3 disabled:cursor-not-allowed disabled:opacity-70"
               @click="update"
+              :disabled="isSubmitting"
             >
-              Actualizar
+              {{ isSubmitting ? "Actualizando..." : "Actualizar" }}
             </button>
           </div>
         </form>
@@ -72,6 +73,7 @@ const props = defineProps({
 const date = ref<String | null>(null);
 const units = ref<string | null>(null);
 const unitsFail = ref<String | null>(null);
+const isSubmitting = ref(false);
 
 const list = async () => {
   visible.value = !visible.value;
@@ -91,6 +93,8 @@ const list = async () => {
 };
 
 const update = async () => {
+  if (isSubmitting.value) return;
+
   unitsFail.value = "";
   if (!units.value) unitsFail.value = "* Este campo es obligatorio.";
 
@@ -101,28 +105,34 @@ const update = async () => {
       cliente_endpoint_id: null,
       usuario: user.value,
     };
-    const resp = await updateUnidadesDiarias(
-      objUnits,
-      String(props.unidadesDiariasID)
-    );
+    isSubmitting.value = true;
 
-    if (resp.success) {
-      units.value = "";
-      toast.add({
-        severity: "success",
-        summary: resp.title,
-        detail: resp.message,
-        life: 5000,
-      });
-      visible.value = false;
-      emits("listTable");
-    } else {
-      toast.add({
-        severity: "error",
-        summary: resp.title,
-        detail: resp.message,
-        life: 5000,
-      });
+    try {
+      const resp = await updateUnidadesDiarias(
+        objUnits,
+        String(props.unidadesDiariasID)
+      );
+
+      if (resp.success) {
+        units.value = "";
+        toast.add({
+          severity: "success",
+          summary: resp.title,
+          detail: resp.message,
+          life: 5000,
+        });
+        visible.value = false;
+        emits("listTable");
+      } else {
+        toast.add({
+          severity: "error",
+          summary: resp.title,
+          detail: resp.message,
+          life: 5000,
+        });
+      }
+    } finally {
+      isSubmitting.value = false;
     }
   }
 };
