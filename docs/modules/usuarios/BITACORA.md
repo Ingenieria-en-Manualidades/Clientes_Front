@@ -83,3 +83,42 @@ Archivos afectados:
 Cambios realizados:
 - Las cookies ahora usan `secure` y `sameSite: none` solo cuando la peticion llega por HTTPS.
 - En HTTP local se usan cookies compatibles con desarrollo para que el navegador pueda guardarlas.
+
+## 2026-05-26
+
+### Permiso de Clientes en administracion
+
+Motivo:
+- Permitir asignar desde la vista de Usuarios el permiso para que un usuario vea el submodulo `Clientes`.
+- Mantener el comportamiento de seguridad del menu: el grupo `Administracion` requiere `view_administration`.
+
+Archivos afectados:
+- `composables/menuItems.ts`
+
+Cambios realizados:
+- Se agrego `Clientes` como submodulo de `Administracion` con permiso `view_clients`.
+- La visibilidad esperada queda:
+  - `view_administration` para ver el grupo `Administracion`.
+  - `view_users` para ver `Usuarios`.
+  - `view_clients` para ver `Clientes`.
+- Se verifico que el usuario `DEVUSER` debe tener `view_administration`, `view_users` y `view_clients` para ver ambos submodulos.
+
+## 2026-05-29
+
+### Mensaje de login para credenciales invalidas
+
+Motivo:
+- Reemplazar el titulo tecnico `Error 422` por un mensaje claro para el usuario cuando falla el login por credenciales.
+
+Archivos afectados:
+- `composables/loginApi.ts`
+- `components/LoginForm.vue`
+
+Cambios realizados:
+- `loginApi.login` usa `title` y `message` devueltos por el backend en errores de autenticacion.
+- El toast del formulario ahora puede mostrar `Credenciales incorrectas` y `Usuario o contraseña incorrectos.`.
+- Se mantiene mensaje generico solo para fallos inesperados de red/servidor.
+
+Verificacion:
+- `npm run build`
+- Resultado: build exitoso con warnings conocidos no bloqueantes.
