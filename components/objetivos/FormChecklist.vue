@@ -1,75 +1,102 @@
 <template>
-  <form id="formChecklist" class="w-[50%] max-w-[200px] sm:max-w-[230px] text-xs sm:text-base">
-    <fieldset
-      class="border-[1px] border-black rounded-lg p-2 sm:p-3 "
-    >
-      <legend class="px-1 ">CheckList</legend>
-      <p class="font-bold mb-1">Mes</p>
-      <p v-if="errorsCheck.dateCheck" class="text-red-500 text-sm pb-1">
-        Este campo es obligatorio
-      </p>
-      <Calendar
-        v-model="dateCheck"
-        :manualInput="false"
-        view="month"
-        dateFormat="yy/mm"
-        showIcon
-        fluid
-        inputClass="w-full"
-        iconDisplay="input"
-      />
-      <p class="font-bold mt-4 mb-1">Calificación (%)</p>
-      <p v-if="errorsCheck.calificacionCheck" class="text-red-500 text-sm pb-1">
-        Este campo es obligatorio
-      </p>
-      <input
-        type="text"
-        v-model="calCheck"
-        maxlength="3"
-        class="border-[1px] border-gray-500 rounded-3xl p-2 outline-none w-full"
-      />
-      <div id="divFileCheck" class="mt-5">
-        <input
-          type="file"
-          ref="fileInput"
-          class="hidden"
-          id="fileCheck"
-          @change="subirArchivoCheck"
-        />
-        <label
-          for="fileCheck"
-          class="flex justify-center mt-3 py-2 bg-[#c86a2b] font-bold text-white cursor-pointer rounded-3xl"
-        >
-          <i class="pi pi-upload pr-3 pt-1"></i>Cargar evidencia</label
-        >
+  <form id="formChecklist" class="min-w-0 w-full text-sm">
+    <fieldset class="h-full min-w-0 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm md:p-5">
+      <legend class="px-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+        CheckList
+      </legend>
+      <div class="mb-4 flex items-center gap-3">
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-azulClaroIENM/10 text-azulClaroIENM">
+          <i class="pi pi-check-square"></i>
+        </span>
+        <div class="min-w-0">
+          <h3 class="font-semibold text-slate-900">Calidad de checklist</h3>
+          <p class="text-sm text-slate-500">Registra el porcentaje mensual y adjunta la evidencia en PDF.</p>
+        </div>
       </div>
-      <div v-if="fileCheck" class="flex mt-1 max-w-[203px]">
-        <p
-          class="p-1 text-sm truncate w-[85%] border-[1px] border-gray-400"
-          :title="fileCheck.name"
-        >
-          {{ fileCheck.name }}
-        </p>
-        <button
-          type="button"
-          @click="removeArchivo"
-          class="px-2 font-bold bg-red-500 border-[1px] border-red-500"
-        >
-          <i class="pi pi-times text-sm text-white"></i>
-        </button>
+
+      <div class="grid min-w-0 gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] xl:grid-cols-[minmax(0,170px)_minmax(0,150px)_minmax(0,1fr)]">
+        <div class="min-w-0">
+          <label class="mb-1 block text-sm font-semibold text-slate-700">Mes</label>
+          <Calendar
+            id="calendarChecklist"
+            v-model="dateCheck"
+            :manualInput="false"
+            view="month"
+            dateFormat="yy/mm"
+            showIcon
+            fluid
+            inputClass="w-full rounded-lg border border-slate-200 px-3 py-2 shadow-sm"
+            iconDisplay="input"
+          />
+          <p v-if="errorsCheck.dateCheck" class="mt-1 text-sm font-semibold text-red-500">
+            Este campo es obligatorio
+          </p>
+        </div>
+
+        <div class="min-w-0">
+          <label class="mb-1 block text-sm font-semibold text-slate-700">Calificación (%)</label>
+          <input
+            id="inputChecklistScore"
+            type="text"
+            v-model="calCheck"
+            maxlength="3"
+            class="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-slate-900 outline-none transition focus:border-azulClaroIENM focus:bg-white"
+            placeholder="Ej: 95"
+          />
+          <p v-if="errorsCheck.calificacionCheck" class="mt-1 text-sm font-semibold text-red-500">
+            Este campo es obligatorio
+          </p>
+        </div>
+
+        <div class="min-w-0 md:col-span-2 xl:col-span-1">
+          <label class="mb-1 block text-sm font-semibold text-slate-700">Evidencia</label>
+          <div id="divFileCheck" class="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-2">
+            <input
+              type="file"
+              ref="fileInput"
+              class="hidden"
+              id="fileCheck"
+              @change="subirArchivoCheck"
+            />
+            <label
+              for="fileCheck"
+              class="flex min-h-10 cursor-pointer items-center justify-center rounded-lg bg-[#c86a2b] px-4 text-center font-semibold text-white transition hover:bg-[#b85f25]"
+            >
+              <i class="pi pi-upload pr-2"></i>Cargar PDF</label
+            >
+          </div>
+          <p class="mt-1 text-sm font-semibold text-red-500">
+            {{ errorFileCheck }}
+          </p>
+        </div>
       </div>
-      <p class="text-red-500 text-sm">
-        {{ errorFileCheck }}
-      </p>
-      <div class="flex justify-center font-bold mt-5">
+
+      <div class="mt-5 flex min-w-0 flex-col gap-3 font-bold sm:flex-row sm:items-center sm:justify-between">
+        <div class="min-w-0 flex-1">
+          <div v-if="fileCheck" class="flex min-w-0 max-w-full overflow-hidden rounded-lg border border-slate-200 sm:max-w-sm">
+            <p
+              class="min-w-0 flex-1 truncate bg-white p-2 text-sm font-normal text-slate-600"
+              :title="fileCheck.name"
+            >
+              {{ fileCheck.name }}
+            </p>
+            <button
+              type="button"
+              @click="removeArchivo"
+              class="shrink-0 bg-red-500 px-3 font-bold text-white"
+            >
+              <i class="pi pi-times text-sm text-white"></i>
+            </button>
+          </div>
+        </div>
         <button
           id="btnSaveChecklist"
           type="button"
-          class="bg-[#4789c8] w-full py-2 rounded-3xl text-white disabled:cursor-not-allowed disabled:opacity-70"
+          class="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[#0063a6] px-5 py-2 text-center font-semibold text-white shadow-lg shadow-blue-900/10 transition hover:bg-[#00558f] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto sm:min-w-44"
           @click="submitCheck()"
           :disabled="isSubmitting"
         >
-          {{ isSubmitting ? "Guardando..." : "Guardar" }}
+          {{ isSubmitting ? "Guardando..." : "Guardar checklist" }}
         </button>
       </div>
     </fieldset>

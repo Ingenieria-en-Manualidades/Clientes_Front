@@ -1,5 +1,5 @@
 <template>
-  <ScrollPanel style="width: 100%; height: 319px">
+  <component :is="scrollComponent" v-bind="scrollProps">
     <table class="text-xs sm:text-sm w-full ">
       <caption class="text-base" v-if="titulo">
         {{
@@ -38,7 +38,7 @@
         <slot name="tfoot"></slot>
       </tfoot>
     </table>
-  </ScrollPanel>
+  </component>
   <div v-if="pag" class="w-full text-center py-3">
     <button
       type="button"
@@ -91,7 +91,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, computed } from "vue";
+import { ref, defineProps, computed, resolveComponent } from "vue";
 
 const props = defineProps({
   titulo: String,
@@ -108,7 +108,20 @@ const props = defineProps({
     required: true,
   },
   pag: Boolean,
+  nativeScroll: Boolean,
 });
+
+const scrollComponent = computed(() =>
+  props.nativeScroll ? "div" : resolveComponent("ScrollPanel")
+);
+const scrollProps = computed(() =>
+  props.nativeScroll
+    ? {
+        class: "max-w-full overflow-auto",
+        style: { width: "100%", maxHeight: "319px" },
+      }
+    : { style: { width: "100%", height: "319px" } }
+);
 
 const paginaActual = ref(1);
 const itemsPorPagina = ref(5);

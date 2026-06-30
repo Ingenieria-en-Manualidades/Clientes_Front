@@ -1,111 +1,158 @@
 <template>
-  <div class="my-3">
-    <form class=" flex justify-center">
-      <div>
-        <p><b>Elegir mes:</b></p>
-        <Calendar
-          v-model="date"
-          :manualInput="false"
-          view="month"
-          dateFormat="yy/mm"
-          showIcon
-          fluid
-          inputClass="w-full"
-          iconDisplay="input"
-          id="calendarFilterGoals"
-        />
-        <p v-if="errors.fecha" class="text-red-500 text-sm font-bold">
-          Este campo es obligatorio
-        </p>
-        <fieldset
-          id="fieldsetGoals"
-          class="border-[1px] border-black rounded p-5 max-w-[850px] mt-3"
-        >
-          <div class="flex justify-center flex-wrap gap-6">
-            <div class="ml-9">
-              <p class="font-bold mb-1">Cumplimiento Plan de Armado (%)</p>
-              <input
-                v-model="cumplimiento"
-                type="text"
-                maxlength="3"
-                class="border-[1px] border-black rounded-md p-1 outline-none"
-              />
-              <p
-                v-if="errors.cumplimiento"
-                class="text-red-500 text-sm font-bold"
-              >
-                Este campo es obligatorio
+  <div class="my-4 flex w-full justify-center px-1">
+    <form class="w-full max-w-5xl">
+      <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+        <div class="border-b border-slate-100 bg-gradient-to-r from-[#eef7ff] via-white to-[#f8fafc] px-5 py-5 md:px-8">
+          <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-azulClaroIENM">
+                Tablero SAE
+              </p>
+              <h2 class="mt-1 text-2xl font-bold text-slate-900">
+                Metas mensuales
+              </h2>
+              <p class="mt-1 max-w-2xl text-sm text-slate-500">
+                Define los porcentajes objetivo que se usarán para medir el cumplimiento del mes seleccionado.
               </p>
             </div>
-            <div>
-              <p class="font-bold mb-1">Eficiencia Productiva (%)</p>
-              <input
-                v-model="eficienciaProductiva"
-                type="text"
-                maxlength="3"
-                class="border-[1px] border-black rounded-md p-1 outline-none"
-              />
-              <p
-                v-if="errors.eficienciaProductiva"
-                class="text-red-500 text-sm font-bold"
-              >
-                Este campo es obligatorio
-              </p>
-            </div>
-            <div>
-              <p class="font-bold mb-1">Inspección de Calidad (%)</p>
-              <input
-                v-model="calidad"
-                type="text"
-                maxlength="3"
-                class="border-[1px] border-black rounded-md p-1 outline-none"
-              />
-              <p v-if="errors.calidad" class="text-red-500 text-sm font-bold">
-                Este campo es obligatorio
-              </p>
-            </div>
-            <div>
-              <p class="font-bold mb-1">Desperdicios de M.E (%)</p>
-              <input
-                v-model="desperdicioME"
-                type="text"
-                maxlength="3"
-                class="border-[1px] border-black rounded-md p-1 outline-none"
-              />
-              <p
-                v-if="errors.desperdicioME"
-                class="text-red-500 text-sm font-bold"
-              >
-                Este campo es obligatorio
-              </p>
-            </div>
-            <div>
-              <p class="font-bold mb-1">Desperdicios de P.P (%)</p>
-              <input
-                v-model="desperdicioPP"
-                type="text"
-                maxlength="3"
-                class="border-[1px] border-black rounded-md p-1 outline-none"
-              />
-              <p
-                v-if="errors.desperdicioPP"
-                class="text-red-500 text-sm font-bold"
-              >
-                Este campo es obligatorio
-              </p>
+            <div class="rounded-full border border-blue-100 bg-white px-4 py-2 text-sm font-semibold text-azulClaroIENM shadow-sm">
+              Valores de 0 a 100%
             </div>
           </div>
-          <div class="flex justify-center mt-8">
+        </div>
+
+        <div class="space-y-6 px-5 py-6 md:px-8">
+          <section class="rounded-2xl border border-slate-100 bg-slate-50/70 p-4 md:p-5">
+            <div class="mb-3 flex items-center gap-3">
+              <span class="flex h-9 w-9 items-center justify-center rounded-full bg-azulClaroIENM/10 text-azulClaroIENM">
+                <i class="pi pi-calendar"></i>
+              </span>
+              <div>
+                <h3 class="font-semibold text-slate-900">Periodo de la meta</h3>
+                <p class="text-sm text-slate-500">Selecciona el mes al que pertenecen estos objetivos.</p>
+              </div>
+            </div>
+            <div class="max-w-xs">
+              <label class="mb-1 block text-sm font-semibold text-slate-700">Elegir mes</label>
+              <Calendar
+                v-model="date"
+                :manualInput="false"
+                view="month"
+                dateFormat="yy/mm"
+                showIcon
+                fluid
+                inputClass="w-full rounded-xl border border-slate-200 px-3 py-2 shadow-sm"
+                iconDisplay="input"
+                id="calendarFilterGoals"
+              />
+              <p v-if="errors.fecha" class="mt-1 text-sm font-semibold text-red-500">
+                Este campo es obligatorio
+              </p>
+            </div>
+          </section>
+
+          <fieldset
+            id="fieldsetGoals"
+            class="rounded-2xl border border-slate-100 bg-white p-4 md:p-5"
+          >
+            <legend class="px-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+              Indicadores objetivo
+            </legend>
+            <div class="mt-2 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-azulClaroIENM focus-within:ring-2 focus-within:ring-azulClaroIENM/10">
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Cumplimiento Plan de Armado (%)</label>
+                <input
+                  v-model="cumplimiento"
+                  type="text"
+                  maxlength="3"
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM focus:bg-white"
+                  placeholder="Ej: 90"
+                />
+                <p
+                  v-if="errors.cumplimiento"
+                  class="mt-1 text-sm font-semibold text-red-500"
+                >
+                  Este campo es obligatorio
+                </p>
+              </div>
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-azulClaroIENM focus-within:ring-2 focus-within:ring-azulClaroIENM/10">
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Eficiencia Productiva (%)</label>
+                <input
+                  v-model="eficienciaProductiva"
+                  type="text"
+                  maxlength="3"
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM focus:bg-white"
+                  placeholder="Ej: 95"
+                />
+                <p
+                  v-if="errors.eficienciaProductiva"
+                  class="mt-1 text-sm font-semibold text-red-500"
+                >
+                  Este campo es obligatorio
+                </p>
+              </div>
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-azulClaroIENM focus-within:ring-2 focus-within:ring-azulClaroIENM/10">
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Inspección de Calidad (%)</label>
+                <input
+                  v-model="calidad"
+                  type="text"
+                  maxlength="3"
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM focus:bg-white"
+                  placeholder="Ej: 98"
+                />
+                <p v-if="errors.calidad" class="mt-1 text-sm font-semibold text-red-500">
+                  Este campo es obligatorio
+                </p>
+              </div>
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-azulClaroIENM focus-within:ring-2 focus-within:ring-azulClaroIENM/10">
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Desperdicios de M.E (%)</label>
+                <input
+                  v-model="desperdicioME"
+                  type="text"
+                  maxlength="3"
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM focus:bg-white"
+                  placeholder="Ej: 2"
+                />
+                <p
+                  v-if="errors.desperdicioME"
+                  class="mt-1 text-sm font-semibold text-red-500"
+                >
+                  Este campo es obligatorio
+                </p>
+              </div>
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition focus-within:border-azulClaroIENM focus-within:ring-2 focus-within:ring-azulClaroIENM/10">
+                <label class="mb-2 block text-sm font-semibold text-slate-700">Desperdicios de P.P (%)</label>
+                <input
+                  v-model="desperdicioPP"
+                  type="text"
+                  maxlength="3"
+                  class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM focus:bg-white"
+                  placeholder="Ej: 1"
+                />
+                <p
+                  v-if="errors.desperdicioPP"
+                  class="mt-1 text-sm font-semibold text-red-500"
+                >
+                  Este campo es obligatorio
+                </p>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p class="text-sm text-slate-500">
+              Revisa que todos los valores estén entre 0 y 100 antes de guardar.
+            </p>
             <button
               type="button"
-              class="bg-[#0063a6] px-10 py-2 rounded-lg text-white disabled:cursor-not-allowed disabled:opacity-70"
+              class="rounded-xl bg-[#0063a6] px-8 py-3 font-semibold text-white shadow-lg shadow-blue-900/10 transition hover:bg-[#00558f] disabled:cursor-not-allowed disabled:opacity-70"
               @click="submitForm"
               :disabled="isSubmitting"
             >
-              {{ isSubmitting ? "Guardando..." : "Guardar" }}
+              {{ isSubmitting ? "Guardando..." : "Guardar meta" }}
             </button>
           </div>
-        </fieldset>
+        </div>
       </div>
     </form>
   </div>

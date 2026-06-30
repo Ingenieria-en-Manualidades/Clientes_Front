@@ -42,13 +42,13 @@ export const useDriver = async () => {
       steps: [
         { popover: { title: 'Bienvenido al módulo de cumplimiento mensual.', description: 'Aquí podras ingresar los valores de calidad mensuales y exportar las evidencias de cada mes.' } },
         { element: '#formChecklist', popover: { title: 'Formulario para la calidad de Checklist.', description: 'Por medio de este formulario podras llenar el porcentanje y evidencia del checklist.' } },
-        { element: '#formChecklist input:nth-child(1)', popover: { title: 'Seleccionar mes.', description: 'Por medio de este campo podrás seleccionar el mes al cual quieres ingresar el checklist.' } },
-        { element: '#formChecklist fieldset input:nth-child(5)', popover: { title: 'Calificación.', description: 'Aquí podras colocar el porcentaje de califación (campo obligatorio).' } },
+        { element: '#calendarChecklist', popover: { title: 'Seleccionar mes.', description: 'Por medio de este campo podrás seleccionar el mes al cual quieres ingresar el checklist.' } },
+        { element: '#inputChecklistScore', popover: { title: 'Calificación.', description: 'Aquí podras colocar el porcentaje de califación (campo obligatorio).' } },
         { element: '#divFileCheck', popover: { title: 'Evidencia.', description: 'Aquí podras subir el archivo PDF que contiene la evidencia (solo admite archivos en formato PDF).' } },
         { element: '#btnSaveChecklist', popover: { title: 'Guardar.', description: 'Después de llenar los campos podras guardar el porcentaje junto a la evidencia.' } },
-        { element: 'form:nth-child(2)', popover: { title: 'Formulario de Inspección sol.', description: 'El formulario de calidad de Inspección sol funciona de la misma manera que el de checklist.' } },
-        { element: '#moduleCalidad div:nth-child(2)', popover: { title: 'Independencia de formularios.', description: 'Los dos formularios funcionan de manera independiente lo que significa que .' } }, 
-        { element: '#moduleCalidad div:nth-child(1)', 
+        { element: '#formInspectionSol', popover: { title: 'Formulario de Inspección sol.', description: 'El formulario de calidad de Inspección sol funciona de la misma manera que el de checklist.' } },
+        { element: '#monthlyComplianceForms', popover: { title: 'Independencia de formularios.', description: 'Los dos formularios funcionan de manera independiente.' } }, 
+        { element: '#monthlyComplianceEvidence', 
           popover: { title: 'Tabla de evidencias.', description: 'Todas las evidencias que subas se guardaran en esta tabla.',
             onNextClick: () => {
               dataFiles.length > 0 ? stepByStep.moveNext() : stepByStep.moveTo(13);
@@ -184,7 +184,7 @@ export const useDriver = async () => {
         { element: '#formUnitsDaily #groupUnitsDaily',
           popover: { title: 'Área, unidades y guardar (diario)', description: 'Selecciona área, ingresa las unidades y guarda. Si ya existe un registro con la misma fecha y area no se permitirá insertar.',
             onNextClick: async () => {
-              stepByStep.moveNext();
+          stepByStep.moveNext();
               await navigateTo({ path: '/objetivos/unidadesTable', hash: '#stepByStep' });
             }
           }

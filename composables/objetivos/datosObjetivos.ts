@@ -1,5 +1,103 @@
 import { ref } from "vue";
 import type { Objetivos, Meta } from "../../interfaces/objetives";
+import type { HeaderWithFilters } from "../../interfaces/filters";
+
+export const itemsMetas = ref([
+  {
+    route: "/objetivos",
+    label: "Ingresar",
+    icon: "pi pi-plus text-[13px] sm:text-[16px]",
+  },
+  {
+    route: "/objetivos/metasTable",
+    label: "Consultar",
+    icon: "pi pi-search text-[13px] sm:text-[16px]",
+  },
+]);
+
+export const itemsCumplimientoMensual = ref([
+  {
+    route: "/objetivos/calidad",
+    label: "Ingresar",
+    icon: "pi pi-plus text-[13px] sm:text-[16px]",
+  },
+  {
+    route: "/objetivos/calidadTable",
+    label: "Consultar",
+    icon: "pi pi-search text-[13px] sm:text-[16px]",
+  },
+]);
+
+export const itemsCumplimientoDiario = ref([
+  {
+    route: "/objetivos/diarios",
+    label: "Ingresar",
+    icon: "pi pi-plus text-[13px] sm:text-[16px]",
+  },
+  {
+    route: "/objetivos/diariosTable",
+    label: "Consultar",
+    icon: "pi pi-search text-[13px] sm:text-[16px]",
+  },
+]);
+
+export const headersMetas = ref<HeaderWithFilters[]>([
+  { label: "id", options: null },
+  { label: "fecha", options: null },
+  { label: "plan armado", options: null },
+  { label: "eficiencia", options: null },
+  { label: "calidad", options: null },
+  { label: "desperdicio m.e", options: null },
+  { label: "desperdicio p.p", options: null },
+]);
+
+export const attributesMetas = ref([
+  "meta_id",
+  "fecha",
+  "cumplimiento",
+  "eficiencia_productiva",
+  "calidad",
+  "desperdicio_me",
+  "desperdicio_pp",
+]);
+
+export const headersCumplimientoMensual = ref<HeaderWithFilters[]>([
+  { label: "id", options: null },
+  { label: "fecha", options: null },
+  { label: "checklist", options: null },
+  { label: "inspección", options: null },
+  { label: "evidencias", options: null },
+]);
+
+export const attributesCumplimientoMensual = ref([
+  "calidad_id",
+  "fecha",
+  "checklist",
+  "inspeccion",
+  "evidencias",
+]);
+
+export const headersCumplimientoDiario = ref<HeaderWithFilters[]>([
+  { label: "id", options: null },
+  { label: "fecha", options: null },
+  { label: "planificada", options: null },
+  { label: "modificada", options: null },
+  { label: "plan armado", options: null },
+  { label: "calidad", options: null },
+  { label: "desperfecto m.e", options: null },
+  { label: "desperfecto p.p", options: null },
+]);
+
+export const attributesCumplimientoDiario = ref([
+  "objetivos_id",
+  "fecha",
+  "planificada",
+  "modificada",
+  "plan_armado",
+  "calidad",
+  "desperfecto_me",
+  "desperfecto_pp",
+]);
 
 export const datosObjetivos = () => { 
 
