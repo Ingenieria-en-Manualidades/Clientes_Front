@@ -2,7 +2,7 @@
   <button id="btnModalUpdateFile"
     type="button"
     @click="visible = !visible"
-    class="bg-green-400 rounded m-1 py-1 px-3 text-white text-center  relative group"
+    class="inline-flex min-h-10 min-w-28 items-center justify-center rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-600"
   >
     <span>Actualizar</span>
   </button>
@@ -15,13 +15,12 @@
       :style="{ width: '30rem' }"
       id="dialogUpdateFile"
     >
-      <div class="border-[1px] border-black py-3 px-5 text-center rounded">
+      <div class="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-center shadow-sm">
         <i class="pi pi-info-circle text-3xl text-red-500"></i>
-        <p class="text-xl text-red-500 font-bold mb-1">
-          Tenga en cuenta que a la hora de actualizar se borrara el siguente
-          archivo:
+        <p class="mb-1 mt-2 text-lg font-bold text-red-500">
+          Al actualizar se reemplazará este archivo:
         </p>
-        <p>{{ nameFile }}</p>
+        <p class="truncate rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-600" :title="nameFile">{{ nameFile }}</p>
         <div id="divUpdateFile" class="mt-5 mb-1">
           <input
             type="file"
@@ -32,15 +31,15 @@
           />
           <label
             for="file"
-            class="flex justify-center mt-3 py-2 bg-[#c86a2b] font-bold text-white cursor-pointer rounded-lg"
+            class="mt-3 flex min-h-10 cursor-pointer items-center justify-center rounded-lg bg-[#c86a2b] px-4 py-2 font-bold text-white transition hover:bg-[#b85f25]"
           >
-            <i class="pi pi-upload pr-3 pt-1"></i>Cargar nueva evidencia</label
+            <i class="pi pi-upload pr-2"></i>Cargar nueva evidencia</label
           >
         </div>
-        <p class="text-left text-red-500 text-sm">{{ errorFile }}</p>
-        <div v-if="file" class="flex justify-start mt-1 max-w-full">
+        <p class="text-left text-sm font-semibold text-red-500">{{ errorFile }}</p>
+        <div v-if="file" class="mt-2 flex min-w-0 max-w-full overflow-hidden rounded-lg border border-slate-200">
           <p
-            class="p-1 text-sm truncate border-[1px] border-gray-400"
+            class="min-w-0 flex-1 truncate bg-white p-2 text-sm text-slate-600"
             :title="file.name"
           >
             {{ file.name }}
@@ -48,17 +47,17 @@
           <button
             type="button"
             @click="removeArchivo"
-            class="px-2 font-bold bg-red-500 border-[1px] border-red-500"
+            class="shrink-0 bg-red-500 px-3 font-bold text-white"
           >
             <i class="pi pi-times text-sm text-white"></i>
           </button>
         </div>
-        <div class="flex justify-center font-bold mt-5">
+        <div class="mt-5 flex justify-center font-bold">
           <button 
             id="btnUpdateFileModal"
             type="button"
             @click="update"
-            class="bg-[#4789c8] w-full py-2 rounded-lg text-white disabled:cursor-not-allowed disabled:opacity-70"
+            class="inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-[#4789c8] px-5 py-2 text-center text-white transition hover:bg-[#3c78b2] disabled:cursor-not-allowed disabled:opacity-70"
             :disabled="isSubmitting"
           >
             {{ isSubmitting ? "Actualizando..." : "Actualizar" }}

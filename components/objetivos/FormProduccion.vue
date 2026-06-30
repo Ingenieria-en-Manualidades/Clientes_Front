@@ -1,10 +1,21 @@
 <template>
-  <form id="formProduccion" class=" w-1/2 max-w-[250px] text-sm sm:text-base">
-    <fieldset
-      class="border-[1px] border-black px-2 py-[11px] min-[444px]:py-[31px] min-[640px]:py-[37px] md:py-3  rounded"
-    >
-      <legend class="">Producción</legend>
-      <p>Producción Planificada:</p>
+  <form id="formProduccion" class="w-full text-sm">
+    <fieldset class="h-full rounded-2xl border border-slate-100 bg-white p-4 shadow-sm md:p-5">
+      <legend class="px-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+        Producción
+      </legend>
+      <div class="mb-4 flex items-center gap-3">
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-azulClaroIENM/10 text-azulClaroIENM">
+          <i class="pi pi-chart-line"></i>
+        </span>
+        <div>
+          <h3 class="font-semibold text-slate-900">Producción diaria</h3>
+          <p class="text-sm text-slate-500">Registra la cantidad planificada y ajusta la producción modificada.</p>
+        </div>
+      </div>
+
+      <section class="rounded-xl border border-slate-100 bg-slate-50/70 p-3">
+        <label class="mb-1 block text-sm font-semibold text-slate-700">Producción planificada</label>
       <!-- <input
         id="fechaPlan"
         v-model="fechaPlan"
@@ -17,7 +28,7 @@
         id="fechaPlan"
         v-model="fechaPlan"
         type="date"
-        class="w-full border-[1px] border-black outline-none rounded mb-1"
+        class="mb-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM"
       />
       <div id="grupoPlan">
         <input
@@ -25,21 +36,25 @@
           type="text"
           v-model="prodPlan"
           maxlength="6"
-          class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+          class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM"
+          placeholder="Ej: 1200"
         />
-        <p class="text-red-500 text-xs my-1">{{ errorProd }}</p>
+        <p class="my-1 text-xs font-semibold text-red-500">{{ errorProd }}</p>
         <button
           id="btnSubmitPlan"
           type="button"
           @click="submitPlanificada"
-          class="w-full py-1 rounded-md border-[1px] bg-azulClaroIENM border-azulClaroIENM text-white font-manrope-b mb-5 disabled:cursor-not-allowed disabled:opacity-70"
+          class="mb-1 w-full rounded-xl border border-azulClaroIENM bg-azulClaroIENM py-2 font-semibold text-white shadow-sm transition hover:bg-[#00558f] disabled:cursor-not-allowed disabled:opacity-70"
           :disabled="isSubmittingPlanificada"
         >
-          {{ isSubmittingPlanificada ? "INGRESANDO..." : "INGRESAR" }}
+          {{ isSubmittingPlanificada ? "Ingresando..." : "Ingresar planificada" }}
         </button>
       </div>
-      <p>Producción Modificada:</p>
-      <p class="mb-1 text-xs">* Elegir una fecha anterior</p>
+      </section>
+
+      <section class="mt-4 rounded-xl border border-slate-100 bg-white p-3">
+        <label class="mb-1 block text-sm font-semibold text-slate-700">Producción modificada</label>
+        <p class="mb-2 text-xs text-slate-500">Elegir una fecha anterior.</p>
       <!-- <input
         id="fechaMod"
         type="date"
@@ -52,7 +67,7 @@
         id="fechaMod"
         type="date"
         v-model="fechaMod"
-        class="w-full border-[1px] border-black outline-none rounded mb-1"
+        class="mb-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM focus:bg-white"
       />
       <div id="grupoMod">
         <input
@@ -60,19 +75,21 @@
           type="text"
           v-model="prodMod"
           maxlength="6"
-          class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+          class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM focus:bg-white"
+          placeholder="Ej: 1100"
         />
-        <p class="text-red-500 text-xs my-1">{{ errorMod }}</p>
+        <p class="my-1 text-xs font-semibold text-red-500">{{ errorMod }}</p>
         <button
           id="btnSubmitMod"
           type="button"
           @click="submitModificada()"
-          class="w-full bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white font-manrope-b text-sm sm:text-base disabled:cursor-not-allowed disabled:opacity-70"
+          class="w-full rounded-xl border border-azulClaroIENM bg-azulClaroIENM py-2 font-semibold text-white shadow-sm transition hover:bg-[#00558f] disabled:cursor-not-allowed disabled:opacity-70"
           :disabled="isSubmittingModificada"
         >
-          {{ isSubmittingModificada ? "INGRESANDO..." : "INGRESAR" }}
+          {{ isSubmittingModificada ? "Ingresando..." : "Ingresar modificada" }}
         </button>
       </div>
+      </section>
     </fieldset>
   </form>
 </template>

@@ -1,13 +1,20 @@
 <template>
-  <form id="formIndicadores" class=" w-1/2 max-w-[260px] text-sm sm:text-base">
-    <fieldset
-      class="w-full border-[1px] border-black p-2  rounded"
-    >
-      <legend class="">Indicadores</legend>
+  <form id="formIndicadores" class="w-full text-sm">
+    <fieldset class="h-full rounded-2xl border border-slate-100 bg-white p-4 shadow-sm md:p-5">
+      <legend class="px-2 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+        Indicadores
+      </legend>
+      <div class="mb-4 flex items-center gap-3">
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-azulClaroIENM/10 text-azulClaroIENM">
+          <i class="pi pi-sliders-h"></i>
+        </span>
+        <div>
+          <h3 class="font-semibold text-slate-900">Indicadores diarios</h3>
+          <p class="text-sm text-slate-500">Completa los porcentajes de cumplimiento, calidad y desperfectos.</p>
+        </div>
+      </div>
       <div class="gap-2">
-        <p v-if="errors.fecha" class="text-xs text-red-500">
-          La fecha es obligatoria
-        </p>
+        <label class="mb-1 block text-sm font-semibold text-slate-700">Fecha</label>
         <!-- <input
           id="fechaIndicador"
           type="date"
@@ -20,68 +27,75 @@
           id="fechaIndicador"
           type="date"
           v-model="fecha"
-          class="w-full border-[1px] border-black outline-none rounded mb-1"
+          class="mb-2 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM focus:bg-white"
         />
-        <div id="divInputsIndicadores">
-          <div class="mb-2">
-            <p>Cumplimiento plan armado (%):</p>
-            <p v-if="errors.planArmado" class="text-xs text-red-500">
+        <p v-if="errors.fecha" class="mb-2 text-xs font-semibold text-red-500">
+          La fecha es obligatoria
+        </p>
+        <div id="divInputsIndicadores" class="grid gap-3 sm:grid-cols-2">
+          <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3">
+            <label class="mb-1 block text-sm font-semibold text-slate-700">Cumplimiento plan armado (%)</label>
+            <p v-if="errors.planArmado" class="mb-1 text-xs font-semibold text-red-500">
               Este campo es obligatorio
             </p>
             <input
               type="text"
               maxlength="3"
               v-model="planArmado"
-              class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+              class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM"
+              placeholder="Ej: 90"
             />
           </div>
-          <div class="mb-2">
-            <p>Calidad (%):</p>
-            <p v-if="errors.calidad" class="text-xs text-red-500">
+          <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3">
+            <label class="mb-1 block text-sm font-semibold text-slate-700">Calidad (%)</label>
+            <p v-if="errors.calidad" class="mb-1 text-xs font-semibold text-red-500">
               Este campo es obligatorio
             </p>
             <input
               type="text"
               maxlength="3"
               v-model="calidad"
-              class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+              class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM"
+              placeholder="Ej: 95"
             />
           </div>
-          <div class="mb-2">
-            <p>Desperfecto M.E (%):</p>
-            <p v-if="errors.desperfectosME" class="text-xs text-red-500">
+          <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3">
+            <label class="mb-1 block text-sm font-semibold text-slate-700">Desperfecto M.E (%)</label>
+            <p v-if="errors.desperfectosME" class="mb-1 text-xs font-semibold text-red-500">
               Este campo es obligatorio
             </p>
             <input
               type="text"
               maxlength="3"
               v-model="desperfectosME"
-              class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+              class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM"
+              placeholder="Ej: 2"
             />
           </div>
-          <div class="mb-2">
-            <p>Desperfecto P.P (%):</p>
-            <p v-if="errors.desperfectosPP" class="text-xs text-red-500">
+          <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-3">
+            <label class="mb-1 block text-sm font-semibold text-slate-700">Desperfecto P.P (%)</label>
+            <p v-if="errors.desperfectosPP" class="mb-1 text-xs font-semibold text-red-500">
               Este campo es obligatorio
             </p>
             <input
               type="text"
               maxlength="3"
               v-model="desperfectosPP"
-              class="w-full border-[1px] border-black rounded-md outline-none py-1 pl-2"
+              class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-azulClaroIENM"
+              placeholder="Ej: 1"
             />
           </div>
         </div>
       </div>
-      <div class="flex justify-center">
+      <div class="mt-5 flex justify-center">
         <button
           id="btnSubmitIndicadores"
           type="button"
           @click="submit()"
-          class="bg-azulClaroIENM border-azulClaroIENM py-1 rounded-md border-[1px] text-white  text-sm sm:text-base w-full disabled:cursor-not-allowed disabled:opacity-70"
+          class="w-full rounded-xl border border-azulClaroIENM bg-azulClaroIENM py-3 font-semibold text-white shadow-lg shadow-blue-900/10 transition hover:bg-[#00558f] disabled:cursor-not-allowed disabled:opacity-70"
           :disabled="isSubmitting"
         >
-          {{ isSubmitting ? "INGRESANDO..." : "INGRESAR" }}
+          {{ isSubmitting ? "Ingresando..." : "Ingresar indicadores" }}
         </button>
       </div>
     </fieldset>

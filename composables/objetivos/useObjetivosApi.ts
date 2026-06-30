@@ -35,6 +35,90 @@ export const useObjetivosApi = () => {
     }
   };
 
+  const listMetas = async (clienteEndpointID: number, fechaInicio?: string, fechaFin?: string): Promise<ApiPromise<any>> => {
+    try {
+      const response = await fetch(`${url}api/listarMetas`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cliente_endpoint_id: clienteEndpointID,
+          fecha_inicio: fechaInicio,
+          fecha_fin: fechaFin,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {success: true, data: data.data};
+      } else {
+        if (data.error) console.error("Error a la hora de listar las metas: ", data.error);
+        return {success: false, error: data.message || "Error a la hora de listar las metas."};
+      }
+    } catch (error) {
+      console.error("Error en el catch a la hora de listar las metas: ", error);
+      return {success: false, error: "Error a la hora de listar las metas."};
+    }
+  };
+
+  const listCalidades = async (clienteEndpointID: number, fechaInicio?: string, fechaFin?: string): Promise<ApiPromise<any>> => {
+    try {
+      const response = await fetch(`${url}api/listarCalidades`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cliente_endpoint_id: clienteEndpointID,
+          fecha_inicio: fechaInicio,
+          fecha_fin: fechaFin,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {success: true, data: data.data};
+      } else {
+        if (data.error) console.error("Error a la hora de listar el cumplimiento mensual: ", data.error);
+        return {success: false, error: data.message || "Error a la hora de listar el cumplimiento mensual."};
+      }
+    } catch (error) {
+      console.error("Error en el catch a la hora de listar el cumplimiento mensual: ", error);
+      return {success: false, error: "Error a la hora de listar el cumplimiento mensual."};
+    }
+  };
+
+  const listObjetivos = async (clienteEndpointID: number, fechaInicio?: string, fechaFin?: string): Promise<ApiPromise<any>> => {
+    try {
+      const response = await fetch(`${url}api/listarObjetivos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cliente_endpoint_id: clienteEndpointID,
+          fecha_inicio: fechaInicio,
+          fecha_fin: fechaFin,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {success: true, data: data.data};
+      } else {
+        if (data.error) console.error("Error a la hora de listar el cumplimiento diario: ", data.error);
+        return {success: false, error: data.message || "Error a la hora de listar el cumplimiento diario."};
+      }
+    } catch (error) {
+      console.error("Error en el catch a la hora de listar el cumplimiento diario: ", error);
+      return {success: false, error: "Error a la hora de listar el cumplimiento diario."};
+    }
+  };
+
   const createCalidad = async (objCalidad: Calidad): Promise<ApiPromise<any>> => {
     try {
       const response = await fetch(`${url}api/guardarCalidad`, {
@@ -284,6 +368,9 @@ export const useObjetivosApi = () => {
 
   return {
     createMeta,
+    listMetas,
+    listCalidades,
+    listObjetivos,
     createFile,
     listarFiles,
     createCalidad,

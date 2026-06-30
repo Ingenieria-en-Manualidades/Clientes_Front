@@ -1,10 +1,24 @@
 <template>
-  <div id="pageDiarios" class="w-full">
+  <div id="pageDiarios" class="w-full p-2 md:p-5">
     <title>Producción diaria</title>
-    <p class=" text-center text-2xl my-1">PRODUCCIÓN</p>
-    <div class="w-full flex justify-center p-1 gap-2">
-      <FormProduccion />
-      <FormIndicadores />
+    <RemisionesTabPanelRemisiones :items="itemsCumplimientoDiario" />
+    <section class="mt-4 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+      <div class="border-b border-slate-100 bg-gradient-to-r from-[#eef7ff] via-white to-[#f8fafc] px-5 py-5 md:px-8">
+        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-azulClaroIENM">
+          Tablero SAE
+        </p>
+        <h2 class="mt-1 text-2xl font-bold text-slate-900">
+          Cumplimiento diario
+        </h2>
+        <p class="mt-1 max-w-2xl text-sm text-slate-500">
+          Registra la producción diaria y los indicadores operativos que alimentan el seguimiento del día.
+        </p>
+      </div>
+      <div class="grid w-full gap-4 p-4 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] md:p-5 xl:p-6">
+        <FormProduccion />
+        <FormIndicadores />
+      </div>
+    </section>
       <!-- <fieldset class="border-[1px] border-black rounded p-2 ">
         <legend class="">Meses Anteriores</legend>
         <Calendar
@@ -31,7 +45,6 @@
           :pag="false"
         />
       </fieldset> -->
-    </div>
   </div>
 </template>
 
@@ -47,6 +60,7 @@ import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composab
 import {
   datosTablaProd,
   datosObjetivos,
+  itemsCumplimientoDiario,
 } from "../../composables/objetivos/datosObjetivos";
 
 const dates = ref();
