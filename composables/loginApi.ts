@@ -46,12 +46,13 @@ export const loginApi = () => {
         return {
           success: false,
           status: 'error',
-          tittle: `Error ${resultado.status}`,
-          detail: response.message
+          tittle: response.title ?? 'No pudimos iniciar sesion',
+          detail: response.message ?? 'Usuario o contraseña incorrectos.'
         };
       }
 
       const response = await resultado.json();
+      const username = response.username ?? userData.username?.toString().trim().toUpperCase();
       
       //Llamamos a una endpoint dentro del proyecto que nos ayudara a guardar el token,la id del cliente y el nombre del usuario como una cookie.
       const restCookies = await fetchWithTimeout('/api/front/cookiesRemisiones', {
@@ -62,7 +63,7 @@ export const loginApi = () => {
         body: JSON.stringify({
           token: response.access_token,
           clients: response.clientes_endpoint_ids,
-          usuario: userData.username,
+          usuario: username,
           permissions: response.permissions
         })
       });

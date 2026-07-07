@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-const model = defineModel<Date | null>();
+const model = defineModel<Date | Date[] | null>();
 const props = defineProps({
   label: {
     type: String,

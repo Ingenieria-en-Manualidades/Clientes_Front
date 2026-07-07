@@ -1,6 +1,19 @@
 import { useRuntimeConfig } from 'nuxt/app';
 import type { Units, ApiPromiseStandard, Area } from "../../interfaces/objetives";
 
+interface BulkDailyUnit {
+  valor: number;
+  fecha_programacion: string;
+}
+
+interface BulkUnitsPayload extends Units {
+  unidades_diarias: BulkDailyUnit[];
+}
+
+interface ReplaceBulkUnitsPayload extends BulkUnitsPayload {
+  meta_unidades_id: number;
+}
+
 export const useUnitsApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
@@ -26,6 +39,54 @@ export const useUnitsApi = () => {
       }
     } catch (error) {
       console.error("Error dentro del catch a la hora de agregar las unidades mensuales: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
+    }
+  }
+
+  const createMetaUnidadesMasivo = async (objUnits: BulkUnitsPayload):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/createMetaUnidadesMasivo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(objUnits)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {success: true, title: data.title, message: data.message};
+      } else {
+        if (data.error) console.error("Error a la hora de guardar las unidades metas masivas: ", data.error);
+        return {success: false, title: data.title, message: data.message, data: data.data, status: response.status};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de agregar las unidades mensuales masivas: ", error);
+      return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
+    }
+  }
+
+  const replaceMetaUnidadesMasivo = async (objUnits: ReplaceBulkUnitsPayload):Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/replaceMetaUnidadesMasivo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(objUnits)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {success: true, title: data.title, message: data.message};
+      } else {
+        if (data.error) console.error("Error a la hora de reemplazar las unidades metas masivas: ", data.error);
+        return {success: false, title: data.title, message: data.message, status: response.status};
+      }
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de reemplazar las unidades mensuales masivas: ", error);
       return {success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador."}
     }
   }
@@ -154,5 +215,7 @@ export const useUnitsApi = () => {
     listMetaUnidades,
     updateMetaUnidades,
     createMetaUnidades,
+    createMetaUnidadesMasivo,
+    replaceMetaUnidadesMasivo,
   }
 }

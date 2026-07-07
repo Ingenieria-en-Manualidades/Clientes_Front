@@ -40,7 +40,7 @@
       <!-- Contenido -->
       <div
         :class="[
-          'fixed right-1 lg:top-[95px] md:top-[90px] top-[80px] bottom-2 bg-white border border-gray-300 shadow-xl rounded-2xl transition-all duration-500 ease-in-out z-10',
+          'fixed right-1 lg:top-[95px] md:top-[90px] top-[80px] bottom-2 overflow-y-auto overflow-x-hidden bg-white border border-gray-300 shadow-xl rounded-2xl transition-all duration-500 ease-in-out z-10',
           contentWidthClass
         ]"
       >

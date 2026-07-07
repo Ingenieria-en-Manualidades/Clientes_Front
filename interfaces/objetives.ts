@@ -102,5 +102,6 @@ export interface Meta {
     title: string,
     message: string,
     data?: T | undefined;
+    status?: number;
   }
   

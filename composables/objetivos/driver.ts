@@ -4,6 +4,12 @@ import type { DataArchivos } from "../../interfaces/objetives";
 export const useDriver = async () => {
   const { driver } = await import('driver.js');
 
+  interface DriverUnidadesIndexOptions {
+    showFormMonthly: boolean;
+    showFormDaily: boolean;
+    showBulkMonthly: boolean;
+  }
+
   // Create the step-by-step tour of goals module.
   const getDriverGoals = async () => {
     if (process.server) return null;
@@ -36,13 +42,13 @@ export const useDriver = async () => {
       steps: [
         { popover: { title: 'Bienvenido al módulo de cumplimiento mensual.', description: 'Aquí podras ingresar los valores de calidad mensuales y exportar las evidencias de cada mes.' } },
         { element: '#formChecklist', popover: { title: 'Formulario para la calidad de Checklist.', description: 'Por medio de este formulario podras llenar el porcentanje y evidencia del checklist.' } },
-        { element: '#formChecklist input:nth-child(1)', popover: { title: 'Seleccionar mes.', description: 'Por medio de este campo podrás seleccionar el mes al cual quieres ingresar el checklist.' } },
-        { element: '#formChecklist fieldset input:nth-child(5)', popover: { title: 'Calificación.', description: 'Aquí podras colocar el porcentaje de califación (campo obligatorio).' } },
+        { element: '#calendarChecklist', popover: { title: 'Seleccionar mes.', description: 'Por medio de este campo podrás seleccionar el mes al cual quieres ingresar el checklist.' } },
+        { element: '#inputChecklistScore', popover: { title: 'Calificación.', description: 'Aquí podras colocar el porcentaje de califación (campo obligatorio).' } },
         { element: '#divFileCheck', popover: { title: 'Evidencia.', description: 'Aquí podras subir el archivo PDF que contiene la evidencia (solo admite archivos en formato PDF).' } },
         { element: '#btnSaveChecklist', popover: { title: 'Guardar.', description: 'Después de llenar los campos podras guardar el porcentaje junto a la evidencia.' } },
-        { element: 'form:nth-child(2)', popover: { title: 'Formulario de Inspección sol.', description: 'El formulario de calidad de Inspección sol funciona de la misma manera que el de checklist.' } },
-        { element: '#moduleCalidad div:nth-child(2)', popover: { title: 'Independencia de formularios.', description: 'Los dos formularios funcionan de manera independiente lo que significa que .' } }, 
-        { element: '#moduleCalidad div:nth-child(1)', 
+        { element: '#formInspectionSol', popover: { title: 'Formulario de Inspección sol.', description: 'El formulario de calidad de Inspección sol funciona de la misma manera que el de checklist.' } },
+        { element: '#monthlyComplianceForms', popover: { title: 'Independencia de formularios.', description: 'Los dos formularios funcionan de manera independiente.' } }, 
+        { element: '#monthlyComplianceEvidence', 
           popover: { title: 'Tabla de evidencias.', description: 'Todas las evidencias que subas se guardaran en esta tabla.',
             onNextClick: () => {
               dataFiles.length > 0 ? stepByStep.moveNext() : stepByStep.moveTo(13);
@@ -127,45 +133,79 @@ export const useDriver = async () => {
   };
 
   // Create the step-by-step tour form for scheduled units (10 steps).
-  const getDriverUnidadesIndex = async (showFormMonthly: boolean) => {
+  const getDriverUnidadesIndex = async ({ showFormMonthly, showFormDaily, showBulkMonthly }: DriverUnidadesIndexOptions) => {
     if (process.server) return null;
-    const stepByStep = driver({
+    let stepByStep: any;
+    const steps = [
+      { popover: { title: 'Bienvenido al módulo de unidades', description: 'Aquí podrás gestionar la capacidad mensual y las unidades programadas diarias.' } },
+      { element: '#tabPanel', popover: { title: 'Pestañas', description: 'Navega entre las pestañas para ingresar y ver registros.' } },
+      { element: '#tabPanel a[data-tab-label="Ingresar"]', popover: { title: 'Pestaña Ingresar', description: 'Selecciona la pestaña Ingresar para añadir registros mensuales o diarios.' } },
+    ];
+
+    if (showFormMonthly) {
+      steps.push(
+        { element: '#formUnitsMonthly', popover: { title: 'Formulario Mensual', description: 'Formulario para ingresar la capacidad mensual por fecha y area.' } },
+        { element: '#formUnitsMonthly #dailyCalendar', popover: { title: 'Seleccionar fecha (mensual)', description: 'Elige el mes al cual quieres ingresar capacidad mensual.' } },
+        { element: '#formUnitsMonthly #dailyDropDown', popover: { title: 'Seleccionar área (mensual)', description: 'Selecciona el área para la capacidad mensual.' } },
+        { element: '#entryModeUnitsMonthly', popover: { title: 'Tipo de ingreso', description: showBulkMonthly ? 'Puedes ingresar unidades de forma manual o cargar un Excel para ingreso masivo.' : 'Para tu usuario está disponible el ingreso manual de unidades mensuales.' } },
+      );
+
+      if (showBulkMonthly) {
+        steps.push(
+          { element: '#btnEntryModeMass', popover: { title: 'Ingreso masivo', description: 'Esta opción permite cargar un archivo Excel con las unidades diarias del mes seleccionado.',
+            onNextClick: async () => {
+              const btnMass = document.querySelector('#btnEntryModeMass') as HTMLButtonElement;
+              if (btnMass) btnMass.click();
+              await new Promise(resolve => setTimeout(resolve, 100));
+              stepByStep.moveNext();
+            }
+          } },
+          { element: '#bulkUnitsUpload', popover: { title: 'Archivo Excel', description: 'El archivo debe tener las columnas Unidades, aaaa/mm/dd y area. La fecha y el área deben coincidir con lo seleccionado. Después de cargar un archivo válido, verás la previsualización antes de guardar.' } },
+        );
+      }
+
+      steps.push(
+        { element: '#btnEntryModeManual', popover: { title: 'Ingreso manual', description: 'Esta opción permite escribir directamente el total mensual de unidades.',
+          onNextClick: () => {
+            const btnManual = document.querySelector('#btnEntryModeManual') as HTMLButtonElement;
+            if (btnManual) btnManual.click();
+            stepByStep.moveNext();
+          }
+        } },
+        { element: '#manualUnitsMonthly', popover: { title: 'Unidades mensuales', description: 'Introduce el valor mensual de unidades cuando uses el ingreso manual.' } },
+        { element: '#btnSaveUnitsMonthly', popover: { title: 'Guardar mensual', description: 'Después de completar la información requerida, guarda la capacidad mensual.' } },
+      );
+    }
+
+    if (showFormDaily) {
+      steps.push(
+        { element: '#formUnitsDaily', popover: { title: 'Formulario Diario', description: 'Formulario para ingresar las unidades programadas diarias relacionadas con la mensual.' } },
+        { element: '#formUnitsDaily #dailyCalendar', popover: { title: 'Seleccionar fecha (diaria)', description: 'Elige la fecha para la programación diaria. Si no existe una meta mensual para esa fecha, no se podrán ingresar unidades.' } },
+        { element: '#formUnitsDaily #groupUnitsDaily',
+          popover: { title: 'Área, unidades y guardar (diario)', description: 'Selecciona área, ingresa las unidades y guarda. Si ya existe un registro con la misma fecha y area no se permitirá insertar.',
+            onNextClick: async () => {
+          stepByStep.moveNext();
+              await navigateTo({ path: '/objetivos/unidadesTable', hash: '#stepByStep' });
+            }
+          }
+        },
+      );
+    } else {
+      steps.push({ popover: { title: 'Consultar registros', description: 'Continuaremos en la pestaña Consultar para revisar los registros de unidades.' ,
+        onNextClick: async () => {
+          stepByStep.moveNext();
+          await navigateTo({ path: '/objetivos/unidadesTable', hash: '#stepByStep' });
+        }
+      } });
+    }
+
+    stepByStep = driver({
       showProgress: true,
       prevBtnText: 'Anterior',
       nextBtnText: 'Siguiente',
       doneBtnText: 'Finalizar',
       progressText: '{{current}} de {{total}}',
-      steps: [
-        { popover: { title: 'Bienvenido al módulo de unidades', description: 'Aquí podrás gestionar la capacidad mensual y las unidades programadas diarias.' } },
-        { element: '#tabPanel', popover: { title: 'Pestañas', description: 'Navega entre las pestañas para ingresar y ver registros.' } },
-        { element: '#tabPanel a[data-tab-label="Ingresar"]', 
-          popover: { title: 'Pestaña Ingresar', description: 'Selecciona la pestaña Ingresar para añadir registros mensuales o diarios.',
-            onNextClick: () => {
-              showFormMonthly ? stepByStep.moveNext() : stepByStep.moveTo(7);
-            }
-          } 
-        },
-        { element: '#formUnitsMonthly', popover: { title: 'Formulario Mensual', description: 'Formulario para ingresar la capacidad mensual por fecha y area.' } },
-        { element: '#formUnitsMonthly #dailyCalendar', popover: { title: 'Seleccionar fecha (mensual)', description: 'Elige el mes al cual quieres ingresar capacidad mensual.' } },
-        { element: '#formUnitsMonthly #dailyDropDown', popover: { title: 'Seleccionar área (mensual)', description: 'Selecciona el área para la capacidad mensual.' } },
-        { element: '#formUnitsMonthly #groupInputNumber', popover: { title: 'Unidades y guardar (mensual)', description: 'Introduce el valor y guarda la capacidad mensual.' } },
-        { element: '#formUnitsDaily', 
-          popover: { title: 'Formulario Diario', description: 'Formulario para ingresar las unidades programadas diarias relacionadas con la mensual.',
-            onPrevClick: () => {
-              showFormMonthly ? stepByStep.movePrevious() : stepByStep.moveTo(2);
-            }
-          } 
-        },
-        { element: '#formUnitsDaily #dailyCalendar', popover: { title: 'Seleccionar fecha (diaria)', description: 'Elige la fecha para la programación diaria (en caso de no haber un ingreso del mes de la fecha seleccionada no podras ingresar las unidades).' } },
-        { element: '#formUnitsDaily #groupUnitsDaily', 
-          popover: { title: 'Área, unidades y guardar (diario)', description: 'Selecciona área, ingresa las unidades y guarda. Si ya existe un registro con la misma fecha y area no se permitirá insertar.', 
-            onNextClick: async () => {
-              stepByStep.moveNext();
-              await navigateTo({ path: '/objetivos/unidadesTable', hash: '#stepByStep' });
-            }
-          } 
-        },
-      ]
+      steps
     });
     return stepByStep;
   };

@@ -110,6 +110,14 @@ export const useModulos = () => {
         permission: 'view_users',
         stepByStep: false,
       },
+      {
+        icono: "pi pi-building",
+        nombre: "Clientes",
+        ruta: "/administration/clients",
+        visible: false,
+        permission: 'view_clients',
+        stepByStep: false,
+      },
     ]
   },
   // {
