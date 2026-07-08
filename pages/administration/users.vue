@@ -48,7 +48,6 @@ import type { UserTable } from "../../interfaces/users";
 import type { WarningTable } from "../../interfaces/filters";
 import { useUsersApi } from "../../composables/administration/usersApi";
 import { useDataUsers } from "../../composables/administration/dataUsers";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 const toast = useToast();
 const usernameFilter = ref<string>("");

@@ -55,7 +55,6 @@ import { useToast } from "primevue/usetoast";
 import { loginApi } from "../composables/loginApi";
 import ProgressSpinner from "primevue/progressspinner";
 import type { OptionDropdown } from "../interfaces/componentesDinamicos";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 const clientChoose = ref();
 const isLoading = ref(false);

@@ -78,7 +78,6 @@ import TablaRemisiones from "../../components/remisiones/TablaRemisiones.vue";
 import { useRemisionesApi } from "../../composables/remisiones/remisionesApi";
 import { useDatosRemisiones } from "../../composables/remisiones/datosRemisiones";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 const dates = ref();
 let avisoIcono = ref();

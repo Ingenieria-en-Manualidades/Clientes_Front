@@ -82,7 +82,6 @@ import ProgressSpinner from "primevue/progressspinner";
 import Tabla from "../../components/dinamicos/Tabla.vue";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
 import ModalGestionar from "../../components/improductividades/ModalGestionar.vue";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 
 // Variables reactivas

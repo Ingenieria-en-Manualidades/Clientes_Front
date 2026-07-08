@@ -83,7 +83,6 @@ import { navigateTo } from "nuxt/app";
 import { useToast } from "primevue/usetoast";
 import { useRoute, useRouter } from "vue-router";
 import { useValidaciones } from "../composables/login/validaciones";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { useActualizarPasswordAPI } from "../composables/login/ActualizarPasswordAPI";
 
 const bloqueo = ref(true);

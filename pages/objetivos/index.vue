@@ -12,7 +12,6 @@ import { ref, onMounted, watch } from "vue";
 import { useDriver } from "../../composables/objetivos/driver";
 import FormObjetivosMen from "~/components/objetivos/FormObjetivosMen.vue";
 import { itemsMetas } from "../../composables/objetivos/datosObjetivos";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 const route = useRoute();
 
