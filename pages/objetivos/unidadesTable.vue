@@ -56,7 +56,6 @@ import {
   attributes,
 } from "../../composables/objetivos/UnitsData";
 import { useUnitsApi } from "../../composables/objetivos/UnitsApi";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { ref, watch } from "vue";
 import { useDriver } from "../../composables/objetivos/driver";
 import type { WarningTable } from "../../interfaces/filters";

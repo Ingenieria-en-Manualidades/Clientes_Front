@@ -1,5 +1,5 @@
 import { useCookies } from '@vueuse/integrations/useCookies';
-import { defineNuxtPlugin } from '../node_modules/nuxt/dist/app/nuxt';
+import { defineNuxtPlugin } from '#app';
 
 export default defineNuxtPlugin((nuxtApp) => {
   // Create a cookies instance
