@@ -35,7 +35,6 @@
 </template>
 
 <script lang="ts" setup>
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 definePageMeta({
   layout: "login",

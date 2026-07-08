@@ -81,7 +81,6 @@ import Tabla from "../../components/dinamicos/Tabla.vue";
 import type { Improductividad } from "../../interfaces/improductividades";
 import Filtros from "../../components/improductividades/Filtros.vue";
 import TabPanelRemisiones from "../../components/remisiones/TabPanelRemisiones.vue";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import { useImproductividadesAPI } from "../../composables/improductividades/improductividadesAPI";
 import {
   items,

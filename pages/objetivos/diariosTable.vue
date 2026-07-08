@@ -64,7 +64,6 @@ import {
   headersCumplimientoDiario,
   itemsCumplimientoDiario,
 } from "../../composables/objetivos/datosObjetivos";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 const toast = useToast();
 const clientID = useCookie("idCliente");

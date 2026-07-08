@@ -106,7 +106,6 @@ import FormCalidad from "../../components/objetivos/FormCalidad.vue";
 import FormChecklist from "../../components/objetivos/FormChecklist.vue";
 import { itemsCumplimientoMensual } from "../../composables/objetivos/datosObjetivos";
 import { useObjetivosApi } from "../../composables/objetivos/useObjetivosApi";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 import type { DataArchivos } from "../../interfaces/objetives";
 
 let avisoIcono = ref();

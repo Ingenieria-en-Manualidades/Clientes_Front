@@ -67,7 +67,6 @@ import { useRouter } from "vue-router";
 import { useToast } from "primevue/usetoast";
 import { loginApi } from "../composables/loginApi";
 import type { Regex } from "../interfaces/componentesDinamicos";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 const password = ref('');
 const repeatPassword = ref('');

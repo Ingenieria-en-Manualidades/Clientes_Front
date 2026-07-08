@@ -15,7 +15,6 @@ import { useRoute } from "vue-router";
 import { ref, watch } from "vue";
 import { items } from "../../composables/objetivos/UnitsData";
 import { useDriver } from "../../composables/objetivos/driver";
-import { definePageMeta } from "../node_modules/nuxt/dist/pages/runtime/composables";
 
 const route = useRoute();
 const userPermissions = useCookie("permissions");
