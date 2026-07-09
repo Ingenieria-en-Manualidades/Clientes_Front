@@ -3,8 +3,8 @@
     <title>Unidades programadas</title>
     <RemisionesTabPanelRemisiones :items="items" />
     <form class="sm:flex items-start gap-2">
-      <ObjetivosFormUnitsMonthly v-show="forms[0].visible" />
-      <ObjetivosFormUnitsDaily v-show="forms[1].visible" />
+      <ObjetivosFormUnitsMonthly v-if="forms[0].visible" />
+      <ObjetivosFormUnitsDaily v-if="forms[1].visible" />
     </form>
   </div>
 </template>
@@ -17,9 +17,37 @@ import { items } from "../../composables/objetivos/UnitsData";
 import { useDriver } from "../../composables/objetivos/driver";
 
 const route = useRoute();
-const userPermissions = useCookie("permissions");
+const userPermissions = useCookie<string | string[] | null>("permissions");
 
-const hasPermission = (permission: string) => userPermissions.value?.includes(permission) ?? false;
+const decodePermissions = (permissions: string) => {
+  try {
+    return decodeURIComponent(permissions);
+  } catch {
+    return permissions;
+  }
+};
+
+const getUserPermissions = () => {
+  const permissions = userPermissions.value;
+  if (!permissions) return [];
+  if (Array.isArray(permissions)) return permissions.map(String);
+
+  const decodedPermissions = decodePermissions(String(permissions));
+
+  try {
+    const parsedPermissions = JSON.parse(decodedPermissions);
+    if (Array.isArray(parsedPermissions)) return parsedPermissions.map(String);
+  } catch {
+    // Permissions are usually stored as a comma-separated cookie value.
+  }
+
+  return decodedPermissions
+    .split(",")
+    .map((permission) => permission.trim())
+    .filter(Boolean);
+};
+
+const hasPermission = (permission: string) => getUserPermissions().includes(permission);
 
 const forms = ref([
   {
