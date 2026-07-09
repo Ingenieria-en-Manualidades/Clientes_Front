@@ -102,6 +102,12 @@ const submitUnits = async () => {
   if (!date.value) failedFields.value.dateFail = "* La fecha es obligatoria.";
   if (!units.value)
     failedFields.value.unitsFail = "* Este campo es obligatorio.";
+  if (units.value) {
+    const parsedUnits = parseUnitsValue(units.value);
+    if (parsedUnits < 0 || parsedUnits > 100000000) {
+      failedFields.value.unitsFail = "* Las unidades deben estar entre 0 y 100.000.000.";
+    }
+  }
   if (!areaChoose.value)
     failedFields.value.areasFail = "* Este campo es obligatorio.";
 
@@ -110,7 +116,7 @@ const submitUnits = async () => {
   if (!errors.includes(true)) {
     if (!failedFields.value.unitsFail) {
       const objUnitsD: UnitsDaily = {
-        valor: Number(units.value?.replace(".", "")),
+        valor: parseUnitsValue(units.value),
         fecha_programacion: date.value,
         cliente_endpoint_id: Number(clienteID.value),
         area_id: areaChoose.value,
@@ -177,15 +183,29 @@ const verifyFields = (obj: any): Boolean[] => {
 
 function formatWithThousandSeparator(value: string | null): string {
   if (value) {
-    const numeric = value.replace(/\./g, "").replace(/\D/g, "");
-    return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    const rawValue = value.replace(/\./g, "");
+    const isNegative = rawValue.trim().startsWith("-");
+    const numeric = rawValue.replace(/\D/g, "");
+    const formatted = numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return isNegative && numeric ? `-${formatted}` : formatted;
   }
   return "";
+}
+
+function parseUnitsValue(value: string | null): number {
+  return Number(value?.replace(/\./g, "") ?? 0);
 }
 
 watch(units, async (newVal, oldVal) => {
   if (newVal !== oldVal) {
     units.value = formatWithThousandSeparator(units.value);
+    if (!units.value) {
+      failedFields.value.unitsFail = "";
+      return;
+    }
+    const parsedUnits = parseUnitsValue(units.value);
+    failedFields.value.unitsFail =
+      parsedUnits < 0 || parsedUnits > 100000000 ? "* Las unidades deben estar entre 0 y 100.000.000." : "";
   }
 });
 </script>

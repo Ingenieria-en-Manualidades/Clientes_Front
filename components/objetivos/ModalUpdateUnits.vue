@@ -109,7 +109,7 @@ const update = async () => {
 
   if (!unitsFail.value && !reasonUpdateFail.value) {
     const objUnits: Units = {
-      valor: Number(units.value?.replace(".", "")),
+      valor: Number(units.value?.replace(/\./g, "")),
       fecha_meta: null,
       cliente_endpoint_id: null,
       usuario: user.value,
