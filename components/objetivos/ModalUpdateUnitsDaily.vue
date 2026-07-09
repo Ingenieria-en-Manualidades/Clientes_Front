@@ -97,10 +97,16 @@ const update = async () => {
 
   unitsFail.value = "";
   if (!units.value) unitsFail.value = "* Este campo es obligatorio.";
+  if (units.value) {
+    const parsedUnits = parseUnitsValue(units.value);
+    if (parsedUnits < 0 || parsedUnits > 100000000) {
+      unitsFail.value = "* Las unidades deben estar entre 0 y 100.000.000.";
+    }
+  }
 
   if (!unitsFail.value) {
     const objUnits: UnitsDaily = {
-      valor: Number(units.value?.replace(".", "")),
+      valor: parseUnitsValue(units.value),
       fecha_programacion: null,
       cliente_endpoint_id: null,
       usuario: user.value,
@@ -139,10 +145,17 @@ const update = async () => {
 
 function formatWithThousandSeparator(value: string | null): string {
   if (value) {
-    const numeric = value.replace(/\./g, "").replace(/\D/g, "");
-    return numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    const rawValue = value.replace(/\./g, "");
+    const isNegative = rawValue.trim().startsWith("-");
+    const numeric = rawValue.replace(/\D/g, "");
+    const formatted = numeric.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return isNegative && numeric ? `-${formatted}` : formatted;
   }
   return "";
+}
+
+function parseUnitsValue(value: string | null): number {
+  return Number(value?.replace(/\./g, "") ?? 0);
 }
 
 const formatoNumero = (numero: number): string => {
@@ -152,6 +165,13 @@ const formatoNumero = (numero: number): string => {
 watch(units, async (newVal, oldVal) => {
   if (newVal !== oldVal) {
     units.value = formatWithThousandSeparator(units.value);
+    if (!units.value) {
+      unitsFail.value = "";
+      return;
+    }
+    const parsedUnits = parseUnitsValue(units.value);
+    unitsFail.value =
+      parsedUnits < 0 || parsedUnits > 100000000 ? "* Las unidades deben estar entre 0 y 100.000.000." : "";
   }
 });
 </script>
