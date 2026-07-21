@@ -155,6 +155,7 @@ const isLoading = ref<boolean>(false);
 const creatorUser = useCookie("usuario");
 const isLoadingForm = ref<boolean>(false);
 const disableInputs = ref({fullname: false, email: false, cellphone: false});
+const appliedRolePermissions = ref<string[]>([]);
 
 // Variables for the user creation form.
 const plant = ref(0);
@@ -189,6 +190,7 @@ const { loadList, loadListByType, createUsername, setReviewFields, setAllNullUse
 // It loads the lists when the modal opens and empties them when it closes.
 watch([visible], async () => {
   isLoadingForm.value = true;
+  appliedRolePermissions.value = [];
   const response = await getDataUserId(props.userID);
   if (response.success) {
     user.value = response.data;
@@ -198,6 +200,7 @@ watch([visible], async () => {
   else toast.add({ severity: "error", summary: response.title, detail: response.message, life: 5000 })
 
   optionsLists.value = await loadList(visible.value);
+  applyRolePermissions();
   if (user.value.userType === 'employee') {
     optionsListsUserType.value = await loadListByType(visible.value, user.value.userType, plant.value);
     setFillOptionsListsEmployees(optionsListsUserType.value.employees || []);
@@ -214,6 +217,10 @@ watch([plant], async (newVal: number[], oldVal: number[]) => {
     if (user.value.userType) optionsListsUserType.value = await loadListByType(visible.value, user.value.userType, plant.value);
     setFillOptionsListsEmployees(optionsListsUserType.value.employees || []);
   }
+});
+
+watch(() => user.value.rol, () => {
+  applyRolePermissions();
 });
 
 // When changing the user information, complete the inputs.
@@ -244,6 +251,18 @@ const setAllDisableInputs = (value: Boolean) => {
   Object.keys(disableInputs.value).forEach(key => {
     disableInputs.value[key] = value;
   });
+}
+
+const applyRolePermissions = () => {
+  if (!user.value.rol || !optionsLists.value.roles?.length) return;
+
+  const selectedRole = optionsLists.value.roles.find((role) => String(role.value) === String(user.value.rol));
+  const rolePermissions = selectedRole?.permissions?.map((permission) => String(permission.id)) ?? [];
+  const currentPermissions = (user.value.permissions ?? []).map((permission) => String(permission));
+  const additionalPermissions = currentPermissions.filter((permission) => !appliedRolePermissions.value.includes(permission));
+
+  user.value.permissions = Array.from(new Set([...rolePermissions, ...additionalPermissions]));
+  appliedRolePermissions.value = rolePermissions;
 }
 
 const update = async () => {
