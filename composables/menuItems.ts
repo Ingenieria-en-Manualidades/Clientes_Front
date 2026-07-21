@@ -111,6 +111,14 @@ export const useModulos = () => {
         stepByStep: false,
       },
       {
+        icono: "pi pi-id-card",
+        nombre: "Roles",
+        ruta: "/administration/roles",
+        visible: false,
+        permission: ['view_roles', 'ver roles', 'view_administration'],
+        stepByStep: false,
+      },
+      {
         icono: "pi pi-building",
         nombre: "Clientes",
         ruta: "/administration/clients",
@@ -131,7 +139,7 @@ export const useModulos = () => {
   const verificarPermisos = () => {
     modulos.value.forEach(modulo => {
 
-      if(userPermissions.value?.includes(modulo.permission)){
+      if(hasPermission(modulo.permission)){
         modulo.visible = true;
       }else{
         modulo.visible = false;
@@ -139,7 +147,7 @@ export const useModulos = () => {
 
       if(modulo.submodulos){
         modulo.submodulos.forEach(submodulo => {
-          if(userPermissions.value?.includes(submodulo.permission)){
+          if(hasPermission(submodulo.permission)){
             submodulo.visible = true;
           }else{
             submodulo.visible = false;
@@ -149,7 +157,15 @@ export const useModulos = () => {
     });
   }
 
-verificarPermisos();
+  const hasPermission = (permission: string | string[]) => {
+    if (Array.isArray(permission)) {
+      return permission.some((item) => userPermissions.value?.includes(item));
+    }
+
+    return userPermissions.value?.includes(permission);
+  }
+
+  verificarPermisos();
 
 return { modulos,
   verificarPermisos };

@@ -13,6 +13,7 @@ export interface ItemTabPanel {
 export interface OptionDropdown {
     label: string | null,
     value: string | Number | null,
+    permissions?: { id: number | string; name?: string }[],
 }
 
 export interface Regex {
