@@ -150,8 +150,8 @@ export const useUsersApi = () => {
       if (response.ok) {
         var roles: Array<OptionDropdown> = [];
 
-        data.data.forEach((element: { id: number; name: string; }) => {
-          roles.push({label: element.name, value: element.id});
+        data.data.forEach((element: { id: number; name: string; permissions?: { id: number; name: string }[] }) => {
+          roles.push({label: element.name, value: element.id, permissions: element.permissions ?? []});
         });
         return {success: true, title: "", message: "", data: roles};
       } else {

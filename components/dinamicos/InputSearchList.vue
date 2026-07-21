@@ -42,6 +42,18 @@
         />
       </div>
 
+      <button
+        v-if="multiple && showSelectAll && items.length > 0"
+        type="button"
+        class="flex w-full items-center gap-2 border-b px-3 py-2 text-left hover:bg-gray-100"
+        @click.stop="toggleAll"
+      >
+        <div class="w-5 h-5 flex items-center justify-center border rounded border-gray-400">
+          <i v-if="allItemsSelected" class="pi pi-check text-blue-500"></i>
+        </div>
+        <span class="text-sm font-semibold">Seleccionar todos</span>
+      </button>
+
       <!-- list -->
       <ul class="max-h-48 overflow-auto">
         <li
@@ -97,6 +109,7 @@ const props = defineProps<{
   placeholder?: string
   searchPlaceholder?: string
   multiple?: boolean
+  showSelectAll?: boolean
   modelValue?: string | string[]
   label: string
   warning: string      // New required prop
@@ -141,7 +154,7 @@ function syncFromModel() {
   if (props.multiple ?? true) {
     selected.value = Array.isArray(props.modelValue) ? [...(props.modelValue as string[])] : (props.modelValue ? [String(props.modelValue)] : [])
   } else {
-    const v = props.modelValue == null ? [] : [String(props.modelValue)]
+    const v = props.modelValue ? [String(props.modelValue)] : []
     selected.value = v
   }
 }
@@ -163,6 +176,20 @@ function toggle() {
 
 function isSelected(val: string) {
   return selected.value.includes(val)
+}
+
+const allItemsSelected = computed(() => {
+  if (items.value.length === 0) return false
+  return items.value.every((item) => selected.value.includes(item.value))
+})
+
+function toggleAll() {
+  if (allItemsSelected.value) {
+    selected.value = []
+  } else {
+    selected.value = items.value.map((item) => item.value)
+  }
+  commit()
 }
 
 function toggleSelect(val: string) {
