@@ -91,6 +91,14 @@ export const useModulos = () => {
         visible: false,
         permission: "view_objetivos_unidades",
         stepByStep: true,
+      },
+      {
+        icono: "pi pi-calendar-plus",
+        nombre: "Programación Detallada",
+        ruta: "/objetivos/programacion-detallada",
+        visible: false,
+        permission: "view_scheduled_detail",
+        stepByStep: false,
       }
     ]
   },
