@@ -215,8 +215,8 @@ const visibleCleanFilters = computed(() => {
 });
 
 const cleanFilters = () => {
-  for (const filter of Object.entries(filters.value)) {
-    filter[1].splice(0, filter.length);
+  for (const selectedOptions of Object.values(filters.value)) {
+    selectedOptions.splice(0, selectedOptions.length);
   }
   emits("setCleanExternalFilters");
 };
