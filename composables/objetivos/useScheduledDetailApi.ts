@@ -101,6 +101,9 @@ export const useScheduledDetailApi = () => {
 
       const response = await fetch(`${url}api/scheduled-detail/preview`, {
         method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: formData,
       });
 
@@ -136,7 +139,7 @@ export const useScheduledDetailApi = () => {
     data: ScheduledDetailSaveRequest,
   ): Promise<ScheduledDetailSaveResponse> => {
     try {
-      const response = await fetch(`${url}api/scheduled-detail`, {
+      const response = await fetch(`${url}api/scheduled-detail/store`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
