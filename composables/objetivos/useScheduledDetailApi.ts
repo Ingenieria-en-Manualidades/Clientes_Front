@@ -102,7 +102,7 @@ export const useScheduledDetailApi = () => {
       const response = await fetch(`${url}api/scheduled-detail/preview`, {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          Accept: "application/json",
         },
         body: formData,
       });
