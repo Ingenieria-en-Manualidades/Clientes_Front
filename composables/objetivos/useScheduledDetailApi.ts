@@ -18,13 +18,18 @@ export interface ScheduledDetailPreviewData {
   values: ScheduledDetailPreviewRow[];
 }
 
-export interface ScheduledDetailSaveRow extends ScheduledDetailPreviewRow {
+export interface ScheduledDetailSaveRow {
+  client_id: number;
+  sku: string;
+  producto: string;
+  value: number;
+}
+
+export interface ScheduledDetailSaveRequest {
   year: number;
   week: number;
   username: string;
-}
-
-export interface ScheduledDetailSaveRequest extends ScheduledDetailPreviewData {
+  values: ScheduledDetailSaveRow[];
   replace_existing?: boolean;
 }
 
@@ -70,7 +75,6 @@ export interface WeeklyScheduledDetailListRow {
   client_name: string | null;
   sku: string;
   product: string;
-  activity_id: string | null;
   weekly_total: number;
   username: string;
 }

@@ -385,7 +385,12 @@ const getSaveRequest = (): ScheduledDetailSaveRequest | null => {
 
   return {
     ...previewContext.value,
-    values: previewRows.value,
+    values: previewRows.value.map(({ client_id, sku, producto, value }) => ({
+      client_id,
+      sku,
+      producto,
+      value,
+    })),
   };
 };
 
