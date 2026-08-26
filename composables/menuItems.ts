@@ -99,6 +99,14 @@ export const useModulos = () => {
         visible: false,
         permission: "view_scheduled_detail",
         stepByStep: false,
+      },
+      {
+        icono: "pi pi-box",
+        nombre: "Armado detallado",
+        ruta: "/objetivos/armado-detallado",
+        visible: false,
+        permission: "view_detailed_assembly",
+        stepByStep: false,
       }
     ]
   },
