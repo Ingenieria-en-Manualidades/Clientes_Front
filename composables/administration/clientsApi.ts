@@ -1,12 +1,13 @@
 import { useRuntimeConfig } from 'nuxt/app';
 import type { ClientSchemaForm, SurveyClientForm } from "../../interfaces/clients";
 import type { ApiPromiseStandard } from "../../interfaces/objetives";
+import { useAdministrationAuthHeaders } from './authHeaders';
 
 export const useClientsApi = () => {
 
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
-  const tokenBackend = config.public.apiKeyBackend;
+  const { headers } = useAdministrationAuthHeaders();
 
   const getClientsSchema = async ():Promise<ApiPromiseStandard<any>> => {
     try {
@@ -92,10 +93,7 @@ export const useClientsApi = () => {
     try {
       const response = await fetch(`${url}api/createClient`, {
         method: 'post',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenBackend}`
-        },
+        headers: headers(),
         body: JSON.stringify(client)
       });
 
@@ -117,10 +115,7 @@ export const useClientsApi = () => {
     try {
       const response = await fetch(`${url}api/syncClients`, {
         method: 'post',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenBackend}`
-        },
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -141,10 +136,7 @@ export const useClientsApi = () => {
     try {
       const response = await fetch(`${url}api/updateClient/${client_id}`, {
         method: 'put',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenBackend}`
-        },
+        headers: headers(),
         body: JSON.stringify(client)
       });
 
@@ -166,10 +158,7 @@ export const useClientsApi = () => {
     try {
       const response = await fetch(`${url}api/setStatusClient/${client_id}`, {
         method: 'put',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenBackend}`
-        },
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -190,10 +179,7 @@ export const useClientsApi = () => {
     try {
       const response = await fetch(`${url}api/updateSurveyClient/${client_id}`, {
         method: 'put',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenBackend}`
-        },
+        headers: headers(),
         body: JSON.stringify(client)
       });
 

@@ -78,6 +78,7 @@
             </ul>
           </div>
         </div>
+
       </section>
 
       <section class="rounded-2xl border border-gray-300 bg-white p-5 shadow-md">
@@ -121,6 +122,36 @@
             />
           </button>
         </div>
+
+        <div class="mt-6 rounded-2xl border border-dashed border-azulClaroIENM/40 bg-sky-50/60 p-4">
+          <p class="text-xs font-bold uppercase text-azulIENM">Crear permiso</p>
+          <p class="mt-1 text-xs text-gray-500">Agrega permisos nuevos para asignarlos luego a los roles.</p>
+
+          <div class="mt-4 grid gap-4 md:grid-cols-[1fr_auto] md:items-end">
+            <DinamicosInputText
+              v-model="permissionName"
+              :label="'Permiso'"
+              :displayFlex="false"
+              :warning="permissionErrors[0] ? 'Este campo es obligatorio.' : ''"
+            />
+            <button
+              type="button"
+              @click="createPermission"
+              :disabled="isCreatingPermission"
+              class="flex w-full items-center justify-center gap-2 rounded-xl bg-azulClaroIENM px-6 py-3 text-sm font-bold text-white shadow-md transition hover:opacity-90 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:shadow-none md:w-auto"
+            >
+              <span v-if="!isCreatingPermission">Crear permiso</span>
+              <ProgressSpinner
+                v-else
+                style="width: 20px; height: 20px"
+                strokeWidth="8"
+                fill="transparent"
+                animationDuration=".5s"
+                aria-label="Cargando"
+              />
+            </button>
+          </div>
+        </div>
       </section>
     </div>
   </div>
@@ -141,17 +172,20 @@ const isLoading = ref<boolean>(false);
 const isLoadingDisabled = ref<boolean>(false);
 const isSaving = ref(false);
 const isAssigning = ref(false);
+const isCreatingPermission = ref(false);
 const roles = ref<RoleTable[]>([]);
 const disabledRoles = ref<RoleTable[]>([]);
 const permissionOptions = ref([]);
+const permissionName = ref("");
 const selectedRoleId = ref("");
 const selectedPermissionIds = ref<string[]>([]);
 const showDisabledRoles = ref(false);
 const roleStatusId = ref<number | null>(null);
 const errors = ref<boolean[]>([]);
 const assignErrors = ref<boolean[]>([]);
+const permissionErrors = ref<boolean[]>([]);
 
-const { getListRoles, getDisabledRoles, setCreateRole, setUpdateRole, setDisableRole, setRestoreRole } = useRolesApi();
+const { getListRoles, getDisabledRoles, setCreateRole, setCreatePermission, setUpdateRole, setDisableRole, setRestoreRole } = useRolesApi();
 const { getListPermissions } = useUsersApi();
 const { setFixDataRoles, setReviewFields } = useDataRoles();
 
@@ -233,6 +267,35 @@ const submit = async () => {
     }
   } finally {
     isSaving.value = false;
+  }
+};
+
+const createPermission = async () => {
+  if (isCreatingPermission.value) return;
+
+  permissionName.value = permissionName.value.trim();
+  permissionErrors.value = [permissionName.value.length === 0];
+  if (permissionErrors.value.includes(true)) return;
+
+  isCreatingPermission.value = true;
+
+  try {
+    const result = await setCreatePermission(permissionName.value);
+
+    toast.add({
+      severity: result.success ? "success" : "error",
+      summary: result.title,
+      detail: result.message,
+      life: 5000,
+    });
+
+    if (result.success) {
+      permissionName.value = "";
+      permissionErrors.value = [];
+      await loadPermissions();
+    }
+  } finally {
+    isCreatingPermission.value = false;
   }
 };
 
