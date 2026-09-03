@@ -40,6 +40,13 @@
             <span :class="['inline-block h-2.5 w-2.5 rounded-full bg-slate-950', isLoading ? 'animate-ping' : '']" />
             {{ isLoading ? 'Actualizando' : 'Actualizar' }}
           </button>
+
+          <NuxtLink
+            to="/administration/monthly-metrics"
+            class="inline-flex items-center justify-center rounded-2xl border border-white/30 px-4 py-3 text-sm font-black text-white transition hover:bg-white/15"
+          >
+            Monthly Metrics
+          </NuxtLink>
         </div>
       </div>
     </section>
@@ -51,7 +58,7 @@
     <template v-else>
       <section class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <article
-          v-for="card in cards"
+          v-for="card in primaryCards"
           :key="card.label"
           class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-sm ring-1 ring-slate-100 transition duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-xl"
         >
@@ -64,30 +71,67 @@
         </article>
       </section>
 
-      <section class="mt-6 grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
-        <MetricPanel title="Usuarios por módulo" subtitle="Conteo agregado sin mostrar nombres de usuario." :items="metrics.modules" labelKey="module" valueKey="users_count" valueLabel="Usuarios" tone="green" />
-
-        <div class="rounded-[2rem] border border-slate-700 bg-slate-950 p-5 text-white shadow-sm ring-1 ring-white/10 sm:p-6">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h2 class="text-xl font-black">Pulso del periodo</h2>
-              <p class="mt-1 text-sm text-slate-300">Actividad distribuida por horarios y días.</p>
-            </div>
-            <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-slate-200">{{ selectedDays }} días</span>
+      <section class="mt-6 rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-slate-100 sm:p-6">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <span class="text-xs font-black uppercase tracking-[0.2em] text-azulIENM">Actividad operativa</span>
+            <h2 class="mt-2 text-2xl font-black text-slate-950">Qué se está usando</h2>
+            <p class="mt-1 max-w-2xl text-sm text-slate-500">Lectura de módulos, usuarios y adopción real durante el periodo seleccionado.</p>
           </div>
+          <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">{{ selectedDays }} días</span>
+        </div>
 
-          <div class="mt-5 space-y-5">
-            <MiniList title="Horarios de mayor uso" :items="metrics.peak_hours" labelKey="hour" valueKey="requests" suffix=":00" />
-            <MiniList title="Frecuencia por día" :items="metrics.daily_usage" labelKey="date" valueKey="requests" />
+        <div class="mt-5">
+          <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-5 text-slate-900 shadow-sm ring-1 ring-slate-100 sm:p-6">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="text-xl font-black text-slate-950">Pulso del periodo</h2>
+                <p class="mt-1 text-sm text-slate-500">Actividad distribuida por horarios y días.</p>
+              </div>
+              <span class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-500 ring-1 ring-slate-200">Tiempo</span>
+            </div>
+
+            <div class="mt-5 grid gap-4 lg:grid-cols-2">
+              <MiniList title="Horarios de mayor uso" :items="metrics.peak_hours" labelKey="hour" valueKey="requests" suffix=":00" />
+              <MiniList title="Frecuencia por día" :items="metrics.daily_usage" labelKey="date" valueKey="requests" />
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="mt-6 grid gap-5 xl:grid-cols-2">
-        <MetricPanel title="Módulos más usados" subtitle="Dónde se concentra la actividad." :items="metrics.modules" labelKey="module" valueKey="requests" valueLabel="Requests" tone="blue" />
-        <MetricPanel title="Módulos con menor actividad" subtitle="Señales tempranas de baja adopción." :items="metrics.low_usage_modules" labelKey="module" valueKey="percentage" valueLabel="Uso" suffixValue="%" tone="amber" />
-        <MetricPanel title="Roles con mayor actividad" subtitle="Uso agrupado por perfil." :items="metrics.roles" labelKey="role" valueKey="requests" valueLabel="Requests" tone="violet" />
-        <MetricPanel title="Promedio de uso por cliente" subtitle="Promedio registrado por cliente." :items="metrics.clients" labelKey="client" valueKey="average_usage" valueLabel="Promedio" tone="cyan" />
+      <section class="mt-6 rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-slate-100 sm:p-6">
+        <div>
+          <span class="text-xs font-black uppercase tracking-[0.2em] text-amber-500">Adopción y perfiles</span>
+          <h2 class="mt-2 text-2xl font-black text-slate-950">Dónde actuar</h2>
+          <p class="mt-1 max-w-2xl text-sm text-slate-500">Módulos, roles y clientes que ayudan a decidir soporte, capacitación o seguimiento.</p>
+        </div>
+
+        <div class="mt-5 grid gap-5 xl:grid-cols-2">
+          <MetricPanel title="Módulos más usados" subtitle="Dónde se concentra la actividad." :items="metrics.modules" labelKey="module" valueKey="requests" valueLabel="Ingresos" tone="blue" />
+          <MetricPanel title="Módulos con menor actividad" subtitle="Señales tempranas de baja adopción." :items="metrics.low_usage_modules" labelKey="module" valueKey="percentage" valueLabel="Uso" suffixValue="%" tone="amber" />
+          <MetricPanel title="Roles con mayor actividad" subtitle="Uso agrupado por perfil." :items="metrics.roles" labelKey="role" valueKey="requests" valueLabel="Actividad" tone="violet" />
+          <MetricPanel title="Promedio de uso por cliente" subtitle="Promedio registrado por cliente." :items="metrics.clients" labelKey="client" valueKey="average_usage" valueLabel="Promedio" tone="cyan" />
+        </div>
+      </section>
+
+      <section class="mt-6 rounded-[2rem] border border-dashed border-slate-300 bg-slate-100/70 p-5 sm:p-6">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <span class="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Observabilidad técnica</span>
+            <h2 class="mt-2 text-xl font-black text-slate-950">Señales capturadas durante la actividad</h2>
+            <p class="mt-1 max-w-2xl text-sm text-slate-500">
+              Errores, lentitudes y acciones críticas salen del registro operativo de requests del periodo.
+            </p>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-3 lg:min-w-[36rem]">
+            <article v-for="card in pendingCards" :key="card.label" class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+              <p class="text-xs font-black uppercase tracking-wide text-slate-400">{{ card.label }}</p>
+              <p class="mt-2 text-2xl font-black text-slate-950">{{ card.value }}</p>
+              <p class="mt-2 text-xs leading-5 text-slate-500">{{ card.description }}</p>
+            </article>
+          </div>
+        </div>
       </section>
     </template>
   </div>
@@ -133,15 +177,15 @@ const MiniList = defineComponent({
     suffix: { type: String, default: '' },
   },
   setup(props) {
-    return () => h('section', { class: 'metrics-scroll-card metrics-scroll-card-compact relative overflow-hidden rounded-2xl border border-white/15 bg-white/8 ring-1 ring-white/10' }, [
-      h('div', { class: 'bg-white/10 px-4 py-3' }, [
-        h('h3', { class: 'text-xs font-black uppercase tracking-wide text-slate-300' }, props.title),
+    return () => h('section', { class: 'metrics-scroll-card metrics-scroll-card-compact relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/80 ring-1 ring-slate-100' }, [
+      h('div', { class: 'border-b border-slate-200 bg-white px-4 py-3' }, [
+        h('h3', { class: 'text-xs font-black uppercase tracking-wide text-slate-500' }, props.title),
       ]),
       props.items.length === 0
-        ? h('p', { class: 'px-4 py-5 text-sm text-slate-400' }, 'Sin datos registrados.')
-          : h('div', { class: 'metrics-scroll metrics-scroll-dark h-40 divide-y divide-white/10 overflow-y-scroll pr-3' }, props.items.map((item: any) => h('div', { class: 'flex items-center justify-between gap-3 px-4 py-3 transition hover:bg-white/10' }, [
-            h('span', { class: 'truncate text-sm font-semibold text-slate-200' }, `${item[props.labelKey]}${props.suffix}`),
-            h('span', { class: 'rounded-full bg-white px-2.5 py-1 text-xs font-black text-slate-900' }, item[props.valueKey] ?? 0),
+        ? h('p', { class: 'px-4 py-5 text-sm text-slate-500' }, 'Sin datos registrados.')
+          : h('div', { class: 'metrics-scroll h-40 divide-y divide-slate-200 overflow-y-scroll pr-3' }, props.items.map((item: any) => h('div', { class: 'flex items-center justify-between gap-3 px-4 py-3 transition hover:bg-sky-50/60' }, [
+            h('span', { class: 'truncate text-sm font-semibold text-slate-700' }, `${item[props.labelKey]}${props.suffix}`),
+            h('span', { class: 'rounded-full bg-azulIENM px-2.5 py-1 text-xs font-black text-white' }, item[props.valueKey] ?? 0),
           ]))),
     ]);
   },
@@ -220,7 +264,7 @@ const metrics = ref<any>({
   low_usage_modules: [],
 });
 
-const cards = computed(() => [
+const primaryCards = computed(() => [
   {
     label: 'Usuarios activos',
     value: metrics.value.summary?.active_users ?? 0,
@@ -228,40 +272,40 @@ const cards = computed(() => [
     description: 'Usuarios con actividad registrada en el periodo.',
   },
   {
-    label: 'Sesiones iniciadas',
-    value: metrics.value.summary?.started_sessions ?? 0,
+    label: 'Clientes activos',
+    value: metrics.value.summary?.active_clients ?? 0,
     accent: 'bg-emerald-500',
-    description: 'Entradas detectadas por el sistema de métricas.',
+    description: 'Clientes con actividad operativa registrada.',
   },
   {
-    label: 'Requests por módulo',
+    label: 'Ingresos por módulo',
     value: metrics.value.summary?.total_requests ?? 0,
     accent: 'bg-amber-400',
-    description: 'Peticiones totales asociadas al uso funcional.',
-  },
-  {
-    label: 'Errores por módulo',
-    value: metrics.value.summary?.total_errors ?? 0,
-    accent: 'bg-red-500',
-    description: 'Errores capturados durante la actividad registrada.',
-  },
-  {
-    label: 'Requests lentos',
-    value: metrics.value.summary?.slow_requests ?? 0,
-    accent: 'bg-violet-500',
-    description: 'Peticiones que superaron el umbral esperado.',
-  },
-  {
-    label: 'Acciones críticas',
-    value: metrics.value.summary?.critical_actions ?? 0,
-    accent: 'bg-orange-500',
-    description: 'Operaciones sensibles o de alto impacto.',
+    description: 'Ingresos totales asociados al uso funcional.',
   },
   {
     label: 'Módulo más usado',
     value: metrics.value.modules?.[0]?.module ?? 'Sin datos',
     accent: 'bg-cyan-500',
     description: 'Módulo con mayor cantidad de requests.',
+  },
+]);
+
+const pendingCards = computed(() => [
+  {
+    label: 'Errores por módulo',
+    value: metrics.value.summary?.total_errors ?? 0,
+    description: 'Respuestas HTTP fallidas detectadas durante la actividad.',
+  },
+  {
+    label: 'Requests lentos',
+    value: metrics.value.summary?.slow_requests ?? 0,
+    description: 'Requests que superaron el umbral operativo definido.',
+  },
+  {
+    label: 'Acciones críticas',
+    value: metrics.value.summary?.critical_actions ?? 0,
+    description: 'Operaciones de escritura o alto impacto capturadas.',
   },
 ]);
 
@@ -348,25 +392,4 @@ definePageMeta({
   background: #007cbb;
 }
 
-.metrics-scroll-dark {
-  scrollbar-color: rgba(251, 220, 0, 0.65) rgba(255, 255, 255, 0.12);
-}
-
-.metrics-scroll-dark::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.metrics-scroll-dark::-webkit-scrollbar-thumb {
-  background: rgba(251, 220, 0, 0.65);
-}
-
-.metrics-scroll-card:hover .metrics-scroll-dark::-webkit-scrollbar-track,
-.metrics-scroll-dark:hover::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.metrics-scroll-card:hover .metrics-scroll-dark::-webkit-scrollbar-thumb,
-.metrics-scroll-dark:hover::-webkit-scrollbar-thumb {
-  background: #fbdc00;
-}
 </style>

@@ -13,6 +13,7 @@ export const useClientsApi = () => {
     try {
       const response = await fetch(`${url}api/getClients`, {
         method: 'get',
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -53,6 +54,7 @@ export const useClientsApi = () => {
     try {
       const response = await fetch(`${url}api/getUsersByClient/${client_id}`, {
         method: 'get',
+        headers: headers(),
       });
 
       const data = await response.json();

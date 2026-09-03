@@ -18,6 +18,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getListPermissions`, {
         method: 'get',
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -132,6 +133,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getRoles`, {
         method: 'get',
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -203,6 +205,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getClients`, {
         method: 'get',
+        headers: headers(),
       });
 
       const data = await response.json();

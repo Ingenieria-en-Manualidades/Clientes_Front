@@ -134,6 +134,14 @@ export const useModulos = () => {
         permission: ['view_pulse', 'Gestionar Roles', 'view_administration'],
         stepByStep: false,
       },
+      {
+        icono: "pi pi-calendar-clock",
+        nombre: "Monthly Metrics",
+        ruta: "/administration/monthly-metrics",
+        visible: false,
+        permission: ['view_pulse', 'Gestionar Roles', 'view_administration'],
+        stepByStep: false,
+      },
     ]
   },
   // {
