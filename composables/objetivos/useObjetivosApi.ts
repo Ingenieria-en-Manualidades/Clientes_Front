@@ -1,17 +1,21 @@
 import { useRuntimeConfig } from 'nuxt/app';
 import type { Meta, Calidad, Accidente, ApiPromise, Objetivos, Archivo } from '../../interfaces/objetives';
+import { useAdministrationAuthHeaders } from '../administration/authHeaders';
 
 export const useObjetivosApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
+  const { headers } = useAdministrationAuthHeaders();
+  const fileHeaders = () => {
+    const { 'Content-Type': _contentType, ...authHeaders } = headers();
+    return authHeaders;
+  };
 
   const createMeta = async (objetivosData: Meta): Promise<ApiPromise<any>> => {
     try {
       const response = await fetch(`${url}api/guardarMeta`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objetivosData)
       });
 
@@ -39,9 +43,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/listarMetas`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify({
           cliente_endpoint_id: clienteEndpointID,
           fecha_inicio: fechaInicio,
@@ -67,9 +69,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/listarCalidades`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify({
           cliente_endpoint_id: clienteEndpointID,
           fecha_inicio: fechaInicio,
@@ -95,9 +95,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/listarObjetivos`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify({
           cliente_endpoint_id: clienteEndpointID,
           fecha_inicio: fechaInicio,
@@ -123,9 +121,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/guardarCalidad`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objCalidad),
       });
 
@@ -160,9 +156,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/verificarCalidad`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objCalidad),
       });
 
@@ -187,9 +181,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/guardarAccidente`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objAccidente),
       });
 
@@ -212,9 +204,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/guardarTablero`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify({
           fecha: fecha,
           meta_id: metaID,
@@ -239,9 +229,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/guardarObjetivos`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objObjetivos),
       });
 
@@ -263,9 +251,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/actualizarObjetivos`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objObjetivos),
       });
 
@@ -296,6 +282,7 @@ export const useObjetivosApi = () => {
 
       const response = await fetch(`${url}api/guardarArchivo`, {
         method: 'POST',
+        headers: fileHeaders(),
         body: formData,
       });
 
@@ -317,9 +304,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/listarArchivos`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: headers(),
         body: JSON.stringify({cliente_endpoint: clienteID}),
       });
 
@@ -339,9 +324,7 @@ export const useObjetivosApi = () => {
     try {
       const response = await fetch(`${url}api/descargar-pdf`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: headers(),
         body: JSON.stringify({url: urlArchivo}),
       });
 

@@ -2,12 +2,13 @@ import { useRuntimeConfig } from 'nuxt/app';
 import type { User } from "../../interfaces/users";
 import type { ApiPromiseStandard } from "../../interfaces/objetives";
 import type { OptionDropdown } from "../../interfaces/componentesDinamicos";
+import { useAdministrationAuthHeaders } from './authHeaders';
 
 export const useUsersApi = () => {
 
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
-  const tokenBackend = config.public.apiKeyBackend;
+  const { headers } = useAdministrationAuthHeaders();
 
   /**
    * Method to obtain the list of permissions.
@@ -17,6 +18,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getListPermissions`, {
         method: 'get',
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -43,10 +45,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getEmployeesImec/${client_id}`, {
         method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenBackend}`
-        }
+        headers: headers()
       });
       
       const data = await response.json();
@@ -67,10 +66,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/createUser`, {
         method: 'post',
-        headers: { 
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenBackend}`
-        },
+        headers: headers(),
         body: JSON.stringify(user)
       });
 
@@ -92,10 +88,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/updateUser/${user_id}`, {
         method: 'put',
-        headers: { 
-          'Content-Type': 'application/json', 
-          Authorization: `Bearer ${tokenBackend}`
-        },
+        headers: headers(),
         body: JSON.stringify(user)
       });
 
@@ -118,10 +111,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getUsers`, {
         method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenBackend}`
-        }
+        headers: headers()
       });
 
       const data = await response.json();
@@ -143,6 +133,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getRoles`, {
         method: 'get',
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -168,6 +159,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/resetUser/${user_id}`, {
         method: 'get',
+        headers: headers()
       });
 
       const data = await response.json();
@@ -188,10 +180,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getDataUserId/${userId}`, {
         method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenBackend}`
-        }
+        headers: headers()
       });
 
       const data = await response.json();
@@ -216,6 +205,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/getClients`, {
         method: 'get',
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -242,10 +232,7 @@ export const useUsersApi = () => {
     try {
       const response = await fetch(`${url}api/setStatusUser/${user_id}`, {
         method: 'put',
-        headers: { 
-          'Content-Type': 'application/json', 
-          Authorization: `Bearer ${tokenBackend}`
-        },
+        headers: headers(),
       });
 
       const data = await response.json();

@@ -1,17 +1,21 @@
 import { useRuntimeConfig } from 'nuxt/app';
 import type { ApiPromise, UpdateArchivo, Archivo} from '../../interfaces/objetives';
+import { useAdministrationAuthHeaders } from '../administration/authHeaders';
 
 export const useFilesApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
+  const { headers } = useAdministrationAuthHeaders();
+  const fileHeaders = () => {
+    const { 'Content-Type': _contentType, ...authHeaders } = headers();
+    return authHeaders;
+  };
 
   const updateFile = async (objArchivo: UpdateArchivo):Promise<ApiPromise<any>> => {
     try {
       const response = await fetch(`${url}api/deleteFile`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objArchivo)
       });
 
@@ -54,6 +58,7 @@ export const useFilesApi = () => {
   
         const response = await fetch(`${url}api/guardarArchivo`, {
           method: 'POST',
+          headers: fileHeaders(),
           body: formData,
         });
   

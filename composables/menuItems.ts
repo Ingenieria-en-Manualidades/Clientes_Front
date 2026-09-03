@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { useCookie, useRuntimeConfig } from "nuxt/app";
+import { useCookie } from "nuxt/app";
 
 
 export const useModulos = () => {
@@ -131,7 +131,7 @@ export const useModulos = () => {
         nombre: "Roles",
         ruta: "/administration/roles",
         visible: false,
-        permission: ['view_roles', 'ver roles', 'view_administration'],
+        permission: ['view_roles', 'ver roles', 'Gestionar Roles', 'view_administration'],
         stepByStep: false,
       },
       {
@@ -140,6 +140,22 @@ export const useModulos = () => {
         ruta: "/administration/clients",
         visible: false,
         permission: 'view_clients',
+        stepByStep: false,
+      },
+      {
+        icono: "pi pi-chart-line",
+        nombre: "Métricas",
+        ruta: "/administration/metrics",
+        visible: false,
+        permission: ['view_pulse', 'Gestionar Roles', 'view_administration'],
+        stepByStep: false,
+      },
+      {
+        icono: "pi pi-calendar-clock",
+        nombre: "Monthly Metrics",
+        ruta: "/administration/monthly-metrics",
+        visible: false,
+        permission: ['view_pulse', 'Gestionar Roles', 'view_administration'],
         stepByStep: false,
       },
     ]
