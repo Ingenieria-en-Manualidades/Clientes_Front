@@ -203,6 +203,7 @@ type MonthlyMetricRow = {
   action: string;
   method: string;
   route: string;
+  fecha_registro: string | null;
   accesses: number;
   percentage: number;
 };
@@ -401,6 +402,7 @@ const downloadExcel = async () => {
     Cliente: row.client,
     Modulo: row.module,
     Submodulo: row.submodule,
+    fecha_registro: row.fecha_registro,
     'Uso periodo (%)': row.percentage,
   }));
 
