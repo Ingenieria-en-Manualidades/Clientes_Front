@@ -1,5 +1,6 @@
 import { useRuntimeConfig } from 'nuxt/app';
 import type { Units, ApiPromiseStandard, Area } from "../../interfaces/objetives";
+import { useAdministrationAuthHeaders } from '../administration/authHeaders';
 
 interface BulkDailyUnit {
   valor: number;
@@ -18,14 +19,13 @@ export const useUnitsApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
   const urlGroot = config.public.apiGroot;
+  const { headers } = useAdministrationAuthHeaders();
 
   const createMetaUnidades = async (objUnits: Units):Promise<ApiPromiseStandard<any>> => {
     try {
       const response = await fetch(`${url}api/createMetaUnidades`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objUnits)
       });
 
@@ -47,9 +47,7 @@ export const useUnitsApi = () => {
     try {
       const response = await fetch(`${url}api/createMetaUnidadesMasivo`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objUnits)
       });
 
@@ -71,9 +69,7 @@ export const useUnitsApi = () => {
     try {
       const response = await fetch(`${url}api/replaceMetaUnidadesMasivo`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objUnits)
       });
 
@@ -95,9 +91,7 @@ export const useUnitsApi = () => {
     try {
       const response = await fetch(`${url}api/getListUnidadesMeta`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify({
           arraysAreas: areasGroot,
           cliente_endpoint_id: cliente_endpoint_id,
@@ -122,6 +116,7 @@ export const useUnitsApi = () => {
     try {
       const response = await fetch(`${url}api/getMetaUnidades/${meta_unidades_id}`, {
         method: 'GET',
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -142,9 +137,7 @@ export const useUnitsApi = () => {
     try {
       const response = await fetch(`${url}api/updateMetaUnidades`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify({
           valor: objUnits.valor,
           usuario: objUnits.usuario,

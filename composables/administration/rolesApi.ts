@@ -1,20 +1,18 @@
 import { useRuntimeConfig } from "nuxt/app";
 import type { ApiPromiseStandard } from "../../interfaces/objetives";
 import type { RoleForm } from "../../interfaces/roles";
+import { useAdministrationAuthHeaders } from './authHeaders';
 
 export const useRolesApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
-  const tokenBackend = config.public.apiKeyBackend;
+  const { headers } = useAdministrationAuthHeaders();
 
   const getListRoles = async (): Promise<ApiPromiseStandard<any>> => {
     try {
       const response = await fetch(`${url}api/getAdminRoles`, {
         method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${tokenBackend}`,
-        },
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -35,10 +33,7 @@ export const useRolesApi = () => {
     try {
       const response = await fetch(`${url}api/createRole`, {
         method: "post",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${tokenBackend}`,
-        },
+        headers: headers(),
         body: JSON.stringify(role),
       });
 
@@ -56,14 +51,33 @@ export const useRolesApi = () => {
     }
   };
 
+  const setCreatePermission = async (name: string): Promise<ApiPromiseStandard<any>> => {
+    try {
+      const response = await fetch(`${url}api/createPermission`, {
+        method: "post",
+        headers: headers(),
+        body: JSON.stringify({ name }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return { success: true, title: data.title, message: data.message };
+      }
+
+      if (data.error) console.error("Error a la hora de crear el permiso: ", data.error);
+      return { success: false, title: data.title, message: data.message };
+    } catch (error) {
+      console.error("Error dentro del catch a la hora de crear el permiso: ", error);
+      return { success: false, title: "Error desconocido.", message: "Por favor verificar la consola del navegador." };
+    }
+  };
+
   const setUpdateRole = async (roleId: number | string, role: RoleForm): Promise<ApiPromiseStandard<any>> => {
     try {
       const response = await fetch(`${url}api/updateRole/${roleId}`, {
         method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${tokenBackend}`,
-        },
+        headers: headers(),
         body: JSON.stringify(role),
       });
 
@@ -85,10 +99,7 @@ export const useRolesApi = () => {
     try {
       const response = await fetch(`${url}api/getDisabledAdminRoles`, {
         method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${tokenBackend}`,
-        },
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -109,10 +120,7 @@ export const useRolesApi = () => {
     try {
       const response = await fetch(`${url}api/disableRole/${roleId}`, {
         method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${tokenBackend}`,
-        },
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -133,10 +141,7 @@ export const useRolesApi = () => {
     try {
       const response = await fetch(`${url}api/restoreRole/${roleId}`, {
         method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${tokenBackend}`,
-        },
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -157,6 +162,7 @@ export const useRolesApi = () => {
     getListRoles,
     getDisabledRoles,
     setCreateRole,
+    setCreatePermission,
     setUpdateRole,
     setDisableRole,
     setRestoreRole,

@@ -1,17 +1,17 @@
 import { useRuntimeConfig } from 'nuxt/app';
 import type { UnitsDaily, ApiPromiseStandard } from "../../interfaces/objetives";
+import { useAdministrationAuthHeaders } from '../administration/authHeaders';
 
 export const useUnitsDailyApi = () => {
   const config = useRuntimeConfig();
   const url = config.public.apiBackendCliente;
+  const { headers } = useAdministrationAuthHeaders();
 
   const createUnidadesDiarias = async (objUnitsD: UnitsDaily):Promise<ApiPromiseStandard<any>> => {
     try {
       const response = await fetch(`${url}api/createUnidadesDiarias`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers(),
         body: JSON.stringify(objUnitsD)
       });
 
@@ -33,6 +33,7 @@ export const useUnitsDailyApi = () => {
     try {
       const response = await fetch(`${url}api/getListUnidadesDiarias/${meta_unidades_id}`, {
         method: 'GET',
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -53,6 +54,7 @@ export const useUnitsDailyApi = () => {
     try {
       const response = await fetch(`${url}api/getUnidadesDiariaID/${unidades_diaria_id}`, {
         method: 'GET',
+        headers: headers(),
       });
 
       const data = await response.json();
@@ -73,9 +75,7 @@ export const useUnitsDailyApi = () => {
       try {
         const response = await fetch(`${url}api/updateUnidadesDiarias`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: headers(),
           body: JSON.stringify({
             valor: objUnits.valor,
             usuario: objUnits.usuario,

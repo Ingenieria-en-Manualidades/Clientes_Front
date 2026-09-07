@@ -42,13 +42,11 @@
             </div>
             <ul :class="['ml-3 pl-3 text-white', modulo.deploy ? 'block' : 'hidden']">
               <li @click="toggleNavBarMovil">
-                <router-link
+                <template
                   v-for="(submodulo, index) in modulo.submodulos"
                   v-bind:key="index"
-                  :to="submodulo.ruta"
-                  v-slot="{ href, navigate }"
-                  custom
                 >
+                  <router-link :to="submodulo.ruta" v-slot="{ href, navigate }" custom>
                   <a
                     v-ripple
                     v-if="submodulo.visible"
@@ -62,7 +60,8 @@
                       }}</span></i
                     >
                   </a>
-                </router-link>
+                  </router-link>
+                </template>
               </li>
             </ul>
           </div>
