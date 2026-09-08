@@ -178,13 +178,15 @@ const ProgressBar = defineComponent({
   setup(props) {
     const progressValue = () => Math.min(Math.max(parseMetricNumber(props.value), 0), 100);
 
-    return () => h('div', { class: 'relative h-7 overflow-hidden rounded-full bg-slate-100' }, [
+    return () => h('div', { class: 'h-8 overflow-hidden rounded-lg bg-slate-100' }, [
       h('div', {
-        class: 'h-full rounded-full bg-gradient-to-r from-azulClaroIENM to-amarilloIENM transition-all duration-500',
-        style: { width: `${progressValue()}%` },
+        class: 'flex h-full items-center justify-center rounded-lg bg-emerald-500 text-sm font-black text-white transition-all duration-500',
+        style: {
+          width: `${progressValue()}%`,
+          minWidth: progressValue() > 0 ? '4rem' : '0',
+        },
         title: formatPercentage(progressValue()),
-      }),
-      h('span', { class: 'absolute inset-0 flex items-center justify-center text-xs font-black text-white drop-shadow-sm' }, formatPercentage(progressValue())),
+      }, progressValue() > 0 ? formatPercentage(progressValue()) : ''),
     ]);
   },
 });
