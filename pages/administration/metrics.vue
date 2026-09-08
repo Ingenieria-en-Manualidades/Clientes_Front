@@ -226,6 +226,16 @@ type MetricGroup = {
   items: any[];
 };
 
+const formatMetricValue = (value: unknown, suffix = '') => {
+  const numericValue = Number(value) || 0;
+
+  if (suffix === '%') {
+    return `${new Intl.NumberFormat('es-CO', { maximumFractionDigits: 2 }).format(numericValue)}%`;
+  }
+
+  return `${value ?? 0}${suffix}`;
+};
+
 const ProgressBar = defineComponent({
   props: {
     value: { type: Number, default: 0 },
@@ -321,7 +331,7 @@ const MetricPanel = defineComponent({
                     h('p', { class: 'truncate text-sm font-bold text-slate-800' }, `${index + 1}. ${item[props.labelKey]}${props.suffix}`),
                     h('p', { class: 'mt-1 text-xs text-slate-400' }, props.valueLabel),
                   ]),
-                  h('p', { class: 'text-right text-base font-black text-slate-900' }, `${rawValue}${props.suffixValue}`),
+                  h('p', { class: 'text-right text-base font-black text-slate-900' }, formatMetricValue(rawValue, props.suffixValue)),
                 ]),
                 h('div', { class: 'mt-3' }, [h(ProgressBar, { value: barValue })]),
               ]);
@@ -400,7 +410,7 @@ const GroupedMetricPanel = defineComponent({
                       h('p', { class: 'truncate text-sm font-bold text-slate-800' }, `${index + 1}. ${item.submodule}`),
                       h('p', { class: 'mt-1 text-xs text-slate-400' }, props.valueLabel),
                     ]),
-                    h('p', { class: 'text-right text-base font-black text-slate-900' }, `${rawValue}${props.suffixValue}`),
+                    h('p', { class: 'text-right text-base font-black text-slate-900' }, formatMetricValue(rawValue, props.suffixValue)),
                   ]),
                   h('div', { class: 'mt-3' }, [h(ProgressBar, { value: barValue })]),
                 ]);
