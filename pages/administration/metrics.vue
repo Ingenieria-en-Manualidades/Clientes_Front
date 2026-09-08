@@ -125,71 +125,18 @@
           </div>
 
           <div class="grid gap-3 sm:grid-cols-2 lg:min-w-[24rem]">
-            <button
+            <article
               v-for="card in technicalCards"
               :key="card.label"
-              type="button"
-              class="rounded-2xl bg-white p-3 text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:ring-azulIENM/40"
-              @click="openTechnicalModal(card)"
+              class="rounded-2xl bg-white p-3 shadow-sm ring-1 ring-slate-200"
             >
               <p class="text-[11px] font-black uppercase tracking-wide text-slate-400">{{ card.label }}</p>
               <p class="mt-2 text-xl font-black text-slate-950">{{ card.value }}</p>
               <p class="mt-2 text-xs leading-5 text-slate-500">{{ card.description }}</p>
-              <p class="mt-2 text-[11px] font-black uppercase tracking-wide text-azulIENM">Ver detalle</p>
-            </button>
+            </article>
           </div>
         </div>
       </section>
-
-      <Teleport to="body">
-        <div v-if="selectedTechnicalCard" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4" @click.self="closeTechnicalModal">
-          <section class="max-h-[85vh] w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200">
-            <header class="flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <p class="text-xs font-black uppercase tracking-[0.2em] text-azulIENM">Detalle técnico</p>
-                <h2 class="mt-1 text-xl font-black text-slate-950">{{ selectedTechnicalCard.label }}</h2>
-                <p class="mt-1 text-sm text-slate-500">Últimos registros capturados durante el periodo seleccionado.</p>
-              </div>
-              <button type="button" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-black text-slate-600 transition hover:bg-slate-200" @click="closeTechnicalModal">
-                Cerrar
-              </button>
-            </header>
-
-            <div class="max-h-[65vh] overflow-auto p-4">
-              <div v-if="selectedTechnicalDetails.length === 0" class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm font-semibold text-slate-500">
-                Sin detalle registrado para este periodo.
-              </div>
-
-              <table v-else class="min-w-full text-left text-xs">
-                <thead class="sticky top-0 bg-slate-100 text-[11px] font-black uppercase tracking-wide text-slate-500">
-                  <tr>
-                    <th class="px-3 py-2">Fecha</th>
-                    <th class="px-3 py-2">Usuario</th>
-                    <th class="px-3 py-2">Cliente</th>
-                    <th class="px-3 py-2">Submódulo</th>
-                    <th class="px-3 py-2">Acción</th>
-                    <th class="px-3 py-2">Ruta</th>
-                    <th class="px-3 py-2 text-right">Estado</th>
-                    <th class="px-3 py-2 text-right">Duración</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                  <tr v-for="(detail, index) in selectedTechnicalDetails" :key="`${detail.fecha_registro}-${detail.route}-${index}`" class="hover:bg-sky-50/60">
-                    <td class="whitespace-nowrap px-3 py-2 font-semibold text-slate-700">{{ detail.fecha_registro ?? 'Sin fecha' }}</td>
-                    <td class="px-3 py-2 text-slate-600">{{ detail.user }}</td>
-                    <td class="px-3 py-2 text-slate-600">{{ detail.client }}</td>
-                    <td class="px-3 py-2 font-semibold text-slate-700">{{ detail.module }} - {{ detail.submodule }}</td>
-                    <td class="px-3 py-2 text-slate-600">{{ detail.action }}</td>
-                    <td class="px-3 py-2 font-mono text-[11px] text-slate-500">{{ detail.method }} {{ detail.route }}</td>
-                    <td class="px-3 py-2 text-right font-black text-slate-700">{{ detail.status_code ?? '-' }}</td>
-                    <td class="px-3 py-2 text-right font-black text-slate-700">{{ detail.duration_ms }} ms</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </div>
-      </Teleport>
     </template>
   </div>
 </template>
@@ -199,26 +146,10 @@ import { computed, defineComponent, h, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useMetricsApi } from '../../composables/administration/metricsApi';
 
-type TechnicalDetailKey = 'errors' | 'slow_requests' | 'critical_actions';
-
-type TechnicalDetail = {
-  fecha_registro: string | null;
-  user: string;
-  client: string;
-  module: string;
-  submodule: string;
-  action: string;
-  method: string;
-  route: string;
-  status_code: number | null;
-  duration_ms: number;
-};
-
 type TechnicalCard = {
   label: string;
   value: number;
   description: string;
-  detailKey: TechnicalDetailKey;
 };
 
 type MetricGroup = {
@@ -226,11 +157,15 @@ type MetricGroup = {
   items: any[];
 };
 
-const formatMetricValue = (value: unknown, suffix = '') => {
-  const numericValue = Number(value) || 0;
+const parseMetricNumber = (value: unknown) => Number(String(value ?? 0).replace('%', '').replace(',', '.')) || 0;
 
-  if (suffix === '%') {
-    return `${new Intl.NumberFormat('es-CO', { maximumFractionDigits: 2 }).format(numericValue)}%`;
+const formatPercentage = (value: unknown) => `${new Intl.NumberFormat('es-CO', { maximumFractionDigits: 2 }).format(parseMetricNumber(value))}%`;
+
+const formatMetricValue = (value: unknown, suffix = '') => {
+  const isPercentage = suffix === '%' || (typeof value === 'string' && value.trim().endsWith('%'));
+
+  if (isPercentage) {
+    return formatPercentage(value);
   }
 
   return `${value ?? 0}${suffix}`;
@@ -241,11 +176,15 @@ const ProgressBar = defineComponent({
     value: { type: Number, default: 0 },
   },
   setup(props) {
-    return () => h('div', { class: 'h-2 overflow-hidden rounded-full bg-slate-100' }, [
+    const progressValue = () => Math.min(Math.max(parseMetricNumber(props.value), 0), 100);
+
+    return () => h('div', { class: 'relative h-7 overflow-hidden rounded-full bg-slate-100' }, [
       h('div', {
         class: 'h-full rounded-full bg-gradient-to-r from-azulClaroIENM to-amarilloIENM transition-all duration-500',
-        style: { width: `${Math.min(Math.max(props.value, 0), 100)}%` },
+        style: { width: `${progressValue()}%` },
+        title: formatPercentage(progressValue()),
       }),
+      h('span', { class: 'absolute inset-0 flex items-center justify-center text-xs font-black text-white drop-shadow-sm' }, formatPercentage(progressValue())),
     ]);
   },
 });
@@ -321,8 +260,8 @@ const MetricPanel = defineComponent({
           ? h(EmptyState, { text: 'Sin datos registrados para este periodo.' })
           : h('div', { class: 'metrics-scroll mt-4 h-72 space-y-2.5 overflow-y-scroll pr-4' }, props.items.map((item: any, index: number) => {
               const rawValue = item[props.valueKey] ?? 0;
-              const numericValue = Number(rawValue) || 0;
-              const maxValue = Math.max(...props.items.map((entry: any) => Number(entry[props.valueKey]) || 0), 1);
+              const numericValue = parseMetricNumber(rawValue);
+              const maxValue = Math.max(...props.items.map((entry: any) => parseMetricNumber(entry[props.valueKey])), 1);
               const barValue = props.suffixValue === '%' ? numericValue : (numericValue / maxValue) * 100;
 
               return h('article', { class: 'rounded-xl border border-slate-100 p-3 transition hover:-translate-y-0.5 hover:border-sky-100 hover:bg-sky-50/40' }, [
@@ -345,7 +284,6 @@ const toast = useToast();
 const { getMetricsDashboard } = useMetricsApi();
 const selectedDays = ref(30);
 const isLoading = ref(false);
-const selectedTechnicalCard = ref<TechnicalCard | null>(null);
 const metrics = ref<any>({
   summary: {},
   modules: [],
@@ -400,8 +338,8 @@ const GroupedMetricPanel = defineComponent({
               h('h3', { class: 'text-xs font-black uppercase tracking-wide text-slate-500' }, group.module),
               h('div', { class: 'mt-2 space-y-2' }, group.items.map((item: any, index: number) => {
                 const rawValue = item[props.valueKey] ?? 0;
-                const numericValue = Number(rawValue) || 0;
-                const maxValue = Math.max(...group.items.map((entry: any) => Number(entry[props.valueKey]) || 0), 1);
+                const numericValue = parseMetricNumber(rawValue);
+                const maxValue = Math.max(...group.items.map((entry: any) => parseMetricNumber(entry[props.valueKey])), 1);
                 const barValue = props.suffixValue === '%' ? numericValue : (numericValue / maxValue) * 100;
 
                 return h('article', { class: 'rounded-xl bg-white p-3 ring-1 ring-slate-100 transition hover:bg-sky-50/60' }, [
@@ -471,29 +409,13 @@ const technicalCards = computed<TechnicalCard[]>(() => [
     label: 'Errores por módulo',
     value: metrics.value.summary?.total_errors ?? 0,
     description: 'Respuestas HTTP fallidas detectadas durante la actividad.',
-    detailKey: 'errors',
   },
   {
     label: 'Requests lentos',
     value: metrics.value.summary?.slow_requests ?? 0,
     description: 'Requests que superaron el umbral operativo definido.',
-    detailKey: 'slow_requests',
   },
 ]);
-
-const selectedTechnicalDetails = computed<TechnicalDetail[]>(() => {
-  if (!selectedTechnicalCard.value) return [];
-
-  return metrics.value.technical_details?.[selectedTechnicalCard.value.detailKey] ?? [];
-});
-
-const openTechnicalModal = (card: TechnicalCard) => {
-  selectedTechnicalCard.value = card;
-};
-
-const closeTechnicalModal = () => {
-  selectedTechnicalCard.value = null;
-};
 
 const loadMetrics = async () => {
   isLoading.value = true;
