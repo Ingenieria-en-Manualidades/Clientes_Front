@@ -56,42 +56,42 @@
     </div>
 
     <template v-else>
-      <section class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <article
           v-for="card in primaryCards"
           :key="card.label"
-          class="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-sm ring-1 ring-slate-100 transition duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-xl"
+          class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-slate-100 transition duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-lg"
         >
-          <div :class="['absolute inset-x-0 top-0 h-1.5', card.accent]" />
+          <div :class="['absolute inset-x-0 top-0 h-1', card.accent]" />
           <div>
-            <p class="text-xs font-black uppercase tracking-wide text-slate-400">{{ card.label }}</p>
-            <p class="mt-3 break-words text-3xl font-black text-slate-900">{{ card.value }}</p>
+            <p class="text-[11px] font-black uppercase tracking-wide text-slate-400">{{ card.label }}</p>
+            <p class="mt-2 break-words text-2xl font-black text-slate-900">{{ card.value }}</p>
           </div>
-          <p class="mt-4 text-xs leading-5 text-slate-500">{{ card.description }}</p>
+          <p class="mt-3 text-xs leading-5 text-slate-500">{{ card.description }}</p>
         </article>
       </section>
 
-      <section class="mt-6 rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-slate-100 sm:p-6">
+      <section class="mt-5 rounded-3xl bg-white p-4 shadow-sm ring-1 ring-slate-100 sm:p-5">
         <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span class="text-xs font-black uppercase tracking-[0.2em] text-azulIENM">Actividad operativa</span>
-            <h2 class="mt-2 text-2xl font-black text-slate-950">Qué se está usando</h2>
+            <h2 class="mt-2 text-xl font-black text-slate-950">Qué se está usando</h2>
             <p class="mt-1 max-w-2xl text-sm text-slate-500">Lectura de módulos, usuarios y adopción real durante el periodo seleccionado.</p>
           </div>
           <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">{{ selectedDays }} días</span>
         </div>
 
         <div class="mt-5">
-          <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-5 text-slate-900 shadow-sm ring-1 ring-slate-100 sm:p-6">
+          <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-slate-900 shadow-sm ring-1 ring-slate-100 sm:p-5">
             <div class="flex items-start justify-between gap-4">
               <div>
-                <h2 class="text-xl font-black text-slate-950">Pulso del periodo</h2>
+                <h2 class="text-lg font-black text-slate-950">Pulso del periodo</h2>
                 <p class="mt-1 text-sm text-slate-500">Actividad distribuida por horarios y días.</p>
               </div>
               <span class="rounded-full bg-white px-3 py-1 text-xs font-bold text-slate-500 ring-1 ring-slate-200">Tiempo</span>
             </div>
 
-            <div class="mt-5 grid gap-4 lg:grid-cols-2">
+            <div class="mt-4 grid gap-3 lg:grid-cols-2">
               <MiniList title="Horarios de mayor uso" :items="metrics.peak_hours" labelKey="hour" valueKey="requests" suffix=":00" />
               <MiniList title="Frecuencia por día" :items="metrics.daily_usage" labelKey="date" valueKey="requests" />
             </div>
@@ -99,40 +99,97 @@
         </div>
       </section>
 
-      <section class="mt-6 rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-slate-100 sm:p-6">
+      <section class="mt-5 rounded-3xl bg-white p-4 shadow-sm ring-1 ring-slate-100 sm:p-5">
         <div>
           <span class="text-xs font-black uppercase tracking-[0.2em] text-amber-500">Adopción y perfiles</span>
-          <h2 class="mt-2 text-2xl font-black text-slate-950">Dónde actuar</h2>
+          <h2 class="mt-2 text-xl font-black text-slate-950">Dónde actuar</h2>
           <p class="mt-1 max-w-2xl text-sm text-slate-500">Módulos, roles y clientes que ayudan a decidir soporte, capacitación o seguimiento.</p>
         </div>
 
-        <div class="mt-5 grid gap-5 xl:grid-cols-2">
-          <MetricPanel title="Módulos más usados" subtitle="Dónde se concentra la actividad." :items="metrics.modules" labelKey="module" valueKey="requests" valueLabel="Ingresos" tone="blue" />
-          <MetricPanel title="Módulos con menor actividad" subtitle="Señales tempranas de baja adopción." :items="metrics.low_usage_modules" labelKey="module" valueKey="percentage" valueLabel="Uso" suffixValue="%" tone="amber" />
+        <div class="mt-4 grid gap-4 xl:grid-cols-2">
+          <GroupedMetricPanel title="Submódulos más usados" subtitle="Dónde se concentra la actividad realizada." :groups="groupedSubmodules" valueKey="requests" valueLabel="Actividades" tone="blue" />
+          <GroupedMetricPanel title="Submódulos con menor actividad" subtitle="Señales tempranas de baja adopción." :groups="groupedLowUsageSubmodules" valueKey="percentage" valueLabel="Uso" suffixValue="%" tone="amber" />
           <MetricPanel title="Roles con mayor actividad" subtitle="Uso agrupado por perfil." :items="metrics.roles" labelKey="role" valueKey="requests" valueLabel="Actividad" tone="violet" />
           <MetricPanel title="Promedio de uso por cliente" subtitle="Promedio registrado por cliente." :items="metrics.clients" labelKey="client" valueKey="average_usage" valueLabel="Promedio" tone="cyan" />
         </div>
       </section>
 
-      <section class="mt-6 rounded-[2rem] border border-dashed border-slate-300 bg-slate-100/70 p-5 sm:p-6">
+      <section class="mt-5 rounded-3xl border border-dashed border-slate-300 bg-slate-100/70 p-4 sm:p-5">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <span class="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Observabilidad técnica</span>
-            <h2 class="mt-2 text-xl font-black text-slate-950">Señales capturadas durante la actividad</h2>
+            <h2 class="mt-2 text-lg font-black text-slate-950">Señales capturadas durante la actividad</h2>
             <p class="mt-1 max-w-2xl text-sm text-slate-500">
               Errores, lentitudes y acciones críticas salen del registro operativo de requests del periodo.
             </p>
           </div>
 
-          <div class="grid gap-3 sm:grid-cols-3 lg:min-w-[36rem]">
-            <article v-for="card in pendingCards" :key="card.label" class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
-              <p class="text-xs font-black uppercase tracking-wide text-slate-400">{{ card.label }}</p>
-              <p class="mt-2 text-2xl font-black text-slate-950">{{ card.value }}</p>
+          <div class="grid gap-3 sm:grid-cols-2 lg:min-w-[24rem]">
+            <button
+              v-for="card in technicalCards"
+              :key="card.label"
+              type="button"
+              class="rounded-2xl bg-white p-3 text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:ring-azulIENM/40"
+              @click="openTechnicalModal(card)"
+            >
+              <p class="text-[11px] font-black uppercase tracking-wide text-slate-400">{{ card.label }}</p>
+              <p class="mt-2 text-xl font-black text-slate-950">{{ card.value }}</p>
               <p class="mt-2 text-xs leading-5 text-slate-500">{{ card.description }}</p>
-            </article>
+              <p class="mt-2 text-[11px] font-black uppercase tracking-wide text-azulIENM">Ver detalle</p>
+            </button>
           </div>
         </div>
       </section>
+
+      <Teleport to="body">
+        <div v-if="selectedTechnicalCard" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4" @click.self="closeTechnicalModal">
+          <section class="max-h-[85vh] w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 ring-slate-200">
+            <header class="flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <p class="text-xs font-black uppercase tracking-[0.2em] text-azulIENM">Detalle técnico</p>
+                <h2 class="mt-1 text-xl font-black text-slate-950">{{ selectedTechnicalCard.label }}</h2>
+                <p class="mt-1 text-sm text-slate-500">Últimos registros capturados durante el periodo seleccionado.</p>
+              </div>
+              <button type="button" class="rounded-full bg-slate-100 px-4 py-2 text-sm font-black text-slate-600 transition hover:bg-slate-200" @click="closeTechnicalModal">
+                Cerrar
+              </button>
+            </header>
+
+            <div class="max-h-[65vh] overflow-auto p-4">
+              <div v-if="selectedTechnicalDetails.length === 0" class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-10 text-center text-sm font-semibold text-slate-500">
+                Sin detalle registrado para este periodo.
+              </div>
+
+              <table v-else class="min-w-full text-left text-xs">
+                <thead class="sticky top-0 bg-slate-100 text-[11px] font-black uppercase tracking-wide text-slate-500">
+                  <tr>
+                    <th class="px-3 py-2">Fecha</th>
+                    <th class="px-3 py-2">Usuario</th>
+                    <th class="px-3 py-2">Cliente</th>
+                    <th class="px-3 py-2">Submódulo</th>
+                    <th class="px-3 py-2">Acción</th>
+                    <th class="px-3 py-2">Ruta</th>
+                    <th class="px-3 py-2 text-right">Estado</th>
+                    <th class="px-3 py-2 text-right">Duración</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr v-for="(detail, index) in selectedTechnicalDetails" :key="`${detail.fecha_registro}-${detail.route}-${index}`" class="hover:bg-sky-50/60">
+                    <td class="whitespace-nowrap px-3 py-2 font-semibold text-slate-700">{{ detail.fecha_registro ?? 'Sin fecha' }}</td>
+                    <td class="px-3 py-2 text-slate-600">{{ detail.user }}</td>
+                    <td class="px-3 py-2 text-slate-600">{{ detail.client }}</td>
+                    <td class="px-3 py-2 font-semibold text-slate-700">{{ detail.module }} - {{ detail.submodule }}</td>
+                    <td class="px-3 py-2 text-slate-600">{{ detail.action }}</td>
+                    <td class="px-3 py-2 font-mono text-[11px] text-slate-500">{{ detail.method }} {{ detail.route }}</td>
+                    <td class="px-3 py-2 text-right font-black text-slate-700">{{ detail.status_code ?? '-' }}</td>
+                    <td class="px-3 py-2 text-right font-black text-slate-700">{{ detail.duration_ms }} ms</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </Teleport>
     </template>
   </div>
 </template>
@@ -141,6 +198,43 @@
 import { computed, defineComponent, h, ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useMetricsApi } from '../../composables/administration/metricsApi';
+
+type TechnicalDetailKey = 'errors' | 'slow_requests' | 'critical_actions';
+
+type TechnicalDetail = {
+  fecha_registro: string | null;
+  user: string;
+  client: string;
+  module: string;
+  submodule: string;
+  action: string;
+  method: string;
+  route: string;
+  status_code: number | null;
+  duration_ms: number;
+};
+
+type TechnicalCard = {
+  label: string;
+  value: number;
+  description: string;
+  detailKey: TechnicalDetailKey;
+};
+
+type MetricGroup = {
+  module: string;
+  items: any[];
+};
+
+const formatMetricValue = (value: unknown, suffix = '') => {
+  const numericValue = Number(value) || 0;
+
+  if (suffix === '%') {
+    return `${new Intl.NumberFormat('es-CO', { maximumFractionDigits: 2 }).format(numericValue)}%`;
+  }
+
+  return `${value ?? 0}${suffix}`;
+};
 
 const ProgressBar = defineComponent({
   props: {
@@ -161,8 +255,8 @@ const EmptyState = defineComponent({
     text: { type: String, required: true },
   },
   setup(props) {
-    return () => h('div', { class: 'mt-5 rounded-3xl border border-dashed border-slate-200 bg-slate-50 px-5 py-10 text-center' }, [
-      h('div', { class: 'mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-xl shadow-sm' }, 'i'),
+    return () => h('div', { class: 'mt-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-7 text-center' }, [
+      h('div', { class: 'mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-white text-lg shadow-sm' }, 'i'),
       h('p', { class: 'text-sm font-semibold text-slate-500' }, props.text),
     ]);
   },
@@ -177,14 +271,14 @@ const MiniList = defineComponent({
     suffix: { type: String, default: '' },
   },
   setup(props) {
-    return () => h('section', { class: 'metrics-scroll-card metrics-scroll-card-compact relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/80 ring-1 ring-slate-100' }, [
-      h('div', { class: 'border-b border-slate-200 bg-white px-4 py-3' }, [
-        h('h3', { class: 'text-xs font-black uppercase tracking-wide text-slate-500' }, props.title),
+    return () => h('section', { class: 'metrics-scroll-card metrics-scroll-card-compact relative overflow-hidden rounded-xl border border-slate-200 bg-slate-50/80 ring-1 ring-slate-100' }, [
+      h('div', { class: 'border-b border-slate-200 bg-white px-3 py-2.5' }, [
+        h('h3', { class: 'text-[11px] font-black uppercase tracking-wide text-slate-500' }, props.title),
       ]),
       props.items.length === 0
-        ? h('p', { class: 'px-4 py-5 text-sm text-slate-500' }, 'Sin datos registrados.')
-          : h('div', { class: 'metrics-scroll h-40 divide-y divide-slate-200 overflow-y-scroll pr-3' }, props.items.map((item: any) => h('div', { class: 'flex items-center justify-between gap-3 px-4 py-3 transition hover:bg-sky-50/60' }, [
-            h('span', { class: 'truncate text-sm font-semibold text-slate-700' }, `${item[props.labelKey]}${props.suffix}`),
+        ? h('p', { class: 'px-3 py-4 text-sm text-slate-500' }, 'Sin datos registrados.')
+          : h('div', { class: 'metrics-scroll h-36 divide-y divide-slate-200 overflow-y-scroll pr-3' }, props.items.map((item: any) => h('div', { class: 'flex items-center justify-between gap-3 px-3 py-2.5 transition hover:bg-sky-50/60' }, [
+            h('span', { class: 'truncate text-xs font-semibold text-slate-700' }, `${item[props.labelKey]}${props.suffix}`),
             h('span', { class: 'rounded-full bg-azulIENM px-2.5 py-1 text-xs font-black text-white' }, item[props.valueKey] ?? 0),
           ]))),
     ]);
@@ -213,31 +307,31 @@ const MetricPanel = defineComponent({
       cyan: 'from-cyan-400 to-sky-700',
     };
 
-    return () => h('section', { class: 'metrics-scroll-card relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm ring-1 ring-slate-100' }, [
-      h('div', { class: `h-2 bg-gradient-to-r ${toneClasses[props.tone] ?? toneClasses.blue}` }),
-      h('div', { class: 'p-5 sm:p-6' }, [
+    return () => h('section', { class: 'metrics-scroll-card relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm ring-1 ring-slate-100' }, [
+      h('div', { class: `h-1.5 bg-gradient-to-r ${toneClasses[props.tone] ?? toneClasses.blue}` }),
+      h('div', { class: 'p-4 sm:p-5' }, [
         h('div', { class: 'flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between' }, [
           h('div', [
-            h('h2', { class: 'text-lg font-black text-slate-900' }, props.title),
+            h('h2', { class: 'text-base font-black text-slate-900' }, props.title),
             h('p', { class: 'mt-1 text-sm text-slate-500' }, props.subtitle),
           ]),
           h('span', { class: 'mt-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500 sm:mt-0' }, props.valueLabel),
         ]),
         props.items.length === 0
           ? h(EmptyState, { text: 'Sin datos registrados para este periodo.' })
-          : h('div', { class: 'metrics-scroll mt-5 h-80 space-y-3 overflow-y-scroll pr-5' }, props.items.map((item: any, index: number) => {
+          : h('div', { class: 'metrics-scroll mt-4 h-72 space-y-2.5 overflow-y-scroll pr-4' }, props.items.map((item: any, index: number) => {
               const rawValue = item[props.valueKey] ?? 0;
               const numericValue = Number(rawValue) || 0;
               const maxValue = Math.max(...props.items.map((entry: any) => Number(entry[props.valueKey]) || 0), 1);
               const barValue = props.suffixValue === '%' ? numericValue : (numericValue / maxValue) * 100;
 
-              return h('article', { class: 'rounded-2xl border border-slate-100 p-4 transition hover:-translate-y-0.5 hover:border-sky-100 hover:bg-sky-50/40' }, [
+              return h('article', { class: 'rounded-xl border border-slate-100 p-3 transition hover:-translate-y-0.5 hover:border-sky-100 hover:bg-sky-50/40' }, [
                 h('div', { class: 'flex items-start justify-between gap-4' }, [
                   h('div', { class: 'min-w-0' }, [
-                    h('p', { class: 'truncate font-bold text-slate-800' }, `${index + 1}. ${item[props.labelKey]}${props.suffix}`),
+                    h('p', { class: 'truncate text-sm font-bold text-slate-800' }, `${index + 1}. ${item[props.labelKey]}${props.suffix}`),
                     h('p', { class: 'mt-1 text-xs text-slate-400' }, props.valueLabel),
                   ]),
-                  h('p', { class: 'text-right text-lg font-black text-slate-900' }, `${rawValue}${props.suffixValue}`),
+                  h('p', { class: 'text-right text-base font-black text-slate-900' }, formatMetricValue(rawValue, props.suffixValue)),
                 ]),
                 h('div', { class: 'mt-3' }, [h(ProgressBar, { value: barValue })]),
               ]);
@@ -251,9 +345,11 @@ const toast = useToast();
 const { getMetricsDashboard } = useMetricsApi();
 const selectedDays = ref(30);
 const isLoading = ref(false);
+const selectedTechnicalCard = ref<TechnicalCard | null>(null);
 const metrics = ref<any>({
   summary: {},
   modules: [],
+  submodules: [],
   most_active_users: [],
   last_activity_by_user: [],
   user_module_usage: [],
@@ -262,6 +358,67 @@ const metrics = ref<any>({
   peak_hours: [],
   daily_usage: [],
   low_usage_modules: [],
+  low_usage_submodules: [],
+  technical_details: {
+    errors: [],
+    slow_requests: [],
+    critical_actions: [],
+  },
+});
+
+const GroupedMetricPanel = defineComponent({
+  props: {
+    title: { type: String, required: true },
+    subtitle: { type: String, required: true },
+    groups: { type: Array as () => MetricGroup[], required: true },
+    valueKey: { type: String, required: true },
+    valueLabel: { type: String, required: true },
+    suffixValue: { type: String, default: '' },
+    tone: { type: String, default: 'blue' },
+  },
+  setup(props) {
+    const toneClasses: Record<string, string> = {
+      blue: 'from-azulIENM to-sky-500',
+      amber: 'from-amber-400 to-orange-500',
+      violet: 'from-violet-500 to-indigo-700',
+      cyan: 'from-cyan-400 to-sky-700',
+    };
+
+    return () => h('section', { class: 'metrics-scroll-card relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm ring-1 ring-slate-100' }, [
+      h('div', { class: `h-1.5 bg-gradient-to-r ${toneClasses[props.tone] ?? toneClasses.blue}` }),
+      h('div', { class: 'p-4 sm:p-5' }, [
+        h('div', { class: 'flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between' }, [
+          h('div', [
+            h('h2', { class: 'text-base font-black text-slate-900' }, props.title),
+            h('p', { class: 'mt-1 text-sm text-slate-500' }, props.subtitle),
+          ]),
+          h('span', { class: 'mt-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500 sm:mt-0' }, props.valueLabel),
+        ]),
+        props.groups.length === 0
+          ? h(EmptyState, { text: 'Sin datos registrados para este periodo.' })
+          : h('div', { class: 'metrics-scroll mt-4 h-72 space-y-3 overflow-y-scroll pr-4' }, props.groups.map((group) => h('section', { class: 'rounded-2xl border border-slate-100 bg-slate-50/70 p-3' }, [
+              h('h3', { class: 'text-xs font-black uppercase tracking-wide text-slate-500' }, group.module),
+              h('div', { class: 'mt-2 space-y-2' }, group.items.map((item: any, index: number) => {
+                const rawValue = item[props.valueKey] ?? 0;
+                const numericValue = Number(rawValue) || 0;
+                const maxValue = Math.max(...group.items.map((entry: any) => Number(entry[props.valueKey]) || 0), 1);
+                const barValue = props.suffixValue === '%' ? numericValue : (numericValue / maxValue) * 100;
+
+                return h('article', { class: 'rounded-xl bg-white p-3 ring-1 ring-slate-100 transition hover:bg-sky-50/60' }, [
+                  h('div', { class: 'flex items-start justify-between gap-4' }, [
+                    h('div', { class: 'min-w-0' }, [
+                      h('p', { class: 'truncate text-sm font-bold text-slate-800' }, `${index + 1}. ${item.submodule}`),
+                      h('p', { class: 'mt-1 text-xs text-slate-400' }, props.valueLabel),
+                    ]),
+                    h('p', { class: 'text-right text-base font-black text-slate-900' }, formatMetricValue(rawValue, props.suffixValue)),
+                  ]),
+                  h('div', { class: 'mt-3' }, [h(ProgressBar, { value: barValue })]),
+                ]);
+              })),
+            ]))),
+      ]),
+    ]);
+  },
 });
 
 const primaryCards = computed(() => [
@@ -278,36 +435,65 @@ const primaryCards = computed(() => [
     description: 'Clientes con actividad operativa registrada.',
   },
   {
-    label: 'Ingresos por módulo',
+    label: 'Actividades por submódulo',
     value: metrics.value.summary?.total_requests ?? 0,
     accent: 'bg-amber-400',
-    description: 'Ingresos totales asociados al uso funcional.',
+    description: 'Actividades totales asociadas al uso funcional.',
   },
   {
-    label: 'Módulo más usado',
-    value: metrics.value.modules?.[0]?.module ?? 'Sin datos',
+    label: 'Submódulo más usado',
+    value: metrics.value.submodules?.[0]?.label ?? 'Sin datos',
     accent: 'bg-cyan-500',
-    description: 'Módulo con mayor cantidad de requests.',
+    description: 'Submódulo con mayor cantidad de actividades.',
   },
 ]);
 
-const pendingCards = computed(() => [
+const groupSubmodulesByModule = (items: any[] = []): MetricGroup[] => {
+  const groups = new Map<string, any[]>();
+
+  items.forEach((item) => {
+    if (!item?.module || !item?.submodule) return;
+    if (!groups.has(item.module)) groups.set(item.module, []);
+    groups.get(item.module)?.push(item);
+  });
+
+  return Array.from(groups.entries()).map(([module, groupItems]) => ({
+    module,
+    items: groupItems,
+  }));
+};
+
+const groupedSubmodules = computed(() => groupSubmodulesByModule(metrics.value.submodules));
+const groupedLowUsageSubmodules = computed(() => groupSubmodulesByModule(metrics.value.low_usage_submodules));
+
+const technicalCards = computed<TechnicalCard[]>(() => [
   {
     label: 'Errores por módulo',
     value: metrics.value.summary?.total_errors ?? 0,
     description: 'Respuestas HTTP fallidas detectadas durante la actividad.',
+    detailKey: 'errors',
   },
   {
     label: 'Requests lentos',
     value: metrics.value.summary?.slow_requests ?? 0,
     description: 'Requests que superaron el umbral operativo definido.',
-  },
-  {
-    label: 'Acciones críticas',
-    value: metrics.value.summary?.critical_actions ?? 0,
-    description: 'Operaciones de escritura o alto impacto capturadas.',
+    detailKey: 'slow_requests',
   },
 ]);
+
+const selectedTechnicalDetails = computed<TechnicalDetail[]>(() => {
+  if (!selectedTechnicalCard.value) return [];
+
+  return metrics.value.technical_details?.[selectedTechnicalCard.value.detailKey] ?? [];
+});
+
+const openTechnicalModal = (card: TechnicalCard) => {
+  selectedTechnicalCard.value = card;
+};
+
+const closeTechnicalModal = () => {
+  selectedTechnicalCard.value = null;
+};
 
 const loadMetrics = async () => {
   isLoading.value = true;
