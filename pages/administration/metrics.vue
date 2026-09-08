@@ -109,7 +109,7 @@
         <div class="mt-4 grid gap-4 xl:grid-cols-2">
           <GroupedMetricPanel title="Submódulos más usados" subtitle="Dónde se concentra la actividad realizada." :groups="groupedSubmodules" valueKey="requests" valueLabel="Actividades" tone="blue" />
           <GroupedMetricPanel title="Submódulos con menor actividad" subtitle="Señales tempranas de baja adopción." :groups="groupedLowUsageSubmodules" valueKey="percentage" valueLabel="Uso" suffixValue="%" tone="amber" />
-          <MetricPanel title="Roles con mayor actividad" subtitle="Uso agrupado por perfil." :items="metrics.roles" labelKey="role" valueKey="requests" valueLabel="Actividad" tone="violet" />
+          <MetricPanel title="Roles con mayor actividaddd" subtitle="Uso agrupado por perfil." :items="metrics.roles" labelKey="role" valueKey="requests" valueLabel="Actividad" tone="violet" />
           <MetricPanel title="Promedio de uso por cliente" subtitle="Promedio registrado por cliente." :items="metrics.clients" labelKey="client" valueKey="average_usage" valueLabel="Promedio" tone="cyan" />
         </div>
       </section>
