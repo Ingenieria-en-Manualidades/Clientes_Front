@@ -177,7 +177,7 @@ const ProgressBar = defineComponent({
   },
   setup(props) {
     const progressValue = () => Math.min(Math.max(parseMetricNumber(props.value), 0), 100);
-    const labelClass = () => progressValue() >= 18 ? 'text-white drop-shadow-sm' : 'text-slate-700';
+    const labelClass = () => progressValue() >= 55 ? 'text-white drop-shadow-sm' : 'text-slate-700';
 
     return () => h('div', { class: 'relative h-8 overflow-hidden rounded-lg bg-slate-100' }, [
       h('div', {
