@@ -109,7 +109,7 @@
         <div class="mt-4 grid gap-4 xl:grid-cols-2">
           <GroupedMetricPanel title="Submódulos más usados" subtitle="Dónde se concentra la actividad realizada." :groups="groupedSubmodules" valueKey="requests" valueLabel="Actividades" tone="blue" />
           <GroupedMetricPanel title="Submódulos con menor actividad" subtitle="Señales tempranas de baja adopción." :groups="groupedLowUsageSubmodules" valueKey="percentage" valueLabel="Uso" suffixValue="%" tone="amber" />
-          <MetricPanel title="Roles con mayor actividaddd" subtitle="Uso agrupado por perfil." :items="metrics.roles" labelKey="role" valueKey="requests" valueLabel="Actividad" tone="violet" />
+          <MetricPanel title="Roles con mayor actividad" subtitle="Uso agrupado por perfil." :items="metrics.roles" labelKey="role" valueKey="requests" valueLabel="Actividad" tone="violet" />
           <MetricPanel title="Promedio de uso por cliente" subtitle="Promedio registrado por cliente." :items="metrics.clients" labelKey="client" valueKey="average_usage" valueLabel="Promedio" tone="cyan" />
         </div>
       </section>
@@ -177,16 +177,15 @@ const ProgressBar = defineComponent({
   },
   setup(props) {
     const progressValue = () => Math.min(Math.max(parseMetricNumber(props.value), 0), 100);
+    const labelClass = () => progressValue() >= 18 ? 'text-white drop-shadow-sm' : 'text-slate-700';
 
-    return () => h('div', { class: 'h-8 overflow-hidden rounded-lg bg-slate-100' }, [
+    return () => h('div', { class: 'relative h-8 overflow-hidden rounded-lg bg-slate-100' }, [
       h('div', {
-        class: 'flex h-full items-center justify-center rounded-lg bg-emerald-500 text-sm font-black text-white transition-all duration-500',
-        style: {
-          width: `${progressValue()}%`,
-          minWidth: progressValue() > 0 ? '4rem' : '0',
-        },
+        class: 'h-full rounded-lg bg-emerald-500 transition-all duration-500',
+        style: { width: `${progressValue()}%` },
         title: formatPercentage(progressValue()),
-      }, progressValue() > 0 ? formatPercentage(progressValue()) : ''),
+      }),
+      h('span', { class: `absolute inset-0 flex items-center justify-center text-sm font-black ${labelClass()}` }, progressValue() > 0 ? formatPercentage(progressValue()) : ''),
     ]);
   },
 });
