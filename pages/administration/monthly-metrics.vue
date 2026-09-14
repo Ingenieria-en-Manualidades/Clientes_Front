@@ -116,7 +116,7 @@
       <div v-else-if="filteredClients.length === 0" class="p-8 text-center text-sm font-semibold text-slate-500">Sin datos registrados para este filtro.</div>
 
       <div v-else class="divide-y divide-slate-100">
-        <article v-for="client in filteredClients" :key="client.client" class="bg-white">
+        <article v-for="client in paginatedClients" :key="client.client" class="bg-white">
           <button type="button" class="flex w-full flex-col gap-3 px-5 py-4 text-left transition hover:bg-sky-50/60 sm:flex-row sm:items-center sm:justify-between" @click="toggleClient(client.client)">
             <div class="min-w-0">
               <p class="truncate text-base font-black text-slate-950">{{ expandedClients.has(client.client) ? '▾' : '▸' }} {{ client.client }}</p>
@@ -147,7 +147,7 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-200 rounded-2xl bg-white">
-                <template v-for="module in client.modules" :key="`${client.client}-${module.module}`">
+                <template v-for="module in paginatedModules(client)" :key="`${client.client}-${module.module}`">
                   <tr class="cursor-pointer hover:bg-sky-50" @click="toggleModule(client.client, module.module)">
                     <td class="px-4 py-3 font-black text-slate-800">{{ expandedModules.has(moduleKey(client.client, module.module)) ? '▾' : '▸' }} {{ module.module }}</td>
                     <td class="px-4 py-3 text-right font-bold text-slate-600">{{ module.users_count }}</td>
@@ -179,8 +179,28 @@
                 </template>
               </tbody>
             </table>
+
+            <div v-if="client.modules.length > pageSize" class="mt-4 flex items-center justify-between gap-3 border-t border-slate-200 pt-4">
+              <button type="button" :class="paginationButtonClass(modulePage(client.client) === 1)" :disabled="modulePage(client.client) === 1" @click="goToModulePage(client.client, modulePage(client.client) - 1)">
+                Anterior
+              </button>
+              <span class="text-xs font-bold text-slate-500">Página {{ modulePage(client.client) }} de {{ modulePageCount(client) }}</span>
+              <button type="button" :class="paginationButtonClass(modulePage(client.client) === modulePageCount(client))" :disabled="modulePage(client.client) === modulePageCount(client)" @click="goToModulePage(client.client, modulePage(client.client) + 1)">
+                Siguiente
+              </button>
+            </div>
           </div>
         </article>
+      </div>
+
+      <div v-if="!isLoading && filteredClients.length > pageSize" class="flex items-center justify-between gap-3 border-t border-slate-100 p-5">
+        <button type="button" :class="paginationButtonClass(effectiveClientPage === 1)" :disabled="effectiveClientPage === 1" @click="goToClientPage(effectiveClientPage - 1)">
+          Anterior
+        </button>
+        <span class="text-xs font-bold text-slate-500">Página {{ effectiveClientPage }} de {{ clientPageCount }}</span>
+        <button type="button" :class="paginationButtonClass(effectiveClientPage === clientPageCount)" :disabled="effectiveClientPage === clientPageCount" @click="goToClientPage(effectiveClientPage + 1)">
+          Siguiente
+        </button>
       </div>
     </section>
   </div>
@@ -275,6 +295,9 @@ const search = ref('');
 const selectedClient = ref('');
 const selectedModule = ref('');
 const isLoading = ref(false);
+const pageSize = 10;
+const clientPage = ref(1);
+const modulePages = ref<Record<string, number>>({});
 const rows = ref<MonthlyMetricRow[]>([]);
 const clients = ref<MonthlyClient[]>([]);
 const summary = ref<MonthlySummary>(emptySummary());
@@ -342,6 +365,46 @@ const filteredClients = computed(() => {
   return visibleClients;
 });
 
+const paginationButtonClass = (isDisabled = false) => [
+  'rounded-full px-4 py-2 text-xs font-black transition',
+  isDisabled ? 'cursor-not-allowed bg-slate-100 text-slate-300' : 'bg-slate-900 text-white hover:bg-azulIENM',
+].join(' ');
+
+const clientPageCount = computed(() => Math.max(Math.ceil(filteredClients.value.length / pageSize), 1));
+const effectiveClientPage = computed(() => Math.min(clientPage.value, clientPageCount.value));
+
+const paginatedClients = computed(() => {
+  const offset = (effectiveClientPage.value - 1) * pageSize;
+  return filteredClients.value.slice(offset, offset + pageSize);
+});
+
+const goToClientPage = (page: number) => {
+  clientPage.value = Math.min(Math.max(page, 1), clientPageCount.value);
+};
+
+const modulePageCount = (client: MonthlyClient) => Math.max(Math.ceil(client.modules.length / pageSize), 1);
+
+const modulePage = (client: string) => {
+  const page = modulePages.value[client] ?? 1;
+  const targetClient = filteredClients.value.find((entry) => entry.client === client);
+  const pageCount = targetClient ? modulePageCount(targetClient) : 1;
+  return Math.min(page, pageCount);
+};
+
+const goToModulePage = (client: string, page: number) => {
+  const targetClient = filteredClients.value.find((entry) => entry.client === client);
+  const pageCount = targetClient ? modulePageCount(targetClient) : 1;
+  modulePages.value = {
+    ...modulePages.value,
+    [client]: Math.min(Math.max(page, 1), pageCount),
+  };
+};
+
+const paginatedModules = (client: MonthlyClient) => {
+  const offset = (modulePage(client.client) - 1) * pageSize;
+  return client.modules.slice(offset, offset + pageSize);
+};
+
 const toggleClient = (client: string) => {
   const next = new Set(expandedClients.value);
   next.has(client) ? next.delete(client) : next.add(client);
@@ -378,6 +441,8 @@ const loadMonthlyMetrics = async () => {
     clients.value = result.data?.clients ?? [];
     summary.value = result.data?.summary ?? emptySummary();
     totalAccesses.value = result.data?.total_accesses ?? 0;
+    clientPage.value = 1;
+    modulePages.value = {};
     collapseAll();
   } else {
     rows.value = [];
